@@ -1,0 +1,69 @@
+plugins {
+    // Apply the java-library plugin to add support for Java Library
+    id 'java-library'
+    id 'maven'
+}
+
+group = 'de.upb.crypto'
+version = '1.1.0-SNAPSHOT'
+
+description = """"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+
+repositories {
+    jcenter()
+    mavenCentral()
+    mavenLocal()
+    maven { url "https://nexus.cs.upb.de/repository/sfb901-libs/" }
+    maven { url "https://nexus.cs.upb.de/repository/sfb901-snapshots/" }
+}
+
+
+dependencies {
+    // This dependency is exported to consumers, that is to say found on their compile classpath.
+    api group: 'de.upb.crypto', name: 'math', version: '1.0.0-SNAPSHOT'
+    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.9.0'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.9.0'
+    implementation group: 'org.reflections', name: 'reflections', version: '0.9.10'
+    implementation group: 'log4j', name: 'log4j', version: '1.2.17'
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+    // For tests
+    //testImplementation group: 'de.upb.crypto', name: 'math', version:'1.0.0-SNAPSHOT', classifier: 'tests'
+    testCompileOnly(
+            'junit:junit:4.12'
+    )
+    testImplementation(
+            'org.junit.jupiter:junit-jupiter-api:5.1.0'
+    )
+    testRuntimeOnly(
+            'org.junit.jupiter:junit-jupiter-engine:5.1.0',
+            'org.junit.vintage:junit-vintage-engine:5.1.0'
+    )
+}
+
+
+
+test {
+    useJUnitPlatform()
+    maxParallelForks 4
+    //we want display the following test events
+    testLogging {
+        events "PASSED", "STARTED", "FAILED", "SKIPPED"
+    }
+    afterSuite { desc, result ->
+        if (!desc.parent) { // will match the outermost suite
+            def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+            def startItem = '|  ', endItem = '  |'
+            def repeatLength = startItem.length() + output.length() + endItem.length()
+            println('\n' + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength))
+        }
+    }
+}
