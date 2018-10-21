@@ -123,7 +123,7 @@ public class ElgamalLargeUniverseDelegationKEMTest {
         checkConvertStandalone(scheme);
     }
 
-    private Policy setupPolicy() {
+    static Policy setupPolicy() {
         StringAttribute A = new StringAttribute("A");
         StringAttribute B = new StringAttribute("B");
         StringAttribute C = new StringAttribute("C");
@@ -170,12 +170,12 @@ public class ElgamalLargeUniverseDelegationKEMTest {
 
     }
 
-    private SetOfAttributes getFulfilling() {
+    static SetOfAttributes getFulfilling() {
         //return new SetOfAttributes(new StringAttribute("A"));
         return new SetOfAttributes(new StringAttribute("B"), new StringAttribute("C"), new StringAttribute("hello"));
     }
 
-    private SetOfAttributes getNonFulfilling() {
+    static SetOfAttributes getNonFulfilling() {
         return new SetOfAttributes(new StringAttribute("C"), new StringAttribute("hello"));
     }
 
