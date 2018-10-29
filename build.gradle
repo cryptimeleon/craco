@@ -22,6 +22,7 @@ repositories {
     mavenCentral()
     mavenLocal()
     maven { url "https://nexus.cs.upb.de/repository/sfb901-libs/" }
+    maven { url "https://nexus.cs.upb.de/repository/sfb901-releases/" }
     maven { url "https://nexus.cs.upb.de/repository/sfb901-snapshots/" }
 }
 
