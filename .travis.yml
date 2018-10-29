@@ -1,5 +1,5 @@
 language: java
-install: true   # tells Travis that we run gradlew manually
+install: true
 jdk:
 - openjdk8
 - openjdk11
@@ -8,29 +8,28 @@ before_cache:
 - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
-  - $HOME/.gradle/caches/
-  - $HOME/.gradle/wrapper/
-
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
 stages:
 - name: build
 - name: snapshot
   if: branch = master
 - name: release
   if: branch = release
-
 jobs:
   include:
   - stage: build
-    script: ./gradlew build
+    script: "./gradlew build"
   - stage: snapshot
-    script: ./gradlew publish -x test -Dsnapshot=true -Dnexus.user=$NEXUS_USER -Dnexus.key=$NEXUS_KEY -Dbuild.number=$TRAVIS_BUILD_NUMBER
+    script: "./gradlew publish -x test -Dsnapshot=true -Dnexus.user=$NEXUS_USER -Dnexus.key=$NEXUS_KEY
+      -Dbuild.number=$TRAVIS_BUILD_NUMBER"
   - stage: release
-    script: ./gradlew publish -x test -Dnexus.user=$NEXUS_USER -Dnexus.key=$NEXUS_KEY -Dbuild.number=$TRAVIS_BUILD_NUMBER
-
+    script: "./gradlew publish -x test -Dnexus.user=$NEXUS_USER -Dnexus.key=$NEXUS_KEY
+      -Dbuild.number=$TRAVIS_BUILD_NUMBER"
 deploy:
   provider: releases
   api_key:
-    secure: MzB4DEXioCIPvQmcdA607N/o88BM73x3lJtoYoR58GqGivNMkGabQFwR4G0Umtq7ZC699VrKob9EOXnqn9XuN0wX0Yd92cCKAxrtK5kg2satJ/+6cpEjXPFB+SCHPkTY1dZCWh84HRPB30lrZSYSuTOsFBzsrEWhgVlDJaVPA43XH72Zj6Y04g2sDcSYlyIPb3XJ0P/RLb4oF2wDxrjBOe+o/FBX7QTyYly+CJiq2FmGZYYmAiwTPQ0/TV9MPxEe9tBupcopwy3dnx9vv+Zp9Hd6Wk991ZKXIdcMdWUpfYGVJux/jp0J46owsA2f/VqdciLpgJcgocJyZp1jsQDGy9JUw9kAdfDBct3ZOPiPNgqSItt7qKPIggdydceBHFaC0EvtT9O22KAukQoV52Ga6LirByJ8uXxZnszuYlw9HJPZfXMfUzfu7LVlUI6x6KtRclaSJHQfv8R3abwtJSgrvQZgW4s/Px17Fp8sTF16dOsAsVVEBlKVLY6zkjHxV0Q2Su02Uwq/UU7FMdYC/BMvx2VAIaGMD+syeFvUH9CxyuI+gdTOZs8u/1IsDCUP5bLYy8GHAkinQpD/BjRVJX3A1rqPbt6QJjmJOpRyigpN06yrm9fUw6pohggk4/wWJpU4QZEvJGUr/8UWFoG2lvwtJiIkCCB9vy5+mXKgo/E2UKo=
+    secure: F2Rw2KEMvMQ72OufFrG/MpDXkWHMswL1rG+ZgcdVTIpPd2cE2y20wRJs/MXO5C1huBo+tUa49HXwd02jyO3/IwQJSvMFwnrwT8cw6GDGH4LEmLUhBmFszs0HqBF8nPtg42RqH727zRb2Z2gj8NsxtwHiguqEcL4d9T0cwOP85eoSciQzTgWQNiIuT1kL1C4eFj7ThF2DlA3dy6Ec/umxk8Og0sY8fW+dTY8PrBYJ5t+ZZG1Zu38QJD5nLrRlnfRxD+60JYRT3SZHf9s7va/WG5wLy7umRb3bAhNDukbCC3TybmeZ7yF9LZXGj2ZlRAW/P7YIIFyho2SUTx9OttgW8dw4X8v003Mu3sN8EYOFW3NopNcutbaX4XB/KAi/bayqmAZ39BLP/aGbNekmekiGZv1PdwKyvCXBsMbZ4a1fjOFg9tcc1Wfqtb1l1YyfAEr9GoFyytvvFD8j5CVzppwI/OeGbVGCQgDPd6X1WYRxnxwBZo7zMReSoGQtoxlqN7ZH/ygZUQ7LlThswJmy+CpZ7BprQVq+9Th2QshoG9TMnpdRh9irIFIJrer+d6TkUvHAPKZ0psOw+jTppIvc6HSWYBFnUFhcv4mWAmpLPOnvyIo4ZYLTdguEPYywdKOvAxj8IOJyjrSz+WS4gGlaYtUNTBPXdWXRPq5AWZ+CoTPVjLQ=
   file_glob: true
   file: build/libs/*
   skip_cleanup: true
