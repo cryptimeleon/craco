@@ -83,7 +83,7 @@ publishing {
                 username = System.getProperty('nexus.user')
                 password = System.getProperty('nexus.key')
             }
-            def releasesRepoUrl = "https://nexus.cs.upb.de/repository/sfb901-snapshots/"
+            def releasesRepoUrl = "https://nexus.cs.upb.de/repository/sfb901-releases/"
             def snapshotsRepoUrl = "https://nexus.cs.upb.de/repository/sfb901-snapshots/"
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
         }
