@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/upbcuk/upb.crypto.craco.svg?branch=master)](https://travis-ci.com/upbcuk/upb.crypto.craco)
 ## upb.crypto.craco
 
 upb.crypto.craco is a library providing cryptographic construction mainly focused on attribute-based schemes.
