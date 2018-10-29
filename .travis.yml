@@ -35,5 +35,5 @@ deploy:
   file: build/libs/*
   skip_cleanup: true
   on:
-    repo: upbcuk/upb.crypto.math
+    repo: upbcuk/upb.crypto.craco
     branch: release
