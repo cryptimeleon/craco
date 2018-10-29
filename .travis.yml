@@ -1,4 +1,5 @@
 language: java
+install: true   # tells Travis that we run gradlew manually
 jdk:
 - openjdk8
 - openjdk11
