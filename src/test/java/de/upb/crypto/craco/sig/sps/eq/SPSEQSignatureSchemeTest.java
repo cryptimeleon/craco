@@ -89,25 +89,7 @@ public class SPSEQSignatureSchemeTest {
         ppTest = new SPSEQPublicParameters(pp.getBilinearMap().getG1(), pp.getBilinearMap().getG2(), pp.getRepresentation());
         assertEquals(pp, ppTest);
     }
-
-    @Test
-    public void testNegativeWrongMessageSPSEQSignatureSchemeSignAndVerify() {
-        SignatureSchemeTester.testNegativeWrongMessageSignatureSchemeSignAndVerify(spseqScheme,
-                messageBlock, wrongMessageBlock, keyPair.getVerificationKey(), keyPair.getSigningKey());
-    }
-
-    @Test
-    public void testNegativeWrongKeySPSEQSignatureSchemeSignAndVerify() {
-        SignatureSchemeTester.testNegativeWrongKeysSignatureSchemeSignAndVerify(spseqScheme, messageBlock,
-                keyPair.getVerificationKey(), keyPair.getSigningKey(), wrongKeyPair.getVerificationKey(),
-                wrongKeyPair.getSigningKey());
-    }
-
-    @Test
-    public void testMapToPlaintext() {
-        SignatureSchemeTester.testMapToPlaintext(spseqScheme, keyPair.getVerificationKey());
-    }
-
+    
     @Test
     public void testMapToPlaintextContract() {
         SignatureSchemeTester.testMapToPlainTextContract(spseqScheme, keyPair);
