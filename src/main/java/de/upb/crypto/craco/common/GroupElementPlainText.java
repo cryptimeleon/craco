@@ -12,7 +12,7 @@ import de.upb.crypto.math.serialization.Representation;
 public class GroupElementPlainText implements PlainText, UniqueByteRepresentable {
 
     @UniqueByteRepresented
-    private GroupElement p; // in G_T
+    private GroupElement p;
 
     public GroupElementPlainText(GroupElement elem) {
         p = elem;
