@@ -89,11 +89,6 @@ public class SPSEQSignatureSchemeTest {
         ppTest = new SPSEQPublicParameters(pp.getBilinearMap().getG1(), pp.getBilinearMap().getG2(), pp.getRepresentation());
         assertEquals(pp, ppTest);
     }
-    
-    @Test
-    public void testMapToPlaintextContract() {
-        SignatureSchemeTester.testMapToPlainTextContract(spseqScheme, keyPair);
-    }
 
     protected static void measureTime(String str) {
         if (timerStart == 0) {
