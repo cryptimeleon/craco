@@ -17,9 +17,11 @@ import de.upb.crypto.math.serialization.annotations.Represented;
 import de.upb.crypto.math.structures.zn.Zn;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+import org.apache.logging.log4j.message.Message;
 
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -186,30 +188,17 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
         return true;
     }
 
-    /**
-     * The change representative method returns a signature matching the new representative of [M]_R.
-     * The new representative of [M]_R is supposed to be generated externally by using the plain text (M) and
-     * element mu. The matching signature sigma' for the new representative mu*M of [M]_R is computed such that
-     * Verify(mu*M,sigma') = 1.
-     * See paper [1] for details.
-     *
-     * @param plainText
-     * @param signature
-     * @param mu
-     * @param publicKey
-     * @return null of the signature given is not valid on plainText under publicKey, else it returns a valid signature
-     *         on mu*plainText
-     */
     @Override
-    public Signature chgRep(PlainText plainText, Signature signature, Zn.ZnElement mu, VerificationKey publicKey) {
-        // First verify the original signature on the plaintext M, if it is not valid return null
-        if (!verify(plainText, signature, publicKey)) {
-            return null;
+    public Signature chgRep(Signature signature, Zn.ZnElement mu, VerificationKey publicKey) {
+        if (!(signature instanceof SPSEQSignature)) {
+            throw new IllegalArgumentException("Not a valid signature for this scheme");
         }
-        // Method verify also checks the plaintext, signature, and public key through instanceof checks.
-        // We only have to check the element mu
+        if (!(publicKey instanceof SPSEQVerificationKey)) {
+            throw new IllegalArgumentException("Not a valid public key for this scheme");
+        }
+        // We have to check that the element mu is of the correct type
         if (!(mu instanceof ZpElement)) {
-            throw new IllegalArgumentException("Not a valid element 'mu' for this scheme");
+            throw new IllegalArgumentException("Not a valid element 'mu' for change representative for this scheme");
         }
 
         // Zp element to randomize the signature
@@ -222,6 +211,47 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
         var sigmaHatY = sigma.getGroup1ElementSigma3HatY().asPowProductExpression().pow(psiInv).evaluateConcurrent();
 
         return new SPSEQSignature(sigmaZ.get(), sigmaY.get(), sigmaHatY.get());
+    }
+
+    @Override
+    public Signature chgRepWithVerify(PlainText plainText, Signature signature, Zn.ZnElement mu, VerificationKey publicKey) {
+        // First verify the original signature on the plaintext M, if it is not valid return null
+        if (!verify(plainText, signature, publicKey)) {
+            return null;
+        }
+        // Method verify also checks the plaintext, signature, and public key through instanceof checks.
+        // We have to check that the element mu is of the correct type
+        if (!(mu instanceof ZpElement)) {
+            throw new IllegalArgumentException("Not a valid element 'mu' for change representative for this scheme");
+        }
+
+        // Zp element to randomize the signature
+        ZpElement psi = pp.getZp().getUniformlyRandomUnit();
+        ZpElement psiInv = psi.inv();
+
+        SPSEQSignature sigma = (SPSEQSignature) signature;
+        var sigmaZ = sigma.getGroup1ElementSigma1Z().asPowProductExpression().pow(psi.mul(mu)).evaluateConcurrent();
+        var sigmaY = sigma.getGroup1ElementSigma2Y().asPowProductExpression().pow(psiInv).evaluateConcurrent();
+        var sigmaHatY = sigma.getGroup1ElementSigma3HatY().asPowProductExpression().pow(psiInv).evaluateConcurrent();
+
+        return new SPSEQSignature(sigmaZ.get(), sigmaY.get(), sigmaHatY.get());
+    }
+
+    @Override
+    public PlainText chgRepMessage(PlainText plainText, Zn.ZnElement mu) {
+        if (plainText instanceof GroupElementPlainText) {
+            plainText = new MessageBlock(plainText);
+        }
+        if (!(plainText instanceof MessageBlock)) {
+            throw new IllegalArgumentException("Not a valid plain text for this scheme");
+        }
+        // We have to check that the element mu is of the correct type
+        if (!(mu instanceof ZpElement)) {
+            throw new IllegalArgumentException("Not a valid element 'mu' for change representative for this scheme");
+        }
+        // apply pow(mu) to every message element: M_i^{mu}
+        return new MessageBlock(((MessageBlock) plainText).parallelStream().map(m -> ((GroupElementPlainText) m).get().pow(mu)).
+                map(GroupElementPlainText::new).collect(Collectors.toList()));
     }
 
     @Override
