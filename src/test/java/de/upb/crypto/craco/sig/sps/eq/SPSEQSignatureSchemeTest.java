@@ -26,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 
 public class SPSEQSignatureSchemeTest {
     static long timerStart = 0;
+    static int testIterations = 1;
     private final int NUM_MESSAGES = 2;
     private final int SECURITY_PARAMETER = 256;
 
@@ -38,7 +39,7 @@ public class SPSEQSignatureSchemeTest {
 
     @Before
     public void setUp() throws Exception {
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 1; i++) {
             SignatureSchemeParams params =
                     SPSEQSignatureSchemeTestParamGenerator.generateParams(SECURITY_PARAMETER, NUM_MESSAGES);
             this.spseqScheme = (SPSEQSignatureScheme) params.getSignatureScheme();
@@ -53,7 +54,7 @@ public class SPSEQSignatureSchemeTest {
     @Test
     public void testSPSEQSignatureSchemeSignAndVerify() {
         // signing a block of messages
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < testIterations; i++) {
             SignatureSchemeTester.testSignatureSchemeSignAndVerify(spseqScheme, messageBlock, keyPair.getVerificationKey(),
                     keyPair.getSigningKey());
 
@@ -63,7 +64,7 @@ public class SPSEQSignatureSchemeTest {
     @Test
     public void testSPSEQSignatureSchemeChgRep() {
         // signing a block of messages
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < testIterations; i++) {
             SPSEQSignature sigma = (SPSEQSignature) SignatureSchemeTester.testSignatureSchemeSignAndVerify(spseqScheme, messageBlock, keyPair.getVerificationKey(),
                     keyPair.getSigningKey());
             Zp.ZpElement mu = pp.getZp().getUniformlyRandomUnit();
