@@ -2,14 +2,11 @@ package de.upb.crypto.craco.sig.sps.eq;
 
 import de.upb.crypto.craco.interfaces.PublicParameters;
 import de.upb.crypto.math.interfaces.mappings.BilinearMap;
-import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.serialization.ObjectRepresentation;
+import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
-
-import java.math.BigInteger;
 
 /**
  * Class for the public parameters of the SPS-EQ signature scheme.
@@ -21,25 +18,17 @@ import java.math.BigInteger;
 public class SPSEQPublicParameters implements PublicParameters {
 
     // The bilinear map e in the paper.
-    @Represented
     private BilinearMap bilinearMap; // G1 x G2 -> GT
 
     /**
      * P \in G_1 in paper.
      */
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
     protected GroupElement group1ElementP;
 
     /**
      * \hat{P} \in G_2 in paper.
      */
-    @Represented(structure = "groupG2", recoveryMethod = GroupElement.RECOVERY_METHOD)
     protected GroupElement group2ElementHatP;
-
-
-    // pointer field used to store the structure for the representation process; in all other cases this should be null
-    protected Group groupG1 = null;
-    protected Group groupG2 = null;
 
 
     public SPSEQPublicParameters(BilinearMap bilinearMap) {
@@ -49,17 +38,20 @@ public class SPSEQPublicParameters implements PublicParameters {
         this.group2ElementHatP = this.bilinearMap.getG2().getUniformlyRandomNonNeutral();
     }
 
-    public SPSEQPublicParameters(Group groupG1, Group groupG2, Representation repr) {
-        this.groupG1 = groupG1;
-        this.groupG2 = groupG2;
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
-        this.groupG1 = null;
-        this.groupG2 = null;
+    public SPSEQPublicParameters(Representation repr) {
+        bilinearMap = (BilinearMap) repr.obj().get("bilinearMap").repr().recreateRepresentable();
+        group1ElementP = bilinearMap.getG1().getElement(repr.obj().get("group1ElementP"));
+        group2ElementHatP = bilinearMap.getG2().getElement(repr.obj().get("group2ElementHatP"));
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        var result = new ObjectRepresentation();
+        result.put("bilinearMap", new RepresentableRepresentation(bilinearMap));
+        result.put("group1ElementP", group1ElementP.getRepresentation());
+        result.put("group2ElementHatP", group2ElementHatP.getRepresentation());
+
+        return result;
     }
 
     /**

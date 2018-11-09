@@ -86,7 +86,7 @@ public class SPSEQSignatureSchemeTest {
 
         // public parameter representation test
         SPSEQPublicParameters ppTest;
-        ppTest = new SPSEQPublicParameters(pp.getBilinearMap().getG1(), pp.getBilinearMap().getG2(), pp.getRepresentation());
+        ppTest = new SPSEQPublicParameters(pp.getRepresentation());
         assertEquals(pp, ppTest);
     }
 
