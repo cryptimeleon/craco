@@ -46,7 +46,7 @@ public class SPSEQPublicParameters implements PublicParameters {
 
     @Override
     public Representation getRepresentation() {
-        var result = new ObjectRepresentation();
+        ObjectRepresentation result = new ObjectRepresentation();
         result.put("bilinearMap", new RepresentableRepresentation(bilinearMap));
         result.put("group1ElementP", group1ElementP.getRepresentation());
         result.put("group2ElementHatP", group2ElementHatP.getRepresentation());

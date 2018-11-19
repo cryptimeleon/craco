@@ -128,13 +128,13 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
         group1ElementZ.pow(y);
 
         // second element of signature, Y in paper
-        var group1ElementSigma2 = pp.getGroup1ElementP().asPowProductExpression().pow(y.inv());
+        PowProductExpression group1ElementSigma2 = pp.getGroup1ElementP().asPowProductExpression().pow(y.inv());
 
         // third element of signature, \hat{Y} in paper
-        var group2ElementSigma3 = pp.getGroup2ElementHatP().asPowProductExpression().pow(y.inv());
-        var sigmaZ = group1ElementZ.evaluateConcurrent();
-        var sigmaY = group1ElementSigma2.evaluateConcurrent();
-        var sigmaHatY = group2ElementSigma3.evaluateConcurrent();
+        PowProductExpression group2ElementSigma3 = pp.getGroup2ElementHatP().asPowProductExpression().pow(y.inv());
+        FutureGroupElement sigmaZ = group1ElementZ.evaluateConcurrent();
+        FutureGroupElement sigmaY = group1ElementSigma2.evaluateConcurrent();
+        FutureGroupElement sigmaHatY = group2ElementSigma3.evaluateConcurrent();
 
         return new SPSEQSignature(sigmaZ.get(), sigmaY.get(), sigmaHatY.get());
     }
@@ -206,9 +206,9 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
         ZpElement psiInv = psi.inv();
 
         SPSEQSignature sigma = (SPSEQSignature) signature;
-        var sigmaZ = sigma.getGroup1ElementSigma1Z().asPowProductExpression().pow(psi.mul(mu)).evaluateConcurrent();
-        var sigmaY = sigma.getGroup1ElementSigma2Y().asPowProductExpression().pow(psiInv).evaluateConcurrent();
-        var sigmaHatY = sigma.getGroup1ElementSigma3HatY().asPowProductExpression().pow(psiInv).evaluateConcurrent();
+        FutureGroupElement sigmaZ = sigma.getGroup1ElementSigma1Z().asPowProductExpression().pow(psi.mul(mu)).evaluateConcurrent();
+        FutureGroupElement sigmaY = sigma.getGroup1ElementSigma2Y().asPowProductExpression().pow(psiInv).evaluateConcurrent();
+        FutureGroupElement sigmaHatY = sigma.getGroup1ElementSigma3HatY().asPowProductExpression().pow(psiInv).evaluateConcurrent();
 
         return new SPSEQSignature(sigmaZ.get(), sigmaY.get(), sigmaHatY.get());
     }
@@ -230,9 +230,9 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
         ZpElement psiInv = psi.inv();
 
         SPSEQSignature sigma = (SPSEQSignature) signature;
-        var sigmaZ = sigma.getGroup1ElementSigma1Z().asPowProductExpression().pow(psi.mul(mu)).evaluateConcurrent();
-        var sigmaY = sigma.getGroup1ElementSigma2Y().asPowProductExpression().pow(psiInv).evaluateConcurrent();
-        var sigmaHatY = sigma.getGroup1ElementSigma3HatY().asPowProductExpression().pow(psiInv).evaluateConcurrent();
+        FutureGroupElement sigmaZ = sigma.getGroup1ElementSigma1Z().asPowProductExpression().pow(psi.mul(mu)).evaluateConcurrent();
+        FutureGroupElement sigmaY = sigma.getGroup1ElementSigma2Y().asPowProductExpression().pow(psiInv).evaluateConcurrent();
+        FutureGroupElement sigmaHatY = sigma.getGroup1ElementSigma3HatY().asPowProductExpression().pow(psiInv).evaluateConcurrent();
 
         return new SPSEQSignature(sigmaZ.get(), sigmaY.get(), sigmaHatY.get());
     }
