@@ -17,7 +17,7 @@ public class SPSEQParams {
         SPSEQPublicParameters pp;
         SPSEQPublicParametersGen ppSetup = new SPSEQPublicParametersGen();
         pp = ppSetup.generatePublicParameter(260, true);
-        var signatureScheme = new SPSEQSignatureScheme(pp);
+        SPSEQSignatureScheme signatureScheme = new SPSEQSignatureScheme(pp);
 
         ArrayList<StandaloneTestParams> toReturn = new ArrayList<>();
         toReturn.add(new StandaloneTestParams(SPSEQSignatureScheme.class, signatureScheme));

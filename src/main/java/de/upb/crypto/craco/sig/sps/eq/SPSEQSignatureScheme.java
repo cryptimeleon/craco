@@ -172,20 +172,16 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
             firstPPE.op(((GroupElementPlainText) messageBlock.get(i)).get(), pk.getGroup2ElementsHatXi()[i]);
         }
 
-        if (!firstPPE.evaluateConcurrent().equals(pp.getBilinearMap().getGT().getNeutralElement())) {
-            return false;
-        }
-
         // Second pairing product equation: e(P,\hat{Y})^{-1} * e(Y,\hat{P}) = 1_{G_T}
         secondPPE.op(pp.getGroup1ElementP(), sigma.getGroup1ElementSigma3HatY()).inv();
         secondPPE.op(sigma.getGroup1ElementSigma2Y(), pp.getGroup2ElementHatP());
 
-        if (!secondPPE.evaluateConcurrent().equals(pp.getBilinearMap().getGT().getNeutralElement())) {
-            return false;
-        }
+        FutureGroupElement resultFirst = firstPPE.evaluateConcurrent();
+        FutureGroupElement resultSecond = secondPPE.evaluateConcurrent();
 
-        // verification equation does hold true
-        return true;
+        GroupElement neutral = pp.getBilinearMap().getGT().getNeutralElement();
+
+        return resultFirst.get().equals(neutral) && resultSecond.get().equals(neutral);
     }
 
     @Override
