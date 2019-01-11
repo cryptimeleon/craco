@@ -29,7 +29,7 @@ repositories {
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api group: 'de.upb.crypto', name: 'math', version: '1.0.0-SNAPSHOT'
+    api group: 'de.upb.crypto', name: 'math', version: '1.0.0'
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.9.0'
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.9.0'
