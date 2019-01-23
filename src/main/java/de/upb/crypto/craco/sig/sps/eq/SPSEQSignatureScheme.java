@@ -180,8 +180,10 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
         FutureGroupElement resultSecond = secondPPE.evaluateConcurrent();
 
         GroupElement neutral = pp.getBilinearMap().getGT().getNeutralElement();
+        final GroupElement groupElement = resultFirst.get();
+        final GroupElement groupElement1 = resultSecond.get();
 
-        return resultFirst.get().equals(neutral) && resultSecond.get().equals(neutral);
+        return groupElement.equals(neutral) && groupElement1.equals(neutral);
     }
 
     @Override

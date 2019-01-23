@@ -4,7 +4,7 @@ import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.factory.BilinearGroupFactory;
 import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.pairings.bn.BarretoNaehrigProvider;
-import de.upb.crypto.math.pairings.mcl.MclBilinearGroupProvider;
+import de.upb.crypto.math.pairings.eccelerate.ECCelerateBilinearGroupProvider;
 
 import java.util.Arrays;
 
@@ -22,7 +22,7 @@ public class SPSEQPublicParametersGen {
         fac.setDebugMode(debugMode);
         fac.setRequirements(BilinearGroup.Type.TYPE_3);
         fac.registerProvider(Arrays.asList(
-                new MclBilinearGroupProvider(),
+                new ECCelerateBilinearGroupProvider(),
                 // new BarretoNaehrigNativeProvider(), //not yet publicly available
                 new BarretoNaehrigProvider()));
         BilinearGroup group = fac.createBilinearGroup();
