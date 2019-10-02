@@ -33,6 +33,11 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
     }
 
     @Override
+    public Representation getRepresentation() {
+        return ReprUtil.serialize(this);
+    }
+
+    @Override
     public SignatureKeyPair<? extends VerificationKey, ? extends SigningKey>
     generateKeyPair(int numberOfMessages) {
         // get exponent field and store group2 for shorter usage
@@ -99,6 +104,7 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
         ZpElement exponentPrimeM = zp.getUniformlyRandomElement();
 
         // Compute third element of signature
+        // First we compute the exponent = x + \sum_{i=1}{r}{y_i * m_i} + y_{r+1} * m'
         ZpElement resultExponent = sk.getExponentX();
         for (int i = 0; i < sk.getNumberOfMessages(); ++i) {
             if (messageBlock.get(i) == null) {
@@ -109,57 +115,165 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
             PlainText messagePartI = messageBlock.get(i);
             if (!(messagePartI instanceof RingElementPlainText)) {
                 throw new IllegalArgumentException(
-                        String.format("%d'th message element is not an 'RingElementPlainText' instance.", i)
+                        String.format("%d'th message element is not a 'RingElementPlainText' instance.", i)
                 );
-            } else if () {
-                throw 
             }
-            ZpElement messageElement = (ZpElement) ((RingElementPlainText) messagePartI).getRingElement();
+            RingElementPlainText messageRingElement = (RingElementPlainText) messagePartI;
+            if (!(messageRingElement.getRingElement().getStructure().equals(zp))) {
+                throw new IllegalArgumentException(
+                        String.format("%d'th message element is not an element of Zp.", i)
+                );
+            }
+            ZpElement messageElement = (ZpElement) messageRingElement.getRingElement();
+            resultExponent = resultExponent.add(sk.getExponentsYi()[i].mul(messageElement));
         }
+        resultExponent = resultExponent.add(
+                sk.getExponentsYi()[sk.getNumberOfMessages()].mul(exponentPrimeM)
+        );
+        // Now we exponentiate h with the exponent.
+        GroupElement group1ElementSigma3 = group1ElementH.pow(resultExponent.getInteger());
+
+        return new PS18Signature(exponentPrimeM, group1ElementH, group1ElementSigma3);
     }
 
     @Override
     public Boolean verify(PlainText plainText, Signature signature, VerificationKey publicKey) {
-        return null;
+        // A single message needs to be converted to message vector with one message
+        if (plainText instanceof RingElementPlainText) {
+            plainText = new MessageBlock(plainText);
+        }
+
+        if (!(plainText instanceof MessageBlock)) {
+            throw new IllegalArgumentException("Plaintext is not a 'MessageBlock' instance.");
+        }
+        if (!(signature instanceof PS18Signature)) {
+            throw new IllegalArgumentException("Signature is not a 'PS18Signature' instance.");
+        }
+        if (!(publicKey instanceof PS18VerificationKey)) {
+            throw new IllegalArgumentException("Public key is not a 'PS18VerificationKey' instance.");
+        }
+
+        MessageBlock messageBlock = (MessageBlock) plainText;
+        PS18VerificationKey pk = (PS18VerificationKey) publicKey;
+        PS18Signature sigma = (PS18Signature) signature;
+
+        // Check that groupElementSigma1 is not neutral element of G_1
+        if (sigma.getGroup1ElementSigma1().isNeutralElement())
+            return false;
+
+        // Check that bilinear pairing equation holds
+        GroupElement leftHandSide, rightHandSide;
+
+        rightHandSide = pp.getBilinearMap().apply(
+                sigma.getGroup1ElementSigma2(), pk.getGroup2ElementTildeG()
+        );
+
+        // Computation of group element from G_2 for left hand side requires sum
+        // \tilde{x} * \prod_{i=1}{r}{\tilde{Y_i}^{m_i}} * \tilde{Y}_{r+1}^{m'}
+        GroupElement leftGroup2Elem = pk.getGroup2ElementTildeX();
+        for (int i = 0; i < pk.getNumberOfMessages(); ++i) {
+            if (messageBlock.get(i) == null) {
+                throw new IllegalArgumentException(
+                        String.format("%d'th message element is null.", i)
+                );
+            }
+            PlainText messagePartI = messageBlock.get(i);
+            if (!(messagePartI instanceof RingElementPlainText)) {
+                throw new IllegalArgumentException(
+                        String.format("%d'th message element is not a 'RingElementPlainText' instance.", i)
+                );
+            }
+            RingElementPlainText messageRingElement = (RingElementPlainText) messagePartI;
+            if (!(messageRingElement.getRingElement().getStructure().equals(pp.getZp()))) {
+                throw new IllegalArgumentException(
+                        String.format("%d'th message element is not an element of Zp.", i)
+                );
+            }
+            ZpElement messageElement = (ZpElement) messageRingElement.getRingElement();
+            leftGroup2Elem.op(pk.getGroup2ElementsTildeYi()[i].pow(messageElement));
+        }
+        leftGroup2Elem.op(
+                pk.getGroup2ElementsTildeYi()[pk.getNumberOfMessages()].pow(sigma.getExponentPrimeM())
+        );
+
+        leftHandSide = pp.getBilinearMap().apply(sigma.getGroup1ElementSigma1(), leftGroup2Elem);
+
+        return leftHandSide.equals(rightHandSide);
     }
 
     @Override
     public PlainText getPlainText(Representation repr) {
-        return null;
+        return new MessageBlock(repr, RingElementPlainText::new);
     }
 
     @Override
     public Signature getSignature(Representation repr) {
-        return null;
+        return new PS18Signature(repr, this.pp.getZp(), this.pp.getBilinearMap().getG1());
     }
 
     @Override
     public SigningKey getSigningKey(Representation repr) {
-        return null;
+        return new PS18SigningKey(repr, this.pp.getZp());
     }
 
     @Override
     public VerificationKey getVerificationKey(Representation repr) {
-        return null;
+        return new PS18VerificationKey(repr, this.pp.getBilinearMap().getG2());
+    }
+
+    public PS18PublicParameters getPp() {
+        return pp;
     }
 
     @Override
     public PlainText mapToPlaintext(byte[] bytes, VerificationKey pk) {
-        return null;
+        return mapToPlaintext(bytes, ((PS18VerificationKey) pk).getNumberOfMessages());
     }
 
     @Override
     public PlainText mapToPlaintext(byte[] bytes, SigningKey sk) {
-        return null;
+        return mapToPlaintext(bytes, ((PS18SigningKey) sk).getNumberOfMessages());
     }
 
     @Override
     public int getMaxNumberOfBytesForMapToPlaintext() {
-        return 0;
+        return (pp.getZp().size().bitLength() - 1) / 8;
+    }
+
+    private MessageBlock mapToPlaintext(byte[] bytes, int messageBlockLength) {
+        //Result will be a vector (zp.injectiveValueOf(bytes), 0, ..., 0)
+        Zp zp = pp.getZp();
+        RingElementPlainText zero = new RingElementPlainText(zp.getZeroElement());
+
+        RingElementPlainText[] msgBlock = new RingElementPlainText[messageBlockLength];
+        msgBlock[0] = new RingElementPlainText(zp.injectiveValueOf(bytes));
+        for (int i = 1; i < msgBlock.length; i++) {
+            msgBlock[i] = zero;
+        }
+
+        return new MessageBlock(msgBlock);
+    }
+
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((pp == null) ? 0 : pp.hashCode());
+        return result;
     }
 
     @Override
-    public Representation getRepresentation() {
-        return null;
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        PS18SignatureScheme other = (PS18SignatureScheme) obj;
+        if (pp == null) {
+            return other.pp == null;
+        } else return pp.equals(other.pp);
     }
 }

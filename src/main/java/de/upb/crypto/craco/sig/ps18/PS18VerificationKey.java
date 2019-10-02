@@ -2,6 +2,7 @@ package de.upb.crypto.craco.sig.ps18;
 
 import de.upb.crypto.craco.interfaces.signature.VerificationKey;
 import de.upb.crypto.math.factory.BilinearGroup;
+import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
@@ -33,6 +34,7 @@ public class PS18VerificationKey implements VerificationKey {
     /**
      * \tilde{Y_1}, ..., \tilde{Y_{r+1}} in paper.
      */
+    @Represented(restorer = "[G2]")
     private GroupElement[] group2ElementsTildeYi;
 
     public PS18VerificationKey(GroupElement group2ElementTildeG,
@@ -48,10 +50,10 @@ public class PS18VerificationKey implements VerificationKey {
      * used in the public parameters.
      *
      * @param repr The representation to construct the verification key from.
-     * @param bilinearGroup The bilinear group defined by the public parameters.
+     * @param group2 Group G2 of the bilinear group used in the public parameters.
      */
-    public PS18VerificationKey(Representation repr, BilinearGroup bilinearGroup) {
-        new ReprUtil(this).register(bilinearGroup).deserialize(repr);
+    public PS18VerificationKey(Representation repr, Group group2) {
+        new ReprUtil(this).register(group2, "G2").deserialize(repr);
     }
 
     @Override

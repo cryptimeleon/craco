@@ -1,7 +1,6 @@
 package de.upb.crypto.craco.sig.ps18;
 
 import de.upb.crypto.craco.interfaces.signature.Signature;
-import de.upb.crypto.craco.sig.ps.PSSignature;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
@@ -23,26 +22,26 @@ public class PS18Signature implements Signature {
      * m' in Z_p in paper. First element of signature.
      */
     @Represented(restorer = "zp")
-    private ZpElement exponentSigma1;
+    private ZpElement exponentPrimeM;
 
     /**
      * h in G_1^* in paper. Second element of signature.
      */
     @Represented(restorer = "G1")
-    private GroupElement group1ElementSigma2;
+    private GroupElement group1ElementSigma1;
 
     /**
      * h^{<sum here>} in G_1 in paper. Third element of signature.
      */
     @Represented(restorer = "G1")
-    private GroupElement group1ElementSigma3;
+    private GroupElement group1ElementSigma2;
 
-    public PS18Signature (ZpElement exponentSigma1, GroupElement group1ElementSigma2,
-                          GroupElement group1ElementSigma3) {
+    public PS18Signature (ZpElement exponentPrimeM, GroupElement group1ElementSigma1,
+                          GroupElement group1ElementSigma2) {
         super();
-        this.exponentSigma1 = exponentSigma1;
+        this.exponentPrimeM = exponentPrimeM;
+        this.group1ElementSigma1 = group1ElementSigma1;
         this.group1ElementSigma2 = group1ElementSigma2;
-        this.group1ElementSigma3 = group1ElementSigma3;
     }
 
     public PS18Signature(Representation repr, Zp zp, Group groupG1) {
@@ -55,26 +54,26 @@ public class PS18Signature implements Signature {
         return ReprUtil.serialize(this);
     }
 
-    public ZpElement getExponentSigma1() { return exponentSigma1; }
+    public ZpElement getExponentPrimeM() { return exponentPrimeM; }
 
-    public void setExponentSigma1(ZpElement exponentSigma1) {
-        this.exponentSigma1 = exponentSigma1;
+    public void setExponentPrimeM(ZpElement exponentPrimeM) {
+        this.exponentPrimeM = exponentPrimeM;
+    }
+
+    public GroupElement getGroup1ElementSigma1() {
+        return group1ElementSigma1;
+    }
+
+    public void setGroup1ElementSigma1(GroupElement group1ElementSigma1) {
+        this.group1ElementSigma1 = group1ElementSigma1;
     }
 
     public GroupElement getGroup1ElementSigma2() {
         return group1ElementSigma2;
     }
 
-    public void setGroup1ElementSigma1(GroupElement group1ElementSigma2) {
+    public void setGroup1ElementSigma2(GroupElement group1ElementSigma2) {
         this.group1ElementSigma2 = group1ElementSigma2;
-    }
-
-    public GroupElement getGroup1ElementSigma3() {
-        return group1ElementSigma3;
-    }
-
-    public void setGroup1ElementSigma3(GroupElement group1ElementSigma3) {
-        this.group1ElementSigma3 = group1ElementSigma3;
     }
 
     @Override
@@ -82,13 +81,13 @@ public class PS18Signature implements Signature {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PS18Signature that = (PS18Signature) o;
-        return  Objects.equals(exponentSigma1, that.exponentSigma1)
-                && Objects.equals(group1ElementSigma2, that.group1ElementSigma2)
-                && Objects.equals(group1ElementSigma3, that.group1ElementSigma3);
+        return  Objects.equals(exponentPrimeM, that.exponentPrimeM)
+                && Objects.equals(group1ElementSigma1, that.group1ElementSigma1)
+                && Objects.equals(group1ElementSigma2, that.group1ElementSigma2);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(exponentSigma1, group1ElementSigma2, group1ElementSigma3);
+        return Objects.hash(exponentPrimeM, group1ElementSigma1, group1ElementSigma2);
     }
 }
