@@ -3,75 +3,32 @@ package de.upb.crypto.craco.sig.ps18;
 import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.RingElementPlainText;
 import de.upb.crypto.craco.interfaces.PlainText;
-import de.upb.crypto.craco.interfaces.signature.*;
-import de.upb.crypto.math.interfaces.structures.Group;
+import de.upb.crypto.craco.interfaces.signature.Signature;
+import de.upb.crypto.craco.interfaces.signature.SigningKey;
+import de.upb.crypto.craco.interfaces.signature.VerificationKey;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.structures.zn.HashIntoZp;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
-import java.util.Arrays;
-import java.util.stream.IntStream;
+/**
+ * This class implements the signature scheme from Pointcheval and Sanders 2018 in
+ * section 4.3 where the extra m' element is computed from the message in the
+ * random oracle model. This saves one Z_p element for the signature.
+ * However, the reduction adversary has to also guess in which random oracle
+ * query the right message is, so the reduction loses a poly factor in success probability.
+ *
+ * @author Raphael Heitjohann
+ */
+public class PS18ROMSignatureScheme extends PS18SignatureScheme {
 
-
-public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme {
-
-    /**
-     * pp in paper. Public parameters of the Pointcheval Sanders 2018 (Section 4.2)
-     * signature scheme.
-     */
-    @Represented
-    protected PS18PublicParameters pp;
-
-    public PS18SignatureScheme(PS18PublicParameters pp) {
-        this.pp = pp;
+    public PS18ROMSignatureScheme(PS18PublicParameters pp) {
+        super(pp);
     }
 
-    public PS18SignatureScheme(Representation repr) {
-        new ReprUtil(this).deserialize(repr);
-    }
-
-    @Override
-    public Representation getRepresentation() {
-        return ReprUtil.serialize(this);
-    }
-
-    @Override
-    public SignatureKeyPair<? extends PS18VerificationKey, ? extends PS18SigningKey>
-    generateKeyPair(int numberOfMessages) {
-        // get exponent field and store group2 for shorter usage
-        Group group2 = pp.getBilinearMap().getG2();
-        Zp zp = pp.getZp();
-
-        // Pick \tilde{g} from G_2^*
-        GroupElement group2ElementTildeG = group2.getUniformlyRandomNonNeutral();
-        // Pick x from Z_p^*
-        ZpElement exponentX = zp.getUniformlyRandomUnit();
-        // Pick y_1, ..., y_{r+1} from Z_p^* (r is number of messages)
-        ZpElement[] exponentsYi = IntStream.range(0, numberOfMessages+1)
-                .mapToObj(a -> zp.getUniformlyRandomUnit())
-                .toArray(ZpElement[]::new);
-
-        // Compute \tilde{X} = \tilde{g}^x
-        GroupElement group2ElementTildeX = group2ElementTildeG.pow(exponentX);
-        // Compute (\tilde{Y_1}, ..., \tilde{Y_{r+1}}) = (\tilde{g}^{y_1}, ..., \tilde{g}^{y_{r+1}})
-        GroupElement[] group2ElementsTildeYi = Arrays.stream(exponentsYi)
-                .map(group2ElementTildeG::pow)
-                .toArray(GroupElement[]::new);
-
-        // Construct secret signing key
-        PS18SigningKey sk = new PS18SigningKey(exponentX, exponentsYi);
-
-        // Construct public verification key
-        PS18VerificationKey pk = new PS18VerificationKey(
-                group2ElementTildeG,
-                group2ElementTildeX,
-                group2ElementsTildeYi
-        );
-
-        return new SignatureKeyPair<>(pk, sk);
+    public PS18ROMSignatureScheme(Representation repr) {
+        super(repr);
     }
 
     @Override
@@ -102,12 +59,12 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
         GroupElement group1ElementSigma1 = pp.getBilinearMap().getG1()
                 .getUniformlyRandomNonNeutral();
 
-        // m' in Z_p, first element of signature
-        ZpElement exponentPrimeM = zp.getUniformlyRandomElement();
+        // m' in Z_p, computed as hash of messages
+        ZpElement exponentPrimeM = romHashIntoZp(messageBlock, zp);
 
         // Compute third element of signature
         // First we compute the exponent = x + \sum_{i=1}{r}{y_i * m_i} + y_{r+1} * m'
-        ZpElement resultExponent = sk.getExponentX();
+        Zp.ZpElement resultExponent = sk.getExponentX();
         for (int i = 0; i < sk.getNumberOfMessages(); ++i) {
             if (messageBlock.get(i) == null) {
                 throw new IllegalArgumentException(
@@ -126,7 +83,7 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
                         String.format("%d'th message element is not an element of Zp.", i)
                 );
             }
-            ZpElement messageElement = (ZpElement) messageRingElement.getRingElement();
+            Zp.ZpElement messageElement = (Zp.ZpElement) messageRingElement.getRingElement();
             resultExponent = resultExponent.add(sk.getExponentsYi()[i].mul(messageElement));
         }
         resultExponent = resultExponent.add(
@@ -135,7 +92,9 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
         // Now we exponentiate h with the exponent.
         GroupElement group1ElementSigma2 = group1ElementSigma1.pow(resultExponent.getInteger());
 
-        return new PS18Signature(exponentPrimeM, group1ElementSigma1, group1ElementSigma2);
+        // TODO: We could also just resue the PSSignature,
+        //  but that does use old representation.
+        return new PS18ROMSignature(group1ElementSigma1, group1ElementSigma2);
     }
 
     @Override
@@ -148,7 +107,7 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
         if (!(plainText instanceof MessageBlock)) {
             throw new IllegalArgumentException("Plaintext is not a 'MessageBlock' instance.");
         }
-        if (!(signature instanceof PS18Signature)) {
+        if (!(signature instanceof PS18ROMSignature)) {
             throw new IllegalArgumentException("Signature is not a 'PS18Signature' instance.");
         }
         if (!(publicKey instanceof PS18VerificationKey)) {
@@ -158,11 +117,13 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
 
         MessageBlock messageBlock = (MessageBlock) plainText;
         PS18VerificationKey pk = (PS18VerificationKey) publicKey;
-        PS18Signature sigma = (PS18Signature) signature;
+        PS18ROMSignature sigma = (PS18ROMSignature) signature;
 
         // Check that groupElementSigma1 is not neutral element of G_1
         if (sigma.getGroup1ElementSigma1().isNeutralElement())
             return false;
+
+        Zp zp = pp.getZp();
 
         // Check that bilinear pairing equation holds
         GroupElement leftHandSide, rightHandSide;
@@ -188,19 +149,19 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
                 );
             }
             RingElementPlainText messageRingElement = (RingElementPlainText) messagePartI;
-            if (!(messageRingElement.getRingElement().getStructure().equals(pp.getZp()))) {
+            if (!(messageRingElement.getRingElement().getStructure().equals(zp))) {
                 throw new IllegalArgumentException(
                         String.format("%d'th message element is not an element of Zp.", i)
                 );
             }
-            ZpElement messageElement = (ZpElement) messageRingElement.getRingElement();
+            Zp.ZpElement messageElement = (Zp.ZpElement) messageRingElement.getRingElement();
             leftGroup2Elem = leftGroup2Elem.op(
                     pk.getGroup2ElementsTildeYi()[i].pow(messageElement)
             );
         }
         leftGroup2Elem = leftGroup2Elem.op(
                 pk.getGroup2ElementsTildeYi()[pk.getNumberOfMessages()]
-                        .pow(sigma.getExponentPrimeM())
+                        .pow(romHashIntoZp(messageBlock, zp))
         );
 
         leftHandSide = pp.getBilinearMap().apply(sigma.getGroup1ElementSigma1(), leftGroup2Elem);
@@ -209,78 +170,14 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
     }
 
     @Override
-    public PlainText getPlainText(Representation repr) {
-        return new MessageBlock(repr, RingElementPlainText::new);
-    }
-
-    @Override
     public Signature getSignature(Representation repr) {
-        return new PS18Signature(repr, this.pp.getZp(), this.pp.getBilinearMap().getG1());
+        return new PS18ROMSignature(repr, this.pp.getBilinearMap().getG1());
     }
 
-    @Override
-    public SigningKey getSigningKey(Representation repr) {
-        return new PS18SigningKey(repr, this.pp.getZp());
-    }
+    private ZpElement romHashIntoZp(MessageBlock messages, Zp zp) {
+        // TODO: this correct?
+        byte[] messageBytes = messages.getUniqueByteRepresentation();
 
-    @Override
-    public VerificationKey getVerificationKey(Representation repr) {
-        return new PS18VerificationKey(repr, this.pp.getBilinearMap().getG2());
-    }
-
-    public PS18PublicParameters getPp() {
-        return pp;
-    }
-
-    @Override
-    public PlainText mapToPlaintext(byte[] bytes, VerificationKey pk) {
-        return mapToPlaintext(bytes, ((PS18VerificationKey) pk).getNumberOfMessages());
-    }
-
-    @Override
-    public PlainText mapToPlaintext(byte[] bytes, SigningKey sk) {
-        return mapToPlaintext(bytes, ((PS18SigningKey) sk).getNumberOfMessages());
-    }
-
-    @Override
-    public int getMaxNumberOfBytesForMapToPlaintext() {
-        return (pp.getZp().size().bitLength() - 1) / 8;
-    }
-
-    private MessageBlock mapToPlaintext(byte[] bytes, int messageBlockLength) {
-        //Result will be a vector (zp.injectiveValueOf(bytes), 0, ..., 0)
-        Zp zp = pp.getZp();
-        RingElementPlainText zero = new RingElementPlainText(zp.getZeroElement());
-
-        RingElementPlainText[] msgBlock = new RingElementPlainText[messageBlockLength];
-        msgBlock[0] = new RingElementPlainText(zp.injectiveValueOf(bytes));
-        for (int i = 1; i < msgBlock.length; i++) {
-            msgBlock[i] = zero;
-        }
-
-        return new MessageBlock(msgBlock);
-    }
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((pp == null) ? 0 : pp.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        PS18SignatureScheme other = (PS18SignatureScheme) obj;
-        if (pp == null) {
-            return other.pp == null;
-        } else return pp.equals(other.pp);
+        return new HashIntoZp(zp).hashIntoStructure(messageBytes);
     }
 }

@@ -11,9 +11,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class PS18SignatureSchemeTest {
+public class PS18ROMSignatureSchemeTest {
 
-    private PS18SignatureScheme psScheme;
+    private PS18ROMSignatureScheme psScheme;
     private SignatureKeyPair<? extends VerificationKey, ? extends SigningKey> keyPair;
     private SignatureKeyPair<? extends VerificationKey, ? extends SigningKey> wrongKeyPair;
     private PS18PublicParameters pp;
@@ -22,9 +22,9 @@ public class PS18SignatureSchemeTest {
 
     @Before
     public void setUp() {
-        SignatureSchemeParams params = PS18SignatureSchemeTestParamGen
+        SignatureSchemeParams params = PS18ROMSignatureSchemeTestParamGen
                 .generateParams(160, 2);
-        this.psScheme = (PS18SignatureScheme) params.getSignatureScheme();
+        this.psScheme = (PS18ROMSignatureScheme) params.getSignatureScheme();
         this.keyPair = params.getKeyPair1();
         this.wrongKeyPair = params.getKeyPair2();
         this.pp = (PS18PublicParameters) params.getPublicParameters();
