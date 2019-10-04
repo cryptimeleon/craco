@@ -38,7 +38,6 @@ public class PS18Signature implements Signature {
 
     public PS18Signature (ZpElement exponentPrimeM, GroupElement group1ElementSigma1,
                           GroupElement group1ElementSigma2) {
-        super();
         this.exponentPrimeM = exponentPrimeM;
         this.group1ElementSigma1 = group1ElementSigma1;
         this.group1ElementSigma2 = group1ElementSigma2;
@@ -46,7 +45,7 @@ public class PS18Signature implements Signature {
 
     public PS18Signature(Representation repr, Zp zp, Group groupG1) {
         new ReprUtil(this).register(zp, "zp").register(groupG1, "G1")
-                .serialize();
+                .deserialize(repr);
     }
 
     @Override

@@ -19,7 +19,8 @@ import java.util.stream.IntStream;
 public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme {
 
     /**
-     * pp in paper. Public parameters of the signature scheme.
+     * pp in paper. Public parameters of the Pointcheval Sanders 2018 (Section 4.2)
+     * signature scheme.
      */
     @Represented
     private PS18PublicParameters pp;
@@ -38,7 +39,7 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
     }
 
     @Override
-    public SignatureKeyPair<? extends VerificationKey, ? extends SigningKey>
+    public SignatureKeyPair<? extends PS18VerificationKey, ? extends PS18SigningKey>
     generateKeyPair(int numberOfMessages) {
         // get exponent field and store group2 for shorter usage
         Group group2 = pp.getBilinearMap().getG2();
@@ -94,11 +95,12 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
             throw new IllegalArgumentException("Message length does not match length " +
                     "supported by signing key.");
         }
-        // we use this twice so generate only once here
+
         Zp zp = pp.getZp();
 
         // h in G_1^*, second element of signature
-        GroupElement group1ElementH = pp.getBilinearMap().getG1().getUniformlyRandomNonNeutral();
+        GroupElement group1ElementSigma1 = pp.getBilinearMap().getG1()
+                .getUniformlyRandomNonNeutral();
 
         // m' in Z_p, first element of signature
         ZpElement exponentPrimeM = zp.getUniformlyRandomElement();
@@ -131,9 +133,9 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
                 sk.getExponentsYi()[sk.getNumberOfMessages()].mul(exponentPrimeM)
         );
         // Now we exponentiate h with the exponent.
-        GroupElement group1ElementSigma3 = group1ElementH.pow(resultExponent.getInteger());
+        GroupElement group1ElementSigma2 = group1ElementSigma1.pow(resultExponent.getInteger());
 
-        return new PS18Signature(exponentPrimeM, group1ElementH, group1ElementSigma3);
+        return new PS18Signature(exponentPrimeM, group1ElementSigma1, group1ElementSigma2);
     }
 
     @Override
@@ -150,7 +152,8 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
             throw new IllegalArgumentException("Signature is not a 'PS18Signature' instance.");
         }
         if (!(publicKey instanceof PS18VerificationKey)) {
-            throw new IllegalArgumentException("Public key is not a 'PS18VerificationKey' instance.");
+            throw new IllegalArgumentException("Public key is not a 'PS18VerificationKey' " +
+                    "instance.");
         }
 
         MessageBlock messageBlock = (MessageBlock) plainText;
@@ -169,7 +172,7 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
         );
 
         // Computation of group element from G_2 for left hand side requires sum
-        // \tilde{x} * \prod_{i=1}{r}{\tilde{Y_i}^{m_i}} * \tilde{Y}_{r+1}^{m'}
+        // \tilde{X} * \prod_{i=1}{r}{\tilde{Y_i}^{m_i}} * \tilde{Y}_{r+1}^{m'}
         GroupElement leftGroup2Elem = pk.getGroup2ElementTildeX();
         for (int i = 0; i < pk.getNumberOfMessages(); ++i) {
             if (messageBlock.get(i) == null) {
@@ -180,7 +183,8 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
             PlainText messagePartI = messageBlock.get(i);
             if (!(messagePartI instanceof RingElementPlainText)) {
                 throw new IllegalArgumentException(
-                        String.format("%d'th message element is not a 'RingElementPlainText' instance.", i)
+                        String.format("%d'th message element is not a 'RingElementPlainText' " +
+                                "instance.", i)
                 );
             }
             RingElementPlainText messageRingElement = (RingElementPlainText) messagePartI;
@@ -190,10 +194,13 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
                 );
             }
             ZpElement messageElement = (ZpElement) messageRingElement.getRingElement();
-            leftGroup2Elem.op(pk.getGroup2ElementsTildeYi()[i].pow(messageElement));
+            leftGroup2Elem = leftGroup2Elem.op(
+                    pk.getGroup2ElementsTildeYi()[i].pow(messageElement)
+            );
         }
-        leftGroup2Elem.op(
-                pk.getGroup2ElementsTildeYi()[pk.getNumberOfMessages()].pow(sigma.getExponentPrimeM())
+        leftGroup2Elem = leftGroup2Elem.op(
+                pk.getGroup2ElementsTildeYi()[pk.getNumberOfMessages()]
+                        .pow(sigma.getExponentPrimeM())
         );
 
         leftHandSide = pp.getBilinearMap().apply(sigma.getGroup1ElementSigma1(), leftGroup2Elem);

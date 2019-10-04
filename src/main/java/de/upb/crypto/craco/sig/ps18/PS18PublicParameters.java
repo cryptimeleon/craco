@@ -22,7 +22,6 @@ public class PS18PublicParameters implements PublicParameters {
     private BilinearMap bilinearMap; // G1 x G2 -> GT
 
     public PS18PublicParameters(BilinearMap bilinearMap) {
-        super();
         this.bilinearMap = bilinearMap;
     }
 
@@ -61,8 +60,7 @@ public class PS18PublicParameters implements PublicParameters {
         PS18PublicParameters other = (PS18PublicParameters) obj;
         if ((bilinearMap == null) != (other.bilinearMap == null)) {
             return false;
-        } else if (!bilinearMap.equals(other.bilinearMap))
-            return false;
-        return true;
+        } else
+            return bilinearMap.equals(other.bilinearMap);
     }
 }
