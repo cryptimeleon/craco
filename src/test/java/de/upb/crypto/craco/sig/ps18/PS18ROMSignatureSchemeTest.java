@@ -6,6 +6,7 @@ import de.upb.crypto.craco.interfaces.signature.SigningKey;
 import de.upb.crypto.craco.interfaces.signature.VerificationKey;
 import de.upb.crypto.craco.sig.SignatureSchemeParams;
 import de.upb.crypto.craco.sig.SignatureSchemeTester;
+import de.upb.crypto.craco.sig.ps.PSPublicParameters;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +17,7 @@ public class PS18ROMSignatureSchemeTest {
     private PS18ROMSignatureScheme psScheme;
     private SignatureKeyPair<? extends VerificationKey, ? extends SigningKey> keyPair;
     private SignatureKeyPair<? extends VerificationKey, ? extends SigningKey> wrongKeyPair;
-    private PS18PublicParameters pp;
+    private PSPublicParameters pp;
     private MessageBlock messageBlock;
     private MessageBlock wrongMessageBlock;
 
@@ -27,7 +28,7 @@ public class PS18ROMSignatureSchemeTest {
         this.psScheme = (PS18ROMSignatureScheme) params.getSignatureScheme();
         this.keyPair = params.getKeyPair1();
         this.wrongKeyPair = params.getKeyPair2();
-        this.pp = (PS18PublicParameters) params.getPublicParameters();
+        this.pp = (PSPublicParameters) params.getPublicParameters();
         this.messageBlock = (MessageBlock) params.getMessage1();
         this.wrongMessageBlock = (MessageBlock) params.getMessage2();
     }
@@ -46,8 +47,8 @@ public class PS18ROMSignatureSchemeTest {
                 keyPair.getVerificationKey(), keyPair.getSigningKey());
 
         // public parameter representation test
-        PS18PublicParameters ppTest;
-        ppTest = new PS18PublicParameters(pp.getRepresentation());
+        PSPublicParameters ppTest;
+        ppTest = new PSPublicParameters(pp.getRepresentation());
         assertEquals(pp, ppTest);
     }
 

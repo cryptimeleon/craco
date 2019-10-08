@@ -6,6 +6,7 @@ import de.upb.crypto.craco.interfaces.PlainText;
 import de.upb.crypto.craco.interfaces.signature.Signature;
 import de.upb.crypto.craco.interfaces.signature.SigningKey;
 import de.upb.crypto.craco.interfaces.signature.VerificationKey;
+import de.upb.crypto.craco.sig.ps.PSPublicParameters;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.zn.HashIntoZp;
@@ -23,7 +24,7 @@ import de.upb.crypto.math.structures.zn.Zp.ZpElement;
  */
 public class PS18ROMSignatureScheme extends PS18SignatureScheme {
 
-    public PS18ROMSignatureScheme(PS18PublicParameters pp) {
+    public PS18ROMSignatureScheme(PSPublicParameters pp) {
         super(pp);
     }
 
@@ -62,38 +63,11 @@ public class PS18ROMSignatureScheme extends PS18SignatureScheme {
         // m' in Z_p, computed as hash of messages
         ZpElement exponentPrimeM = romHashIntoZp(messageBlock, zp);
 
-        // Compute third element of signature
-        // First we compute the exponent = x + \sum_{i=1}{r}{y_i * m_i} + y_{r+1} * m'
-        Zp.ZpElement resultExponent = sk.getExponentX();
-        for (int i = 0; i < sk.getNumberOfMessages(); ++i) {
-            if (messageBlock.get(i) == null) {
-                throw new IllegalArgumentException(
-                        String.format("%d'th message element is null.", i)
-                );
-            }
-            PlainText messagePartI = messageBlock.get(i);
-            if (!(messagePartI instanceof RingElementPlainText)) {
-                throw new IllegalArgumentException(
-                        String.format("%d'th message element is not a 'RingElementPlainText' instance.", i)
-                );
-            }
-            RingElementPlainText messageRingElement = (RingElementPlainText) messagePartI;
-            if (!(messageRingElement.getRingElement().getStructure().equals(zp))) {
-                throw new IllegalArgumentException(
-                        String.format("%d'th message element is not an element of Zp.", i)
-                );
-            }
-            Zp.ZpElement messageElement = (Zp.ZpElement) messageRingElement.getRingElement();
-            resultExponent = resultExponent.add(sk.getExponentsYi()[i].mul(messageElement));
-        }
-        resultExponent = resultExponent.add(
-                sk.getExponentsYi()[sk.getNumberOfMessages()].mul(exponentPrimeM)
+        // Compute second element of signature
+        PS18SignatureScheme ps18SigScheme = new PS18SignatureScheme(pp);
+        GroupElement group1ElementSigma2 = ps18SigScheme.computeSigma2(
+                messageBlock, sk, exponentPrimeM, group1ElementSigma1
         );
-        // Now we exponentiate h with the exponent.
-        GroupElement group1ElementSigma2 = group1ElementSigma1.pow(resultExponent.getInteger());
-
-        // TODO: We could also just resue the PSSignature,
-        //  but that does use old representation.
         return new PS18ROMSignature(group1ElementSigma1, group1ElementSigma2);
     }
 
@@ -132,39 +106,10 @@ public class PS18ROMSignatureScheme extends PS18SignatureScheme {
                 sigma.getGroup1ElementSigma2(), pk.getGroup2ElementTildeG()
         );
 
-        // Computation of group element from G_2 for left hand side requires sum
-        // \tilde{X} * \prod_{i=1}{r}{\tilde{Y_i}^{m_i}} * \tilde{Y}_{r+1}^{m'}
-        GroupElement leftGroup2Elem = pk.getGroup2ElementTildeX();
-        for (int i = 0; i < pk.getNumberOfMessages(); ++i) {
-            if (messageBlock.get(i) == null) {
-                throw new IllegalArgumentException(
-                        String.format("%d'th message element is null.", i)
-                );
-            }
-            PlainText messagePartI = messageBlock.get(i);
-            if (!(messagePartI instanceof RingElementPlainText)) {
-                throw new IllegalArgumentException(
-                        String.format("%d'th message element is not a 'RingElementPlainText' " +
-                                "instance.", i)
-                );
-            }
-            RingElementPlainText messageRingElement = (RingElementPlainText) messagePartI;
-            if (!(messageRingElement.getRingElement().getStructure().equals(zp))) {
-                throw new IllegalArgumentException(
-                        String.format("%d'th message element is not an element of Zp.", i)
-                );
-            }
-            Zp.ZpElement messageElement = (Zp.ZpElement) messageRingElement.getRingElement();
-            leftGroup2Elem = leftGroup2Elem.op(
-                    pk.getGroup2ElementsTildeYi()[i].pow(messageElement)
-            );
-        }
-        leftGroup2Elem = leftGroup2Elem.op(
-                pk.getGroup2ElementsTildeYi()[pk.getNumberOfMessages()]
-                        .pow(romHashIntoZp(messageBlock, zp))
+        PS18SignatureScheme ps18SigScheme = new PS18SignatureScheme(pp);
+        leftHandSide = ps18SigScheme.computeLeftHandSide(
+                messageBlock, pk, romHashIntoZp(messageBlock, zp), sigma.getGroup1ElementSigma1()
         );
-
-        leftHandSide = pp.getBilinearMap().apply(sigma.getGroup1ElementSigma1(), leftGroup2Elem);
 
         return leftHandSide.equals(rightHandSide);
     }
@@ -175,7 +120,6 @@ public class PS18ROMSignatureScheme extends PS18SignatureScheme {
     }
 
     private ZpElement romHashIntoZp(MessageBlock messages, Zp zp) {
-        // TODO: this correct?
         byte[] messageBytes = messages.getUniqueByteRepresentation();
 
         return new HashIntoZp(zp).hashIntoStructure(messageBytes);

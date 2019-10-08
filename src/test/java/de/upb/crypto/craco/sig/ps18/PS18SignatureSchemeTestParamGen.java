@@ -4,6 +4,8 @@ import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.RingElementPlainText;
 import de.upb.crypto.craco.interfaces.signature.SignatureKeyPair;
 import de.upb.crypto.craco.sig.SignatureSchemeParams;
+import de.upb.crypto.craco.sig.ps.PSPublicParameters;
+import de.upb.crypto.craco.sig.ps.PSPublicParametersGen;
 
 public class PS18SignatureSchemeTestParamGen {
 
@@ -16,8 +18,8 @@ public class PS18SignatureSchemeTestParamGen {
      * @return Instance of the {@link SignatureSchemeParams}.
      */
     public static SignatureSchemeParams generateParams(int securityParam, int numMessages) {
-        PS18PublicParametersGen ppGen = new PS18PublicParametersGen();
-        PS18PublicParameters pp = ppGen.generatePublicParameter(securityParam, true);
+        PSPublicParametersGen ppGen = new PSPublicParametersGen();
+        PSPublicParameters pp = ppGen.generatePublicParameter(securityParam, true);
         PS18SignatureScheme psScheme = new PS18SignatureScheme(pp);
 
         SignatureKeyPair<? extends PS18VerificationKey, ? extends PS18SigningKey> keyPair =
