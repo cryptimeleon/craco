@@ -15,9 +15,10 @@ import de.upb.crypto.craco.interfaces.proxy.TransformationKey;
 import de.upb.crypto.craco.kem.asym.elgamal.ElgamalKEM;
 import de.upb.crypto.craco.kem.asym.elgamal.ElgamalKEM.KeyAndCiphertextAndNonce;
 import de.upb.crypto.craco.kem.asym.elgamal.ElgamalKEMCiphertext;
+import de.upb.crypto.math.expressions.exponent.ExponentConstantExpr;
+import de.upb.crypto.math.expressions.group.*;
 import de.upb.crypto.math.interfaces.hash.HashIntoStructure;
 import de.upb.crypto.math.interfaces.mappings.BilinearMap;
-import de.upb.crypto.math.interfaces.mappings.PairingProductExpression;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.*;
@@ -227,17 +228,24 @@ public class ElgamalLargeUniverseDelegationKEM
 
 
         /*store pairing product to do batch processing*/
-        PairingProductExpression expr = pairing.pairingProductExpression();
+        // PairingProductExpression expr = pairing.pairingProductExpression();
 
         /*
          * e(K0,C0)^1
          */
-        expr.op(tk.k0, ct.c0);
+        // expr.op(tk.k0, ct.c0);
+
+        GroupElementExpression expr = new PairingExpr(
+                pairing,
+                new GroupElementConstantExpr(tk.k0),
+                new GroupElementConstantExpr(ct.c0)
+        );
 
         /*
          * compute product over \prod e(K1,C_i,1)^bi as sum e(K1,\sum C_i,1)^bi
          */
-        GroupElement ci1Sum = this.getPublicParameters().getPairingParameters().getG2().getNeutralElement();
+        GroupElement ci1Sum = this.getPublicParameters().getPairingParameters().getG2()
+                .getNeutralElement();
 
         /*
          * compute pairing product over supporting set of share
@@ -264,12 +272,34 @@ public class ElgamalLargeUniverseDelegationKEM
              *
              * bi is typically small, hence we prefer to use bilinearity to pull sign into first argument
              */
-            expr.op(tk.ki_map.get(rho_i)[0].inv(), ct.abeComponents.get(i)[1], b_i);
+            expr = new GroupOpExpr(
+                    expr,
+                    new GroupPowExpr(
+                            new PairingExpr(
+                                pairing,
+                                new GroupElementConstantExpr(tk.ki_map.get(rho_i)[0].inv()),
+                                new GroupElementConstantExpr(ct.abeComponents.get(i)[1])
+                            ),
+                            new ExponentConstantExpr(b_i)
+                    )
+            );
+            //expr.op(tk.ki_map.get(rho_i)[0].inv(), ct.abeComponents.get(i)[1], b_i);
 
             /*
              * e(K_rho(i),3  ; C_i,3)^-bi=e(-K_rho(i),3  ; C_i,3)^bi
              */
-            expr.op(tk.ki_map.get(rho_i)[1].inv(), ct.abeComponents.get(i)[2], b_i);
+            expr = new GroupOpExpr(
+                    expr,
+                    new GroupPowExpr(
+                            new PairingExpr(
+                                    pairing,
+                                    new GroupElementConstantExpr(tk.ki_map.get(rho_i)[1].inv()),
+                                    new GroupElementConstantExpr(ct.abeComponents.get(i)[2])
+                            ),
+                            new ExponentConstantExpr(b_i)
+                    )
+            );
+            // expr.op(tk.ki_map.get(rho_i)[1].inv(), ct.abeComponents.get(i)[2], b_i);
 
 
 //			assertEquals(pairing.apply(tk.k1,ct.abeKomponents.get(i)[0]),
@@ -281,19 +311,25 @@ public class ElgamalLargeUniverseDelegationKEM
         /*
          * e(K1,\sum C_i,1)^-bi
          */
-        expr.op(tk.k1.inv(), ci1Sum);
+        expr = new GroupOpExpr(
+                expr,
+                new PairingExpr(
+                        pairing,
+                        new GroupElementConstantExpr(tk.k1.inv()),
+                        new GroupElementConstantExpr(ci1Sum)
+                )
+        );
+        //expr.op(tk.k1.inv(), ci1Sum);
 
         GroupElement b = expr.evaluate();
 
         //	assertEquals(b,this.getPublicParameters().getElgamalEncryptionKey().getH());
         //	System.out.println("B=" + b);
 
-        ElgamalKEMCiphertext elgamalct = new ElgamalKEMCiphertext(
-                new ElgamalCipherText(b, ct.c)
-                , ct.encaps);
-
-        return elgamalct;
-
+        return new ElgamalKEMCiphertext(
+                new ElgamalCipherText(b, ct.c),
+                ct.encaps
+        );
     }
 
 
