@@ -49,6 +49,8 @@ dependencies {
             'org.junit.jupiter:junit-jupiter-engine:5.1.0',
             'org.junit.vintage:junit-vintage-engine:5.1.0'
     )
+    // For performance test
+    implementation "com.github.noconnor:junitperf:1.15.0"
 }
 
 
