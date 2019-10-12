@@ -272,32 +272,26 @@ public class ElgamalLargeUniverseDelegationKEM
              *
              * bi is typically small, hence we prefer to use bilinearity to pull sign into first argument
              */
-            expr = new GroupOpExpr(
-                    expr,
-                    new GroupPowExpr(
-                            new PairingExpr(
-                                pairing,
-                                new GroupElementConstantExpr(tk.ki_map.get(rho_i)[0].inv()),
-                                new GroupElementConstantExpr(ct.abeComponents.get(i)[1])
-                            ),
-                            new ExponentConstantExpr(b_i)
-                    )
+            expr = expr.opPow(
+                    new PairingExpr(
+                            pairing,
+                            new GroupElementConstantExpr(tk.ki_map.get(rho_i)[0].inv()),
+                            new GroupElementConstantExpr(ct.abeComponents.get(i)[1])
+                    ),
+                    b_i
             );
             //expr.op(tk.ki_map.get(rho_i)[0].inv(), ct.abeComponents.get(i)[1], b_i);
 
             /*
              * e(K_rho(i),3  ; C_i,3)^-bi=e(-K_rho(i),3  ; C_i,3)^bi
              */
-            expr = new GroupOpExpr(
-                    expr,
-                    new GroupPowExpr(
-                            new PairingExpr(
-                                    pairing,
-                                    new GroupElementConstantExpr(tk.ki_map.get(rho_i)[1].inv()),
-                                    new GroupElementConstantExpr(ct.abeComponents.get(i)[2])
-                            ),
-                            new ExponentConstantExpr(b_i)
-                    )
+            expr = expr.opPow(
+                    new PairingExpr(
+                            pairing,
+                            new GroupElementConstantExpr(tk.ki_map.get(rho_i)[1].inv()),
+                            new GroupElementConstantExpr(ct.abeComponents.get(i)[2])
+                    ),
+                    b_i
             );
             // expr.op(tk.ki_map.get(rho_i)[1].inv(), ct.abeComponents.get(i)[2], b_i);
 
@@ -311,8 +305,7 @@ public class ElgamalLargeUniverseDelegationKEM
         /*
          * e(K1,\sum C_i,1)^-bi
          */
-        expr = new GroupOpExpr(
-                expr,
+        expr = expr.op(
                 new PairingExpr(
                         pairing,
                         new GroupElementConstantExpr(tk.k1.inv()),

@@ -321,21 +321,15 @@ public class PS18SignatureSchemeExpr implements StandardMultiMessageSignatureSch
             }
             Zp.ZpElement messageElement = (Zp.ZpElement) messageRingElement.getRingElement();
             // l = l op \tilde{Y}_i^{m_i}
-            leftGroup2ElemExpr = new GroupOpExpr(
-                    leftGroup2ElemExpr,
-                    new GroupPowExpr(
-                            new GroupElementConstantExpr(pk.getGroup2ElementsTildeYi()[i]),
-                            new ExponentConstantExpr(messageElement)
-                    )
+            leftGroup2ElemExpr = leftGroup2ElemExpr.opPow(
+                    new GroupElementConstantExpr(pk.getGroup2ElementsTildeYi()[i]),
+                    messageElement
             );
         }
-        leftGroup2ElemExpr = new GroupOpExpr(
-                leftGroup2ElemExpr,
-                new GroupPowExpr(
-                        new GroupElementConstantExpr(
-                                pk.getGroup2ElementsTildeYi()[pk.getNumberOfMessages()]),
-                        new ExponentConstantExpr(exponentPrimeM)
-                )
+        leftGroup2ElemExpr = leftGroup2ElemExpr.opPow(
+                new GroupElementConstantExpr(
+                        pk.getGroup2ElementsTildeYi()[pk.getNumberOfMessages()]),
+                exponentPrimeM
         );
 
         return pp.getBilinearMap().apply(sigma1, leftGroup2ElemExpr.evaluate());

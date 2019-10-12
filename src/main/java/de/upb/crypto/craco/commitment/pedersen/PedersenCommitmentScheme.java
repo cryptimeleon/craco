@@ -105,10 +105,10 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
         for (int i = 0; i < messagesInZp.length; i++) {
             mi = messagesInZp[i];
             hi = pp.getH()[i];
-            c = new GroupOpExpr(c, new GroupPowExpr(
+            c = c.opPow(
                     new GroupElementConstantExpr(hi),
-                    new ExponentConstantExpr(mi)
-            ));
+                    mi
+            );
         }
         // Construct the commitment object
         PedersenOpenValue openValue = new PedersenOpenValue(messagesInZp, r);
@@ -137,10 +137,10 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
         for (int i = 0; i < messages.length; i++) {
             mi = messages[i];
             hi = pp.getH()[i];
-            result = new GroupOpExpr(result, new GroupPowExpr(
+            result = result.opPow(
                     new GroupElementConstantExpr(hi),
-                    new ExponentConstantExpr(mi)
-            ));
+                    mi
+            );
         }
         GroupElement c = pedersenCommitmentValue.getCommitmentElement();
         return c.equals(result.evaluate()) ? pedersenOpenValue.getMessages() : null;
