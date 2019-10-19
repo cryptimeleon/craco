@@ -297,9 +297,7 @@ public class PS18SignatureSchemeExpr implements StandardMultiMessageSignatureSch
         // \tilde{X} * \prod_{i=1}{r}{\tilde{Y}_i^{m_i}} * \tilde{Y}_{r+1}^{m'}
 
         // l = \tilde{X}
-        GroupElementExpression leftGroup2ElemExpr = new GroupElementConstantExpr(
-                pk.getGroup2ElementTildeX()
-        );
+        GroupElementExpression leftGroup2ElemExpr = pk.getGroup2ElementTildeX().expr();
         for (int i = 0; i < pk.getNumberOfMessages(); ++i) {
             if (messageBlock.get(i) == null) {
                 throw new IllegalArgumentException(
@@ -322,13 +320,12 @@ public class PS18SignatureSchemeExpr implements StandardMultiMessageSignatureSch
             Zp.ZpElement messageElement = (Zp.ZpElement) messageRingElement.getRingElement();
             // l = l op \tilde{Y}_i^{m_i}
             leftGroup2ElemExpr = leftGroup2ElemExpr.opPow(
-                    new GroupElementConstantExpr(pk.getGroup2ElementsTildeYi()[i]),
+                    pk.getGroup2ElementsTildeYi()[i].expr(),
                     messageElement
             );
         }
         leftGroup2ElemExpr = leftGroup2ElemExpr.opPow(
-                new GroupElementConstantExpr(
-                        pk.getGroup2ElementsTildeYi()[pk.getNumberOfMessages()]),
+                pk.getGroup2ElementsTildeYi()[pk.getNumberOfMessages()].expr(),
                 exponentPrimeM
         );
 

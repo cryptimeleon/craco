@@ -80,8 +80,8 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
         // Compute c
         GroupElement g = pp.getG();
         GroupElementExpression c = new GroupPowExpr(
-                new GroupElementConstantExpr(g),
-                new ExponentConstantExpr(r)
+                g.expr(),
+                r.asExponentExpression()
         );
 
         // Prepare the messages for committing
@@ -105,10 +105,7 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
         for (int i = 0; i < messagesInZp.length; i++) {
             mi = messagesInZp[i];
             hi = pp.getH()[i];
-            c = c.opPow(
-                    new GroupElementConstantExpr(hi),
-                    mi
-            );
+            c = c.opPow(hi.expr(), mi);
         }
         // Construct the commitment object
         PedersenOpenValue openValue = new PedersenOpenValue(messagesInZp, r);
@@ -129,18 +126,15 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
         Zp.ZpElement[] messages = pedersenOpenValue.getMessages();
         GroupElement g = pp.getG();
         GroupElementExpression result = new GroupPowExpr(
-                new GroupElementConstantExpr(g),
-                new ExponentConstantExpr(pedersenOpenValue.getRandomValue())
+                g.expr(),
+                pedersenOpenValue.getRandomValue().asExponentExpression()
         );
         Zp.ZpElement mi;
         GroupElement hi;
         for (int i = 0; i < messages.length; i++) {
             mi = messages[i];
             hi = pp.getH()[i];
-            result = result.opPow(
-                    new GroupElementConstantExpr(hi),
-                    mi
-            );
+            result = result.opPow(hi.expr(), mi);
         }
         GroupElement c = pedersenCommitmentValue.getCommitmentElement();
         return c.equals(result.evaluate()) ? pedersenOpenValue.getMessages() : null;

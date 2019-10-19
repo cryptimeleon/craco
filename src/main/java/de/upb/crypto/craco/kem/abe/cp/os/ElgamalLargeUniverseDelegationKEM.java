@@ -237,8 +237,8 @@ public class ElgamalLargeUniverseDelegationKEM
 
         GroupElementExpression expr = new PairingExpr(
                 pairing,
-                new GroupElementConstantExpr(tk.k0),
-                new GroupElementConstantExpr(ct.c0)
+                tk.k0.expr(),
+                ct.c0.expr()
         );
 
         /*
@@ -275,8 +275,8 @@ public class ElgamalLargeUniverseDelegationKEM
             expr = expr.opPow(
                     new PairingExpr(
                             pairing,
-                            new GroupElementConstantExpr(tk.ki_map.get(rho_i)[0].inv()),
-                            new GroupElementConstantExpr(ct.abeComponents.get(i)[1])
+                            tk.ki_map.get(rho_i)[0].inv().expr(),
+                            ct.abeComponents.get(i)[1].expr()
                     ),
                     b_i
             );
@@ -288,8 +288,8 @@ public class ElgamalLargeUniverseDelegationKEM
             expr = expr.opPow(
                     new PairingExpr(
                             pairing,
-                            new GroupElementConstantExpr(tk.ki_map.get(rho_i)[1].inv()),
-                            new GroupElementConstantExpr(ct.abeComponents.get(i)[2])
+                            tk.ki_map.get(rho_i)[1].inv().expr(),
+                            ct.abeComponents.get(i)[2].expr()
                     ),
                     b_i
             );
@@ -308,8 +308,8 @@ public class ElgamalLargeUniverseDelegationKEM
         expr = expr.op(
                 new PairingExpr(
                         pairing,
-                        new GroupElementConstantExpr(tk.k1.inv()),
-                        new GroupElementConstantExpr(ci1Sum)
+                        tk.k1.inv().expr(),
+                        ci1Sum.expr()
                 )
         );
         //expr.op(tk.k1.inv(), ci1Sum);
