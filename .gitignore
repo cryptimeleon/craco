@@ -1,4 +1,6 @@
 /src/test/java/de/upb/crypto/craco/enc/streaming/test/cipherText
 .gradle/**
-build/**
+out/**
+.idea/**
+.composite-enable
 
