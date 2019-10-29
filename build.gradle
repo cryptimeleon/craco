@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'de.upb.crypto'
-version = '1.1.0' + (Boolean.valueOf(System.getProperty("snapshot")) ? "-SNAPSHOT" : "")
+version = '1.1.0' + (Boolean.valueOf(System.getProperty("disablesnapshot")) ? "" : "-SNAPSHOT")
 
 description = """"""
 
@@ -29,7 +29,7 @@ repositories {
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api group: 'de.upb.crypto', name: 'math', version: '1.0.0'
+    api group: 'de.upb.crypto', name: 'math', version: '1.0.0' + (Boolean.valueOf(System.getProperty("disablesnapshot")) ? "" : "-SNAPSHOT")
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.9.0'
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.9.0'
@@ -87,6 +87,26 @@ publishing {
             def releasesRepoUrl = "https://nexus.cs.upb.de/repository/sfb901-releases/"
             def snapshotsRepoUrl = "https://nexus.cs.upb.de/repository/sfb901-snapshots/"
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+        }
+    }
+}
+
+
+task enableCompositeBuild {
+    group = 'Tools'
+    description = 'Enable composite build'
+    doLast {
+        new File("../upb.crypto.math/.composite-enable").createNewFile()
+    }
+}
+
+task disableCompositeBuild {
+    group = 'Tools'
+    description = 'Disable composite build'
+    doLast {
+        File file = file("../upb.crypto.math/.composite-enable")
+        if (file.exists()) {
+            file.delete()
         }
     }
 }
