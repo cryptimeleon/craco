@@ -27,33 +27,33 @@ public class PS18SigSchemePerfTest {
         PS18SigSchemePerfTestParamGen paramGen = new PS18SigSchemePerfTestParamGen(160);
         psScheme = paramGen.generateSigScheme();
         psSchemeExpr = paramGen.generateSigSchemeExpr();
-        message = paramGen.generateMessage(2);
-        keyPair = psScheme.generateKeyPair(2);
+        message = paramGen.generateMessage(15);
+        keyPair = psScheme.generateKeyPair(15);
         sig = (PS18Signature) psScheme.sign(message, keyPair.getSigningKey());
     }
 
     @Test
-    @JUnitPerfTest(durationMs = 20_000, warmUpMs = 5_000)
+    @JUnitPerfTest(durationMs = 15_000, warmUpMs = 5_000)
     public void testSignVerifySameMessage() {
         Signature tempSig = psScheme.sign(message, keyPair.getSigningKey());
         assertTrue(psScheme.verify(message, tempSig, keyPair.getVerificationKey()));
     }
 
     @Test
-    @JUnitPerfTest(durationMs = 20_000, warmUpMs = 5_000)
+    @JUnitPerfTest(durationMs = 15_000, warmUpMs = 5_000)
     public void testSignVerifySameMessageExpr() {
         Signature tempSig = psSchemeExpr.sign(message, keyPair.getSigningKey());
         assertTrue(psSchemeExpr.verify(message, tempSig, keyPair.getVerificationKey()));
     }
 
     @Test
-    @JUnitPerfTest(durationMs = 10_000, warmUpMs = 5_000)
+    @JUnitPerfTest(durationMs = 15_000, warmUpMs = 5_000)
     public void testVerifySameSignature() {
         assertTrue(psScheme.verify(message, sig, keyPair.getVerificationKey()));
     }
 
     @Test
-    @JUnitPerfTest(durationMs = 10_000, warmUpMs = 5_000)
+    @JUnitPerfTest(durationMs = 15_000, warmUpMs = 5_000)
     public void testVerifySameSignatureExpr() {
         assertTrue(psSchemeExpr.verify(message, sig, keyPair.getVerificationKey()));
     }

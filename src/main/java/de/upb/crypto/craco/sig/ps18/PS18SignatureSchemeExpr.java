@@ -11,6 +11,7 @@ import de.upb.crypto.math.expressions.group.GroupOpExpr;
 import de.upb.crypto.math.expressions.group.GroupPowExpr;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.raphael.OptGroupElementExpressionEvaluator;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
@@ -329,7 +330,9 @@ public class PS18SignatureSchemeExpr implements StandardMultiMessageSignatureSch
                 exponentPrimeM
         );
 
-        return pp.getBilinearMap().apply(sigma1, leftGroup2ElemExpr.evaluate());
+        OptGroupElementExpressionEvaluator evaluator = new OptGroupElementExpressionEvaluator();
+        evaluator.setEnableCaching(true);
+        return pp.getBilinearMap().apply(sigma1, leftGroup2ElemExpr.evaluate(evaluator));
     }
 }
 
