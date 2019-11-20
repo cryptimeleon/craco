@@ -19,7 +19,7 @@ public class PS18ROMSignatureSchemeTestParamGen {
     public static SignatureSchemeParams generateParams(int securityParam, int numMessages) {
         PSPublicParametersGen ppGen = new PSPublicParametersGen();
         PSPublicParameters pp = ppGen.generatePublicParameter(securityParam, true);
-        PS18SignatureScheme psScheme = new PS18ROMSignatureScheme(pp);
+        PS18ROMSignatureScheme psScheme = new PS18ROMSignatureScheme(pp);
 
         SignatureKeyPair<? extends PS18VerificationKey, ? extends PS18SigningKey> keyPair =
                 psScheme.generateKeyPair(numMessages);

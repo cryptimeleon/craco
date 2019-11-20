@@ -5,6 +5,7 @@ import de.upb.crypto.craco.common.RingElementPlainText;
 import de.upb.crypto.craco.interfaces.PlainText;
 import de.upb.crypto.craco.interfaces.signature.*;
 import de.upb.crypto.craco.sig.ps.PSPublicParameters;
+import de.upb.crypto.math.expressions.group.*;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
@@ -288,8 +289,10 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
     protected GroupElement computeLeftHandSide(MessageBlock messageBlock, PS18VerificationKey pk,
                                                ZpElement exponentPrimeM, GroupElement sigma1) {
         // Computation of group element from G_2 for left hand side requires sum
-        // \tilde{X} * \prod_{i=1}{r}{\tilde{Y_i}^{m_i}} * \tilde{Y}_{r+1}^{m'}
-        GroupElement leftGroup2Elem = pk.getGroup2ElementTildeX();
+        // \tilde{X} * \prod_{i=1}{r}{\tilde{Y}_i^{m_i}} * \tilde{Y}_{r+1}^{m'}
+
+        // l = \tilde{X}
+        GroupElementExpression leftGroup2ElemExpr = pk.getGroup2ElementTildeX().expr();
         for (int i = 0; i < pk.getNumberOfMessages(); ++i) {
             if (messageBlock.get(i) == null) {
                 throw new IllegalArgumentException(
@@ -310,15 +313,19 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
                 );
             }
             Zp.ZpElement messageElement = (Zp.ZpElement) messageRingElement.getRingElement();
-            leftGroup2Elem = leftGroup2Elem.op(
-                    pk.getGroup2ElementsTildeYi()[i].pow(messageElement)
+            // l = l op \tilde{Y}_i^{m_i}
+            leftGroup2ElemExpr = leftGroup2ElemExpr.opPow(
+                    pk.getGroup2ElementsTildeYi()[i].expr(),
+                    messageElement
             );
         }
-        leftGroup2Elem = leftGroup2Elem.op(
-                pk.getGroup2ElementsTildeYi()[pk.getNumberOfMessages()]
-                        .pow(exponentPrimeM)
+        leftGroup2ElemExpr = leftGroup2ElemExpr.opPow(
+                pk.getGroup2ElementsTildeYi()[pk.getNumberOfMessages()].expr(),
+                exponentPrimeM
         );
 
-        return pp.getBilinearMap().apply(sigma1, leftGroup2Elem);
+        OptGroupElementExpressionEvaluator evaluator = new OptGroupElementExpressionEvaluator();
+        return pp.getBilinearMap().apply(sigma1, leftGroup2ElemExpr.evaluate(evaluator));
     }
 }
+
