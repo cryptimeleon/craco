@@ -1,1 +1,5 @@
 rootProject.name = 'craco'
+
+if (file("../upb.crypto.math/.composite-enable").exists()) {
+    includeBuild ('../upb.crypto.math')
+}
