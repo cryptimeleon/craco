@@ -5,7 +5,6 @@ import de.upb.crypto.craco.common.RingElementPlainText;
 import de.upb.crypto.craco.interfaces.PlainText;
 import de.upb.crypto.craco.interfaces.signature.*;
 import de.upb.crypto.craco.sig.ps.PSPublicParameters;
-import de.upb.crypto.math.expressions.exponent.ExponentConstantExpr;
 import de.upb.crypto.math.expressions.exponent.ExponentVariableExpr;
 import de.upb.crypto.math.expressions.group.GroupElementExpression;
 import de.upb.crypto.math.expressions.group.OptGroupElementExpressionEvaluator;
@@ -42,7 +41,7 @@ public class PS18SignatureSchemePrec implements StandardMultiMessageSignatureSch
     }
 
     @Override
-    public SignatureKeyPair<? extends PS18VerificationKeyPrec, ? extends PS18SigningKey>
+    public SignatureKeyPair<? extends PS18VerificationKey, ? extends PS18SigningKey>
     generateKeyPair(int numberOfMessages) {
         // get exponent field and store group2 for shorter usage
         Group group2 = pp.getBilinearMap().getG2();
@@ -78,18 +77,16 @@ public class PS18SignatureSchemePrec implements StandardMultiMessageSignatureSch
                 new ExponentVariableExpr("m'")
         );
         // optimize
-        leftGroup2ElemExpr = new OptGroupElementExpressionEvaluator()
-                .precompute(leftGroup2ElemExpr);
+        new OptGroupElementExpressionEvaluator().precompute(leftGroup2ElemExpr);
 
         // Construct secret signing key
         PS18SigningKey sk = new PS18SigningKey(exponentX, exponentsYi);
 
         // Construct public verification key
-        PS18VerificationKeyPrec pk = new PS18VerificationKeyPrec(
+        PS18VerificationKey pk = new PS18VerificationKey(
                 group2ElementTildeG,
                 group2ElementTildeX,
-                group2ElementsTildeYi,
-                leftGroup2ElemExpr
+                group2ElementsTildeYi
         );
 
         return new SignatureKeyPair<>(pk, sk);
@@ -147,13 +144,13 @@ public class PS18SignatureSchemePrec implements StandardMultiMessageSignatureSch
         if (!(signature instanceof PS18Signature)) {
             throw new IllegalArgumentException("Signature is not a 'PS18Signature' instance.");
         }
-        if (!(publicKey instanceof PS18VerificationKeyPrec)) {
+        if (!(publicKey instanceof PS18VerificationKey)) {
             throw new IllegalArgumentException("Public key is not a 'PS18VerificationKey' " +
                     "instance.");
         }
 
         MessageBlock messageBlock = (MessageBlock) plainText;
-        PS18VerificationKeyPrec pk = (PS18VerificationKeyPrec) publicKey;
+        PS18VerificationKey pk = (PS18VerificationKey) publicKey;
         PS18Signature sigma = (PS18Signature) signature;
 
         // Check that groupElementSigma1 is not neutral element of G_1
@@ -191,7 +188,7 @@ public class PS18SignatureSchemePrec implements StandardMultiMessageSignatureSch
 
     @Override
     public VerificationKey getVerificationKey(Representation repr) {
-        return new PS18VerificationKeyPrec(repr, this.pp.getBilinearMap().getG2());
+        return new PS18VerificationKey(repr, this.pp.getBilinearMap().getG2());
     }
 
     public PSPublicParameters getPp() {
@@ -244,7 +241,7 @@ public class PS18SignatureSchemePrec implements StandardMultiMessageSignatureSch
             return false;
         if (getClass() != obj.getClass())
             return false;
-        PS18SignatureScheme other = (PS18SignatureScheme) obj;
+        PS18SignatureSchemePrec other = (PS18SignatureSchemePrec) obj;
         if (pp == null) {
             return other.pp == null;
         } else return pp.equals(other.pp);
@@ -305,11 +302,11 @@ public class PS18SignatureSchemePrec implements StandardMultiMessageSignatureSch
      * @param sigma1 \sigma_1 in paper. Either second or first element of signature (see above).
      * @return element of G_T which is the left hand side of the verification equation.
      */
-    protected GroupElement computeLeftHandSide(MessageBlock messageBlock, PS18VerificationKeyPrec pk,
+    protected GroupElement computeLeftHandSide(MessageBlock messageBlock, PS18VerificationKey pk,
                                                Zp.ZpElement exponentPrimeM, GroupElement sigma1) {
         // Computation of group element from G_2 for left hand side requires sum
         // \tilde{X} * \prod_{i=1}{r}{\tilde{Y}_i^{m_i}} * \tilde{Y}_{r+1}^{m'}
-        GroupElementExpression leftGroup2ElemExpr = pk.getLeftGroup2ElemExpr();
+        GroupElementExpression leftGroup2ElemExpr = pp.getBilinearMap().getG2().expr();
         // l = \tilde{X}
         for (int i = 0; i < pk.getNumberOfMessages(); ++i) {
             if (messageBlock.get(i) == null) {
@@ -331,11 +328,15 @@ public class PS18SignatureSchemePrec implements StandardMultiMessageSignatureSch
                 );
             }
             Zp.ZpElement messageElement = (Zp.ZpElement) messageRingElement.getRingElement();
-            leftGroup2ElemExpr = leftGroup2ElemExpr.substitute("m" + i,
-                    new ExponentConstantExpr(messageElement));
+            leftGroup2ElemExpr = leftGroup2ElemExpr.opPow(
+                    pk.getGroup2ElementsTildeYi()[i].expr(),
+                    messageElement
+            );
         }
-        leftGroup2ElemExpr = leftGroup2ElemExpr.substitute("m'",
-                new ExponentConstantExpr(exponentPrimeM));
+        leftGroup2ElemExpr = leftGroup2ElemExpr.opPow(
+                pk.getGroup2ElementsTildeYi()[pk.getNumberOfMessages()],
+                exponentPrimeM
+        );
 
         OptGroupElementExpressionEvaluator evaluator = new OptGroupElementExpressionEvaluator();
         return pp.getBilinearMap().apply(sigma1, leftGroup2ElemExpr.evaluate(evaluator));

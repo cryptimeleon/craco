@@ -22,7 +22,7 @@ public class PS18PrecBenchmark {
         PS18SigSchemePerfTestParamGen paramGen = new PS18SigSchemePerfTestParamGen(80);
         PS18SignatureSchemePrec psScheme = paramGen.generateSigSchemePrec();
         MessageBlock message = paramGen.generateMessage(numMessages);
-        SignatureKeyPair<? extends PS18VerificationKeyPrec, ? extends PS18SigningKey> keyPair;
+        SignatureKeyPair<? extends PS18VerificationKey, ? extends PS18SigningKey> keyPair;
 
         int runs = 10;
         int warmupRuns = 2;
