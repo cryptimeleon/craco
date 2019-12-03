@@ -1,7 +1,8 @@
 package de.upb.crypto.craco.commitment.pedersen;
 
+import de.upb.crypto.craco.commitment.interfaces.CommitmentPair;
 import de.upb.crypto.craco.commitment.interfaces.CommitmentScheme;
-import de.upb.crypto.craco.commitment.interfaces.CommitmentValue;
+import de.upb.crypto.craco.commitment.interfaces.Commitment;
 import de.upb.crypto.craco.commitment.interfaces.OpenValue;
 import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.RingElementPlainText;
@@ -13,11 +14,13 @@ import de.upb.crypto.math.expressions.group.GroupOpExpr;
 import de.upb.crypto.math.expressions.group.GroupPowExpr;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.structures.zn.Zn;
 import de.upb.crypto.math.structures.zn.Zp;
 
 import java.math.BigInteger;
+import java.util.List;
 
 
 /**
@@ -26,18 +29,13 @@ import java.math.BigInteger;
  * for (commit, open) methods.
  */
 public class PedersenCommitmentScheme implements CommitmentScheme {
-
     @Represented
-    private PedersenPublicParameters pp;
+    protected Group group;
+    @Represented(restorer = "[group]")
+    protected List<GroupElement> h; //elements that will carry the committed values
+    @Represented(restorer = "group")
+    protected GroupElement g; //element that will carry the randomness
 
-    /**
-     * Construct a new PedersenCommitmentScheme object providing {@link PedersenPublicParameters} as argument
-     *
-     * @param pp {@link PedersenPublicParameters}
-     */
-    public PedersenCommitmentScheme(PedersenPublicParameters pp) {
-        this.pp = pp;
-    }
 
     /**
      * Construct a new PedersenCommitmentScheme object providing {@link Representation} object
@@ -45,24 +43,21 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
      * @param representation {@link Representation}
      */
     public PedersenCommitmentScheme(Representation representation) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(representation, this);
+        new ReprUtil(this).deserialize(representation);
     }
 
     /**
      * The committing process accepts an object of type {@link PlainText}. Thus, two concrete objects can be passed
      * as input to this method, namely: {@link RingElementPlainText} (single-message) or
      * {@link MessageBlock} (multi-message).
-     * The method makes use of the attributes encapsulated within
-     * {@link PedersenPublicParameters} and stored in {@link #pp} member attribute.
      *
      * @param plainText object of type {@link MessageBlock} or {@link RingElementPlainText}
-     * @return {@link PedersenCommitmentPair} the result of commit process
+     * @return {@link CommitmentPair} the result of commit process
      */
     @Override
-    public PedersenCommitmentPair commit(PlainText plainText) {
+    public CommitmentPair commit(PlainText plainText) {
         if (plainText instanceof RingElementPlainText)
             plainText = new MessageBlock(plainText);
-
 
         if (!(plainText instanceof MessageBlock)) {
             throw new IllegalArgumentException("Not a valid PlainText for this scheme");
@@ -70,11 +65,11 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
 
         MessageBlock messageBlock = (MessageBlock) plainText;
 
-        if (!(messageBlock.size() == pp.getH().length)) {
+        if (!(messageBlock.size() == h.size())) {
             throw new UnsupportedOperationException("The message list and parameter list lengths are not compatible!");
         }
         // Generate r
-        Zp zP = pp.getZp();
+        Zn zP = group.getZn();
         Zp.ZpElement r = generateR(pp.getP());
 
         // Compute c
@@ -109,20 +104,20 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
         }
         // Construct the commitment object
         PedersenOpenValue openValue = new PedersenOpenValue(messagesInZp, r);
-        PedersenCommitmentValue com = new PedersenCommitmentValue(c.evaluate());
-        return new PedersenCommitmentPair(com, openValue);
+        PedersenCommitment com = new PedersenCommitment(c.evaluate());
+        return new CommitmentPair(com, openValue);
     }
 
     /**
-     * This private function opens the commitment ({@link PedersenCommitmentValue}) to a message with a given
+     * This private function opens the commitment ({@link PedersenCommitment}) to a message with a given
      * {@link OpenValue} and returns a {@link Zp.ZpElement}. This is done by checking that the messages in
-     * {@link PedersenOpenValue} conforms to the {@link PedersenCommitmentValue}.
+     * {@link PedersenOpenValue} conforms to the {@link PedersenCommitment}.
      *
-     * @param pedersenCommitmentValue {@link PedersenCommitmentValue}
+     * @param pedersenCommitmentValue {@link PedersenCommitment}
      * @param pedersenOpenValue       {@link PedersenOpenValue}
      * @return Array of opened messages of type {@link Zp.ZpElement} or null if the open failed.
      */
-    private Zp.ZpElement[] open(PedersenCommitmentValue pedersenCommitmentValue, PedersenOpenValue pedersenOpenValue) {
+    private Zp.ZpElement[] open(PedersenCommitment pedersenCommitmentValue, PedersenOpenValue pedersenOpenValue) {
         Zp.ZpElement[] messages = pedersenOpenValue.getMessages();
         GroupElement g = pp.getG();
         GroupElementExpression result = new GroupPowExpr(
@@ -136,22 +131,22 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
             hi = pp.getH()[i];
             result = result.opPow(hi.expr(), mi);
         }
-        GroupElement c = pedersenCommitmentValue.getCommitmentElement();
+        GroupElement c = pedersenCommitmentValue.get();
         return c.equals(result.evaluate()) ? pedersenOpenValue.getMessages() : null;
     }
 
     /**
      * This function performs the opening phase of the committing process. It first verifies that the messages in the
-     * open value {@link PedersenOpenValue} conform to the {@link PedersenCommitmentValue} and then checks the
+     * open value {@link PedersenOpenValue} conform to the {@link PedersenCommitment} and then checks the
      * equality of the opened messages to the messages provided by the {@link PlainText} input (announced message).
      *
-     * @param commitmentValue {@link PedersenCommitmentValue}
+     * @param commitment {@link PedersenCommitment}
      * @param openValue       {@link PedersenOpenValue}
      * @param plainText       {@link PlainText} (announced message)
      * @return boolean value whether the opening process is successful (true) or not (false)
      */
     @Override
-    public boolean verify(CommitmentValue commitmentValue, OpenValue openValue, PlainText plainText) {
+    public boolean verify(Commitment commitment, OpenValue openValue, PlainText plainText) {
         if (plainText instanceof RingElementPlainText)
             plainText = new MessageBlock(plainText);
 
@@ -162,11 +157,11 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
 
         MessageBlock messageBlock = (MessageBlock) plainText;
 
-        if (!(commitmentValue instanceof PedersenCommitmentValue) || !(openValue instanceof PedersenOpenValue)) {
+        if (!(commitment instanceof PedersenCommitment) || !(openValue instanceof PedersenOpenValue)) {
             return false;
         }
 
-        Zp.ZpElement[] openedMessages = this.open((PedersenCommitmentValue) commitmentValue, (PedersenOpenValue)
+        Zp.ZpElement[] openedMessages = this.open((PedersenCommitment) commitment, (PedersenOpenValue)
                 openValue);
 
         if (openedMessages == null) {

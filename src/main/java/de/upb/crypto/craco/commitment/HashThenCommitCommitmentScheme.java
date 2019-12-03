@@ -2,7 +2,7 @@ package de.upb.crypto.craco.commitment;
 
 import de.upb.crypto.craco.commitment.interfaces.CommitmentPair;
 import de.upb.crypto.craco.commitment.interfaces.CommitmentScheme;
-import de.upb.crypto.craco.commitment.interfaces.CommitmentValue;
+import de.upb.crypto.craco.commitment.interfaces.Commitment;
 import de.upb.crypto.craco.commitment.interfaces.OpenValue;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
 import de.upb.crypto.craco.interfaces.PlainText;
@@ -67,16 +67,16 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
 
     /**
      * Verification that the 'announced' {@link PlainText} ( message) equals the result (original message) of opening
-     * the {@link CommitmentValue} with the {@link OpenValue} for hashing of the original message.
+     * the {@link Commitment} with the {@link OpenValue} for hashing of the original message.
      *
-     * @param commitmentValue {@link CommitmentValue} of the encapsulated {@link CommitmentScheme}.
+     * @param commitment {@link Commitment} of the encapsulated {@link CommitmentScheme}.
      * @param openValue       {@link OpenValue} of the encapsulated {@link CommitmentScheme}.
      * @param plainText       {@link PlainText} (original message) of the encapsulated {@link CommitmentScheme}.
      * @return Boolean value whether the opened message equals the announced message is successful
      * (true) or not (false).
      */
     @Override
-    public boolean verify(CommitmentValue commitmentValue, OpenValue openValue, PlainText plainText) {
+    public boolean verify(Commitment commitment, OpenValue openValue, PlainText plainText) {
         ByteArrayImplementation pt;
         if (!(plainText instanceof ByteArrayImplementation)) {
             pt = (ByteArrayImplementation) mapToPlainText(plainText.getUniqueByteRepresentation());
@@ -86,7 +86,7 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
         // hash
         byte[] hashedBytes = hashFunction.hash(pt.getData());
         PlainText hashedPlainText = encapsulatedScheme.mapToPlainText(hashedBytes);
-        return encapsulatedScheme.verify(commitmentValue, openValue, hashedPlainText);
+        return encapsulatedScheme.verify(commitment, openValue, hashedPlainText);
     }
 
     /**

@@ -8,8 +8,8 @@ import de.upb.crypto.math.serialization.StandaloneRepresentable;
  * 'Commitment
  * Schemes' in combination with these interfaces:
  * {@link CommitmentScheme}, {@link CommitmentSchemePublicParameters}, {@link CommitmentSchemePublicParametersGen},
- * {@link CommitmentPair} and {@link CommitmentValue}.
- * The implementation of this interface has to contain all values for open() or verify() of a {@link CommitmentValue}.
+ * {@link CommitmentPair} and {@link Commitment}.
+ * The implementation of this interface has to contain all values for open() or verify() of a {@link Commitment}.
  * Furthermore, it is part of the {@link CommitmentPair}.
  */
 public interface OpenValue extends StandaloneRepresentable, UniqueByteRepresentable {

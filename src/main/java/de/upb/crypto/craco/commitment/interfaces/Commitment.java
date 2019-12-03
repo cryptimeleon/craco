@@ -11,5 +11,5 @@ import de.upb.crypto.math.serialization.StandaloneRepresentable;
  * The implementation of this interface has to contains the commitment value.
  * Furthermore, it is part of the {@link CommitmentPair}.
  */
-public interface CommitmentValue extends StandaloneRepresentable, UniqueByteRepresentable {
+public interface Commitment extends StandaloneRepresentable, UniqueByteRepresentable {
 }

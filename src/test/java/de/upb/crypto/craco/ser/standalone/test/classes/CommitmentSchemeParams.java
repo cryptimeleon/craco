@@ -40,7 +40,7 @@ public class CommitmentSchemeParams {
         toReturn.add(new StandaloneTestParams(FixedRValuePedersenCommitmentTestScheme.class, testScheme));
         toReturn.add(new StandaloneTestParams(PedersenCommitmentPair.class, pair));
         toReturn.add(new StandaloneTestParams(PedersenOpenValue.class, pair.getOpenValue()));
-        toReturn.add(new StandaloneTestParams(PedersenCommitmentValue.class, pair.getCommitmentValue()));
+        toReturn.add(new StandaloneTestParams(PedersenCommitment.class, pair.getCommitmentValue()));
         toReturn.add(new StandaloneTestParams(HashThenCommitCommitmentScheme.class, new
                 HashThenCommitCommitmentScheme(testScheme,
                 new SHA256HashFunction())));
