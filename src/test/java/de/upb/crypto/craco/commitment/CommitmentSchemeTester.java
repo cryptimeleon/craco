@@ -22,7 +22,7 @@ public class CommitmentSchemeTester {
      */
     public static void testCommitmentSchemeVerify(CommitmentScheme commitmentScheme, PlainText message) {
         CommitmentPair commitmentPair = commitmentScheme.commit(message);
-        assertTrue(commitmentScheme.verify(commitmentPair.getCommitmentValue(),
+        assertTrue(commitmentScheme.verify(commitmentPair.getCommitment(),
                 commitmentPair.getOpenValue(), message));
     }
 
@@ -43,15 +43,15 @@ public class CommitmentSchemeTester {
                                                                    PlainText wrongMessage) {
         CommitmentPair commitmentPair = commitmentScheme.commit(originalMessage);
         CommitmentPair commitmentPair2 = commitmentScheme.commit(wrongMessage);
-        assertFalse(commitmentScheme.verify(commitmentPair.getCommitmentValue(),
+        assertFalse(commitmentScheme.verify(commitmentPair.getCommitment(),
                 commitmentPair.getOpenValue(), wrongMessage));
-        assertFalse(commitmentScheme.verify(commitmentPair.getCommitmentValue(),
+        assertFalse(commitmentScheme.verify(commitmentPair.getCommitment(),
                 commitmentPair2.getOpenValue(), wrongMessage));
-        assertFalse(commitmentScheme.verify(commitmentPair.getCommitmentValue(),
+        assertFalse(commitmentScheme.verify(commitmentPair.getCommitment(),
                 commitmentPair2.getOpenValue(), originalMessage));
-        assertFalse(commitmentScheme.verify(commitmentPair2.getCommitmentValue(),
+        assertFalse(commitmentScheme.verify(commitmentPair2.getCommitment(),
                 commitmentPair.getOpenValue(), wrongMessage));
-        assertFalse(commitmentScheme.verify(commitmentPair2.getCommitmentValue(),
+        assertFalse(commitmentScheme.verify(commitmentPair2.getCommitment(),
                 commitmentPair2.getOpenValue(), originalMessage));
     }
 
@@ -65,7 +65,7 @@ public class CommitmentSchemeTester {
     public static void testCommitmentSchemeMapToPlaintext(CommitmentScheme commitmentScheme, PlainText message) {
         CommitmentPair commitmentPair =
                 commitmentScheme.commit(commitmentScheme.mapToPlainText(message.getUniqueByteRepresentation()));
-        assertTrue(commitmentScheme.verify(commitmentPair.getCommitmentValue(),
+        assertTrue(commitmentScheme.verify(commitmentPair.getCommitment(),
                 commitmentPair.getOpenValue(), commitmentScheme.mapToPlainText(message.getUniqueByteRepresentation())));
     }
 
@@ -90,19 +90,19 @@ public class CommitmentSchemeTester {
                 commitmentScheme.commit(commitmentScheme.mapToPlainText(originalMessage.getUniqueByteRepresentation()));
         CommitmentPair commitmentPair2 =
                 commitmentScheme.commit(commitmentScheme.mapToPlainText(wrongMessage.getUniqueByteRepresentation()));
-        assertFalse(commitmentScheme.verify(commitmentPair.getCommitmentValue(),
+        assertFalse(commitmentScheme.verify(commitmentPair.getCommitment(),
                 commitmentPair.getOpenValue(),
                 commitmentScheme.mapToPlainText(wrongMessage.getUniqueByteRepresentation())));
-        assertFalse(commitmentScheme.verify(commitmentPair.getCommitmentValue(),
+        assertFalse(commitmentScheme.verify(commitmentPair.getCommitment(),
                 commitmentPair2.getOpenValue(),
                 commitmentScheme.mapToPlainText(wrongMessage.getUniqueByteRepresentation())));
-        assertFalse(commitmentScheme.verify(commitmentPair.getCommitmentValue(),
+        assertFalse(commitmentScheme.verify(commitmentPair.getCommitment(),
                 commitmentPair2.getOpenValue(),
                 commitmentScheme.mapToPlainText(originalMessage.getUniqueByteRepresentation())));
-        assertFalse(commitmentScheme.verify(commitmentPair2.getCommitmentValue(),
+        assertFalse(commitmentScheme.verify(commitmentPair2.getCommitment(),
                 commitmentPair.getOpenValue(),
                 commitmentScheme.mapToPlainText(wrongMessage.getUniqueByteRepresentation())));
-        assertFalse(commitmentScheme.verify(commitmentPair2.getCommitmentValue(),
+        assertFalse(commitmentScheme.verify(commitmentPair2.getCommitment(),
                 commitmentPair2.getOpenValue(),
                 commitmentScheme.mapToPlainText(originalMessage.getUniqueByteRepresentation())));
     }

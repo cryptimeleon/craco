@@ -17,7 +17,7 @@ public class CommitmentPair implements Representable, UniqueByteRepresentable {
         this.openValue = openValue;
     }
 
-    public Commitment getCommitmentValue() {
+    public Commitment getCommitment() {
         return commitment;
     }
 
