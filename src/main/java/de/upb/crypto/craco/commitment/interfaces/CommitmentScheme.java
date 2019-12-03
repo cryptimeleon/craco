@@ -52,11 +52,11 @@ public interface CommitmentScheme extends StandaloneRepresentable, Representatio
 
     default CommitmentPair getCommitmentPair(Representation repr) {
         return new CommitmentPair(
-                getCommitmentValue(repr.obj().get("com")),
+                getCommitment(repr.obj().get("com")),
                 getOpenValue(repr.obj().get("open")));
     }
 
-    Commitment getCommitmentValue(Representation repr);
+    Commitment getCommitment(Representation repr);
 
     OpenValue getOpenValue(Representation repr);
 
@@ -65,7 +65,7 @@ public interface CommitmentScheme extends StandaloneRepresentable, Representatio
         if (CommitmentPair.class.isAssignableFrom((Class) type))
             return getCommitmentPair(repr);
         if (Commitment.class.isAssignableFrom((Class) type))
-            return getCommitmentValue(repr);
+            return getCommitment(repr);
         if (OpenValue.class.isAssignableFrom((Class) type))
             return getOpenValue(repr);
 

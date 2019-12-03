@@ -1,7 +1,6 @@
 package de.upb.crypto.craco.sig.ps;
 
 import de.upb.crypto.craco.commitment.pedersen.PedersenCommitmentScheme;
-import de.upb.crypto.craco.commitment.pedersen.PedersenPublicParameters;
 import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.RingElementPlainText;
 import de.upb.crypto.craco.interfaces.PlainText;
@@ -26,7 +25,7 @@ import java.util.Arrays;
  * when used in a {@link PedersenCommitmentScheme}:
  * it allows for being able to blind and unblind messages before and after signing them. This is
  * achieved by using the same g and Y-i in the
- * {@link PedersenPublicParameters} as provided by the
+ * {@link de.upb.crypto.craco.commitment.pedersen.PedersenCommitmentScheme} as provided by the
  * {@link PSExtendedSignatureScheme}. This case allows a user to receive a signature on a commitment for a message and
  * to then calculate the signature for the uncommited message and thereby receiving a signature of a signer for a
  * message without the signer knowing the content of the message.

@@ -100,6 +100,16 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
         return new ByteArrayImplementation(bytes);
     }
 
+    @Override
+    public Commitment getCommitment(Representation repr) {
+        return encapsulatedScheme.getCommitment(repr);
+    }
+
+    @Override
+    public OpenValue getOpenValue(Representation repr) {
+        return encapsulatedScheme.getOpenValue(repr);
+    }
+
     /**
      * The representation of this object. Used for serialization.
      *
