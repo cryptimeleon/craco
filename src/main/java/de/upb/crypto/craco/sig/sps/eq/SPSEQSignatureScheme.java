@@ -26,7 +26,8 @@ import java.util.stream.IntStream;
 
 /**
  * Signature scheme that was originally presented in [1] by Fuchsbauer, Hanser, and Slamanig. The result is
- * structure-preserving signatures on equivalence classes.
+ * structure-preserving signatures on equivalence classes. This is the version for messages from G_1.
+ * A version for messages in G_2 can be obtained by swapping membership of all elements.
  * <p>
  * Bilinear map type: 3
  * <p>
@@ -308,17 +309,32 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
 
     @Override
     public MessageBlock mapToPlaintext(byte[] bytes, VerificationKey pk) {
-        throw new IllegalArgumentException();
+        return mapToPlaintext(bytes, ((SPSEQVerificationKey) pk).getNumberOfMessages());
     }
 
     @Override
     public MessageBlock mapToPlaintext(byte[] bytes, SigningKey sk) {
-        throw new IllegalArgumentException();
+        return mapToPlaintext(bytes, ((SPSEQSigningKey) sk).getNumberOfMessages());
+    }
+
+    private MessageBlock mapToPlaintext(byte[] bytes, int messageBlockLength) {
+        // returns (P^m, P, ..., P) where m = Z_p.injectiveValueOf(bytes).
+        // this makes sure different messages produce different equivalence classes
+
+        GroupElementPlainText[] msgBlock = new GroupElementPlainText[messageBlockLength];
+        msgBlock[0] = new GroupElementPlainText(
+                pp.getGroup1ElementP().pow(pp.getZp().injectiveValueOf(bytes))
+        );
+        for (int i = 1; i < msgBlock.length; i++) {
+            msgBlock[i] = new GroupElementPlainText(pp.getGroup1ElementP());
+        }
+
+        return new MessageBlock(msgBlock);
     }
 
     @Override
     public int getMaxNumberOfBytesForMapToPlaintext() {
-        throw new IllegalArgumentException();
+        return (pp.getBilinearMap().getG1().size().bitLength() - 1) / 8;
     }
 
 }
