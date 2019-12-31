@@ -96,6 +96,16 @@ public class SPSEQSignatureSchemeTest {
         assertEquals(pp, ppTest);
     }
 
+    @Test
+    public void testMapToPlaintext() {
+        SignatureSchemeTester.testMapToPlaintext(spseqScheme, keyPair.getVerificationKey());
+    }
+
+    @Test
+    public void testMapToPlaintextContract() {
+        SignatureSchemeTester.testMapToPlainTextContract(spseqScheme, keyPair);
+    }
+
     protected static void measureTime(String str) {
         if (timerStart == 0) {
             DebugGroupLogger.reset();
