@@ -218,22 +218,7 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
         if (!verify(plainText, signature, publicKey)) {
             return null;
         }
-        // Method verify also checks the plaintext, signature, and public key through instanceof checks.
-        // We have to check that the element mu is of the correct type
-        if (!(mu instanceof ZpElement)) {
-            throw new IllegalArgumentException("Not a valid element 'mu' for change representative for this scheme");
-        }
-
-        // Zp element to randomize the signature
-        ZpElement psi = pp.getZp().getUniformlyRandomUnit();
-        ZpElement psiInv = psi.inv();
-
-        SPSEQSignature sigma = (SPSEQSignature) signature;
-        FutureGroupElement sigmaZ = sigma.getGroup1ElementSigma1Z().asPowProductExpression().pow(psi.mul(mu)).evaluateConcurrent();
-        FutureGroupElement sigmaY = sigma.getGroup1ElementSigma2Y().asPowProductExpression().pow(psiInv).evaluateConcurrent();
-        FutureGroupElement sigmaHatY = sigma.getGroup1ElementSigma3HatY().asPowProductExpression().pow(psiInv).evaluateConcurrent();
-
-        return new SPSEQSignature(sigmaZ.get(), sigmaY.get(), sigmaHatY.get());
+        return chgRep(signature, mu, publicKey);
     }
 
     @Override
