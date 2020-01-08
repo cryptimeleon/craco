@@ -138,6 +138,9 @@ public class StandaloneTest {
         toReturn.add(new StandaloneTestParams(ShamirSecretSharingSchemeProvider.class, new
                 ShamirSecretSharingSchemeProvider()));
         toReturn.add(ThresholdPolicyParams.get());
+        toReturn.addAll(PS18ROMSignatureParams.get());
+        toReturn.addAll(PS18SignatureParams.get());
+        toReturn.addAll(PS18SignaturePrecParams.get());
 
         // clarc
         toReturn.addAll(CommitmentSchemeParams.get());

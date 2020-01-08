@@ -6,8 +6,12 @@ import de.upb.crypto.craco.commitment.interfaces.OpenValue;
 import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.RingElementPlainText;
 import de.upb.crypto.craco.interfaces.PlainText;
+import de.upb.crypto.math.expressions.exponent.ExponentConstantExpr;
+import de.upb.crypto.math.expressions.group.GroupElementConstantExpr;
+import de.upb.crypto.math.expressions.group.GroupElementExpression;
+import de.upb.crypto.math.expressions.group.GroupOpExpr;
+import de.upb.crypto.math.expressions.group.GroupPowExpr;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
-import de.upb.crypto.math.interfaces.structures.PowProductExpression;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
 import de.upb.crypto.math.serialization.annotations.Represented;
@@ -75,7 +79,10 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
 
         // Compute c
         GroupElement g = pp.getG();
-        PowProductExpression c = g.asPowProductExpression().pow(r);
+        GroupElementExpression c = new GroupPowExpr(
+                g.expr(),
+                r.asExponentExpression()
+        );
 
         // Prepare the messages for committing
         Zp.ZpElement[] messagesInZp = new Zp.ZpElement[messageBlock.size()];
@@ -98,7 +105,7 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
         for (int i = 0; i < messagesInZp.length; i++) {
             mi = messagesInZp[i];
             hi = pp.getH()[i];
-            c.op(hi, mi);
+            c = c.opPow(hi.expr(), mi);
         }
         // Construct the commitment object
         PedersenOpenValue openValue = new PedersenOpenValue(messagesInZp, r);
@@ -118,13 +125,16 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
     private Zp.ZpElement[] open(PedersenCommitmentValue pedersenCommitmentValue, PedersenOpenValue pedersenOpenValue) {
         Zp.ZpElement[] messages = pedersenOpenValue.getMessages();
         GroupElement g = pp.getG();
-        PowProductExpression result = g.asPowProductExpression().pow(pedersenOpenValue.getRandomValue());
+        GroupElementExpression result = new GroupPowExpr(
+                g.expr(),
+                pedersenOpenValue.getRandomValue().asExponentExpression()
+        );
         Zp.ZpElement mi;
         GroupElement hi;
         for (int i = 0; i < messages.length; i++) {
             mi = messages[i];
             hi = pp.getH()[i];
-            result.op(hi, mi);
+            result = result.opPow(hi.expr(), mi);
         }
         GroupElement c = pedersenCommitmentValue.getCommitmentElement();
         return c.equals(result.evaluate()) ? pedersenOpenValue.getMessages() : null;

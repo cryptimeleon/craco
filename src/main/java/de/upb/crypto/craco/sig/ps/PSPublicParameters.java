@@ -18,10 +18,13 @@ public class PSPublicParameters implements PublicParameters {
     // The bilinear map e in the paper.
     @Represented
     private BilinearMap bilinearMap; // G1 x G2 -> GT
+    @Represented
+    private Zp zp;
 
     public PSPublicParameters(BilinearMap bilinearMap) {
         super();
         this.bilinearMap = bilinearMap;
+        this.zp = new Zp(bilinearMap.getG1().size());
     }
 
     public PSPublicParameters(Representation repr) {
@@ -37,7 +40,7 @@ public class PSPublicParameters implements PublicParameters {
      * Returns the group Zp (where p is the group order of G1, G2, and GT)
      */
     public Zp getZp() {
-        return new Zp(bilinearMap.getG1().size());
+        return zp;
     }
 
     public BilinearMap getBilinearMap() {
