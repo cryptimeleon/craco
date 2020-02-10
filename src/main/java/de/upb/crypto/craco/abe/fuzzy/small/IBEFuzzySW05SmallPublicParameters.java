@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.abe.fuzzy.small;
 
-import de.upb.crypto.craco.interfaces.PublicParameters;
-import de.upb.crypto.craco.interfaces.abe.Attribute;
+import de.upb.crypto.craco.common.interfaces.PublicParameters;
+import de.upb.crypto.craco.abe.interfaces.Attribute;
 import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;

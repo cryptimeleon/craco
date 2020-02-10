@@ -1,13 +1,13 @@
 package de.upb.crypto.craco.abe.kp.large;
 
 import de.upb.crypto.craco.common.GroupElementPlainText;
-import de.upb.crypto.craco.interfaces.CipherText;
-import de.upb.crypto.craco.interfaces.DecryptionKey;
-import de.upb.crypto.craco.interfaces.EncryptionKey;
-import de.upb.crypto.craco.interfaces.PlainText;
-import de.upb.crypto.craco.interfaces.abe.Attribute;
-import de.upb.crypto.craco.interfaces.abe.SetOfAttributes;
-import de.upb.crypto.craco.interfaces.pe.PredicateEncryptionScheme;
+import de.upb.crypto.craco.common.interfaces.CipherText;
+import de.upb.crypto.craco.common.interfaces.DecryptionKey;
+import de.upb.crypto.craco.common.interfaces.EncryptionKey;
+import de.upb.crypto.craco.common.interfaces.PlainText;
+import de.upb.crypto.craco.abe.interfaces.Attribute;
+import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
+import de.upb.crypto.craco.common.interfaces.pe.PredicateEncryptionScheme;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.zn.Zp;

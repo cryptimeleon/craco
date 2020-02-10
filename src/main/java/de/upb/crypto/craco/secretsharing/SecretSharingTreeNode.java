@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.secretsharing;
 
-import de.upb.crypto.craco.interfaces.policy.Policy;
+import de.upb.crypto.craco.common.interfaces.policy.Policy;
 
 public interface SecretSharingTreeNode {
 

@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.kem.abe.cp.os;
 
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
-import de.upb.crypto.craco.interfaces.CipherText;
-import de.upb.crypto.craco.interfaces.policy.Policy;
+import de.upb.crypto.craco.common.interfaces.CipherText;
+import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.craco.kem.asym.elgamal.ElgamalKEMCiphertext;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.*;

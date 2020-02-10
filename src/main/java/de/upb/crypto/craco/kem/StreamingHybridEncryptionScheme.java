@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.kem;
 
-import de.upb.crypto.craco.interfaces.*;
+import de.upb.crypto.craco.common.interfaces.*;
 import de.upb.crypto.craco.kem.KeyEncapsulationMechanism.KeyAndCiphertext;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.RepresentableRepresentation;

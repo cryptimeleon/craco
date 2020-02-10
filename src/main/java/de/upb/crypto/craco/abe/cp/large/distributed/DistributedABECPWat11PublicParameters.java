@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.abe.cp.large.distributed;
 
 import de.upb.crypto.craco.abe.cp.large.ABECPWat11PublicParameters;
-import de.upb.crypto.craco.interfaces.PublicParameters;
+import de.upb.crypto.craco.common.interfaces.PublicParameters;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;

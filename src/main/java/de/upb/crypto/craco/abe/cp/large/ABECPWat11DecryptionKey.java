@@ -1,9 +1,9 @@
 package de.upb.crypto.craco.abe.cp.large;
 
-import de.upb.crypto.craco.interfaces.DecryptionKey;
-import de.upb.crypto.craco.interfaces.abe.Attribute;
-import de.upb.crypto.craco.interfaces.abe.SetOfAttributes;
-import de.upb.crypto.craco.interfaces.pe.KeyIndex;
+import de.upb.crypto.craco.common.interfaces.DecryptionKey;
+import de.upb.crypto.craco.abe.interfaces.Attribute;
+import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
+import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
@@ -18,7 +18,7 @@ import java.util.Map;
  * a {@link SetOfAttributes} as {@link KeyIndex}.
  * <p>
  * This key should be created by
- * {@link ABECPWat11#generateDecryptionKey(de.upb.crypto.craco.interfaces.pe.MasterSecret, de.upb.crypto.craco.interfaces.pe.KeyIndex)}
+ * {@link ABECPWat11#generateDecryptionKey(de.upb.crypto.craco.common.interfaces.pe.MasterSecret, de.upb.crypto.craco.common.interfaces.pe.KeyIndex)}
  *
  * @author Mirko Jürgens, Jan Bobolz
  */

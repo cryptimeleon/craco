@@ -2,7 +2,7 @@ package de.upb.crypto.craco.kem.abe.cp.os;
 
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalEncryption;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPublicKey;
-import de.upb.crypto.craco.interfaces.PublicParameters;
+import de.upb.crypto.craco.common.interfaces.PublicParameters;
 import de.upb.crypto.craco.kem.asym.elgamal.ElgamalKEM;
 import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.interfaces.structures.Group;

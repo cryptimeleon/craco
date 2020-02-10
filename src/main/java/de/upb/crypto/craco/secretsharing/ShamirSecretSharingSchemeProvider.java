@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.secretsharing;
 
-import de.upb.crypto.craco.interfaces.abe.LinearSecretSharing;
-import de.upb.crypto.craco.interfaces.policy.Policy;
-import de.upb.crypto.craco.interfaces.policy.ThresholdPolicy;
+import de.upb.crypto.craco.abe.interfaces.LinearSecretSharing;
+import de.upb.crypto.craco.common.interfaces.policy.Policy;
+import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.zn.Zp;

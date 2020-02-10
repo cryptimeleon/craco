@@ -4,7 +4,7 @@ import de.upb.crypto.craco.commitment.interfaces.CommitmentPair;
 import de.upb.crypto.craco.commitment.interfaces.CommitmentScheme;
 import de.upb.crypto.craco.commitment.interfaces.CommitmentValue;
 import de.upb.crypto.craco.commitment.interfaces.OpenValue;
-import de.upb.crypto.craco.interfaces.PlainText;
+import de.upb.crypto.craco.common.interfaces.PlainText;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

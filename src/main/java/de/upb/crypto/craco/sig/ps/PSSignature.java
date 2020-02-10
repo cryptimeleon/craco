@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.sig.ps;
 
-import de.upb.crypto.craco.interfaces.signature.Signature;
+import de.upb.crypto.craco.sig.interfaces.Signature;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;

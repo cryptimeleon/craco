@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.ser.standalone.test.classes;
 
-import de.upb.crypto.craco.interfaces.abe.StringAttribute;
-import de.upb.crypto.craco.interfaces.policy.BooleanPolicy;
-import de.upb.crypto.craco.interfaces.policy.BooleanPolicy.BooleanOperator;
+import de.upb.crypto.craco.abe.interfaces.StringAttribute;
+import de.upb.crypto.craco.common.interfaces.policy.BooleanPolicy;
+import de.upb.crypto.craco.common.interfaces.policy.BooleanPolicy.BooleanOperator;
 import de.upb.crypto.craco.kem.abe.cp.os.ElgamalLargeUniverseDelegationKEM;
 import de.upb.crypto.craco.kem.abe.cp.os.LUDEncryptionKey;
 import de.upb.crypto.craco.kem.abe.cp.os.LUDPublicParameters;

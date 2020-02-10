@@ -1,9 +1,9 @@
 package de.upb.crypto.craco.abe.ibe;
 
+import de.upb.crypto.craco.common.interfaces.*;
+import de.upb.crypto.craco.common.interfaces.pe.*;
 import de.upb.crypto.craco.common.utils.ByteUtil;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
-import de.upb.crypto.craco.interfaces.*;
-import de.upb.crypto.craco.interfaces.pe.*;
 import de.upb.crypto.math.hash.impl.ByteArrayAccumulator;
 import de.upb.crypto.math.hash.impl.SHA256HashFunction;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;

@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.abe.kp.small;
 
-import de.upb.crypto.craco.interfaces.abe.Attribute;
-import de.upb.crypto.craco.interfaces.pe.MasterSecret;
+import de.upb.crypto.craco.abe.interfaces.Attribute;
+import de.upb.crypto.craco.common.interfaces.pe.MasterSecret;
 import de.upb.crypto.math.serialization.MapRepresentation;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.RepresentableRepresentation;

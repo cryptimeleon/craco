@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.enc.test;
 
-import de.upb.crypto.craco.interfaces.*;
+import de.upb.crypto.craco.common.interfaces.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

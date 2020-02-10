@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.abe.fuzzy.large;
 
-import de.upb.crypto.craco.interfaces.pe.MasterSecret;
+import de.upb.crypto.craco.common.interfaces.pe.MasterSecret;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
 import de.upb.crypto.math.serialization.annotations.Represented;

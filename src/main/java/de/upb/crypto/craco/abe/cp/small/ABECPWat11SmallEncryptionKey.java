@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.abe.cp.small;
 
-import de.upb.crypto.craco.interfaces.EncryptionKey;
-import de.upb.crypto.craco.interfaces.pe.CiphertextIndex;
-import de.upb.crypto.craco.interfaces.policy.Policy;
+import de.upb.crypto.craco.common.interfaces.EncryptionKey;
+import de.upb.crypto.craco.common.interfaces.pe.CiphertextIndex;
+import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
@@ -17,7 +17,7 @@ import de.upb.crypto.math.serialization.annotations.Represented;
  * {@link} Policy as {@link CiphertextIndex}.
  * <p>
  * This key should be created by
- * {@link ABECPWat11Small#generateEncryptionKey(de.upb.crypto.craco.interfaces.pe.CiphertextIndex)}
+ * {@link ABECPWat11Small#generateEncryptionKey(de.upb.crypto.craco.common.interfaces.pe.CiphertextIndex)}
  *
  * @author Mirko Jürgens
  */

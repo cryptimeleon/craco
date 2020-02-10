@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.abe.fuzzy.small;
 
 import de.upb.crypto.craco.abe.fuzzy.large.Identity;
-import de.upb.crypto.craco.interfaces.DecryptionKey;
-import de.upb.crypto.craco.interfaces.abe.SetOfAttributes;
+import de.upb.crypto.craco.common.interfaces.DecryptionKey;
+import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;

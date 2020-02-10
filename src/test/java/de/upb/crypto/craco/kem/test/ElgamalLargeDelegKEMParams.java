@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.kem.test;
 
-import de.upb.crypto.craco.interfaces.KeyPair;
-import de.upb.crypto.craco.interfaces.policy.Policy;
+import de.upb.crypto.craco.common.interfaces.KeyPair;
+import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.craco.kem.abe.cp.os.ElgamalLargeUniverseDelegationKEM;
 import de.upb.crypto.craco.kem.abe.cp.os.LUDDecryptionKey;
 import de.upb.crypto.craco.kem.abe.cp.os.LUDEncryptionKey;

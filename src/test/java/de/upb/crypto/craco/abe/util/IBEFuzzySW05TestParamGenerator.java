@@ -2,7 +2,7 @@ package de.upb.crypto.craco.abe.util;
 
 import de.upb.crypto.craco.abe.fuzzy.large.IBEFuzzySW05;
 import de.upb.crypto.craco.abe.fuzzy.large.Identity;
-import de.upb.crypto.craco.interfaces.abe.BigIntegerAttribute;
+import de.upb.crypto.craco.abe.interfaces.BigIntegerAttribute;
 
 import java.math.BigInteger;
 

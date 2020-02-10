@@ -4,8 +4,8 @@ import de.upb.crypto.craco.abe.cp.small.ABECPWat11Small;
 import de.upb.crypto.craco.abe.cp.small.ABECPWat11SmallKEM;
 import de.upb.crypto.craco.abe.cp.small.ABECPWat11SmallPublicParameters;
 import de.upb.crypto.craco.abe.cp.small.ABECPWat11SmallSetup;
-import de.upb.crypto.craco.interfaces.abe.SetOfAttributes;
-import de.upb.crypto.craco.interfaces.abe.StringAttribute;
+import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
+import de.upb.crypto.craco.abe.interfaces.StringAttribute;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
 
 import java.util.ArrayList;

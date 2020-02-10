@@ -3,8 +3,8 @@ package de.upb.crypto.craco.sig.ps18;
 import com.github.noconnor.junitperf.JUnitPerfRule;
 import com.github.noconnor.junitperf.JUnitPerfTest;
 import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.interfaces.signature.Signature;
-import de.upb.crypto.craco.interfaces.signature.SignatureKeyPair;
+import de.upb.crypto.craco.sig.interfaces.Signature;
+import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
 import org.junit.*;
 
 import static org.junit.Assert.assertTrue;

@@ -2,13 +2,13 @@ package de.upb.crypto.craco.test;
 
 import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.RingElementPlainText;
+import de.upb.crypto.craco.common.interfaces.*;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalEncryption;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPlainText;
-import de.upb.crypto.craco.interfaces.*;
-import de.upb.crypto.craco.interfaces.signature.Signature;
-import de.upb.crypto.craco.interfaces.signature.SignatureKeyPair;
-import de.upb.crypto.craco.interfaces.signature.SigningKey;
-import de.upb.crypto.craco.interfaces.signature.VerificationKey;
+import de.upb.crypto.craco.sig.interfaces.Signature;
+import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
+import de.upb.crypto.craco.sig.interfaces.SigningKey;
+import de.upb.crypto.craco.sig.interfaces.VerificationKey;
 import de.upb.crypto.craco.sig.ps.*;
 import de.upb.crypto.math.interfaces.structures.Element;
 import de.upb.crypto.math.interfaces.structures.Group;

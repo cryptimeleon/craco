@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.sig.ps18;
 
 import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.interfaces.signature.SignatureKeyPair;
+import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
 
 import static org.junit.Assert.assertTrue;
 

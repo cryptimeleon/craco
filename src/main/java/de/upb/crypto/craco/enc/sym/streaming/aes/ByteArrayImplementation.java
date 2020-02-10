@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.enc.sym.streaming.aes;
 
-import de.upb.crypto.craco.interfaces.*;
-import de.upb.crypto.craco.interfaces.pe.CiphertextIndex;
-import de.upb.crypto.craco.interfaces.pe.KeyIndex;
+import de.upb.crypto.craco.common.interfaces.*;
+import de.upb.crypto.craco.common.interfaces.pe.CiphertextIndex;
+import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
 import de.upb.crypto.craco.prf.PrfImage;
 import de.upb.crypto.craco.prf.PrfKey;
 import de.upb.crypto.craco.prf.PrfPreimage;

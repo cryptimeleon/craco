@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.sig.bbs;
 
-import de.upb.crypto.craco.interfaces.PublicParameters;
+import de.upb.crypto.craco.common.interfaces.PublicParameters;
 import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.interfaces.mappings.GroupHomomorphism;
 import de.upb.crypto.math.interfaces.structures.Group;

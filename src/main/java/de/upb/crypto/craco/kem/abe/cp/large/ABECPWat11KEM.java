@@ -2,8 +2,8 @@ package de.upb.crypto.craco.kem.abe.cp.large;
 
 import de.upb.crypto.craco.abe.accessStructure.MonotoneSpanProgram;
 import de.upb.crypto.craco.abe.cp.large.*;
-import de.upb.crypto.craco.interfaces.*;
-import de.upb.crypto.craco.interfaces.pe.PredicateKEM;
+import de.upb.crypto.craco.common.interfaces.*;
+import de.upb.crypto.craco.common.interfaces.pe.PredicateKEM;
 import de.upb.crypto.craco.kem.KeyMaterial;
 import de.upb.crypto.craco.kem.UniqueByteKeyMaterial;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
@@ -48,7 +48,7 @@ public class ABECPWat11KEM extends AbstractABECPWat11 implements PredicateKEM<Ke
      * encapsulation of this key.
      *
      * @param publicKey {@link ABECPWat11EncryptionKey} created by
-     *                  {@link ABECPWat11#generateEncryptionKey(de.upb.crypto.craco.interfaces.pe.CiphertextIndex)}
+     *                  {@link ABECPWat11#generateEncryptionKey(de.upb.crypto.craco.common.interfaces.pe.CiphertextIndex)}
      * @return (Y ^ s, ( g ^ s, ( g ^ { a \ lambda_i } * T ( \ rho ( i))^{-s})))
      */
     public KeyAndCiphertext<KeyMaterial> encaps(EncryptionKey publicKey) {

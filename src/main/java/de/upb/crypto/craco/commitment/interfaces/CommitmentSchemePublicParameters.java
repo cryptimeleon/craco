@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.commitment.interfaces;
 
-import de.upb.crypto.craco.interfaces.PublicParameters;
+import de.upb.crypto.craco.common.interfaces.PublicParameters;
 
 /**
  * Marker interface for public parameters of a {@link CommitmentScheme} reflecting the theoretical properties of

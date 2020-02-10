@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.kem;
 
-import de.upb.crypto.craco.interfaces.EncryptionScheme;
-import de.upb.crypto.craco.interfaces.SymmetricKey;
-import de.upb.crypto.craco.interfaces.pe.PredicateKEM;
+import de.upb.crypto.craco.common.interfaces.EncryptionScheme;
+import de.upb.crypto.craco.common.interfaces.SymmetricKey;
+import de.upb.crypto.craco.common.interfaces.pe.PredicateKEM;
 
 /**
  * A KEM that implements the standard hybrid construction, i.e. encaps()

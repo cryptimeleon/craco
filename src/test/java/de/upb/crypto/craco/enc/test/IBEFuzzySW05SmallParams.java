@@ -5,12 +5,12 @@ import de.upb.crypto.craco.abe.fuzzy.small.IBEFuzzySW05SmallMasterSecret;
 import de.upb.crypto.craco.abe.fuzzy.small.IBEFuzzySW05SmallPublicParameters;
 import de.upb.crypto.craco.abe.fuzzy.small.IBEFuzzySW05SmallSetup;
 import de.upb.crypto.craco.common.GroupElementPlainText;
-import de.upb.crypto.craco.interfaces.DecryptionKey;
-import de.upb.crypto.craco.interfaces.EncryptionKey;
-import de.upb.crypto.craco.interfaces.KeyPair;
-import de.upb.crypto.craco.interfaces.PlainText;
-import de.upb.crypto.craco.interfaces.abe.BigIntegerAttribute;
-import de.upb.crypto.craco.interfaces.abe.SetOfAttributes;
+import de.upb.crypto.craco.common.interfaces.DecryptionKey;
+import de.upb.crypto.craco.common.interfaces.EncryptionKey;
+import de.upb.crypto.craco.common.interfaces.KeyPair;
+import de.upb.crypto.craco.common.interfaces.PlainText;
+import de.upb.crypto.craco.abe.interfaces.BigIntegerAttribute;
+import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
 
 import java.math.BigInteger;
 import java.util.function.Supplier;

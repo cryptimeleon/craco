@@ -1,10 +1,10 @@
 package de.upb.crypto.craco.abe.fuzzy.large;
 
-import de.upb.crypto.craco.interfaces.abe.BigIntegerAttribute;
-import de.upb.crypto.craco.interfaces.pe.CiphertextIndex;
-import de.upb.crypto.craco.interfaces.pe.KeyIndex;
-import de.upb.crypto.craco.interfaces.policy.Policy;
-import de.upb.crypto.craco.interfaces.policy.ThresholdPolicy;
+import de.upb.crypto.craco.abe.interfaces.BigIntegerAttribute;
+import de.upb.crypto.craco.common.interfaces.pe.CiphertextIndex;
+import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
+import de.upb.crypto.craco.common.interfaces.policy.Policy;
+import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
 import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;

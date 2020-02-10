@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.abe.cp.large.distributed;
 
-import de.upb.crypto.craco.interfaces.abe.Attribute;
-import de.upb.crypto.craco.interfaces.abe.SetOfAttributes;
-import de.upb.crypto.craco.interfaces.abe.distributed.KeyShare;
+import de.upb.crypto.craco.abe.interfaces.Attribute;
+import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
+import de.upb.crypto.craco.abe.interfaces.distributed.KeyShare;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;

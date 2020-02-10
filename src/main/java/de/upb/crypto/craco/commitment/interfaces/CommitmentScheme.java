@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.commitment.interfaces;
 
-import de.upb.crypto.craco.interfaces.PlainText;
+import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
 
 /**

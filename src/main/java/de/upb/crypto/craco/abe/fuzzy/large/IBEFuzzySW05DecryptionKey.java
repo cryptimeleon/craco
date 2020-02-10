@@ -1,9 +1,9 @@
 package de.upb.crypto.craco.abe.fuzzy.large;
 
 
-import de.upb.crypto.craco.interfaces.DecryptionKey;
-import de.upb.crypto.craco.interfaces.pe.KeyIndex;
-import de.upb.crypto.craco.interfaces.pe.MasterSecret;
+import de.upb.crypto.craco.common.interfaces.DecryptionKey;
+import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
+import de.upb.crypto.craco.common.interfaces.pe.MasterSecret;
 import de.upb.crypto.craco.kem.fuzzy.large.IBEFuzzySW05KEM;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;

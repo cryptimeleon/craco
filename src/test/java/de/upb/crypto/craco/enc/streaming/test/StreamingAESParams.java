@@ -3,8 +3,8 @@ package de.upb.crypto.craco.enc.streaming.test;
 import de.upb.crypto.craco.enc.sym.streaming.aes.StreamingCBCAES;
 import de.upb.crypto.craco.enc.sym.streaming.aes.StreamingGCMAES;
 import de.upb.crypto.craco.enc.sym.streaming.aes.StreamingGCMAESPacketMode;
-import de.upb.crypto.craco.interfaces.KeyPair;
-import de.upb.crypto.craco.interfaces.SymmetricKey;
+import de.upb.crypto.craco.common.interfaces.KeyPair;
+import de.upb.crypto.craco.common.interfaces.SymmetricKey;
 
 public class StreamingAESParams {
 

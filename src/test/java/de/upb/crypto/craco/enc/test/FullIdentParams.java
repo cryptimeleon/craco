@@ -5,10 +5,10 @@ import de.upb.crypto.craco.abe.ibe.FullIdentMasterSecret;
 import de.upb.crypto.craco.abe.ibe.FullIdentPublicParameters;
 import de.upb.crypto.craco.abe.ibe.FullIdentSetup;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
-import de.upb.crypto.craco.interfaces.DecryptionKey;
-import de.upb.crypto.craco.interfaces.EncryptionKey;
-import de.upb.crypto.craco.interfaces.KeyPair;
-import de.upb.crypto.craco.interfaces.PlainText;
+import de.upb.crypto.craco.common.interfaces.DecryptionKey;
+import de.upb.crypto.craco.common.interfaces.EncryptionKey;
+import de.upb.crypto.craco.common.interfaces.KeyPair;
+import de.upb.crypto.craco.common.interfaces.PlainText;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
