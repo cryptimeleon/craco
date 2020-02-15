@@ -4,7 +4,7 @@ import de.upb.crypto.craco.abe.cp.large.ABECPWat11;
 import de.upb.crypto.craco.abe.cp.large.ABECPWat11DecryptionKey;
 import de.upb.crypto.craco.common.utils.LagrangeUtil;
 import de.upb.crypto.craco.common.interfaces.DecryptionKey;
-import de.upb.crypto.craco.common.interfaces.DistributedEncryptionScheme;
+import de.upb.crypto.craco.abe.interfaces.distributed.DistributedEncryptionScheme;
 import de.upb.crypto.craco.abe.interfaces.Attribute;
 import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
 import de.upb.crypto.craco.abe.interfaces.distributed.KeyShare;

@@ -1,7 +1,9 @@
-package de.upb.crypto.craco.common.interfaces;
+package de.upb.crypto.craco.abe.interfaces.distributed;
 
 import de.upb.crypto.craco.abe.interfaces.distributed.KeyShare;
 import de.upb.crypto.craco.abe.interfaces.distributed.MasterKeyShare;
+import de.upb.crypto.craco.common.interfaces.DecryptionKey;
+import de.upb.crypto.craco.common.interfaces.EncryptionScheme;
 import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
 import de.upb.crypto.math.serialization.Representation;
 
