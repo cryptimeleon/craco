@@ -3,7 +3,7 @@ package de.upb.crypto.craco.kem.abe.cp.os;
 import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.abe.interfaces.Attribute;
 import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
-import de.upb.crypto.craco.common.interfaces.proxy.TransformationKey;
+import de.upb.crypto.craco.kem.abe.interfaces.proxy.TransformationKey;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.MapRepresentation;
 import de.upb.crypto.math.serialization.ObjectRepresentation;

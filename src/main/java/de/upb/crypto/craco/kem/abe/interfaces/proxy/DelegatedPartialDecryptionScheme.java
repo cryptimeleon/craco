@@ -1,14 +1,27 @@
-package de.upb.crypto.craco.common.interfaces.proxy;
+package de.upb.crypto.craco.kem.abe.interfaces.proxy;
 
 import de.upb.crypto.craco.common.interfaces.CipherText;
 import de.upb.crypto.craco.common.interfaces.DecryptionKey;
-import de.upb.crypto.craco.kem.KeyEncapsulationMechanism;
+import de.upb.crypto.craco.common.interfaces.EncryptionScheme;
 import de.upb.crypto.math.serialization.Representation;
 
 /**
- * See DelegatedPartialDecryptionScheme
+ * A delegated partial decryption scheme is an encryption scheme where
+ * the owner of a decryption key can generate some "transformation key"
+ * that allows any party ("proxy") to transform a ciphertext of the scheme
+ * to a ciphertext (of potentially a different scheme) (without learning the
+ * plaintext).
+ * <p>
+ * The usual process of "partially-proxy-decrypting" a ciphertext c of this encryption scheme
+ * is:
+ * - make sure you have a decryption key dk that could directly decrypt the ciphertext (i.e. decrypt() works)
+ * - get transformation key tf and decryption key dk' from generateTransformationKey(dk)
+ * - anyone can now, given tf, transform the ciphertext c to a ciphertext c' using transform(c, tf)
+ * - c' can be decrypted using getSchemeForTransformedCiphertexts().decrypt(c', dk')
+ *
+ * @author Jan
  */
-public interface DelegatedPartialDecapsulationScheme<T> extends KeyEncapsulationMechanism<T> {
+public interface DelegatedPartialDecryptionScheme extends EncryptionScheme {
     public static class TransformationAndDecryptionKey {
         public TransformationKey transformationKey;
         public DecryptionKey decryptionKey;
@@ -38,7 +51,7 @@ public interface DelegatedPartialDecapsulationScheme<T> extends KeyEncapsulation
     /**
      * Returns the scheme that the transformed ciphertexts are meaningful to.
      */
-    public KeyEncapsulationMechanism<T> getSchemeForTransformedCiphertexts();
+    public EncryptionScheme getSchemeForTransformedCiphertexts();
 
     /**
      * Recreates a transformation key from representation

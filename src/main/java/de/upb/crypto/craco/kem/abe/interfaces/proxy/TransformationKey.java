@@ -1,4 +1,4 @@
-package de.upb.crypto.craco.common.interfaces.proxy;
+package de.upb.crypto.craco.kem.abe.interfaces.proxy;
 
 import de.upb.crypto.math.serialization.Representable;
 

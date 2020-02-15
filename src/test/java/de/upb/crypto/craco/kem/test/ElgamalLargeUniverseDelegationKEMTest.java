@@ -12,7 +12,7 @@ import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
 import de.upb.crypto.craco.abe.interfaces.StringAttribute;
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
-import de.upb.crypto.craco.common.interfaces.proxy.DelegatedPartialDecapsulationScheme.TransformationAndDecryptionKey;
+import de.upb.crypto.craco.kem.abe.interfaces.proxy.DelegatedPartialDecapsulationScheme.TransformationAndDecryptionKey;
 import de.upb.crypto.craco.kem.KeyEncapsulationMechanism.KeyAndCiphertext;
 import de.upb.crypto.craco.kem.abe.cp.os.*;
 import de.upb.crypto.craco.kem.asym.elgamal.ElgamalKEMCiphertext;
