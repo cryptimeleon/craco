@@ -7,7 +7,7 @@ import de.upb.crypto.craco.prf.PrfPreimage;
 import de.upb.crypto.craco.prf.PseudorandomFunction;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -37,12 +37,12 @@ public class AesPseudorandomFunction implements PseudorandomFunction {
     }
 
     public AesPseudorandomFunction(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

@@ -3,7 +3,7 @@ package de.upb.crypto.craco.kdf.lhl;
 import de.upb.crypto.craco.interfaces.kdf.HashFamily;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.polynomial.Seed;
 
 import java.math.BigInteger;
@@ -58,12 +58,12 @@ public class UniversalHashFamily implements HashFamily {
     }
 
     public UniversalHashFamily(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

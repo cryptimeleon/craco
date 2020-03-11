@@ -6,7 +6,7 @@ import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.RepresentedList;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class ThresholdPolicy implements Policy {
     private ArrayList<Policy> children;
 
     public ThresholdPolicy(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public ThresholdPolicy(int threshold, Collection<? extends Policy> children) {
@@ -37,7 +37,7 @@ public class ThresholdPolicy implements Policy {
     }
 
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

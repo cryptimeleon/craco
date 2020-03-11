@@ -3,7 +3,7 @@ package de.upb.crypto.craco.abe.fuzzy.large;
 import de.upb.crypto.craco.interfaces.pe.MasterSecret;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
@@ -27,12 +27,12 @@ public class IBEFuzzySW05MasterSecret implements MasterSecret {
 
     public IBEFuzzySW05MasterSecret(Representation repr, IBEFuzzySW05PublicParameters kpp) {
         zp = new Zp(kpp.getGroupG1().size());
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

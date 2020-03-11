@@ -5,7 +5,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
 import java.util.Map;
@@ -39,7 +39,7 @@ public class IBEIBEFuzzySW05SW05CipherText extends IBEFuzzySW05KEMCipherText {
         super();
         groupG1 = pp.getGroupG1();
         groupGT = pp.getGroupGT();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public GroupElement getEPrime() {

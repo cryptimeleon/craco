@@ -5,7 +5,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.RepresentedArray;
 
 import java.util.Arrays;
@@ -47,13 +47,13 @@ public class PSVerificationKey implements VerificationKey {
 
     public PSVerificationKey(Group groupG2, Representation repr) {
         this.groupG2 = groupG2;
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
         this.groupG2 = null;
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public GroupElement getGroup2ElementTildeG() {

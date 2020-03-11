@@ -5,7 +5,7 @@ import de.upb.crypto.craco.kem.KeyDerivationFunction;
 import de.upb.crypto.craco.kem.KeyMaterial;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 /**
  * An instance of {@link LHLFamily}. For more information see javadoc there.
@@ -23,12 +23,12 @@ public class LHLKeyDerivationFunction implements KeyDerivationFunction<ByteArray
     }
 
     public LHLKeyDerivationFunction(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

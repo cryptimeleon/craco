@@ -7,7 +7,7 @@ import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 
 public class NguyenAccumulatorIdentity implements AccumulatorIdentity, UniqueByteRepresentable {
@@ -56,7 +56,7 @@ public class NguyenAccumulatorIdentity implements AccumulatorIdentity, UniqueByt
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

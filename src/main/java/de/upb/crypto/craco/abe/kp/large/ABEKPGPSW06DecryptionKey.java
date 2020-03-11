@@ -7,7 +7,8 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.RepresentedMap;
 
 import java.math.BigInteger;
@@ -25,12 +26,10 @@ public class ABEKPGPSW06DecryptionKey implements DecryptionKey {
     @Represented
     private Policy policy;
 
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "G1")
     private Map<BigInteger, GroupElement> dElementMap;
 
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "G1")
     private Map<BigInteger, GroupElement> rElementMap;
 
     @SuppressWarnings("unused")
@@ -45,12 +44,12 @@ public class ABEKPGPSW06DecryptionKey implements DecryptionKey {
 
     public ABEKPGPSW06DecryptionKey(Representation repr, ABEKPGPSW06PublicParameters kpp) {
         groupG1 = kpp.getGroupG1();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).register(groupG1, "G1").deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public Policy getPolicy() {

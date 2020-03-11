@@ -4,14 +4,15 @@ import de.upb.crypto.craco.interfaces.abe.distributed.MasterKeyShare;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
 
 public class DistributedABECPWat11MasterKeyShare implements StandaloneRepresentable, MasterKeyShare {
 
     @Represented
-    private int serverID;
+    private Integer serverID;
 
     @Represented
     private BigInteger share;
@@ -23,7 +24,7 @@ public class DistributedABECPWat11MasterKeyShare implements StandaloneRepresenta
     }
 
     public DistributedABECPWat11MasterKeyShare(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public int getServerID() {
@@ -36,7 +37,7 @@ public class DistributedABECPWat11MasterKeyShare implements StandaloneRepresenta
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

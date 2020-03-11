@@ -8,7 +8,8 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public class ABEKPGPSW06CipherText extends ABEKPGPSW06KEMCipherText {
     /**
      * E' := m * Y^s \in G_T
      */
-    @Represented(structure = "groupGT", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "GT")
     private GroupElement ePrime;
 
     @SuppressWarnings("unused")
@@ -33,12 +34,12 @@ public class ABEKPGPSW06CipherText extends ABEKPGPSW06KEMCipherText {
         this.ePrime = ePrime;
     }
 
-    public ABEKPGPSW06CipherText(Representation representation, ABEKPGPSW06PublicParameters kpp) {
+    public ABEKPGPSW06CipherText(Representation repr, ABEKPGPSW06PublicParameters kpp) {
         // restoring doesn't work with super call, so empty constructor is needed
         super();
         groupG1 = kpp.getGroupG1();
         groupGT = kpp.getGroupGT();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(representation, this);
+        new ReprUtil(this).register(groupG1, "G1").register(groupGT, "GT").deserialize(repr);
     }
 
     public GroupElement getEPrime() {

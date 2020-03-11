@@ -6,7 +6,7 @@ import de.upb.crypto.craco.kem.KeyDerivationFunction;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.RepresentedList;
 import de.upb.crypto.math.structures.polynomial.Seed;
 import org.apache.logging.log4j.LogManager;
@@ -99,7 +99,7 @@ public class UnpredictabilityKeyDerivationFamily implements StandaloneRepresenta
     }
 
     public UnpredictabilityKeyDerivationFamily(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public List<KWiseDeltaDependentHashFamily> getFamilyList() {
@@ -132,7 +132,7 @@ public class UnpredictabilityKeyDerivationFamily implements StandaloneRepresenta
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

@@ -6,7 +6,7 @@ import de.upb.crypto.math.hash.impl.SHA256HashFunction;
 import de.upb.crypto.math.interfaces.hash.HashFunction;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Arrays;
 
@@ -34,12 +34,12 @@ public class HashBasedKeyDerivationFunction implements KeyDerivationFunction<Sym
     }
 
     public HashBasedKeyDerivationFunction(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

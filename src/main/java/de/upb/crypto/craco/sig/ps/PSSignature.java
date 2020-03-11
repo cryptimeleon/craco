@@ -5,7 +5,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Objects;
 
@@ -34,7 +34,7 @@ public class PSSignature implements Signature {
 
     public PSSignature(Representation repr, Group groupG1) {
         this.groupG1 = groupG1;
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
         this.groupG1 = null;
     }
 
@@ -46,7 +46,7 @@ public class PSSignature implements Signature {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public GroupElement getGroup1ElementSigma1() {

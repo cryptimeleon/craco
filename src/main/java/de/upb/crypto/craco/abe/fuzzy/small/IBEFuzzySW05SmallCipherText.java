@@ -7,7 +7,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.RepresentedMap;
 
 import java.util.Map;
@@ -49,11 +49,11 @@ public class IBEFuzzySW05SmallCipherText implements CipherText {
     public IBEFuzzySW05SmallCipherText(Representation repr, IBEFuzzySW05SmallPublicParameters pp) {
         groupGT = pp.getGroupGT();
         groupG1 = pp.getGroupG1();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public SetOfAttributes getOmega_prime() {

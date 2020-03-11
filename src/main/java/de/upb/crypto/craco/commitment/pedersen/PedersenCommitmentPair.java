@@ -6,7 +6,7 @@ import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Objects;
 
@@ -40,7 +40,7 @@ public class PedersenCommitmentPair implements CommitmentPair {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

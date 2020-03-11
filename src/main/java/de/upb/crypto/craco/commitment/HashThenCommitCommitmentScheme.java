@@ -9,7 +9,7 @@ import de.upb.crypto.craco.interfaces.PlainText;
 import de.upb.crypto.math.interfaces.hash.HashFunction;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Objects;
 
@@ -108,7 +108,7 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
      */
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

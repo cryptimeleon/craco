@@ -7,7 +7,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.RepresentedMap;
 
 import java.math.BigInteger;
@@ -45,7 +45,7 @@ public class IBEFuzzySW05SmallPublicParameters implements PublicParameters {
     private BilinearMap e;
 
     public IBEFuzzySW05SmallPublicParameters(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public IBEFuzzySW05SmallPublicParameters() {
@@ -53,7 +53,7 @@ public class IBEFuzzySW05SmallPublicParameters implements PublicParameters {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public BigInteger getD() {

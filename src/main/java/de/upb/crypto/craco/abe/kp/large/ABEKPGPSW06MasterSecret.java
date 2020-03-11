@@ -3,7 +3,8 @@ package de.upb.crypto.craco.abe.kp.large;
 import de.upb.crypto.craco.interfaces.pe.MasterSecret;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
@@ -16,7 +17,7 @@ import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 public class ABEKPGPSW06MasterSecret implements MasterSecret {
 
     // Uniformly random element in Z_{size(GroupG1)}
-    @Represented(structure = "zp", recoveryMethod = ZpElement.RECOVERY_METHOD)
+    @Represented(restorer = "Zp")
     private ZpElement y;
 
     @SuppressWarnings("unused")
@@ -28,12 +29,12 @@ public class ABEKPGPSW06MasterSecret implements MasterSecret {
 
     public ABEKPGPSW06MasterSecret(Representation repr, ABEKPGPSW06PublicParameters kpp) {
         zp = new Zp(kpp.getGroupG1().size());
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).register(zp, "Zp").deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

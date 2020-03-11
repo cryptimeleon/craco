@@ -3,7 +3,7 @@ package de.upb.crypto.craco.kdf.lhl;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.polynomial.Seed;
 
 import java.math.BigInteger;
@@ -55,7 +55,7 @@ public class LHLFamily implements StandaloneRepresentable {
     }
 
     public LHLFamily(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public int getSeedLength() {
@@ -68,7 +68,7 @@ public class LHLFamily implements StandaloneRepresentable {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

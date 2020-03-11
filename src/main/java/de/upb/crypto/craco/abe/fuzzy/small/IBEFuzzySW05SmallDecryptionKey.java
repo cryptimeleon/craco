@@ -7,7 +7,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.RepresentedMap;
 
 import java.math.BigInteger;
@@ -41,12 +41,12 @@ public class IBEFuzzySW05SmallDecryptionKey implements DecryptionKey {
 
     public IBEFuzzySW05SmallDecryptionKey(Representation repr, IBEFuzzySW05SmallPublicParameters kpp) {
         groupG1 = kpp.getGroupG1();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public SetOfAttributes getIdentity() {

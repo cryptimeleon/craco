@@ -3,7 +3,7 @@ package de.upb.crypto.craco.sig.ps;
 import de.upb.crypto.craco.interfaces.signature.SigningKey;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.RepresentedArray;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
@@ -40,13 +40,13 @@ public class PSSigningKey implements SigningKey {
 
     public PSSigningKey(Representation repr, Zp zp) {
         this.zp = zp;
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
         this.zp = null;
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public ZpElement getExponentX() {

@@ -5,7 +5,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 public class NguyenWitness implements AccumulatorWitness {
     @Represented(structure = "group", recoveryMethod = GroupElement.RECOVERY_METHOD)
@@ -56,6 +56,6 @@ public class NguyenWitness implements AccumulatorWitness {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 }

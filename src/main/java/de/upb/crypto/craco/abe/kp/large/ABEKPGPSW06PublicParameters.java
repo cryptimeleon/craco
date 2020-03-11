@@ -7,7 +7,8 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.RepresentedMap;
 
 import java.math.BigInteger;
@@ -21,20 +22,19 @@ import java.util.Map;
  */
 public class ABEKPGPSW06PublicParameters implements PublicParameters {
 
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "groupG1")
     private GroupElement g1_generator;
 
     // T_i in groupG1
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "foo -> groupG1")
     private Map<BigInteger, GroupElement> t;
 
     // in groupGT
-    @Represented(structure = "groupGT", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "groupGT")
     private GroupElement y;
 
     @Represented
-    private Group groupG1, groupG2, groupGT;
+    public Group groupG1, groupG2, groupGT;
 
     @Represented
     private BilinearMap e;
@@ -49,12 +49,12 @@ public class ABEKPGPSW06PublicParameters implements PublicParameters {
     }
 
     public ABEKPGPSW06PublicParameters(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public GroupElement getG1_generator() {

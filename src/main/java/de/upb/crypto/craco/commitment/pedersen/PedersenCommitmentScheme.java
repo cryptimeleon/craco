@@ -14,7 +14,7 @@ import de.upb.crypto.math.expressions.group.GroupPowExpr;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 
 import java.math.BigInteger;
@@ -235,7 +235,7 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
      */
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public PedersenPublicParameters getPp() {
