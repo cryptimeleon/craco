@@ -6,7 +6,6 @@ import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;

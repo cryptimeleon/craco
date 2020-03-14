@@ -5,7 +5,9 @@ import com.github.noconnor.junitperf.JUnitPerfTest;
 import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.interfaces.signature.Signature;
 import de.upb.crypto.craco.interfaces.signature.SignatureKeyPair;
-import org.junit.*;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 

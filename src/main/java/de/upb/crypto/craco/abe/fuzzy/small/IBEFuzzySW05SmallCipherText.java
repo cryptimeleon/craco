@@ -3,13 +3,10 @@ package de.upb.crypto.craco.abe.fuzzy.small;
 import de.upb.crypto.craco.interfaces.CipherText;
 import de.upb.crypto.craco.interfaces.abe.Attribute;
 import de.upb.crypto.craco.interfaces.abe.SetOfAttributes;
-import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
 
 import java.util.Map;
 

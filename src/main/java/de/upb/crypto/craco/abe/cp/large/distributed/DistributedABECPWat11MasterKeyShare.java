@@ -3,7 +3,6 @@ package de.upb.crypto.craco.abe.cp.large.distributed;
 import de.upb.crypto.craco.interfaces.abe.distributed.MasterKeyShare;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 

@@ -1,10 +1,8 @@
 package de.upb.crypto.craco.abe.fuzzy.large;
 
 import de.upb.crypto.craco.kem.fuzzy.large.IBEFuzzySW05KEMCipherText;
-import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
@@ -23,7 +21,7 @@ public class IBEIBEFuzzySW05SW05CipherText extends IBEFuzzySW05KEMCipherText {
     /**
      * E' \in G_1
      */
-    @Represented(restorer = "groupGT")
+    @Represented(restorer = "GT")
     private GroupElement ePrime;
 
     public IBEIBEFuzzySW05SW05CipherText(Identity omegaPrime, GroupElement ePrime, GroupElement eTwoPrime,

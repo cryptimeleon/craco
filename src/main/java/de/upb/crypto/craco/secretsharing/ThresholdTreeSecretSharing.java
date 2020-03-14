@@ -8,7 +8,6 @@ import de.upb.crypto.craco.interfaces.policy.PolicyFact;
 import de.upb.crypto.craco.interfaces.policy.ThresholdPolicy;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;

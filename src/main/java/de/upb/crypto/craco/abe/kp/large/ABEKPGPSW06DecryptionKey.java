@@ -3,13 +3,10 @@ package de.upb.crypto.craco.abe.kp.large;
 import de.upb.crypto.craco.interfaces.DecryptionKey;
 import de.upb.crypto.craco.interfaces.pe.KeyIndex;
 import de.upb.crypto.craco.interfaces.policy.Policy;
-import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
 
 import java.math.BigInteger;
 import java.util.Map;
@@ -26,10 +23,10 @@ public class ABEKPGPSW06DecryptionKey implements DecryptionKey {
     @Represented
     private Policy policy;
 
-    @Represented(restorer = "G1")
+    @Represented(restorer = "int -> G1")
     private Map<BigInteger, GroupElement> dElementMap;
 
-    @Represented(restorer = "G1")
+    @Represented(restorer = "int -> G1")
     private Map<BigInteger, GroupElement> rElementMap;
 
     public ABEKPGPSW06DecryptionKey(Policy policy, Map<BigInteger, GroupElement> dElementMap,

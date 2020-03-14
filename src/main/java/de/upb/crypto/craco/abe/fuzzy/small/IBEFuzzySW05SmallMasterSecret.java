@@ -3,10 +3,8 @@ package de.upb.crypto.craco.abe.fuzzy.small;
 import de.upb.crypto.craco.interfaces.abe.Attribute;
 import de.upb.crypto.craco.interfaces.pe.MasterSecret;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 

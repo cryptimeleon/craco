@@ -14,9 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static de.upb.crypto.craco.kem.test.ElgamalLargeUniverseDelegationKEMTest.getFulfilling;
-import static de.upb.crypto.craco.kem.test.ElgamalLargeUniverseDelegationKEMTest.getNonFulfilling;
-import static de.upb.crypto.craco.kem.test.ElgamalLargeUniverseDelegationKEMTest.setupPolicy;
+import static de.upb.crypto.craco.kem.test.ElgamalLargeUniverseDelegationKEMTest.*;
 
 public class ElgamalLargeDelegKEMParams {
 	public static List<KeyEncapsulationMechanismTestParams> getParams() {
