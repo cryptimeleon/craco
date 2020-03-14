@@ -7,6 +7,7 @@ import de.upb.crypto.math.hash.impl.ByteArrayAccumulator;
 import de.upb.crypto.math.interfaces.hash.HashFunction;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.RepresentedMap;
 import de.upb.crypto.math.structures.polynomial.Seed;
@@ -25,7 +26,7 @@ public class UnpredictabilityKeyDerivationFunction implements KeyDerivationFunct
     @Represented
     private UnpredictabilityKeyDerivationFamily unpredictabilityKeyDerivationFamily;
     // maps index-> function
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented)
+    @Represented(restorer = "int -> foo")
     private Map<Integer, KWiseDeltaDependentHashFunction> functions;
 
     public UnpredictabilityKeyDerivationFunction(

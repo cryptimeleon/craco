@@ -3,6 +3,7 @@ package de.upb.crypto.craco.sig.ps;
 import de.upb.crypto.craco.interfaces.signature.SigningKey;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.RepresentedArray;
 import de.upb.crypto.math.structures.zn.Zp;
@@ -22,26 +23,21 @@ public class PSSigningKey implements SigningKey {
     /**
      * x \in Z_p in paper.
      */
-    @Represented(structure = "zp", recoveryMethod = ZpElement.RECOVERY_METHOD)
+    @Represented(restorer = "Zp")
     protected ZpElement exponentX;
 
     /**
      * y_1, ... , y_n \in Z_p in paper.
      */
-    @RepresentedArray(elementRestorer = @Represented(structure = "zp", recoveryMethod = ZpElement.RECOVERY_METHOD))
+    @Represented(restorer = "[Zp]")
     protected ZpElement exponentsYi[];
-
-    // pointer field used to store the structure for the representation process; in all other cases this should be null
-    protected Zp zp = null;
 
     public PSSigningKey() {
         super();
     }
 
     public PSSigningKey(Representation repr, Zp zp) {
-        this.zp = zp;
-        new ReprUtil(this).deserialize(repr);
-        this.zp = null;
+        new ReprUtil(this).register(zp, "Zp").deserialize(repr);
     }
 
     @Override

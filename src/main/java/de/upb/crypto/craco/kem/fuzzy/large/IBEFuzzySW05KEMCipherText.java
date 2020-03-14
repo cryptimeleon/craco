@@ -9,6 +9,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.RepresentedMap;
 
@@ -32,18 +33,14 @@ public class IBEFuzzySW05KEMCipherText implements CipherText {
     /**
      * E'' \in G_1
      */
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "G1")
     protected GroupElement eTwoPrime;
 
     /**
      * values E_i \in G_1 for {@link BigInteger}'s i \in {@link #omegaPrime}
      */
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "int -> G1")
     protected Map<BigInteger, GroupElement> eElementMap;
-
-    @SuppressWarnings("unused")
-    protected Group groupG1;
 
     public IBEFuzzySW05KEMCipherText(Identity omegaPrime, GroupElement eTwoPrime,
                                      Map<BigInteger, GroupElement> eElementMap) {
@@ -53,8 +50,7 @@ public class IBEFuzzySW05KEMCipherText implements CipherText {
     }
 
     public IBEFuzzySW05KEMCipherText(Representation repr, IBEFuzzySW05PublicParameters pp) {
-        groupG1 = pp.getGroupG1();
-        new ReprUtil(this).deserialize(repr);
+        new ReprUtil(this).register(pp.getGroupG1(), "G1").deserialize(repr);
     }
 
     public IBEFuzzySW05KEMCipherText() {

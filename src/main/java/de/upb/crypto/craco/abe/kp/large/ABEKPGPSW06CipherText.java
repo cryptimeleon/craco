@@ -25,9 +25,6 @@ public class ABEKPGPSW06CipherText extends ABEKPGPSW06KEMCipherText {
     @Represented(restorer = "GT")
     private GroupElement ePrime;
 
-    @SuppressWarnings("unused")
-    private Group groupGT;
-
     public ABEKPGPSW06CipherText(GroupElement ePrime, GroupElement eTwoPrime, Map<Attribute, GroupElement> eElementMap,
                                  SetOfAttributes attributes) {
         super(attributes, eTwoPrime, eElementMap);
@@ -35,11 +32,8 @@ public class ABEKPGPSW06CipherText extends ABEKPGPSW06KEMCipherText {
     }
 
     public ABEKPGPSW06CipherText(Representation repr, ABEKPGPSW06PublicParameters kpp) {
-        // restoring doesn't work with super call, so empty constructor is needed
-        super();
-        groupG1 = kpp.getGroupG1();
-        groupGT = kpp.getGroupGT();
-        new ReprUtil(this).register(groupG1, "G1").register(groupGT, "GT").deserialize(repr);
+        new ReprUtil(this).register(kpp.getGroupG1(), "G1").register(kpp.getGroupGT(), "GT")
+                .deserialize(repr);
     }
 
     public GroupElement getEPrime() {

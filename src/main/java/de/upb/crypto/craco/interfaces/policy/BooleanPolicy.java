@@ -6,6 +6,7 @@ import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.RepresentedSet;
 
@@ -27,7 +28,7 @@ public class BooleanPolicy implements Policy {
     private BooleanOperator operator;
 
     @UniqueByteRepresented
-    @RepresentedSet(elementRestorer = @Represented)
+    @Represented
     private HashSet<Policy> children;
 
     public BooleanPolicy(Representation repr) {

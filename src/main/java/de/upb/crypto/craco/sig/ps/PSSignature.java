@@ -5,6 +5,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Objects;
@@ -20,22 +21,20 @@ public class PSSignature implements Signature {
     /**
      * First group element of G_1 of the signature.
      */
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "G1")
     protected GroupElement group1ElementSigma1;
 
     /**
      * Second group element of G_1 of the signature, namely group1ElementSigma1^(x+\sum m_i*y_i).
      */
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "G1")
     protected GroupElement group1ElementSigma2;
 
     // pointer field used to store the structure for the representation process; in all other cases this should be null
     protected Group groupG1 = null;
 
     public PSSignature(Representation repr, Group groupG1) {
-        this.groupG1 = groupG1;
-        new ReprUtil(this).deserialize(repr);
-        this.groupG1 = null;
+        new ReprUtil(this).register(groupG1, "G1").deserialize(repr);
     }
 
     public PSSignature(GroupElement group1ElementSigma1, GroupElement group1ElementSigma2) {

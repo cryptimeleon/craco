@@ -8,6 +8,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
@@ -60,7 +61,7 @@ public class PSSignatureScheme implements StandardMultiMessageSignatureScheme {
         // x in paper
         ZpElement exponentX = zp.getUniformlyRandomElement();
         // y_i's in paper
-        ZpElement exponentsYi[] = IntStream.range(0, numberOfMessages).mapToObj(a -> zp.getUniformlyRandomElement())
+        ZpElement[] exponentsYi = IntStream.range(0, numberOfMessages).mapToObj(a -> zp.getUniformlyRandomElement())
                 .toArray(ZpElement[]::new);
 
         // \tilde{X} in paper

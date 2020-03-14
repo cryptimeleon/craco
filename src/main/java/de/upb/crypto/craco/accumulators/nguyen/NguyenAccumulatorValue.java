@@ -5,6 +5,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 /**
@@ -12,7 +13,7 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
  * the value is g^(\prod (x_i + secret))
  */
 public class NguyenAccumulatorValue implements AccumulatorValue {
-    @Represented(structure = "group", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "group")
     private GroupElement value;
 
     @Represented
@@ -23,8 +24,8 @@ public class NguyenAccumulatorValue implements AccumulatorValue {
         this.group = value.getStructure();
     }
 
-    public NguyenAccumulatorValue(Representation representation) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(representation, this);
+    public NguyenAccumulatorValue(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
     }
 
     public GroupElement getValue() {

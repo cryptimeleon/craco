@@ -5,6 +5,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.RepresentedArray;
 
@@ -22,20 +23,19 @@ public class PSVerificationKey implements VerificationKey {
     /**
      * \tilde{g} \in G_2 in paper.
      */
-    @Represented(structure = "groupG2", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "G2")
     protected GroupElement group2ElementTildeG;
 
     /**
      * \tilde{X} \in G_2 in paper.
      */
-    @Represented(structure = "groupG2", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "G2")
     protected GroupElement group2ElementTildeX;
 
     /**
      * \tilde{Y}_1, ..., \tilde{Y}_n \in G_2 in paper.
      */
-    @RepresentedArray(elementRestorer = @Represented(structure = "groupG2", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "[G2]")
     protected GroupElement[] group2ElementsTildeYi;
 
     // pointer field used to store the structure for the representation process; in all other cases this should be null
@@ -46,9 +46,7 @@ public class PSVerificationKey implements VerificationKey {
     }
 
     public PSVerificationKey(Group groupG2, Representation repr) {
-        this.groupG2 = groupG2;
-        new ReprUtil(this).deserialize(repr);
-        this.groupG2 = null;
+        new ReprUtil(this).register(groupG2, "G2").deserialize(repr);
     }
 
     @Override

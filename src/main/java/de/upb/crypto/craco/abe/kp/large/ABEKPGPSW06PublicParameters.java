@@ -34,7 +34,7 @@ public class ABEKPGPSW06PublicParameters implements PublicParameters {
     private GroupElement y;
 
     @Represented
-    public Group groupG1, groupG2, groupGT;
+    private Group groupG1, groupG2, groupGT;
 
     @Represented
     private BilinearMap e;

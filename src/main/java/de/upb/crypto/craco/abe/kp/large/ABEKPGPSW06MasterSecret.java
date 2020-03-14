@@ -20,15 +20,12 @@ public class ABEKPGPSW06MasterSecret implements MasterSecret {
     @Represented(restorer = "Zp")
     private ZpElement y;
 
-    @SuppressWarnings("unused")
-    private Zp zp;
-
     public ABEKPGPSW06MasterSecret(ZpElement y) {
         this.y = y;
     }
 
     public ABEKPGPSW06MasterSecret(Representation repr, ABEKPGPSW06PublicParameters kpp) {
-        zp = new Zp(kpp.getGroupG1().size());
+        Zp zp = new Zp(kpp.getGroupG1().size());
         new ReprUtil(this).register(zp, "Zp").deserialize(repr);
     }
 

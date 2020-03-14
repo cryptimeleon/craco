@@ -9,6 +9,7 @@ import de.upb.crypto.craco.interfaces.PlainText;
 import de.upb.crypto.math.interfaces.hash.HashFunction;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Objects;
@@ -38,10 +39,10 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
     /**
      * Constructor for a {@link HashThenCommitCommitmentScheme}-instance from a {@link Representation}
      *
-     * @param representation {@link Representation} of a {@link HashThenCommitCommitmentScheme} instance.
+     * @param repr {@link Representation} of a {@link HashThenCommitCommitmentScheme} instance.
      */
-    public HashThenCommitCommitmentScheme(Representation representation) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(representation, this);
+    public HashThenCommitCommitmentScheme(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
     }
 
     /**

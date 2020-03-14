@@ -19,7 +19,7 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 public class ABECPWat11PublicParameters implements PublicParameters {
 
     @Represented
-    private Group groupG1, groupGT;
+    protected Group groupG1, groupGT;
 
     @Represented
     protected BilinearMap e;

@@ -9,6 +9,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.RepresentedMap;
 
@@ -27,22 +28,17 @@ public class IBEFuzzySW05DecryptionKey implements DecryptionKey {
     /**
      * { D_i \in G_1 }_i for i \in {@link #identity}
      */
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "int -> G1")
     private Map<BigInteger, GroupElement> dElementMap;
 
     /**
      * {R_i \in G_1 }_i for i \in {@link #identity}
      */
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "int -> G1")
     private Map<BigInteger, GroupElement> rElementMap;
 
     @Represented
     private Identity identity;
-
-    @SuppressWarnings("unused")
-    private Group groupG1;
 
     public IBEFuzzySW05DecryptionKey(Map<BigInteger, GroupElement> dElementMap,
                                      Map<BigInteger, GroupElement> rElementMap, Identity identity) {
@@ -52,8 +48,7 @@ public class IBEFuzzySW05DecryptionKey implements DecryptionKey {
     }
 
     public IBEFuzzySW05DecryptionKey(Representation repr, IBEFuzzySW05PublicParameters kpp) {
-        groupG1 = kpp.getGroupG1();
-        new ReprUtil(this).deserialize(repr);
+        new ReprUtil(this).register(kpp.getGroupG1(), "G1").deserialize(repr);
     }
 
     @Override

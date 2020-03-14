@@ -7,6 +7,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
@@ -34,19 +35,19 @@ public class IBEFuzzySW05PublicParameters implements PublicParameters {
     /**
      * generator g \in G_1
      */
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "groupG1")
     private GroupElement g;
 
     /**
      * generator g1 \in G_1
      */
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "groupG1")
     private GroupElement g1;
 
     /**
      * generator g2 \in G_1
      */
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "groupG1")
     private GroupElement g2;
 
     @Represented

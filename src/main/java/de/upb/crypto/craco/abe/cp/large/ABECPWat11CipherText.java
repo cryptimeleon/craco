@@ -21,9 +21,6 @@ public class ABECPWat11CipherText extends ABECPWat11KEMCipherText {
     @Represented(restorer = "GT")
     private GroupElement ePrime; // in G_T
 
-    @SuppressWarnings("unused")
-    private Group groupGT;
-
     public ABECPWat11CipherText(Policy policy, GroupElement ePrime, GroupElement eTwoPrime,
                                 Map<BigInteger, GroupElement> e) {
         super(policy, eTwoPrime, e);
@@ -31,11 +28,7 @@ public class ABECPWat11CipherText extends ABECPWat11KEMCipherText {
     }
 
     public ABECPWat11CipherText(Representation repr, ABECPWat11PublicParameters pp) {
-        // empty super constructor needed since deserializing in the super call does not work (no access to GT)
-        super();
-        groupG1 = pp.getGroupG1();
-        groupGT = pp.getGroupGT();
-        new ReprUtil(this).register(groupGT, "GT").register(groupG1, "G1")
+        new ReprUtil(this).register(pp.getGroupGT(), "GT").register(pp.getGroupG1(), "G1")
                 .deserialize(repr);
     }
 

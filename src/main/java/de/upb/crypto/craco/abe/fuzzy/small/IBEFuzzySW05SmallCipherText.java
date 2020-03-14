@@ -7,6 +7,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.RepresentedMap;
 
@@ -23,20 +24,12 @@ public class IBEFuzzySW05SmallCipherText implements CipherText {
     private SetOfAttributes omega_prime;
 
     // in G_T
-    @Represented(structure = "groupGT", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "GT")
     private GroupElement e_prime;
 
     // in G_1
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "attr -> G1")
     private Map<Attribute, GroupElement> e;
-
-
-    @SuppressWarnings("unused")
-    private Group groupG1;
-
-    @SuppressWarnings("unused")
-    private Group groupGT;
 
 
     public IBEFuzzySW05SmallCipherText(SetOfAttributes identity, GroupElement E_prime,
@@ -47,9 +40,8 @@ public class IBEFuzzySW05SmallCipherText implements CipherText {
     }
 
     public IBEFuzzySW05SmallCipherText(Representation repr, IBEFuzzySW05SmallPublicParameters pp) {
-        groupGT = pp.getGroupGT();
-        groupG1 = pp.getGroupG1();
-        new ReprUtil(this).deserialize(repr);
+        new ReprUtil(this).register(pp.getGroupG1(), "G1").register(pp.getGroupGT(), "GT")
+                .deserialize(repr);
     }
 
     public Representation getRepresentation() {

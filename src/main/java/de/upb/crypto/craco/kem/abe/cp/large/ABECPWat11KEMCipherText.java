@@ -25,9 +25,6 @@ public class ABECPWat11KEMCipherText implements CipherText, Representable {
     @Represented(restorer="int -> G1")
     protected Map<BigInteger, GroupElement> eElementMap; // in G_1
 
-    @SuppressWarnings("unused")
-    protected Group groupG1;
-
     public ABECPWat11KEMCipherText(Policy policy, GroupElement eTwoPrime, Map<BigInteger, GroupElement> eElementMap) {
         this.policy = policy;
         this.eTwoPrime = eTwoPrime;

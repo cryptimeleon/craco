@@ -30,9 +30,6 @@ public class DistributedABECPWat11KeyShare implements KeyShare {
     @Represented
     private SetOfAttributes omega;
 
-    @SuppressWarnings("unused")
-    private Group groupG1;
-
     public DistributedABECPWat11KeyShare(GroupElement d_prime, GroupElement d_two_prime, int serverID,
                                          Map<Attribute, GroupElement> d_xi, SetOfAttributes omega) {
         this.d_prime = d_prime;
@@ -43,8 +40,7 @@ public class DistributedABECPWat11KeyShare implements KeyShare {
     }
 
     public DistributedABECPWat11KeyShare(Representation repr, DistributedABECPWat11PublicParameters pp) {
-        groupG1 = pp.getGroupG1();
-        new ReprUtil(this).register(pp.groupG1, "G1").deserialize(repr);
+        new ReprUtil(this).register(pp.getGroupG1(), "G1").deserialize(repr);
     }
 
     public Representation getRepresentation() {

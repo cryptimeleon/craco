@@ -3,6 +3,7 @@ package de.upb.crypto.craco.kdf.lhl;
 import de.upb.crypto.craco.interfaces.kdf.HashFamily;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.polynomial.Seed;
 

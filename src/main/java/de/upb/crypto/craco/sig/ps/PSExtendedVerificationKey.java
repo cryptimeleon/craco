@@ -11,6 +11,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.RepresentedArray;
 
@@ -35,17 +36,13 @@ public class PSExtendedVerificationKey extends PSVerificationKey
     // Added parameters to enable blindly signing messages in combination with the Pedersen commitment scheme
     // g for enabling optional blinding/unblinding
     @UniqueByteRepresented
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "G1")
     private GroupElement group1ElementG;
 
     // Y_i for enabling optional blinding/unblinding
     @UniqueByteRepresented
-    @RepresentedArray(elementRestorer = @Represented(structure = "groupG1", recoveryMethod = GroupElement
-            .RECOVERY_METHOD))
+    @Represented(restorer = "[G1]")
     private GroupElement[] group1ElementsYi;
-
-    // pointer field used to store the structure for the representation process; in all other cases this should be null
-    private Group groupG1 = null;
 
     /**
      * Extended constructor for the extended verification key in the ACS allowing direct instantiation.
@@ -75,11 +72,8 @@ public class PSExtendedVerificationKey extends PSVerificationKey
      * @param repr    {@link Representation} of {@link PSExtendedVerificationKey}
      */
     public PSExtendedVerificationKey(Group groupG1, Group groupG2, Representation repr) {
-        this.groupG1 = groupG1;
-        this.groupG2 = groupG2;
-        new ReprUtil(this).deserialize(repr);
-        this.groupG1 = null;
-        this.groupG2 = null;
+        super();
+        new ReprUtil(this).register(groupG1, "G1").register(groupG2, "G2").deserialize(repr);
     }
 
     @Override

@@ -7,13 +7,14 @@ import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 
 public class NguyenAccumulatorIdentity implements AccumulatorIdentity, UniqueByteRepresentable {
 
     @UniqueByteRepresented
-    @Represented(structure = "zp", recoveryMethod = Zp.ZpElement.RECOVERY_METHOD)
+    @Represented(restorer = "zp")
     private Zp.ZpElement identity;
 
     @Represented
@@ -24,8 +25,8 @@ public class NguyenAccumulatorIdentity implements AccumulatorIdentity, UniqueByt
         this.zp = identity.getStructure();
     }
 
-    public NguyenAccumulatorIdentity(Representation representation) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(representation, this);
+    public NguyenAccumulatorIdentity(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
     }
 
     public Zp.ZpElement getIdentity() {

@@ -3,6 +3,7 @@ package de.upb.crypto.craco.abe.ibe;
 import de.upb.crypto.craco.interfaces.pe.MasterSecret;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
@@ -17,19 +18,16 @@ public class FullIdentMasterSecret implements MasterSecret {
 
 
     // Uniformly random element in Z_{size(GroupG1)}*
-    @Represented(structure = "zp", recoveryMethod = ZpElement.RECOVERY_METHOD)
+    @Represented(restorer = "zp")
     private ZpElement s;
-
-    @SuppressWarnings("unused")
-    private Zp zp;
 
     public FullIdentMasterSecret(ZpElement s) {
         this.s = s;
     }
 
     public FullIdentMasterSecret(Representation repr, FullIdentPublicParameters pp) {
-        zp = new Zp(pp.getGroupG1().size());
-        new ReprUtil(this).deserialize(repr);
+        Zp zp = new Zp(pp.getGroupG1().size());
+        new ReprUtil(this).register(zp, "zp").deserialize(repr);
     }
 
     @Override

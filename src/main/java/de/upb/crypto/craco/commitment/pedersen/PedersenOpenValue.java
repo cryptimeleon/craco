@@ -5,6 +5,7 @@ import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.RepresentedArray;
 import de.upb.crypto.math.structures.zn.Zp;
@@ -18,11 +19,11 @@ public class PedersenOpenValue implements OpenValue {
     private Zp zp;
 
     @UniqueByteRepresented
-    @RepresentedArray(elementRestorer = @Represented(structure = "zp", recoveryMethod = Zp.ZpElement.RECOVERY_METHOD))
+    @Represented(restorer = "[zp]")
     private Zp.ZpElement[] messages;
 
     @UniqueByteRepresented
-    @Represented(structure = "zp", recoveryMethod = Zp.ZpElement.RECOVERY_METHOD)
+    @Represented(restorer = "zp")
     private Zp.ZpElement randomness;
 
     public PedersenOpenValue(Zp.ZpElement[] messages, Zp.ZpElement randomness) {
@@ -31,8 +32,8 @@ public class PedersenOpenValue implements OpenValue {
         this.zp = randomness.getStructure();
     }
 
-    public PedersenOpenValue(Representation representation) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(representation, this);
+    public PedersenOpenValue(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
 
     }
 

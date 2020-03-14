@@ -6,6 +6,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Arrays;
@@ -17,7 +18,7 @@ import java.util.Arrays;
  */
 public class FullIdentCipherText implements CipherText {
 
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "G1")
     private GroupElement u; // P^r \in G1
 
     @Represented
@@ -26,9 +27,6 @@ public class FullIdentCipherText implements CipherText {
     @Represented
     private byte[] w; // M \oplus H_4(sigma)
 
-    @SuppressWarnings("unused")
-    private Group groupG1;
-
     public FullIdentCipherText(GroupElement U, byte[] V, byte[] W) {
         this.u = U;
         this.v = V;
@@ -36,8 +34,7 @@ public class FullIdentCipherText implements CipherText {
     }
 
     public FullIdentCipherText(Representation repr, FullIdentPublicParameters pp) {
-        groupG1 = pp.getGroupG1();
-        new ReprUtil(this).deserialize(repr);
+        new ReprUtil(this).register(pp.getGroupG1(), "G1").deserialize(repr);
     }
 
     @Override

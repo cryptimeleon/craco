@@ -32,9 +32,6 @@ public class ABEKPGPSW06DecryptionKey implements DecryptionKey {
     @Represented(restorer = "G1")
     private Map<BigInteger, GroupElement> rElementMap;
 
-    @SuppressWarnings("unused")
-    private Group groupG1;
-
     public ABEKPGPSW06DecryptionKey(Policy policy, Map<BigInteger, GroupElement> dElementMap,
                                     Map<BigInteger, GroupElement> rElementMap) {
         this.policy = policy;
@@ -43,8 +40,7 @@ public class ABEKPGPSW06DecryptionKey implements DecryptionKey {
     }
 
     public ABEKPGPSW06DecryptionKey(Representation repr, ABEKPGPSW06PublicParameters kpp) {
-        groupG1 = kpp.getGroupG1();
-        new ReprUtil(this).register(groupG1, "G1").deserialize(repr);
+        new ReprUtil(this).register(kpp.getGroupG1(), "G1").deserialize(repr);
     }
 
     @Override
