@@ -16,7 +16,7 @@ import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representable;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
-import de.upb.crypto.math.serialization.annotations.*;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.structures.zn.Zn;
 import de.upb.crypto.math.structures.zn.Zp;
@@ -33,13 +33,13 @@ public class TestData implements Representable {
     String string;
 
     @Represented
-    int integer;
+    Integer integer;
 
     @Represented
     byte[] bytes;
 
     @Represented
-    boolean bool;
+    Boolean bool;
 
     @Represented
     StandaloneRepresentable representable;
@@ -47,53 +47,49 @@ public class TestData implements Representable {
     @Represented
     Group group;
 
-    @Represented(structure = "group", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "group")
     GroupElement element;
 
     @Represented
     EncryptionScheme encryptionScheme;
 
-    @Represented(structure = "encryptionScheme", recoveryMethod = EncryptionKey.RECOVERY_METHOD)
+    @Represented(restorer = "encryptionScheme")
     EncryptionKey encryptionKey;
 
-    @Represented(structure = "encryptionScheme", recoveryMethod = DecryptionKey.RECOVERY_METHOD)
+    @Represented(restorer = "encryptionScheme")
     DecryptionKey decryptionKey;
 
-    @Represented(structure = "encryptionScheme", recoveryMethod = PlainText.RECOVERY_METHOD)
+    @Represented(restorer = "encryptionScheme")
     PlainText plaintext;
 
-    @Represented(structure = "encryptionScheme", recoveryMethod = CipherText.RECOVERY_METHOD)
+    @Represented(restorer = "encryptionScheme")
     CipherText ciphertext;
 
     @Represented
     PSSignatureScheme signatureScheme;
 
-    @Represented(structure = "signatureScheme", recoveryMethod = Signature.RECOVERY_METHOD)
+    @Represented(restorer = "signatureScheme")
     Signature signature;
 
-    @Represented(structure = "signatureScheme", recoveryMethod = SigningKey.RECOVERY_METHOD)
+    @Represented(restorer = "signatureScheme")
     SigningKey singingKey;
 
-    @Represented(structure = "signatureScheme", recoveryMethod = VerificationKey.RECOVERY_METHOD)
+    @Represented(restorer = "signatureScheme")
     VerificationKey verificationKey;
 
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "group", recoveryMethod =
-            Element.RECOVERY_METHOD))
+    @Represented(restorer = "int -> group")
     LinkedHashMap<BigInteger, GroupElement> map;
 
-    @RepresentedList(elementRestorer = @Represented(structure = "group", recoveryMethod = Element.RECOVERY_METHOD))
+    @Represented(restorer = "[group]")
     List<GroupElement> list;
 
-    @RepresentedArray(elementRestorer = @Represented(structure = "group", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "[group]")
     GroupElement[] array;
 
-    @RepresentedMapAndMap(keyRestorer = @Represented, valueRestorer = @RepresentedMap(keyRestorer = @Represented,
-            valueRestorer = @Represented(structure = "group", recoveryMethod = GroupElement.RECOVERY_METHOD)))
+    @Represented(restorer = "int -> (bigint -> group)")
     private HashMap<Integer, LinkedHashMap<BigInteger, GroupElement>> t_function;
 
-    @RepresentedMapAndList(keyRestorer = @Represented, valueRestorer = @RepresentedList(elementRestorer =
-    @Represented(structure = "group", recoveryMethod = GroupElement.RECOVERY_METHOD)))
+    @Represented(restorer = "int -> [group]")
     private HashMap<Integer, LinkedList<GroupElement>> t_functionWithList;
 
     @Override
@@ -150,7 +146,7 @@ public class TestData implements Representable {
     }
 
     public TestData(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr.obj(), this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override

@@ -125,7 +125,6 @@ public abstract class SymmetricKeyKEM implements KeyEncapsulationMechanism<Symme
     @Override
     public Representation getRepresentation() {
         return ReprUtil.serialize(this);
-
     }
 
 }
