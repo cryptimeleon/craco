@@ -9,7 +9,7 @@ package de.upb.crypto.craco.interfaces.signature;
  * <p>
  * generateKeyPair() without the numberOfMessages parameter defaults to a single message.
  */
-public interface StandardMultiMessageSignatureScheme extends StandardSignatureScheme {
+public interface StandardMultiMessageSignatureScheme extends StandardSignatureScheme, MultiMessageSignatureScheme {
     /**
      * Generates a key pair for signing a vector of numberOfMessages messages
      * with each signature.

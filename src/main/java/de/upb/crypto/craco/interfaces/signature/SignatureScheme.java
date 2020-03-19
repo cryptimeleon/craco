@@ -64,8 +64,7 @@ public interface SignatureScheme extends StandaloneRepresentable {
      * these bytes (e.g., the byte array is too long).
      * <p>
      * The contract is that VerificationKey pk and SigningKey sk are compatible (in the sense that verify(m,sign(m,
-     * sk),pk) == true),
-     * then mapToPlaintext(bytes, pk) equals mapToPlaintext(bytes, sk) for all bytes.
+     * sk),pk) == true), then mapToPlaintext(bytes, pk) equals mapToPlaintext(bytes, sk) for all bytes.
      *
      * @param bytes bytes to be mapped to a {@link PlainText}
      * @param pk    the verification key for which the resulting PlainText should be valid

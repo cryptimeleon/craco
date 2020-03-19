@@ -14,15 +14,14 @@ import java.util.Arrays;
 
 /**
  * Signature scheme that was originally presentet in [1] by Boneh, Boyen and Shacham. The version implemented is the
- * one presented in [2]
- * which is the extension mentioned in the original paper. The result is a block signature scheme.
+ * one presented in [2] which is the extension mentioned in the original paper. The result is a block signature scheme.
  * <p>
  * Bilinear map type: 2
  * <p>
- * [1]Dan Boneh, Xavier Boyen, and Hovav Shacham, "Short group signatures", in Advances in Cryptology CRYPTO 2004,
- * 2004, pp. 41â€“55.
+ * [1] Dan Boneh, Xavier Boyen, and Hovav Shacham, "Short group signatures", in Advances in Cryptology CRYPTO 2004,
+ * 2004
  * <p>
- * [2]F. Eidens, Anonymous Credential System based on the q-Strong Diffie-Hellman Assumption 2015.
+ * [2] F. Eidens, Anonymous Credential System based on the q-Strong Diffie-Hellman Assumption 2015.
  *
  * @author Fabian Eidens
  */

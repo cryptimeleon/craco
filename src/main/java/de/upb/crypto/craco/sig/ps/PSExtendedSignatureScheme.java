@@ -38,7 +38,7 @@ import java.util.Arrays;
  * Report 2015/525, 2015.
  * </p>
  */
-public class PSExtendedSignatureScheme extends de.upb.crypto.craco.sig.ps.PSSignatureScheme implements SignatureScheme {
+public class PSExtendedSignatureScheme extends PSSignatureScheme{
 
     public PSExtendedSignatureScheme(PSPublicParameters pp) {
         super(pp);
