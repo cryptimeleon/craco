@@ -27,8 +27,8 @@ import java.util.*;
  * The DistributedABECPWat11 can be seen as an extension to the normal
  * {@link ABECPWat11}, where the {@link MasterSecret} is shared
  * among a well defined amount of servers. These servers each hold a
- * {@link MasterSecretShare} and the user can combine <code>t</code>
- * {@link MasterSecretShare} to request a {@link DecryptionKey}, where
+ * {@link MasterKeyShare} and the user can combine <code>t</code>
+ * {@link MasterKeyShare} to request a {@link DecryptionKey}, where
  * <code>t</code> is defined by
  * {@link DistributedEncryptionScheme#getMinAmountToRecreate()}.
  * <p>

@@ -15,6 +15,7 @@ import de.upb.crypto.craco.kem.fuzzy.large.IBEFuzzySW05KEMCipherText;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.craco.interfaces.pe.PredicateEncryptionScheme;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -78,7 +79,7 @@ public class AbstractIBEFuzzySW05 {
     }
 
     /**
-     * Computes {@link IBEFuzzySW05KEMCipherText#eElementMap} in the fuzzy IBE encaps and encrypt.
+     * Computes {@link IBEFuzzySW05KEMCipherText#getEElementMap()} in the fuzzy IBE encaps and encrypt.
      *
      * @param omega identity
      * @param s     secret value
@@ -115,8 +116,8 @@ public class AbstractIBEFuzzySW05 {
      * Then, Y^{s} = (Numerator / Denominator)^{-1}
      *
      * @param ct           ciphertext or encapsulated key for which Y^s shall be restored
-     * @param dElementMap  {@link IBEFuzzySW05DecryptionKey#dElementMap}
-     * @param rElementMap  {@link IBEFuzzySW05DecryptionKey#rElementMap}
+     * @param dElementMap  {@link IBEFuzzySW05DecryptionKey#getDElementMap()}
+     * @param rElementMap  {@link IBEFuzzySW05DecryptionKey#getRElementMap()}
      * @param attributeSet a subset of the intersection of the ciphertext's and secret key's identity of size d. It
      *                     is assumed
      *                     that the size of the set is correct.
@@ -184,8 +185,8 @@ public class AbstractIBEFuzzySW05 {
      * decrypt ciphertexts where getPredicate().check(kind, cind) = 1.
      * <p>
      * Generates an {@link DecryptionKey} out of the given {@link Identity}. This {@link DecryptionKey} can only decrypt
-     * cipher texts if there are at least {@link IBEFuzzySW05PublicParameters#getD()} attributes in the intersection
-     * of this
+     * cipher texts if there are at least {@link IBEFuzzySW05PublicParameters#getIdentityThresholdD()} attributes in the
+     * intersection of this
      * {@link Identity} and the {@link Identity} of the respective {@link EncryptionKey}.
      *
      * @param msk  the master secret obtained during setup.
@@ -270,18 +271,17 @@ public class AbstractIBEFuzzySW05 {
      */
 
     /**
-     * {@inheritDoc}
-     * <p>
      * This scheme uses a {@link Identity} as {@link KeyIndex} and {@link CiphertextIndex}. The {@link Predicate} is
      * that there are at least {@link IBEFuzzySW05PublicParameters#getIdentityThresholdD()} attributes in the
      * intersection.
+     * See {@link PredicateEncryptionScheme} for more information on predicates and their usage.
      */
     public Predicate getPredicate() {
         return (kind, cind) -> {
             if (!(kind instanceof Identity))
                 throw new IllegalArgumentException("Identity expected as KeyIndex");
             if (!(cind instanceof Identity))
-                throw new IllegalArgumentException("Identity expceted as CiphertextIndex");
+                throw new IllegalArgumentException("Identity expected as CiphertextIndex");
             Identity iCind = (Identity) cind;
             Identity iKind = (Identity) kind;
             return iCind.intersect(iKind).getAttributes().size() >= pp.getIdentityThresholdD().intValue();

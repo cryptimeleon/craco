@@ -11,6 +11,7 @@ import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.craco.sig.ps.PSSignatureScheme;
 
 import java.util.Arrays;
 
@@ -20,7 +21,7 @@ import java.util.Arrays;
  * <p>
  * The signing key remains the same, but the verification key is extended to store the generator g and the
  * group-elements Y-i from group 1. The extended implementation of the
- * {@link de.upb.crypto.craco.sig.ps.PSSignatureScheme}
+ * {@link PSSignatureScheme}
  * allows the usage of the {@link PSExtendedVerificationKey} containing the generator g and the
  * group-elements Y-i from group 1 and enable 'signing messages blindly'
  * when used in a {@link PedersenCommitmentScheme}:

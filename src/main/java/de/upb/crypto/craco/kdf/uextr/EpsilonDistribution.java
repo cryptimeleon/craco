@@ -60,7 +60,8 @@ public class EpsilonDistribution implements StandaloneRepresentable {
 
     /**
      * @param sampleLength
-     * @param epsilon
+     * @param logEpsilon
+     * @param seed
      */
     public EpsilonDistribution(int sampleLength, double logEpsilon, Seed seed) {
 

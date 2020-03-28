@@ -16,7 +16,6 @@ import java.util.*;
 /**
  * Access structure realized by using the monotone span programs.
  *
- * @param <E> type of the attributes
  * @author pschleiter, Fabian Eidens (refactor)
  */
 public class MonotoneSpanProgram extends AccessStructure {
@@ -99,7 +98,7 @@ public class MonotoneSpanProgram extends AccessStructure {
     }
 
     /**
-     * This method returns a String, that contain a representation of the
+     * This method returns a String that contain a representation of the
      * monotone span program contained by this class. The layout of the string
      * is designed for access structures that contain only threshold nodes with at
      * most 999 leaves.

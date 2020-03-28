@@ -17,6 +17,7 @@ import de.upb.crypto.math.serialization.annotations.RepresentedArray;
 import java.util.Arrays;
 import java.util.Objects;
 
+
 /**
  * Extension of the verification key for a Pointcheval Sanders Signature Scheme to store the generator g and the
  * group-elements Y_i from group 1. These parameters are generated in the
@@ -47,14 +48,15 @@ public class PSExtendedVerificationKey extends PSVerificationKey
     // pointer field used to store the structure for the representation process; in all other cases this should be null
     private Group groupG1 = null;
 
+
     /**
      * Extended constructor for the extended verification key in the ACS allowing direct instantiation.
      *
      * @param group1Element         {@link GroupElement} g is a generator from {@link Group} 1
-     * @param group1ElementsYi      {@link GroupElement[]} Y_i from {@link Group} 1
+     * @param group1ElementsYi      Array of {@link GroupElement} containing Y_i from {@link Group} 1
      * @param group2ElementTildeG   {@link GroupElement} g_Tilde is a generator from {@link Group} 2
      * @param group2ElementTildeX   {@link GroupElement} x_Tilde from {@link Group} 1
-     * @param group2ElementsTildeYi {@link GroupElement[]} Y_i_Tilde from {@link Group} 2
+     * @param group2ElementsTildeYi Array of {@link GroupElement} containing  Y_i_Tilde from {@link Group} 2
      */
     public PSExtendedVerificationKey(GroupElement group1Element, GroupElement[] group1ElementsYi,
                                      GroupElement group2ElementTildeG, GroupElement group2ElementTildeX,

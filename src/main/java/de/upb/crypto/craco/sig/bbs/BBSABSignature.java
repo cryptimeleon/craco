@@ -26,7 +26,7 @@ public class BBSABSignature implements Signature {
      * Restore the SignedMessage from Representation
      *
      * @param repr
-     * @param gmpk
+     * @param groupG1
      */
     public BBSABSignature(Representation repr, Group groupG1) {
         for (String member : group1Elements) {

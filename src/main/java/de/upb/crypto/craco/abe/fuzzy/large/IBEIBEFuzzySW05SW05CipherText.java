@@ -23,7 +23,7 @@ public class IBEIBEFuzzySW05SW05CipherText extends IBEFuzzySW05KEMCipherText {
      * E' \in G_1
      */
     @Represented(structure = "groupGT", recoveryMethod = GroupElement.RECOVERY_METHOD)
-    private GroupElement ePrime;
+    protected GroupElement ePrime;
 
     @SuppressWarnings("unused")
     Group groupGT;

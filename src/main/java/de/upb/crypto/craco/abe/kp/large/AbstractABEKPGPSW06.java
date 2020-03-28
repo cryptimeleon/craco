@@ -15,6 +15,7 @@ import de.upb.crypto.craco.kem.abe.kp.large.ABEKPGPSW06KEMCipherText;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.craco.interfaces.pe.PredicateEncryptionScheme;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -46,8 +47,6 @@ public class AbstractABEKPGPSW06 {
     }
 
     /**
-     * {@inheritDoc}
-     * <p>
      * Creates a {@link DecryptionKey} out of a given {@link Policy}. This decryption key can only decrypt cipher texts
      * that are encrypted with a set of attributes that satisfy this policy.
      */
@@ -87,8 +86,6 @@ public class AbstractABEKPGPSW06 {
     }
 
     /**
-     * {@inheritDoc}
-     * <p>
      * Generates an encryption key out of a given {@link Set Of Attributes}. This means that all plain texts that are
      * encrypted with this encryption key can only be decrypted if the {@link Policy} of the respective decryption key
      * is satisfied by this set of attributes.
@@ -101,9 +98,8 @@ public class AbstractABEKPGPSW06 {
     }
 
     /**
-     * {@inheritDoc}
-     * <p>
      * This scheme uses a {@link SetOfAttributes} as the CipherTextIndex and a {@link Policy} as the KeyIndex.
+     * See {@link PredicateEncryptionScheme} for more information about predicates.
      */
     public Predicate getPredicate() {
         return new Predicate() {
