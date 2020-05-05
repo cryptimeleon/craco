@@ -24,11 +24,11 @@ public class UniversalHashFamily implements HashFamily {
 
     // n
     @Represented
-    protected int inputLength;
+    protected Integer inputLength;
 
     // m
     @Represented
-    protected int outputLength;
+    protected Integer outputLength;
 
     @Represented
     protected BigInteger p;

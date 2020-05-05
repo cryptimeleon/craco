@@ -25,7 +25,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class AesPseudorandomFunction implements PseudorandomFunction {
     @Represented
-    protected int keylength; //length of keys in bit
+    protected Integer keylength; //length of keys in bit
 
     /**
      * Instantiates the PRP

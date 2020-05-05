@@ -20,7 +20,7 @@ public class LHLFamily implements StandaloneRepresentable {
             "The given source of randomness has an insufficent amount of entropy for this key derivation process.";
 
     @Represented
-    protected int securityParameter, inputLength, outputLength, minEntropy;
+    protected Integer securityParameter, inputLength, outputLength, minEntropy;
 
     @Represented
     protected UniversalHashFamily family;
