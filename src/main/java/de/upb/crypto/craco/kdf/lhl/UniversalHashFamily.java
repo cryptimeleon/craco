@@ -130,20 +130,17 @@ public class UniversalHashFamily implements HashFamily {
         if (getClass() != obj.getClass())
             return false;
         UniversalHashFamily other = (UniversalHashFamily) obj;
-        if (inputLength != other.inputLength)
+        if (!inputLength.equals(other.inputLength))
             return false;
         if (m == null) {
             if (other.m != null)
                 return false;
         } else if (!m.equals(other.m))
             return false;
-        if (outputLength != other.outputLength)
+        if (!outputLength.equals(other.outputLength))
             return false;
         if (p == null) {
-            if (other.p != null)
-                return false;
-        } else if (!p.equals(other.p))
-            return false;
-        return true;
+            return other.p == null;
+        } else return p.equals(other.p);
     }
 }

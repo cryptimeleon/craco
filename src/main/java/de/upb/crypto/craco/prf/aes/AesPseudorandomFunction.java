@@ -96,9 +96,8 @@ public class AesPseudorandomFunction implements PseudorandomFunction {
 
     @Override
     public boolean equals(Object obj) {
-        return obj != null
-                && obj instanceof AesPseudorandomFunction
-                && ((AesPseudorandomFunction) obj).keylength == keylength;
+        return obj instanceof AesPseudorandomFunction
+                && ((AesPseudorandomFunction) obj).keylength.equals(keylength);
     }
 
 }

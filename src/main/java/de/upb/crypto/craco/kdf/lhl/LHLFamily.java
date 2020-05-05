@@ -97,15 +97,13 @@ public class LHLFamily implements StandaloneRepresentable {
                 return false;
         } else if (!family.equals(other.family))
             return false;
-        if (inputLength != other.inputLength)
+        if (!inputLength.equals(other.inputLength))
             return false;
-        if (minEntropy != other.minEntropy)
+        if (!minEntropy.equals(other.minEntropy))
             return false;
-        if (outputLength != other.outputLength)
+        if (!outputLength.equals(other.outputLength))
             return false;
-        if (securityParameter != other.securityParameter)
-            return false;
-        return true;
+        return securityParameter.equals(other.securityParameter);
     }
 
     public LHLKeyDerivationFunction seed() {

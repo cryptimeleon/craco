@@ -158,11 +158,9 @@ public class UnpredictabilityKeyDerivationFamily implements StandaloneRepresenta
                 return false;
         } else if (!familyList.equals(other.familyList))
             return false;
-        if (inputLength != other.inputLength)
+        if (!inputLength.equals(other.inputLength))
             return false;
-        if (minEntropy != other.minEntropy)
-            return false;
-        return true;
+        return minEntropy.equals(other.minEntropy);
     }
 
 }

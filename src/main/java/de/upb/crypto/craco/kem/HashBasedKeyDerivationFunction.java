@@ -76,11 +76,8 @@ public class HashBasedKeyDerivationFunction implements KeyDerivationFunction<Sym
             return false;
         HashBasedKeyDerivationFunction other = (HashBasedKeyDerivationFunction) obj;
         if (hashFunction == null) {
-            if (other.hashFunction != null)
-                return false;
-        } else if (!hashFunction.equals(other.hashFunction))
-            return false;
-        return true;
+            return other.hashFunction == null;
+        } else return hashFunction.equals(other.hashFunction);
     }
 
 }

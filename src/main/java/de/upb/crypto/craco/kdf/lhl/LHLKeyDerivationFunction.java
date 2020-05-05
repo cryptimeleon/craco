@@ -7,6 +7,8 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
+import java.util.Objects;
+
 /**
  * An instance of {@link LHLFamily}. For more information see javadoc there.
  *
@@ -45,7 +47,7 @@ public class LHLKeyDerivationFunction implements KeyDerivationFunction<ByteArray
 
         LHLKeyDerivationFunction that = (LHLKeyDerivationFunction) o;
 
-        return hash != null ? hash.equals(that.hash) : that.hash == null;
+        return Objects.equals(hash, that.hash);
     }
 
     @Override

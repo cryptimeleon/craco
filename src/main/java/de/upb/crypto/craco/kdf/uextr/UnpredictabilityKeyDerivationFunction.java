@@ -99,11 +99,8 @@ public class UnpredictabilityKeyDerivationFunction implements KeyDerivationFunct
         if (!getOuterType().equals(other.getOuterType()))
             return false;
         if (functions == null) {
-            if (other.functions != null)
-                return false;
-        } else if (!functions.equals(other.functions))
-            return false;
-        return true;
+            return other.functions == null;
+        } else return functions.equals(other.functions);
     }
 
     private UnpredictabilityKeyDerivationFamily getOuterType() {
