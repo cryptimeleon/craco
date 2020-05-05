@@ -65,10 +65,10 @@ public class ABECPAsymSmallWat11Setup {
         pp.setG2(pp.getGroupG2().getUniformlyRandomNonNeutral());
         // g_1^alpha for master secret key
         GroupElement g1Alpha = pp.getG1().pow(alpha);
-        // eGgAlpha = e(g1, g2)^alpha = e(g1^alpha, g2)
-        pp.seteGgAlpha(pp.getE().apply(g1Alpha, pp.getG2()));
-        // gA = g^a \in G_1
-        pp.setgA(pp.getG1().pow(a));
+        // eGgAlpha = e(g_1, g_2)^alpha = e(g_1^alpha, g_2)
+        pp.setEGgAlpha(pp.getE().apply(g1Alpha, pp.getG2()));
+        // gA = g_1^a
+        pp.setGA(pp.getG1().pow(a));
 
         // msk = g^y
         msk = new ABECPAsymSmallWat11MasterSecret(g1Alpha);

@@ -49,7 +49,7 @@ public class ABECPAsymSmallWat11CipherText implements CipherText {
         return c;
     }
 
-    public GroupElement getcPrime() {
+    public GroupElement getCPrime() {
         return cPrime;
     }
 

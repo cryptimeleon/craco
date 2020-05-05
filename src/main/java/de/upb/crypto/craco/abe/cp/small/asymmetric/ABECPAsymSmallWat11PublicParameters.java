@@ -91,11 +91,11 @@ public class ABECPAsymSmallWat11PublicParameters implements PublicParameters {
         this.g2 = g2;
     }
 
-    public GroupElement geteGgAlpha() {
+    public GroupElement getEGgAlpha() {
         return eGgAlpha;
     }
 
-    public void seteGgAlpha(GroupElement eGgAlpha) {
+    public void setEGgAlpha(GroupElement eGgAlpha) {
         this.eGgAlpha = eGgAlpha;
     }
 

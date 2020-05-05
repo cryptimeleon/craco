@@ -1,10 +1,8 @@
 package de.upb.crypto.craco.abe.cp.small.asymmetric;
 
+import de.upb.crypto.craco.abe.accessStructure.MonotoneSpanProgram;
 import de.upb.crypto.craco.common.GroupElementPlainText;
-import de.upb.crypto.craco.interfaces.CipherText;
-import de.upb.crypto.craco.interfaces.DecryptionKey;
-import de.upb.crypto.craco.interfaces.EncryptionKey;
-import de.upb.crypto.craco.interfaces.PlainText;
+import de.upb.crypto.craco.interfaces.*;
 import de.upb.crypto.craco.interfaces.abe.Attribute;
 import de.upb.crypto.craco.interfaces.abe.SetOfAttributes;
 import de.upb.crypto.craco.interfaces.pe.*;
@@ -14,8 +12,8 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.math.BigInteger;
+import java.util.*;
 
 /**
  * Asymmetric version of the small universe ABE scheme from [Wat11], Section 3.
@@ -50,45 +48,106 @@ public class ABECPAsymSmallWat11 implements PredicateEncryptionScheme {
     }
 
     @Override
-    public ABECPAsymWat11CipherText encrypt(PlainText plainText, EncryptionKey publicKey) {
+    public ABECPAsymSmallWat11CipherText encrypt(PlainText plainText, EncryptionKey publicKey) {
         if (!(plainText instanceof GroupElementPlainText))
-            throw new IllegalArgumentException("Not a valid plain text for this scheme");
-        if (!(publicKey instanceof ABECPAsymWat11EncryptionKey))
-            throw new IllegalArgumentException("Not a valid public key for this scheme");
+            throw new IllegalArgumentException("Not a valid plain text for this scheme: " + plainText.getClass());
+        if (!(publicKey instanceof ABECPAsymSmallWat11EncryptionKey))
+            throw new IllegalArgumentException("Not a valid public key for this scheme: " + plainText.getClass());
 
         GroupElementPlainText pt = (GroupElementPlainText) plainText;
-        ABECPAsymWat11EncryptionKey pk = (ABECPAsymWat11EncryptionKey) publicKey;
+        ABECPAsymSmallWat11EncryptionKey pk = (ABECPAsymSmallWat11EncryptionKey) publicKey;
 
         ZpElement s = zp.getUniformlyRandomUnit();
 
-        GroupElement encryptionFactor = pp.getY().pow(s);
-        // m \cdot Y^s = m \cdot E(g,g)^{ys}
-        GroupElement ePrime = pt.get().op(encryptionFactor);
-        // g^s \in G_1
-        GroupElement eTwoPrime = pp.getG().pow(s);
+        GroupElement encryptionFactor = pp.getEGgAlpha().pow(s);
+        // C = M \cdot e(g_1, g_2)^{\alpha s}
+        GroupElement c = pt.get().op(encryptionFactor);
+        // C' = g_2^s
+        GroupElement cPrime = pp.getG2().pow(s);
 
         // compute E_i = g^{a \cdot \lambda_i} \cdot T(\rho(i))^{-s} for every attribute i
         MonotoneSpanProgram msp = new MonotoneSpanProgram(pk.getPolicy(), zp);
         Map<Integer, ZpElement> shares = msp.getShares(s);
-        if (!isMonotoneSpanProgramValid(shares, msp, pp.getL_max()))
+        if (!isMonotoneSpanProgramValid(shares, msp, pp.getAttrs().size()))
             throw new IllegalArgumentException("MSP is invalid");
 
-        Map<BigInteger, GroupElement> elementE = computeE(s, msp, shares);
+        Map<BigInteger, GroupElement> mapC = new HashMap<>();
+        Map<BigInteger, GroupElement> mapD = new HashMap<>();
 
-        return new ABECPWat11CipherText(pk.getPolicy(), ePrime, eTwoPrime, elementE);
+        for (Map.Entry<Integer, ZpElement> share : shares.entrySet()) {
+            // the row of the share
+            BigInteger i = BigInteger.valueOf(share.getKey());
+            // the party linked to this share
+            Attribute rhoI = (Attribute) msp.getShareReceiver(share.getKey());
+            // the share /constant
+            ZpElement lambdaI = share.getValue();
+            ZpElement rI = zp.getUniformlyRandomUnit();
+            // C_i = (g_1^a)^lambda_i * attr_{rho_i}^{-r_i}
+            GroupElement cElementI = pp.getGA().pow(lambdaI).op(pp.getAttrs().get(rhoI).pow(rI).inv());
+            // D_i = g_2^r_1
+            GroupElement dElementI = pp.getG2().pow(rI);
+
+            mapC.put(i, cElementI);
+            mapD.put(i, dElementI);
+        }
+
+        return new ABECPAsymSmallWat11CipherText(pk.getPolicy(), c, cPrime, mapC, mapD);
     }
 
     @Override
     public GroupElementPlainText decrypt(CipherText cipherText, DecryptionKey privateKey) {
-        if (!(privateKey instanceof ABECPWat11DecryptionKey))
-            throw new IllegalArgumentException("Not a valid private key for this scheme");
-        if (!(cipherText instanceof ABECPWat11CipherText))
-            throw new IllegalArgumentException("Not a valid ciphertext for this scheme");
+        if (!(privateKey instanceof ABECPAsymSmallWat11DecryptionKey))
+            throw new IllegalArgumentException("Not a valid private key for this scheme: " + privateKey.getClass());
+        if (!(cipherText instanceof ABECPAsymSmallWat11CipherText))
+            throw new IllegalArgumentException("Not a valid ciphertext for this scheme:" + cipherText.getClass());
 
-        ABECPWat11DecryptionKey sk = (ABECPWat11DecryptionKey) privateKey;
-        ABECPWat11CipherText c = (ABECPWat11CipherText) cipherText;
-        GroupElement encryptionFactor = restoreYs(sk, c);
-        return new GroupElementPlainText(c.getEPrime().op(encryptionFactor.inv()));
+
+        ABECPAsymSmallWat11CipherText c = (ABECPAsymSmallWat11CipherText) cipherText;
+        ABECPAsymSmallWat11DecryptionKey sk = (ABECPAsymSmallWat11DecryptionKey) privateKey;
+
+        MonotoneSpanProgram msp = new MonotoneSpanProgram(c.getPolicy(), zp);
+
+        // the attributes of the decryption key
+        Set<Attribute> S = sk.getMapKx().keySet();
+
+        if (!msp.isQualified(S)) {
+            throw new UnqualifiedKeyException("The given decryption key does not satisfy the MSP.");
+        }
+
+        GroupElement message = c.getC();
+
+        List<GroupElement> zList = new ArrayList<>();
+
+        for (Map.Entry<Integer, ZpElement> omegaI : msp.getSolvingVector(S).entrySet()) {
+            // the row of the share
+            BigInteger i = BigInteger.valueOf(omegaI.getKey());
+            // the party linked to this share
+            Attribute rhoI = (Attribute) msp.getShareReceiver(omegaI.getKey());
+
+            if (!omegaI.getValue().getInteger().equals(BigInteger.ZERO)) {
+                GroupElement cElementI = c.getMapC().get(i);
+                GroupElement dElementI = c.getMapD().get(i);
+                GroupElement kElementRhoI = sk.getMapKx().get(rhoI);
+
+                GroupElement map1 = pp.getE().apply(cElementI, sk.getL());
+                GroupElement map2 = pp.getE().apply(dElementI, kElementRhoI);
+
+                map1 = map1.op(map2);
+                map1 = map1.pow(omegaI.getValue().getInteger());
+                zList.add(map1);
+            }
+        }
+        // TODO: Use multiexponentiation here
+        Optional<GroupElement> reduced = zList.stream().parallel().reduce(GroupElement::op);
+        GroupElement tmp = pp.getE().getGT().getNeutralElement();
+        if (reduced.isPresent()) {
+            tmp = reduced.get();
+        }
+
+        GroupElement map = pp.getE().apply(c.getCPrime(), sk.getK());
+        map = map.op(tmp.inv());
+        return new GroupElementPlainText(message.op(map.inv()));
+
     }
 
     @Override
@@ -119,9 +178,10 @@ public class ABECPAsymSmallWat11 implements PredicateEncryptionScheme {
     @Override
     public DecryptionKey generateDecryptionKey(MasterSecret msk, KeyIndex kind) {
         if (!(msk instanceof ABECPAsymSmallWat11MasterSecret))
-            throw new IllegalArgumentException("The master secret is not a valid master secret for this scheme.");
+            throw new IllegalArgumentException("The master secret is not a valid master secret for this scheme: "
+                    + msk.getClass());
         if (!(kind instanceof SetOfAttributes))
-            throw new IllegalArgumentException("Expected SetOfAttributes as KeyIndex");
+            throw new IllegalArgumentException("Expected SetOfAttributes as KeyIndex but got " + kind.getClass());
 
         SetOfAttributes attributes = (SetOfAttributes) kind;
         ABECPAsymSmallWat11MasterSecret cpmsk = (ABECPAsymSmallWat11MasterSecret) msk;
@@ -157,6 +217,23 @@ public class ABECPAsymSmallWat11 implements PredicateEncryptionScheme {
 
     @Override
     public Representation getRepresentation() {
-        return null;
+        return pp.getRepresentation();
+    }
+
+    private boolean isMonotoneSpanProgramValid(Map<Integer, ZpElement> shares, MonotoneSpanProgram msp, int l_max) {
+        // check for line count
+        if (shares.size() > l_max) {
+            return false;
+        } else {
+            Set<Attribute> attributes = new HashSet<>();
+            for (Map.Entry<Integer, ZpElement> share : shares.entrySet()) {
+                if (attributes.contains((Attribute) msp.getShareReceiver(share.getKey()))) {
+                    return false;
+                } else {
+                    attributes.add((Attribute) msp.getShareReceiver(share.getKey()));
+                }
+            }
+            return true;
+        }
     }
 }
