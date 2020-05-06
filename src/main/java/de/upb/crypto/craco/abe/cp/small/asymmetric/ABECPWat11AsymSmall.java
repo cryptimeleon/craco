@@ -153,27 +153,27 @@ public class ABECPWat11AsymSmall implements PredicateEncryptionScheme {
 
     @Override
     public PlainText getPlainText(Representation repr) {
-        return null;
+        return new GroupElementPlainText(repr, pp.getGroupGT());
     }
 
     @Override
     public CipherText getCipherText(Representation repr) {
-        return null;
+        return new ABECPWat11AsymSmallCipherText(repr, pp);
     }
 
     @Override
     public EncryptionKey getEncryptionKey(Representation repr) {
-        return null;
+        return new ABECPWat11AsymSmallEncryptionKey(repr);
     }
 
     @Override
     public DecryptionKey getDecryptionKey(Representation repr) {
-        return null;
+        return new ABECPWat11AsymSmallDecryptionKey(repr, pp.getGroupG1(), pp.getGroupG2());
     }
 
     @Override
     public MasterSecret getMasterSecret(Representation repr) {
-        return null;
+        return new ABECPWat11AsymSmallMasterSecret(repr, pp.getGroupG1());
     }
 
     @Override

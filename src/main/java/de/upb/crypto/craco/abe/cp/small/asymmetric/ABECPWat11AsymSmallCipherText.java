@@ -36,6 +36,10 @@ public class ABECPWat11AsymSmallCipherText implements CipherText {
         this.mapD = mapD;
     }
 
+    public ABECPWat11AsymSmallCipherText(Representation repr, ABECPWat11AsymSmallPublicParameters pp) {
+        new ReprUtil(this).register(pp.getE()).deserialize(repr);
+    }
+
     @Override
     public Representation getRepresentation() {
         return ReprUtil.serialize(this);
@@ -59,5 +63,51 @@ public class ABECPWat11AsymSmallCipherText implements CipherText {
 
     public Map<BigInteger, GroupElement> getMapD() {
         return mapD;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((c == null) ? 0 : c.hashCode());
+        result = prime * result + ((cPrime == null) ? 0 : cPrime.hashCode());
+        result = prime * result + ((mapC == null) ? 0 : mapC.hashCode());
+        result = prime * result + ((mapD == null) ? 0 : mapD.hashCode());
+        result = prime * result + ((policy == null) ? 0 : policy.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ABECPWat11AsymSmallCipherText other = (ABECPWat11AsymSmallCipherText) obj;
+        if (c == null) {
+            if (other.c != null)
+                return false;
+        } else if (!c.equals(other.c))
+            return false;
+        if (cPrime == null) {
+            if (other.cPrime != null)
+                return false;
+        } else if (!cPrime.equals(other.cPrime))
+            return false;
+        if (mapC == null) {
+            if (other.mapC != null)
+                return false;
+        } else if (!mapC.equals(other.mapC))
+            return false;
+        if (mapD == null) {
+            if (other.mapD != null)
+                return false;
+        } else if (!mapD.equals(other.mapD))
+            return false;
+        if (policy == null) {
+            return other.policy == null;
+        } else return policy.equals(other.policy);
     }
 }

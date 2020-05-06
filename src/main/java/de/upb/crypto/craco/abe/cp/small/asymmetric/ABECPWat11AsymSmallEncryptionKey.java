@@ -6,9 +6,11 @@ import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 public class ABECPWat11AsymSmallEncryptionKey implements EncryptionKey {
 
+    @Represented
     private Policy policy;
 
     public ABECPWat11AsymSmallEncryptionKey(Policy policy) {
@@ -51,10 +53,7 @@ public class ABECPWat11AsymSmallEncryptionKey implements EncryptionKey {
             return false;
         ABECPWat11AsymSmallEncryptionKey other = (ABECPWat11AsymSmallEncryptionKey) obj;
         if (policy == null) {
-            if (other.policy != null)
-                return false;
-        } else if (!policy.equals(other.policy))
-            return false;
-        return true;
+            return other.policy == null;
+        } else return policy.equals(other.policy);
     }
 }
