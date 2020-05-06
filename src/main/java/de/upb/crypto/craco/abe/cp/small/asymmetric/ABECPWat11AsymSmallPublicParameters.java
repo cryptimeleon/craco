@@ -11,7 +11,7 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Map;
 
-public class ABECPAsymSmallWat11PublicParameters implements PublicParameters {
+public class ABECPWat11AsymSmallPublicParameters implements PublicParameters {
 
     @Represented
     private Group groupG1, groupG2, groupGT;
@@ -22,7 +22,7 @@ public class ABECPAsymSmallWat11PublicParameters implements PublicParameters {
     @Represented(restorer = "groupG1")
     private GroupElement g1; // Generator of G_1
 
-    @Represented(restorer = "groupG1")
+    @Represented(restorer = "groupG2")
     private GroupElement g2; // Generator of G_2
 
     @Represented(restorer = "groupGT")
@@ -34,12 +34,12 @@ public class ABECPAsymSmallWat11PublicParameters implements PublicParameters {
     @Represented(restorer = "foo -> groupG1")
     private Map<Attribute, GroupElement> attrs; // Attribute in Universe, Element in G_1
 
-    public ABECPAsymSmallWat11PublicParameters() {
+    public ABECPWat11AsymSmallPublicParameters() {
 
     }
 
 
-    public ABECPAsymSmallWat11PublicParameters(Representation repr) {
+    public ABECPWat11AsymSmallPublicParameters(Representation repr) {
         new ReprUtil(this).deserialize(repr);
     }
 
@@ -143,7 +143,7 @@ public class ABECPAsymSmallWat11PublicParameters implements PublicParameters {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        ABECPAsymSmallWat11PublicParameters other = (ABECPAsymSmallWat11PublicParameters) obj;
+        ABECPWat11AsymSmallPublicParameters other = (ABECPWat11AsymSmallPublicParameters) obj;
         if (e == null) {
             if (other.e != null)
                 return false;

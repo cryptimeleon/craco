@@ -10,7 +10,7 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Map;
 
-public class ABECPAsymSmallWat11DecryptionKey implements DecryptionKey {
+public class ABECPWat11AsymSmallDecryptionKey implements DecryptionKey {
 
     @Represented(restorer = "G1")
     private GroupElement k; // K in G_1
@@ -21,13 +21,13 @@ public class ABECPAsymSmallWat11DecryptionKey implements DecryptionKey {
     @Represented(restorer = "foo -> G1")
     private Map<Attribute, GroupElement> mapKx; // K_x in G_1
 
-    public ABECPAsymSmallWat11DecryptionKey(GroupElement k, GroupElement l, Map<Attribute, GroupElement> mapKx) {
+    public ABECPWat11AsymSmallDecryptionKey(GroupElement k, GroupElement l, Map<Attribute, GroupElement> mapKx) {
         this.k = k;
         this.l = l;
         this.mapKx = mapKx;
     }
 
-    public ABECPAsymSmallWat11DecryptionKey(Representation repr, Group groupG1, Group groupG2) {
+    public ABECPWat11AsymSmallDecryptionKey(Representation repr, Group groupG1, Group groupG2) {
         new ReprUtil(this).register(groupG1, "G1").register(groupG2, "G2").deserialize(repr);
     }
 
@@ -78,7 +78,7 @@ public class ABECPAsymSmallWat11DecryptionKey implements DecryptionKey {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        ABECPAsymSmallWat11DecryptionKey other = (ABECPAsymSmallWat11DecryptionKey) obj;
+        ABECPWat11AsymSmallDecryptionKey other = (ABECPWat11AsymSmallDecryptionKey) obj;
         if (mapKx == null) {
             if (other.mapKx != null)
                 return false;

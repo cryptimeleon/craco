@@ -140,6 +140,7 @@ public class StandaloneTest {
         toReturn.addAll(PS18ROMSignatureParams.get());
         toReturn.addAll(PS18SignatureParams.get());
         toReturn.addAll(PS18SignaturePrecParams.get());
+        toReturn.addAll(ABECPWat11AsymSmallParams.get());
 
         // clarc
         toReturn.addAll(CommitmentSchemeParams.get());

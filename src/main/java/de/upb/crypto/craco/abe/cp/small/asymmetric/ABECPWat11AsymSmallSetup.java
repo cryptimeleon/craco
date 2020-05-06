@@ -11,17 +11,17 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ABECPAsymSmallWat11Setup {
+public class ABECPWat11AsymSmallSetup {
 
-    private ABECPAsymSmallWat11PublicParameters pp;
-    private ABECPAsymSmallWat11MasterSecret msk;
+    private ABECPWat11AsymSmallPublicParameters pp;
+    private ABECPWat11AsymSmallMasterSecret msk;
 
     /**
      * Generate public parameters and the master secret.
      * <p>
      * Sets up public parameters and the master secret for a given security
      * parameter securityParameter. The universe specifies which attributes can
-     * be used in the {@link ABECPAsymSmallWat11EncryptionKey} and in the {@link ABECPAsymSmallWat11DecryptionKey}.
+     * be used in the {@link ABECPWat11AsymSmallEncryptionKey} and in the {@link ABECPWat11AsymSmallDecryptionKey}.
      * <p>
      * To enable debugging modus, set debug to true. WARNING: This results in an
      * insecure instantiation of the underlying groups.
@@ -48,7 +48,7 @@ public class ABECPAsymSmallWat11Setup {
      */
     public void doKeyGen(BilinearGroup group, Collection<? extends Attribute> universe) {
         // Public Parameter stuff
-        pp = new ABECPAsymSmallWat11PublicParameters();
+        pp = new ABECPWat11AsymSmallPublicParameters();
 
         pp.setGroupG1(group.getG1());
         pp.setGroupG2(group.getG2());
@@ -71,7 +71,7 @@ public class ABECPAsymSmallWat11Setup {
         pp.setGA(pp.getG1().pow(a));
 
         // msk = g^y
-        msk = new ABECPAsymSmallWat11MasterSecret(g1Alpha);
+        msk = new ABECPWat11AsymSmallMasterSecret(g1Alpha);
 
         Map<Attribute, GroupElement> attrs = new HashMap<>();
         // \for all x in univese T_x = RandomNonNeutral in G1
@@ -81,11 +81,11 @@ public class ABECPAsymSmallWat11Setup {
         pp.setAttrs(attrs);
     }
 
-    public ABECPAsymSmallWat11PublicParameters getPublicParameters() {
+    public ABECPWat11AsymSmallPublicParameters getPublicParameters() {
         return pp;
     }
 
-    public ABECPAsymSmallWat11MasterSecret getMasterSecret() {
+    public ABECPWat11AsymSmallMasterSecret getMasterSecret() {
         return msk;
     }
 }

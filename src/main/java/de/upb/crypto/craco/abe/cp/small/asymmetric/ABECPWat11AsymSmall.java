@@ -1,6 +1,7 @@
 package de.upb.crypto.craco.abe.cp.small.asymmetric;
 
 import de.upb.crypto.craco.abe.accessStructure.MonotoneSpanProgram;
+import de.upb.crypto.craco.abe.cp.small.ABECPWat11Small;
 import de.upb.crypto.craco.common.GroupElementPlainText;
 import de.upb.crypto.craco.interfaces.*;
 import de.upb.crypto.craco.interfaces.abe.Attribute;
@@ -26,36 +27,36 @@ import java.util.*;
  * In Proceedings of the 2017 ACM SIGSAC Conference on Computer and Communications Security (CCS ’17).
  * Association for Computing Machinery, New York, NY, USA, 665–682. DOI:https://doi.org/10.1145/3133956.3134014
  */
-public class ABECPAsymSmallWat11 implements PredicateEncryptionScheme {
+public class ABECPWat11AsymSmall implements PredicateEncryptionScheme {
 
     /**
      * The public parameters for this CP ABE Scheme
      */
-    private ABECPAsymSmallWat11PublicParameters pp;
+    private ABECPWat11AsymSmallPublicParameters pp;
     /**
      * Defined as Zp_{size(groupG1)}
      */
     private Zp zp;
 
-    public ABECPAsymSmallWat11(ABECPAsymSmallWat11PublicParameters pp) {
+    public ABECPWat11AsymSmall(ABECPWat11AsymSmallPublicParameters pp) {
         this.pp = pp;
         this.zp = new Zp(pp.getGroupG1().size());
     }
 
-    public ABECPAsymSmallWat11(Representation repr) {
-        this.pp = new ABECPAsymSmallWat11PublicParameters(repr);
+    public ABECPWat11AsymSmall(Representation repr) {
+        this.pp = new ABECPWat11AsymSmallPublicParameters(repr);
         this.zp = new Zp(pp.getGroupG1().size());
     }
 
     @Override
-    public ABECPAsymSmallWat11CipherText encrypt(PlainText plainText, EncryptionKey publicKey) {
+    public ABECPWat11AsymSmallCipherText encrypt(PlainText plainText, EncryptionKey publicKey) {
         if (!(plainText instanceof GroupElementPlainText))
             throw new IllegalArgumentException("Not a valid plain text for this scheme: " + plainText.getClass());
-        if (!(publicKey instanceof ABECPAsymSmallWat11EncryptionKey))
+        if (!(publicKey instanceof ABECPWat11AsymSmallEncryptionKey))
             throw new IllegalArgumentException("Not a valid public key for this scheme: " + plainText.getClass());
 
         GroupElementPlainText pt = (GroupElementPlainText) plainText;
-        ABECPAsymSmallWat11EncryptionKey pk = (ABECPAsymSmallWat11EncryptionKey) publicKey;
+        ABECPWat11AsymSmallEncryptionKey pk = (ABECPWat11AsymSmallEncryptionKey) publicKey;
 
         ZpElement s = zp.getUniformlyRandomUnit();
 
@@ -91,19 +92,19 @@ public class ABECPAsymSmallWat11 implements PredicateEncryptionScheme {
             mapD.put(i, dElementI);
         }
 
-        return new ABECPAsymSmallWat11CipherText(pk.getPolicy(), c, cPrime, mapC, mapD);
+        return new ABECPWat11AsymSmallCipherText(pk.getPolicy(), c, cPrime, mapC, mapD);
     }
 
     @Override
     public GroupElementPlainText decrypt(CipherText cipherText, DecryptionKey privateKey) {
-        if (!(privateKey instanceof ABECPAsymSmallWat11DecryptionKey))
+        if (!(privateKey instanceof ABECPWat11AsymSmallDecryptionKey))
             throw new IllegalArgumentException("Not a valid private key for this scheme: " + privateKey.getClass());
-        if (!(cipherText instanceof ABECPAsymSmallWat11CipherText))
+        if (!(cipherText instanceof ABECPWat11AsymSmallCipherText))
             throw new IllegalArgumentException("Not a valid ciphertext for this scheme:" + cipherText.getClass());
 
 
-        ABECPAsymSmallWat11CipherText c = (ABECPAsymSmallWat11CipherText) cipherText;
-        ABECPAsymSmallWat11DecryptionKey sk = (ABECPAsymSmallWat11DecryptionKey) privateKey;
+        ABECPWat11AsymSmallCipherText c = (ABECPWat11AsymSmallCipherText) cipherText;
+        ABECPWat11AsymSmallDecryptionKey sk = (ABECPWat11AsymSmallDecryptionKey) privateKey;
 
         MonotoneSpanProgram msp = new MonotoneSpanProgram(c.getPolicy(), zp);
 
@@ -177,14 +178,14 @@ public class ABECPAsymSmallWat11 implements PredicateEncryptionScheme {
 
     @Override
     public DecryptionKey generateDecryptionKey(MasterSecret msk, KeyIndex kind) {
-        if (!(msk instanceof ABECPAsymSmallWat11MasterSecret))
+        if (!(msk instanceof ABECPWat11AsymSmallMasterSecret))
             throw new IllegalArgumentException("The master secret is not a valid master secret for this scheme: "
                     + msk.getClass());
         if (!(kind instanceof SetOfAttributes))
             throw new IllegalArgumentException("Expected SetOfAttributes as KeyIndex but got " + kind.getClass());
 
         SetOfAttributes attributes = (SetOfAttributes) kind;
-        ABECPAsymSmallWat11MasterSecret cpmsk = (ABECPAsymSmallWat11MasterSecret) msk;
+        ABECPWat11AsymSmallMasterSecret cpmsk = (ABECPWat11AsymSmallMasterSecret) msk;
         GroupElement gAlpha = cpmsk.get();
 
         Zp.ZpElement t = zp.getUniformlyRandomUnit();
@@ -199,7 +200,7 @@ public class ABECPAsymSmallWat11 implements PredicateEncryptionScheme {
             GroupElement kx = pp.getAttrs().get(x).pow(t);
             mapKx.put(x, kx);
         }
-        return new ABECPAsymSmallWat11DecryptionKey(k, l, mapKx);
+        return new ABECPWat11AsymSmallDecryptionKey(k, l, mapKx);
     }
 
     @Override
@@ -207,17 +208,44 @@ public class ABECPAsymSmallWat11 implements PredicateEncryptionScheme {
         if (!(cind instanceof Policy))
             throw new IllegalArgumentException("Policy expected as CiphertextIndex");
         Policy policy = (Policy) cind;
-        return new ABECPAsymSmallWat11EncryptionKey(policy);
+        return new ABECPWat11AsymSmallEncryptionKey(policy);
     }
 
     @Override
     public Predicate getPredicate() {
-        return null;
+        return (kind, cind) -> {
+            if (!(cind instanceof Policy))
+                throw new IllegalArgumentException("Policy expected as CiphertextIndex but got " + cind.getClass());
+            if (!(kind instanceof SetOfAttributes))
+                throw new IllegalArgumentException("SetOfAttributes expected as KeyIndex but got " + kind.getClass());
+            Policy policy = (Policy) cind;
+            SetOfAttributes soa = (SetOfAttributes) kind;
+            return policy.isFulfilled(soa);
+        };
     }
 
     @Override
     public Representation getRepresentation() {
         return pp.getRepresentation();
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((pp == null) ? 0 : pp.hashCode());
+        result = prime * result + ((zp == null) ? 0 : zp.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof ABECPWat11AsymSmall) {
+            ABECPWat11AsymSmall other = (ABECPWat11AsymSmall) o;
+            return pp.equals(other.pp);
+        } else {
+            return false;
+        }
     }
 
     private boolean isMonotoneSpanProgramValid(Map<Integer, ZpElement> shares, MonotoneSpanProgram msp, int l_max) {

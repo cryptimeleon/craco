@@ -7,15 +7,15 @@ import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 
-public class ABECPAsymSmallWat11EncryptionKey implements EncryptionKey {
+public class ABECPWat11AsymSmallEncryptionKey implements EncryptionKey {
 
     private Policy policy;
 
-    public ABECPAsymSmallWat11EncryptionKey(Policy policy) {
+    public ABECPWat11AsymSmallEncryptionKey(Policy policy) {
         this.policy = policy;
     }
 
-    public ABECPAsymSmallWat11EncryptionKey(Representation repr) {
+    public ABECPWat11AsymSmallEncryptionKey(Representation repr) {
         new ReprUtil(this).deserialize(repr);
     }
 
@@ -49,7 +49,7 @@ public class ABECPAsymSmallWat11EncryptionKey implements EncryptionKey {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        ABECPAsymSmallWat11EncryptionKey other = (ABECPAsymSmallWat11EncryptionKey) obj;
+        ABECPWat11AsymSmallEncryptionKey other = (ABECPWat11AsymSmallEncryptionKey) obj;
         if (policy == null) {
             if (other.policy != null)
                 return false;

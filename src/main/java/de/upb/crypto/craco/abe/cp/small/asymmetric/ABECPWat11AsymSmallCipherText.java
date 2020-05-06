@@ -10,7 +10,7 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import java.math.BigInteger;
 import java.util.Map;
 
-public class ABECPAsymSmallWat11CipherText implements CipherText {
+public class ABECPWat11AsymSmallCipherText implements CipherText {
 
     @Represented
     private Policy policy;
@@ -27,7 +27,7 @@ public class ABECPAsymSmallWat11CipherText implements CipherText {
     @Represented(restorer = "foo -> G2")
     private Map<BigInteger, GroupElement> mapD; // D_1 to D_\ell in G_2
 
-    public ABECPAsymSmallWat11CipherText(Policy policy, GroupElement c, GroupElement cPrime,
+    public ABECPWat11AsymSmallCipherText(Policy policy, GroupElement c, GroupElement cPrime,
                                          Map<BigInteger, GroupElement> mapC, Map<BigInteger, GroupElement> mapD) {
         this.policy = policy;
         this.c = c;
