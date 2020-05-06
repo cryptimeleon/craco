@@ -131,7 +131,7 @@ public class ABECPWat11AsymSmall implements PredicateEncryptionScheme {
                 GroupElement kElementRhoI = sk.getMapKx().get(rhoI);
 
                 GroupElement map1 = pp.getE().apply(cElementI, sk.getL());
-                GroupElement map2 = pp.getE().apply(dElementI, kElementRhoI);
+                GroupElement map2 = pp.getE().apply(kElementRhoI, dElementI);
 
                 map1 = map1.op(map2);
                 map1 = map1.pow(omegaI.getValue().getInteger());
@@ -145,7 +145,7 @@ public class ABECPWat11AsymSmall implements PredicateEncryptionScheme {
             tmp = reduced.get();
         }
 
-        GroupElement map = pp.getE().apply(c.getCPrime(), sk.getK());
+        GroupElement map = pp.getE().apply(sk.getK(), c.getCPrime());
         map = map.op(tmp.inv());
         return new GroupElementPlainText(message.op(map.inv()));
 
