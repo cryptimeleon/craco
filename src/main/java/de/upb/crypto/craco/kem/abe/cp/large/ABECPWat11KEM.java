@@ -108,7 +108,7 @@ public class ABECPWat11KEM extends AbstractABECPWat11 implements PredicateKEM<Ke
     }
 
     public CipherText getEncapsulatedKey(Representation repr) {
-        return new ABECPWat11CipherText(repr, pp);
+        return new ABECPWat11KEMCipherText(repr, pp);
     }
 
     public EncryptionKey getEncapsulationKey(Representation repr) {
