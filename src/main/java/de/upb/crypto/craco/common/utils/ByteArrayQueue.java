@@ -177,7 +177,6 @@ public final class ByteArrayQueue {
      * array.
      *
      * @param target removed bytes are inserted here
-     * @param offset start writing at offset in target
      * @param count  number ob bytes to remove
      */
     public void remove(final byte[] target, final int count) {

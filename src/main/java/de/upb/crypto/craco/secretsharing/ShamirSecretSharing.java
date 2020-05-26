@@ -27,8 +27,8 @@ import java.util.stream.IntStream;
  * the secret.
  * <p>
  * The secret is only shared among the direct children of the given {@link ThresholdPolicy}.
- * To share a secret among all {@link ThresholdPolicy} in a hierarchy of {@link Policy}s use {@link
- * ThresholdTreeSecretSharing}.
+ * To share a secret among all {@link ThresholdPolicy} in a hierarchy of {@link Policy}s use
+ * {@link ThresholdTreeSecretSharing}.
  */
 public class ShamirSecretSharing implements LinearSecretSharing<Policy> {
     private static Logger log = Logger.getLogger(ShamirSecretSharing.class.getName());

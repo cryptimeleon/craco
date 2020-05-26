@@ -122,6 +122,7 @@ public class StandaloneTest {
         toReturn.add(ABECPWat11SymmetricKEMParams.get());
         toReturn.addAll(LUDParams.get());
         toReturn.addAll(PSTestParams.get());
+        toReturn.addAll(SPSEQParams.get());
         toReturn.add(StreamingHybridEncryptionSchemeParams.get());
         toReturn.add(BooleanPolicyParams.get());
         toReturn.add(ByteArrayImplementationParams.get());

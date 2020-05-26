@@ -12,7 +12,7 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 /**
  * An {@link EncryptionKey} for the {@link ABECPWat11} that stores a
- * {@link} Policy as {@link CiphertextIndex}.
+ * {@link Policy} as {@link CiphertextIndex}.
  * <p>
  * This key should be created by
  * {@link ABECPWat11#generateEncryptionKey(de.upb.crypto.craco.interfaces.pe.CiphertextIndex)}

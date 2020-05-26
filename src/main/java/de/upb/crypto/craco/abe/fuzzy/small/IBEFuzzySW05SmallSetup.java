@@ -30,7 +30,6 @@ public class IBEFuzzySW05SmallSetup {
      * insecure instantiation of the underlying groups.
      *
      * @param securityParameter
-     * @param n                 the size of an identity
      * @param universeThreshold the required number of attributes in the intersection
      * @param debug             enable debugging
      */
