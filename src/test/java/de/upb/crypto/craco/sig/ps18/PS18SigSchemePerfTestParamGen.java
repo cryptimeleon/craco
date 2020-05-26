@@ -4,7 +4,6 @@ import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.RingElementPlainText;
 import de.upb.crypto.craco.sig.ps.PSPublicParameters;
 import de.upb.crypto.craco.sig.ps.PSPublicParametersGen;
-import de.upb.crypto.math.structures.zn.Zp;
 
 public class PS18SigSchemePerfTestParamGen {
 

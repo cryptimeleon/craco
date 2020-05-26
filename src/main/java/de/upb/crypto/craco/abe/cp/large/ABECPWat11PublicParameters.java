@@ -6,8 +6,8 @@ import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 /**
  * The public parameters for the {@link ABECPWat11}, generated in
@@ -23,29 +23,29 @@ public class ABECPWat11PublicParameters implements PublicParameters {
     @Represented
     protected BilinearMap e;
 
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "groupG1")
     protected GroupElement g; // Generator of G_1
 
-    @Represented(structure = "groupGT", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "groupGT")
     protected GroupElement y; // in G_T
 
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "groupG1")
     protected GroupElement g_a; // in G_1
 
     @Represented
     protected HashIntoStructure hashToG1;
 
     @Represented
-    protected int l_max;
+    protected Integer l_max;
 
     @Represented
-    protected int n;
+    protected Integer n;
 
     public ABECPWat11PublicParameters() {
     }
 
     public ABECPWat11PublicParameters(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public HashIntoStructure getHashToG1() {
@@ -122,7 +122,7 @@ public class ABECPWat11PublicParameters implements PublicParameters {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

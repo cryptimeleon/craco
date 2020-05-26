@@ -5,7 +5,6 @@ import de.upb.crypto.craco.interfaces.EncryptionKey;
 import de.upb.crypto.craco.interfaces.KeyPair;
 import de.upb.crypto.craco.interfaces.UnqualifiedKeyException;
 import de.upb.crypto.craco.kem.KeyEncapsulationMechanism;
-import de.upb.crypto.craco.kem.abe.cp.os.ElgamalLargeUniverseDelegationKEM;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

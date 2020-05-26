@@ -4,36 +4,33 @@ import de.upb.crypto.craco.abe.cp.large.ABECPWat11PublicParameters;
 import de.upb.crypto.craco.interfaces.PublicParameters;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
 import java.util.Map;
 
 public class DistributedABECPWat11PublicParameters extends ABECPWat11PublicParameters implements PublicParameters {
 
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "foo -> groupG1")
     private Map<BigInteger, GroupElement> t;
 
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupGT", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "foo -> groupGT")
     private Map<Integer, GroupElement> verificationKeys;
 
     @Represented
-    private int threshold;
+    private Integer threshold;
 
     public DistributedABECPWat11PublicParameters() {
     }
 
     public DistributedABECPWat11PublicParameters(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public Map<BigInteger, GroupElement> getT() {

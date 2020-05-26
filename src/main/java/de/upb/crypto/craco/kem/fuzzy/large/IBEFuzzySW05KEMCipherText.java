@@ -5,12 +5,10 @@ import de.upb.crypto.craco.abe.fuzzy.large.IBEFuzzySW05PublicParameters;
 import de.upb.crypto.craco.abe.fuzzy.large.IBEIBEFuzzySW05SW05CipherText;
 import de.upb.crypto.craco.abe.fuzzy.large.Identity;
 import de.upb.crypto.craco.interfaces.CipherText;
-import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
 import java.util.Map;
@@ -32,18 +30,14 @@ public class IBEFuzzySW05KEMCipherText implements CipherText {
     /**
      * E'' \in G_1
      */
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "G1")
     protected GroupElement eTwoPrime;
 
     /**
      * values E_i \in G_1 for {@link BigInteger}'s i \in {@link #omegaPrime}
      */
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "int -> G1")
     protected Map<BigInteger, GroupElement> eElementMap;
-
-    @SuppressWarnings("unused")
-    protected Group groupG1;
 
     public IBEFuzzySW05KEMCipherText(Identity omegaPrime, GroupElement eTwoPrime,
                                      Map<BigInteger, GroupElement> eElementMap) {
@@ -53,8 +47,7 @@ public class IBEFuzzySW05KEMCipherText implements CipherText {
     }
 
     public IBEFuzzySW05KEMCipherText(Representation repr, IBEFuzzySW05PublicParameters pp) {
-        groupG1 = pp.getGroupG1();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).register(pp.getGroupG1(), "G1").deserialize(repr);
     }
 
     public IBEFuzzySW05KEMCipherText() {
@@ -75,7 +68,7 @@ public class IBEFuzzySW05KEMCipherText implements CipherText {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

@@ -5,9 +5,8 @@ import de.upb.crypto.craco.interfaces.policy.Policy;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
 import java.util.Map;
@@ -22,18 +21,16 @@ public class ABECPWat11SmallCipherText implements CipherText {
     @Represented
     private Policy policy;
 
-    @Represented(structure = "groupGT", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "GT")
     private GroupElement e_prime; // in G_T
 
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "G1")
     private GroupElement e_two_prime; // in G_1
 
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "foo -> G1")
     private Map<BigInteger, GroupElement> e1; // in G_1
 
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "foo -> G1")
     private Map<BigInteger, GroupElement> e2; // in G_1
 
     @SuppressWarnings("unused")
@@ -55,7 +52,8 @@ public class ABECPWat11SmallCipherText implements CipherText {
     public ABECPWat11SmallCipherText(Representation repr, ABECPWat11SmallPublicParameters pp) {
         groupG1 = pp.getGroupG1();
         groupGT = pp.getGroupGT();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).register(groupG1, "G1").register(groupGT, "GT")
+                .deserialize(repr);
     }
 
     public Policy getPolicy() {
@@ -80,7 +78,7 @@ public class ABECPWat11SmallCipherText implements CipherText {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

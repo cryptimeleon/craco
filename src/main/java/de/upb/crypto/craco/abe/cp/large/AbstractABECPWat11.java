@@ -16,8 +16,8 @@ import de.upb.crypto.craco.kem.abe.cp.large.ABECPWat11KEM;
 import de.upb.crypto.craco.kem.abe.cp.large.ABECPWat11KEMCipherText;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,7 +58,7 @@ public abstract class AbstractABECPWat11 {
     }
 
     public AbstractABECPWat11(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
         this.zp = new Zp(pp.getGroupG1().size());
     }
 
@@ -284,7 +284,7 @@ public abstract class AbstractABECPWat11 {
      * here to save duplicate code.
      */
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

@@ -1,8 +1,14 @@
 package de.upb.crypto.craco.interfaces.signature;
 
+import de.upb.crypto.craco.interfaces.CipherText;
+import de.upb.crypto.craco.interfaces.DecryptionKey;
+import de.upb.crypto.craco.interfaces.EncryptionKey;
 import de.upb.crypto.craco.interfaces.PlainText;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
+import de.upb.crypto.math.serialization.annotations.v2.RepresentationRestorer;
+
+import java.lang.reflect.Type;
 
 /**
  * An SignatureScheme has the ability to sign plaintexts
@@ -24,7 +30,7 @@ import de.upb.crypto.math.serialization.StandaloneRepresentable;
  *
  * @author feidens
  */
-public interface SignatureScheme extends StandaloneRepresentable {
+public interface SignatureScheme extends StandaloneRepresentable, RepresentationRestorer {
     /**
      * Signing algrithm of the signature scheme. The secret key should contain all information
      * necessary to sign, therefore public key is not needed.
@@ -101,4 +107,20 @@ public interface SignatureScheme extends StandaloneRepresentable {
      * @return maximal number of bytes that can be given to {@link #mapToPlaintext}.
      */
     int getMaxNumberOfBytesForMapToPlaintext();
+
+
+    default Object recreateFromRepresentation(Type type, Representation repr) {
+        if (type instanceof Class) {
+            if (SigningKey.class.isAssignableFrom((Class) type)) {
+                return this.getSigningKey(repr);
+            } else if (VerificationKey.class.isAssignableFrom((Class) type)) {
+                return this.getVerificationKey(repr);
+            } else if (Signature.class.isAssignableFrom((Class) type)) {
+                return this.getSignature(repr);
+            } else if (PlainText.class.isAssignableFrom((Class) type)) {
+                return this.getPlainText(repr);
+            }
+        }
+        throw new IllegalArgumentException("Cannot recreate object of type: " + type.getTypeName());
+    }
 }

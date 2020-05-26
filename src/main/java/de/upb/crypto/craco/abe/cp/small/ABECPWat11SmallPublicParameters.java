@@ -6,9 +6,8 @@ import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Collections;
 import java.util.Map;
@@ -22,22 +21,21 @@ import java.util.Map;
 public class ABECPWat11SmallPublicParameters implements PublicParameters {
 
     @Represented
-    private Group groupG1, groupGT;
+    public Group groupG1, groupGT;
 
     @Represented
     private BilinearMap e;
 
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "groupG1")
     private GroupElement g; // Generator of G_1
 
-    @Represented(structure = "groupGT", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "groupGT")
     private GroupElement y; // in G_T
 
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "groupG1")
     private GroupElement g_a; // in G_1
 
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "foo -> groupG1")
     private Map<Attribute, GroupElement> t; // Attribute in Universe, Element in
     // G_1
 
@@ -45,7 +43,7 @@ public class ABECPWat11SmallPublicParameters implements PublicParameters {
     }
 
     public ABECPWat11SmallPublicParameters(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public Group getGroupG1() {
@@ -106,7 +104,7 @@ public class ABECPWat11SmallPublicParameters implements PublicParameters {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

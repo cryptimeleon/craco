@@ -4,8 +4,8 @@ import de.upb.crypto.craco.interfaces.pe.MasterSecret;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 /**
  * The master secret for the {@link ABECPWat11Small} generated in the
@@ -16,7 +16,7 @@ import de.upb.crypto.math.serialization.annotations.Represented;
 public class ABECPWat11SmallMasterSecret implements MasterSecret {
 
 
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "G1")
     private GroupElement g_y; // in G_1
 
     @SuppressWarnings("unused")
@@ -28,7 +28,7 @@ public class ABECPWat11SmallMasterSecret implements MasterSecret {
 
     public ABECPWat11SmallMasterSecret(Representation repr, Group groupG1) {
         this.groupG1 = groupG1;
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).register(groupG1, "G1").deserialize(repr);
     }
 
     public GroupElement get() {
@@ -37,7 +37,7 @@ public class ABECPWat11SmallMasterSecret implements MasterSecret {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
 

@@ -3,9 +3,8 @@ package de.upb.crypto.craco.abe.fuzzy.small;
 import de.upb.crypto.craco.interfaces.abe.Attribute;
 import de.upb.crypto.craco.interfaces.pe.MasterSecret;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
@@ -19,15 +18,11 @@ import java.util.Map;
  */
 public class IBEFuzzySW05SmallMasterSecret implements MasterSecret {
 
-    @Represented(structure = "zp", recoveryMethod = ZpElement.RECOVERY_METHOD)
+    @Represented(restorer = "zp")
     private ZpElement y;
 
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "zp", recoveryMethod =
-            ZpElement.RECOVERY_METHOD))
+    @Represented(restorer = "attr -> zp")
     private Map<Attribute, ZpElement> t;
-
-    @SuppressWarnings("unused")
-    private Zp zp;
 
     public IBEFuzzySW05SmallMasterSecret(ZpElement y, Map<Attribute, ZpElement> t2) {
         this.y = y;
@@ -35,13 +30,13 @@ public class IBEFuzzySW05SmallMasterSecret implements MasterSecret {
     }
 
     public IBEFuzzySW05SmallMasterSecret(Representation repr, IBEFuzzySW05SmallPublicParameters kpp) {
-        zp = new Zp(kpp.getGroupG1().size());
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        Zp zp = new Zp(kpp.getGroupG1().size());
+        new ReprUtil(this).register(zp, "zp").deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

@@ -2,10 +2,11 @@ package de.upb.crypto.craco.kdf.lhl;
 
 import de.upb.crypto.math.interfaces.hash.HashFunction;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * An instance of a {@link UniversalHashFamily}. For more information see the javdoc there.
@@ -30,7 +31,7 @@ public class UniversalHashFunction implements HashFunction {
     }
 
     public UniversalHashFunction(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
 
     }
 
@@ -43,12 +44,11 @@ public class UniversalHashFunction implements HashFunction {
 
         UniversalHashFunction that = (UniversalHashFunction) o;
 
-        if (universalHashFamily != null ? !universalHashFamily.equals(that.universalHashFamily)
-                : that.universalHashFamily != null)
+        if (!Objects.equals(universalHashFamily, that.universalHashFamily))
             return false;
-        if (a != null ? !a.equals(that.a) : that.a != null)
+        if (!Objects.equals(a, that.a))
             return false;
-        return b != null ? b.equals(that.b) : that.b == null;
+        return Objects.equals(b, that.b);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class UniversalHashFunction implements HashFunction {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
