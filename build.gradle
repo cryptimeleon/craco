@@ -5,11 +5,7 @@ plugins {
 }
 
 group = 'de.upb.crypto'
-<<<<<<< HEAD
 version = '1.2.0' + (Boolean.valueOf(System.getProperty("disablesnapshot")) ? "" : "-SNAPSHOT")
-=======
-version = '1.1.2' + (Boolean.valueOf(System.getProperty("disablesnapshot")) ? "" : "-SNAPSHOT")
->>>>>>> adds_sps_eq
 
 description = """"""
 
