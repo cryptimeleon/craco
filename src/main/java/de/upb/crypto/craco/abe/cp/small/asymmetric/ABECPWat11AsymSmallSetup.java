@@ -34,7 +34,6 @@ public class ABECPWat11AsymSmallSetup {
         // Public Parameter stuff
         BilinearGroupFactory fac = new BilinearGroupFactory(securityParameter);
         fac.setDebugMode(debug);
-        // to use this we actually need a hash into GT for the message but we dont have that
         fac.setRequirements(BilinearGroup.Type.TYPE_3, false, false, false);
         BilinearGroup group = fac.createBilinearGroup();
 
