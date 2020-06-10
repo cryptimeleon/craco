@@ -26,6 +26,8 @@ import java.util.*;
  * [AgrCha17] Shashank Agrawal and Melissa Chase. 2017. FAME: Fast Attribute-based Message Encryption.
  * In Proceedings of the 2017 ACM SIGSAC Conference on Computer and Communications Security (CCS ’17).
  * Association for Computing Machinery, New York, NY, USA, 665–682. DOI:https://doi.org/10.1145/3133956.3134014
+ *
+ * @author Raphael Heitjohann
  */
 public class ABECPWat11AsymSmall implements PredicateEncryptionScheme {
 

@@ -17,22 +17,18 @@ public class ABECPWat11SmallMasterSecret implements MasterSecret {
 
 
     @Represented(restorer = "G1")
-    private GroupElement g_y; // in G_1
+    private GroupElement gAlpha; // in G_1
 
-    @SuppressWarnings("unused")
-    private Group groupG1;
-
-    public ABECPWat11SmallMasterSecret(GroupElement g_y) {
-        this.g_y = g_y;
+    public ABECPWat11SmallMasterSecret(GroupElement gAlpha) {
+        this.gAlpha = gAlpha;
     }
 
     public ABECPWat11SmallMasterSecret(Representation repr, Group groupG1) {
-        this.groupG1 = groupG1;
         new ReprUtil(this).register(groupG1, "G1").deserialize(repr);
     }
 
     public GroupElement get() {
-        return g_y;
+        return gAlpha;
     }
 
     @Override
@@ -45,7 +41,7 @@ public class ABECPWat11SmallMasterSecret implements MasterSecret {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((g_y == null) ? 0 : g_y.hashCode());
+        result = prime * result + ((gAlpha == null) ? 0 : gAlpha.hashCode());
         return result;
     }
 
@@ -58,10 +54,10 @@ public class ABECPWat11SmallMasterSecret implements MasterSecret {
         if (getClass() != obj.getClass())
             return false;
         ABECPWat11SmallMasterSecret other = (ABECPWat11SmallMasterSecret) obj;
-        if (g_y == null) {
-            if (other.g_y != null)
+        if (gAlpha == null) {
+            if (other.gAlpha != null)
                 return false;
-        } else if (!g_y.equals(other.g_y))
+        } else if (!gAlpha.equals(other.gAlpha))
             return false;
         return true;
     }
