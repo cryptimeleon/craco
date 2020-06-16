@@ -34,7 +34,13 @@ if (file(mathPath + "/.git/refs/heads/" + branchThis.getName()).exists()) {
             createBranch = true
         }
     } else {
-        println("upb.crypto.math: Branch " + branchThis.getName() + " does not exist remotely. Using master.")
+        println(lib + ": Branch " + branchThis.getName() + " does not exist remotely. Using master.")
+        if (grgitLib.branch.current().getName() == "master") {
+            println(lib + ": Branch master is checked out already. Using it.")
+        } else {
+            throw new GradleException(lib + ": Branch master is not checked out. " +
+                    "Please check it out yourself before building.")
+        }
     }
 }
 
