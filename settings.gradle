@@ -5,36 +5,38 @@ import org.ajoberstar.grgit.Grgit
 
 rootProject.name = 'craco'
 
+
+def mathPath = file("../upb.crypto.math").getPath()
 def grgitMath
-if (file("/tmp/upb.crypto.math/").exists()) {
-    println("Math: Local repository exists.")
-    grgitMath = Grgit.open(dir: "/tmp/upb.crypto.math")
+if (file(mathPath).exists()) {
+    println("upb.crypto.math: Local repository exists.")
+    grgitMath = Grgit.open(dir: mathPath)
 } else {
-    println("Math: Local repository does not exist. Cloning to <...>.")
-    grgitMath = Grgit.clone(dir: "/tmp/upb.crypto.math", uri: "https://github.com/upbcuk/upb.crypto.math.git")
+    println("upb.crypto.math: Local repository does not exist. Cloning to " + mathPath + ".")
+    grgitMath = Grgit.clone(dir: mathPath, uri: "https://github.com/upbcuk/upb.crypto.math.git")
 }
 def grgitThis = Grgit.open()
 def branchThis = grgitThis.branch.current()
-if (file("/tmp/upb.crypto.math/.git/refs/heads/" + branchThis.getName()).exists()) {
+if (file(mathPath + "/.git/refs/heads/" + branchThis.getName()).exists()) {
     if (grgitMath.branch.current().getName() == branchThis.getName()) {
-        println("Math: Branch " + branchThis.getName() + " exists and is checked out already.")
+        println("upb.crypto.math: Branch " + branchThis.getName() + " exists and is checked out already.")
     } else {
-        throw new GradleException("Math: Branch " + branchThis.getName() + " exists but is not checked out. " +
+        throw new GradleException("upb.crypto.math: Branch " + branchThis.getName() + " exists but is not checked out. " +
                                   "Please check it out yourself before building.")
     }
 } else {
-    println("Math: Branch " + branchThis.getName() + " does not exist locally.")
+    println("upb.crypto.math: Branch " + branchThis.getName() + " does not exist locally.")
     if (grgitMath.branch.list{mode = "REMOTE"}.collect{it.getName()}.contains("origin/" + branchThis.getName())) {
-        println("Math: Branch " + branchThis.getName() + " exists remotely. Creating a local branch.")
+        println("upb.crypto.math: Branch " + branchThis.getName() + " exists remotely. Creating a local branch.")
         grgitMath.checkout {
             branch = branchThis.getName()
             startPoint = "origin/" + branchThis.getName()
             createBranch = true
         }
     } else {
-        println("Math: Branch " + branchThis.getName() + " does not exist remotely. Using master.")
+        println("upb.crypto.math: Branch " + branchThis.getName() + " does not exist remotely. Using master.")
     }
 }
 
-println("Math: Enabling composite build.")
-includeBuild ('/tmp/upb.crypto.math')
+println("upb.crypto.math: Enabling composite build.")
+includeBuild (mathPath)
