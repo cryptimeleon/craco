@@ -7,8 +7,10 @@ rootProject.name = 'craco'
 
 def grgitMath
 if (file("/tmp/upb.crypto.math/").exists()) {
+    println("Math: Local repository exists.")
     grgitMath = Grgit.open(dir: "/tmp/upb.crypto.math")
 } else {
+    println("Math: Local repository does not exist. Cloning to <...>.")
     grgitMath = Grgit.clone(dir: "/tmp/upb.crypto.math", uri: "https://github.com/upbcuk/upb.crypto.math.git")
 }
 def grgitThis = Grgit.open()
@@ -17,20 +19,22 @@ if (file("/tmp/upb.crypto.math/.git/refs/heads/" + branchThis.getName()).exists(
     if (grgitMath.branch.current().getName() == branchThis.getName()) {
         println("Math: Branch " + branchThis.getName() + " exists and is checked out already.")
     } else {
-        println("Math: Branch " + branchThis.getName() + " exists. Checking it out")
-        grgitMath.checkout({branch = branchThis.getName()})
+        throw new GradleException("Math: Branch " + branchThis.getName() + " exists but is not checked out. " +
+                                  "Please check it out yourself before building.")
     }
 } else {
     println("Math: Branch " + branchThis.getName() + " does not exist locally.")
-    if (grgitMath.branch.list({mode = "REMOTE"}).collect{it.getName()}.contains("origin/test-gradle")) {
+    if (grgitMath.branch.list{mode = "REMOTE"}.collect{it.getName()}.contains("origin/" + branchThis.getName())) {
         println("Math: Branch " + branchThis.getName() + " exists remotely. Creating a local branch.")
-        grgitMath.checkout({
+        grgitMath.checkout {
             branch = branchThis.getName()
-            startPoint = "origin/test-gradle"
+            startPoint = "origin/" + branchThis.getName()
             createBranch = true
-        })
+        }
     } else {
         println("Math: Branch " + branchThis.getName() + " does not exist remotely. Using master.")
     }
 }
+
+println("Math: Enabling composite build.")
 includeBuild ('/tmp/upb.crypto.math')

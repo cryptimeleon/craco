@@ -93,23 +93,3 @@ publishing {
         }
     }
 }
-
-
-task enableCompositeBuild {
-    group = 'Tools'
-    description = 'Enable composite build'
-    doLast {
-        new File("../upb.crypto.math/.composite-enable").createNewFile()
-    }
-}
-
-task disableCompositeBuild {
-    group = 'Tools'
-    description = 'Disable composite build'
-    doLast {
-        File file = file("../upb.crypto.math/.composite-enable")
-        if (file.exists()) {
-            file.delete()
-        }
-    }
-}
