@@ -20,7 +20,7 @@ for (String lib: compositeLibraries) {
         grgitLib = Grgit.clone(dir: libPath, uri: "https://github.com/upbcuk/" +  lib + ".git")
         cloned = true
     }
-    def grgitThis = Grgit.open()
+    def grgitThis = Grgit.open(dir: rootProject.projectDir)
     def branchThis = grgitThis.branch.current()
     if (file(libPath + "/.git/refs/heads/" + branchThis.getName()).exists()) {
         if (grgitLib.branch.current().getName() == branchThis.getName()) {
