@@ -6,43 +6,46 @@ import org.ajoberstar.grgit.Grgit
 rootProject.name = 'craco'
 
 
-def mathPath = file("../upb.crypto.math").getPath()
-def grgitMath
-if (file(mathPath).exists()) {
-    println("upb.crypto.math: Local repository exists.")
-    grgitMath = Grgit.open(dir: mathPath)
-} else {
-    println("upb.crypto.math: Local repository does not exist. Cloning to " + mathPath + ".")
-    grgitMath = Grgit.clone(dir: mathPath, uri: "https://github.com/upbcuk/upb.crypto.math.git")
-}
-def grgitThis = Grgit.open()
-def branchThis = grgitThis.branch.current()
-if (file(mathPath + "/.git/refs/heads/" + branchThis.getName()).exists()) {
-    if (grgitMath.branch.current().getName() == branchThis.getName()) {
-        println("upb.crypto.math: Branch " + branchThis.getName() + " exists and is checked out already.")
+def compositeLibraries = ["upb.crypto.math"]
+for (String lib: compositeLibraries) {
+    def libPath = file("../" + lib).getPath()
+    def grgitLib
+    if (file(libPath).exists()) {
+        println(lib + ": Local repository exists.")
+        grgitLib = Grgit.open(dir: libPath)
     } else {
-        throw new GradleException("upb.crypto.math: Branch " + branchThis.getName() + " exists but is not checked out. " +
-                                  "Please check it out yourself before building.")
+        println(lib + ": Local repository does not exist. Cloning to " + libPath + ".")
+        grgitLib = Grgit.clone(dir: libPath, uri: "https://github.com/upbcuk/" +  lib + ".git")
     }
-} else {
-    println("upb.crypto.math: Branch " + branchThis.getName() + " does not exist locally.")
-    if (grgitMath.branch.list{mode = "REMOTE"}.collect{it.getName()}.contains("origin/" + branchThis.getName())) {
-        println("upb.crypto.math: Branch " + branchThis.getName() + " exists remotely. Creating a local branch.")
-        grgitMath.checkout {
-            branch = branchThis.getName()
-            startPoint = "origin/" + branchThis.getName()
-            createBranch = true
-        }
-    } else {
-        println(lib + ": Branch " + branchThis.getName() + " does not exist remotely. Using master.")
-        if (grgitLib.branch.current().getName() == "master") {
-            println(lib + ": Branch master is checked out already. Using it.")
+    def grgitThis = Grgit.open()
+    def branchThis = grgitThis.branch.current()
+    if (file(libPath + "/.git/refs/heads/" + branchThis.getName()).exists()) {
+        if (grgitLib.branch.current().getName() == branchThis.getName()) {
+            println(lib + ": Branch " + branchThis.getName() + " exists and is checked out already.")
         } else {
-            throw new GradleException(lib + ": Branch master is not checked out. " +
-                    "Please check it out yourself before building.")
+            throw new GradleException(lib + ": Branch " + branchThis.getName() + " exists but is not checked out. "
+                    + "Please check it out yourself before building.")
+        }
+    } else {
+        println(lib + ": Branch " + branchThis.getName() + " does not exist locally.")
+        if (grgitLib.branch.list{mode = "REMOTE"}.collect{it.getName()}.contains("origin/" + branchThis.getName())) {
+            println(lib + ": Branch " + branchThis.getName() + " exists remotely. Creating a local branch.")
+            grgitLib.checkout {
+                branch = branchThis.getName()
+                startPoint = "origin/" + branchThis.getName()
+                createBranch = true
+            }
+        } else {
+            println(lib + ": Branch " + branchThis.getName() + " does not exist remotely. Using master.")
+            if (grgitLib.branch.current().getName() == "master") {
+                println(lib + ": Branch master is checked out already. Using it.")
+            } else {
+                throw new GradleException(lib + ": Branch master exists but is not checked out. "
+                        + "Please check it out yourself before building.")
+            }
         }
     }
-}
 
-println("upb.crypto.math: Enabling composite build.")
-includeBuild (mathPath)
+    println(lib + ": Enabling composite build.")
+    includeBuild(libPath)
+}
