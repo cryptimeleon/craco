@@ -32,12 +32,8 @@ for (String lib: compositeLibraries) {
     } else {
         println(lib + ": Branch " + branchThis.getName() + " does not exist locally.")
         if (grgitLib.branch.list{mode = "REMOTE"}.collect{it.getName()}.contains("origin/" + branchThis.getName())) {
-            println(lib + ": Branch " + branchThis.getName() + " exists remotely. Creating a local branch.")
-            grgitLib.checkout {
-                branch = branchThis.getName()
-                startPoint = "origin/" + branchThis.getName()
-                createBranch = true
-            }
+            println(lib + ": Branch " + branchThis.getName() + " exists remotely but not locally. " +
+                    "Please check it out yourself before building.")
         } else {
             println(lib + ": Branch " + branchThis.getName() + " does not exist remotely. Using master.")
             if (grgitLib.branch.current().getName() == "master") {
