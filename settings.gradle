@@ -10,15 +10,12 @@ def compositeLibraries = ["upb.crypto.math"]
 for (String lib: compositeLibraries) {
     def libPath = file("../" + lib).getPath()
     def grgitLib
-    def cloned
     if (file(libPath).exists()) {
         println(lib + ": Local repository exists.")
         grgitLib = Grgit.open(dir: libPath)
-        cloned = false
     } else {
         println(lib + ": Local repository does not exist. Cloning to " + libPath + ".")
         grgitLib = Grgit.clone(dir: libPath, uri: "https://github.com/upbcuk/" +  lib + ".git")
-        cloned = true
     }
     def grgitThis = Grgit.open(dir: rootProject.projectDir)
     def branchThis = grgitThis.branch.current()
