@@ -6,15 +6,12 @@ import de.upb.crypto.craco.commitment.interfaces.OpenValue;
 import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.RingElementPlainText;
 import de.upb.crypto.craco.interfaces.PlainText;
-import de.upb.crypto.math.expressions.exponent.ExponentConstantExpr;
-import de.upb.crypto.math.expressions.group.GroupElementConstantExpr;
 import de.upb.crypto.math.expressions.group.GroupElementExpression;
-import de.upb.crypto.math.expressions.group.GroupOpExpr;
 import de.upb.crypto.math.expressions.group.GroupPowExpr;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 
 import java.math.BigInteger;
@@ -42,10 +39,10 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
     /**
      * Construct a new PedersenCommitmentScheme object providing {@link Representation} object
      *
-     * @param representation {@link Representation}
+     * @param repr {@link Representation}
      */
-    public PedersenCommitmentScheme(Representation representation) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(representation, this);
+    public PedersenCommitmentScheme(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
     }
 
     /**
@@ -235,7 +232,7 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
      */
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public PedersenPublicParameters getPp() {

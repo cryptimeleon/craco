@@ -6,9 +6,8 @@ import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Collections;
 import java.util.Map;
@@ -22,30 +21,29 @@ import java.util.Map;
 public class ABECPWat11SmallPublicParameters implements PublicParameters {
 
     @Represented
-    private Group groupG1, groupGT;
+    public Group groupG1, groupGT;
 
     @Represented
     private BilinearMap e;
 
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "groupG1")
     private GroupElement g; // Generator of G_1
 
-    @Represented(structure = "groupGT", recoveryMethod = GroupElement.RECOVERY_METHOD)
-    private GroupElement y; // in G_T
+    @Represented(restorer = "groupGT")
+    private GroupElement eGGAlpha; // in G_T
 
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
-    private GroupElement g_a; // in G_1
+    @Represented(restorer = "groupG1")
+    private GroupElement gA; // in G_1
 
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
-    private Map<Attribute, GroupElement> t; // Attribute in Universe, Element in
+    @Represented(restorer = "foo -> groupG1")
+    private Map<Attribute, GroupElement> h; // Attribute in Universe, Element in
     // G_1
 
     public ABECPWat11SmallPublicParameters() {
     }
 
     public ABECPWat11SmallPublicParameters(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public Group getGroupG1() {
@@ -80,33 +78,33 @@ public class ABECPWat11SmallPublicParameters implements PublicParameters {
         this.g = g;
     }
 
-    public GroupElement getY() {
-        return y;
+    public GroupElement geteGGAlpha() {
+        return eGGAlpha;
     }
 
-    public void setY(GroupElement y) {
-        this.y = y;
+    public void seteGGAlpha(GroupElement eGGAlpha) {
+        this.eGGAlpha = eGGAlpha;
     }
 
-    public GroupElement getG_a() {
-        return g_a;
+    public GroupElement getgA() {
+        return gA;
     }
 
-    public void setG_a(GroupElement g_a) {
-        this.g_a = g_a;
+    public void setgA(GroupElement gA) {
+        this.gA = gA;
     }
 
-    public Map<Attribute, GroupElement> getT() {
-        return t;
+    public Map<Attribute, GroupElement> getH() {
+        return h;
     }
 
-    public void setT(Map<Attribute, GroupElement> t) {
-        this.t = Collections.unmodifiableMap(t);
+    public void setH(Map<Attribute, GroupElement> h) {
+        this.h = Collections.unmodifiableMap(h);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -115,11 +113,11 @@ public class ABECPWat11SmallPublicParameters implements PublicParameters {
         int result = 1;
         result = prime * result + ((e == null) ? 0 : e.hashCode());
         result = prime * result + ((g == null) ? 0 : g.hashCode());
-        result = prime * result + ((g_a == null) ? 0 : g_a.hashCode());
+        result = prime * result + ((gA == null) ? 0 : gA.hashCode());
         result = prime * result + ((groupG1 == null) ? 0 : groupG1.hashCode());
         result = prime * result + ((groupGT == null) ? 0 : groupGT.hashCode());
-        result = prime * result + ((t == null) ? 0 : t.hashCode());
-        result = prime * result + ((y == null) ? 0 : y.hashCode());
+        result = prime * result + ((h == null) ? 0 : h.hashCode());
+        result = prime * result + ((eGGAlpha == null) ? 0 : eGGAlpha.hashCode());
         return result;
     }
 
@@ -142,10 +140,10 @@ public class ABECPWat11SmallPublicParameters implements PublicParameters {
                 return false;
         } else if (!g.equals(other.g))
             return false;
-        if (g_a == null) {
-            if (other.g_a != null)
+        if (gA == null) {
+            if (other.gA != null)
                 return false;
-        } else if (!g_a.equals(other.g_a))
+        } else if (!gA.equals(other.gA))
             return false;
         if (groupG1 == null) {
             if (other.groupG1 != null)
@@ -157,15 +155,15 @@ public class ABECPWat11SmallPublicParameters implements PublicParameters {
                 return false;
         } else if (!groupGT.equals(other.groupGT))
             return false;
-        if (t == null) {
-            if (other.t != null)
+        if (h == null) {
+            if (other.h != null)
                 return false;
-        } else if (!t.equals(other.t))
+        } else if (!h.equals(other.h))
             return false;
-        if (y == null) {
-            if (other.y != null)
+        if (eGGAlpha == null) {
+            if (other.eGGAlpha != null)
                 return false;
-        } else if (!y.equals(other.y))
+        } else if (!eGGAlpha.equals(other.eGGAlpha))
             return false;
         return true;
     }

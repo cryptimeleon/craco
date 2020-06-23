@@ -18,8 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 @RunWith(value = Parameterized.class)
 public class StandaloneTest {
@@ -40,7 +39,7 @@ public class StandaloneTest {
             // tries to get the constructor that has Representation as class
             // parameters
             Constructor<? extends StandaloneRepresentable> c = toTest.getConstructor(Representation.class);
-            assertTrue(c != null);
+            assertNotNull(c);
         } catch (NoSuchMethodException | SecurityException e) {
             // no constructor given or constructor not visible
             fail();
@@ -55,7 +54,7 @@ public class StandaloneTest {
             Method equals = toTest.getMethod("equals", Object.class);
             // this is maybe not enough since it only asserts that any super
             // class overwrites equals
-            assertTrue(!equals.getDeclaringClass().equals(Object.class));
+            assertNotEquals(equals.getDeclaringClass(), Object.class);
         } catch (NoSuchMethodException | SecurityException e) {
             fail();
         }
@@ -68,7 +67,7 @@ public class StandaloneTest {
             Method hashCode = toTest.getMethod("hashCode");
             // this is maybe not enough since it only asserts that any super
             // class overwrites hashcode
-            assertTrue(!hashCode.getDeclaringClass().equals(Object.class));
+            assertNotEquals(hashCode.getDeclaringClass(), Object.class);
         } catch (NoSuchMethodException | SecurityException e) {
             fail();
         }
@@ -84,9 +83,9 @@ public class StandaloneTest {
             fail("Failed to test " + toTest.getName());
         } else {
             Constructor<? extends StandaloneRepresentable> c = toTest.getConstructor(Representation.class);
-            assertTrue(c != null);
+            assertNotNull(c);
             Representation repr = (Representation) toTest.getMethod("getRepresentation").invoke(instance);
-            assertTrue(instance.equals(c.newInstance(repr)));
+            assertEquals(instance, c.newInstance(repr));
         }
     }
 
@@ -123,6 +122,7 @@ public class StandaloneTest {
         toReturn.add(ABECPWat11SymmetricKEMParams.get());
         toReturn.addAll(LUDParams.get());
         toReturn.addAll(PSTestParams.get());
+        toReturn.addAll(SPSEQParams.get());
         toReturn.add(StreamingHybridEncryptionSchemeParams.get());
         toReturn.add(BooleanPolicyParams.get());
         toReturn.add(ByteArrayImplementationParams.get());
@@ -140,6 +140,7 @@ public class StandaloneTest {
         toReturn.addAll(PS18ROMSignatureParams.get());
         toReturn.addAll(PS18SignatureParams.get());
         toReturn.addAll(PS18SignaturePrecParams.get());
+        toReturn.addAll(ABECPWat11AsymSmallParams.get());
 
         // clarc
         toReturn.addAll(CommitmentSchemeParams.get());

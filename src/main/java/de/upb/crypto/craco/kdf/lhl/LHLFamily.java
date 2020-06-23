@@ -2,8 +2,8 @@ package de.upb.crypto.craco.kdf.lhl;
 
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.polynomial.Seed;
 
 import java.math.BigInteger;
@@ -20,7 +20,7 @@ public class LHLFamily implements StandaloneRepresentable {
             "The given source of randomness has an insufficent amount of entropy for this key derivation process.";
 
     @Represented
-    protected int securityParameter, inputLength, outputLength, minEntropy;
+    protected Integer securityParameter, inputLength, outputLength, minEntropy;
 
     @Represented
     protected UniversalHashFamily family;
@@ -55,7 +55,7 @@ public class LHLFamily implements StandaloneRepresentable {
     }
 
     public LHLFamily(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public int getSeedLength() {
@@ -68,7 +68,7 @@ public class LHLFamily implements StandaloneRepresentable {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -97,15 +97,13 @@ public class LHLFamily implements StandaloneRepresentable {
                 return false;
         } else if (!family.equals(other.family))
             return false;
-        if (inputLength != other.inputLength)
+        if (!inputLength.equals(other.inputLength))
             return false;
-        if (minEntropy != other.minEntropy)
+        if (!minEntropy.equals(other.minEntropy))
             return false;
-        if (outputLength != other.outputLength)
+        if (!outputLength.equals(other.outputLength))
             return false;
-        if (securityParameter != other.securityParameter)
-            return false;
-        return true;
+        return securityParameter.equals(other.securityParameter);
     }
 
     public LHLKeyDerivationFunction seed() {

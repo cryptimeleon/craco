@@ -4,9 +4,8 @@ import de.upb.crypto.craco.interfaces.signature.VerificationKey;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedArray;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -22,20 +21,19 @@ public class PSVerificationKey implements VerificationKey {
     /**
      * \tilde{g} \in G_2 in paper.
      */
-    @Represented(structure = "groupG2", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "G2")
     protected GroupElement group2ElementTildeG;
 
     /**
      * \tilde{X} \in G_2 in paper.
      */
-    @Represented(structure = "groupG2", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "G2")
     protected GroupElement group2ElementTildeX;
 
     /**
      * \tilde{Y}_1, ..., \tilde{Y}_n \in G_2 in paper.
      */
-    @RepresentedArray(elementRestorer = @Represented(structure = "groupG2", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "[G2]")
     protected GroupElement[] group2ElementsTildeYi;
 
     // pointer field used to store the structure for the representation process; in all other cases this should be null
@@ -46,14 +44,12 @@ public class PSVerificationKey implements VerificationKey {
     }
 
     public PSVerificationKey(Group groupG2, Representation repr) {
-        this.groupG2 = groupG2;
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
-        this.groupG2 = null;
+        new ReprUtil(this).register(groupG2, "G2").deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public GroupElement getGroup2ElementTildeG() {

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 /**
- * @param <E> type of the attribute
  * @author pschleiter, Fabian Eidens (refactoring)
  */
 public class InnerNode implements TreeNode {

@@ -1,7 +1,6 @@
 package de.upb.crypto.craco.sig.ps18;
 
 import de.upb.crypto.craco.interfaces.signature.VerificationKey;
-import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;

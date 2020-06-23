@@ -15,7 +15,6 @@ public class LeafNode implements TreeNode {
     /**
      * create a new leaf
      *
-     * @param attribute that is represented by this leaf
      * @param value     additional information to the attribute
      */
     public LeafNode(Integer value) {

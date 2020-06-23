@@ -17,7 +17,7 @@ import java.util.Scanner;
 /**
  * Provides binary efficient irreducible polynomials in Zp2 (Trinomials or
  * Pentanomials) via a table lookup.
- * (http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.365.1806&rep=rep1&type=pdf)
+ * ({@literal http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.365.1806&rep=rep1&type=pdf})
  *
  * @author Mirko Juergens
  */

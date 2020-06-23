@@ -5,9 +5,8 @@ import de.upb.crypto.craco.interfaces.kdf.HashFamily;
 import de.upb.crypto.craco.kem.KeyDerivationFunction;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedList;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.polynomial.Seed;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,20 +18,20 @@ public class UnpredictabilityKeyDerivationFamily implements StandaloneRepresenta
 
     private static final Logger logger = LogManager.getLogger(UnpredictabilityKeyDerivationFamily.class.getName());
 
-    @RepresentedList(elementRestorer = @Represented)
+    @Represented(restorer = "[foo]")
     private ArrayList<KWiseDeltaDependentHashFamily> familyList;
 
     /**
      * n in the paper
      */
     @Represented
-    private int inputLength;
+    private Integer inputLength;
 
     /**
      * k in the paper
      */
     @Represented
-    private int minEntropy;
+    private Integer minEntropy;
 
     /**
      * @param securityParameter the success probability of an attacker noted in negative log_2, i.e. 80 if the
@@ -99,7 +98,7 @@ public class UnpredictabilityKeyDerivationFamily implements StandaloneRepresenta
     }
 
     public UnpredictabilityKeyDerivationFamily(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public List<KWiseDeltaDependentHashFamily> getFamilyList() {
@@ -132,7 +131,7 @@ public class UnpredictabilityKeyDerivationFamily implements StandaloneRepresenta
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -159,11 +158,9 @@ public class UnpredictabilityKeyDerivationFamily implements StandaloneRepresenta
                 return false;
         } else if (!familyList.equals(other.familyList))
             return false;
-        if (inputLength != other.inputLength)
+        if (!inputLength.equals(other.inputLength))
             return false;
-        if (minEntropy != other.minEntropy)
-            return false;
-        return true;
+        return minEntropy.equals(other.minEntropy);
     }
 
 }

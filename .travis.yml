@@ -16,6 +16,8 @@ stages:
   if: branch = master
 - name: release
   if: branch = release
+before_script:
+  git checkout ${TRAVIS_BRANCH} # to fix travis checking out HEAD branch which breaks grgit
 jobs:
   include:
   - stage: test

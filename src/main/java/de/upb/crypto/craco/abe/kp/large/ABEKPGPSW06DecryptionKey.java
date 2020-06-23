@@ -3,12 +3,10 @@ package de.upb.crypto.craco.abe.kp.large;
 import de.upb.crypto.craco.interfaces.DecryptionKey;
 import de.upb.crypto.craco.interfaces.pe.KeyIndex;
 import de.upb.crypto.craco.interfaces.policy.Policy;
-import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
 import java.util.Map;
@@ -25,16 +23,11 @@ public class ABEKPGPSW06DecryptionKey implements DecryptionKey {
     @Represented
     private Policy policy;
 
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "int -> G1")
     private Map<BigInteger, GroupElement> dElementMap;
 
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "int -> G1")
     private Map<BigInteger, GroupElement> rElementMap;
-
-    @SuppressWarnings("unused")
-    private Group groupG1;
 
     public ABEKPGPSW06DecryptionKey(Policy policy, Map<BigInteger, GroupElement> dElementMap,
                                     Map<BigInteger, GroupElement> rElementMap) {
@@ -44,13 +37,12 @@ public class ABEKPGPSW06DecryptionKey implements DecryptionKey {
     }
 
     public ABEKPGPSW06DecryptionKey(Representation repr, ABEKPGPSW06PublicParameters kpp) {
-        groupG1 = kpp.getGroupG1();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).register(kpp.getGroupG1(), "G1").deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public Policy getPolicy() {

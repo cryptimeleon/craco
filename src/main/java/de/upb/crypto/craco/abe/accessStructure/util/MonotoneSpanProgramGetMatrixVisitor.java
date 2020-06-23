@@ -9,7 +9,6 @@ import java.util.ArrayList;
 /**
  * This Visitor calculates the matrix for the tree it is performed on
  *
- * @param <E> type of the attributes
  * @author pschleiter, Fabian Eidens (refactor)
  */
 public class MonotoneSpanProgramGetMatrixVisitor implements Visitor<Integer> {

@@ -61,9 +61,9 @@ public class ABECPWat11SmallSetup {
         // g in G_1
         pp.setG(pp.getGroupG1().getUniformlyRandomNonNeutral());
         // Y = E (g, g)^y \in G_T
-        pp.setY(pp.getE().apply(pp.getG(), pp.getG()).pow(y));
+        pp.seteGGAlpha(pp.getE().apply(pp.getG(), pp.getG()).pow(y));
         // g_a = g^a \in G_1
-        pp.setG_a(pp.getG().pow(a));
+        pp.setgA(pp.getG().pow(a));
 
         // msk = g^y
         msk = new ABECPWat11SmallMasterSecret(pp.getG().pow(y));
@@ -73,7 +73,7 @@ public class ABECPWat11SmallSetup {
         for (Attribute attribute : universe) {
             t.put(attribute, pp.getGroupG1().getUniformlyRandomNonNeutral());
         }
-        pp.setT(t);
+        pp.setH(t);
     }
 
     public ABECPWat11SmallPublicParameters getPublicParameters() {

@@ -3,11 +3,10 @@ package de.upb.crypto.craco.abe.cp.large;
 import de.upb.crypto.craco.interfaces.CipherText;
 import de.upb.crypto.craco.interfaces.policy.Policy;
 import de.upb.crypto.craco.kem.abe.cp.large.ABECPWat11KEMCipherText;
-import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
 import java.util.Map;
@@ -17,11 +16,8 @@ import java.util.Map;
  */
 public class ABECPWat11CipherText extends ABECPWat11KEMCipherText {
 
-    @Represented(structure = "groupGT", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "GT")
     private GroupElement ePrime; // in G_T
-
-    @SuppressWarnings("unused")
-    private Group groupGT;
 
     public ABECPWat11CipherText(Policy policy, GroupElement ePrime, GroupElement eTwoPrime,
                                 Map<BigInteger, GroupElement> e) {
@@ -30,12 +26,8 @@ public class ABECPWat11CipherText extends ABECPWat11KEMCipherText {
     }
 
     public ABECPWat11CipherText(Representation repr, ABECPWat11PublicParameters pp) {
-        // empty super constructor needed since restoring in the super call
-        // and calling restore again did not work
-        super();
-        groupG1 = pp.getGroupG1();
-        groupGT = pp.getGroupGT();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).register(pp.getGroupGT(), "GT").register(pp.getGroupG1(), "G1")
+                .deserialize(repr);
     }
 
     public GroupElement getEPrime() {
@@ -44,7 +36,7 @@ public class ABECPWat11CipherText extends ABECPWat11KEMCipherText {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

@@ -8,9 +8,8 @@ import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.interfaces.structures.RingElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedSet;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.polynomial.PolynomialRing;
 import de.upb.crypto.math.structures.zn.Zp;
 
@@ -28,15 +27,15 @@ public class NguyenAccumulator implements DynamicAccumulator<NguyenAccumulatorId
     @Represented
     private NguyenAccumulatorValue accumulatorValue;
 
-    @RepresentedSet(elementRestorer = @Represented)
+    @Represented(restorer = "[foo]")
     private Set<NguyenAccumulatorIdentity> identitySet;
 
     public NguyenAccumulator(NguyenAccumulatorPublicParameters pp) {
         this.pp = pp;
     }
 
-    public NguyenAccumulator(Representation representation) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(representation, this);
+    public NguyenAccumulator(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
     }
 
     /**
@@ -384,7 +383,7 @@ public class NguyenAccumulator implements DynamicAccumulator<NguyenAccumulatorId
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

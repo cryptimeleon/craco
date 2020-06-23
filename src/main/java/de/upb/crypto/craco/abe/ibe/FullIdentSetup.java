@@ -17,7 +17,7 @@ public class FullIdentSetup {
      * Generates the master secret and the public parameters for a FullIdent
      * based encryption scheme.
      *
-     * @param securityParameter
+     * @param securityParameter the security parameter
      * @param block_size        the size of a plaintext in bytes
      * @param debug             enable debugging
      */

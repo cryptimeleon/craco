@@ -4,12 +4,10 @@ import de.upb.crypto.craco.abe.kp.large.ABEKPGPSW06PublicParameters;
 import de.upb.crypto.craco.interfaces.CipherText;
 import de.upb.crypto.craco.interfaces.abe.Attribute;
 import de.upb.crypto.craco.interfaces.abe.SetOfAttributes;
-import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Map;
 
@@ -23,18 +21,14 @@ public class ABEKPGPSW06KEMCipherText implements CipherText {
     /**
      * E'' := g^s \in G_1
      */
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "G1")
     protected GroupElement eTwoPrime;
 
     /**
      * E_i := T_i^s , i \in attributes, T_i \in G1
      */
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "attr -> G1")
     protected Map<Attribute, GroupElement> eElementMap;
-
-    @SuppressWarnings("unused")
-    protected Group groupG1;
 
     public ABEKPGPSW06KEMCipherText(SetOfAttributes attributes, GroupElement eTwoPrime,
                                     Map<Attribute, GroupElement> eElementMap) {
@@ -43,9 +37,8 @@ public class ABEKPGPSW06KEMCipherText implements CipherText {
         this.eElementMap = eElementMap;
     }
 
-    public ABEKPGPSW06KEMCipherText(Representation representation, ABEKPGPSW06PublicParameters kpp) {
-        groupG1 = kpp.getGroupG1();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(representation, this);
+    public ABEKPGPSW06KEMCipherText(Representation repr, ABEKPGPSW06PublicParameters kpp) {
+        new ReprUtil(this).register(kpp.getGroupG1(), "G1").deserialize(repr);
     }
 
     public ABEKPGPSW06KEMCipherText() {
@@ -54,7 +47,7 @@ public class ABEKPGPSW06KEMCipherText implements CipherText {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public Map<Attribute, GroupElement> getEElementMap() {

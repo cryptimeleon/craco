@@ -5,8 +5,8 @@ import de.upb.crypto.craco.interfaces.DecryptionKey;
 import de.upb.crypto.craco.interfaces.EncryptionKey;
 import de.upb.crypto.craco.interfaces.SymmetricKey;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 /**
  * A KEM that is implemented by the composition of a {@link KeyEncapsulationMechanism} providing {@link KeyMaterial} and
@@ -39,7 +39,7 @@ public abstract class SymmetricKeyKEM implements KeyEncapsulationMechanism<Symme
     }
 
     public SymmetricKeyKEM(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     /**
@@ -124,8 +124,7 @@ public abstract class SymmetricKeyKEM implements KeyEncapsulationMechanism<Symme
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
-
+        return ReprUtil.serialize(this);
     }
 
 }

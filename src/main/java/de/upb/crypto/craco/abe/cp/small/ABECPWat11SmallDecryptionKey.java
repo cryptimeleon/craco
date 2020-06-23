@@ -4,12 +4,10 @@ import de.upb.crypto.craco.interfaces.DecryptionKey;
 import de.upb.crypto.craco.interfaces.abe.Attribute;
 import de.upb.crypto.craco.interfaces.abe.SetOfAttributes;
 import de.upb.crypto.craco.interfaces.pe.KeyIndex;
-import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Map;
 
@@ -24,51 +22,46 @@ import java.util.Map;
  */
 public class ABECPWat11SmallDecryptionKey implements DecryptionKey {
 
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
-    private GroupElement d_prime, d_prime2;
+    @Represented(restorer = "G1")
+    private GroupElement k, l;
 
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
-    private Map<Attribute, GroupElement> d;
-
-    @SuppressWarnings("unused")
-    private Group groupG1;
+    @Represented(restorer = "foo -> G1")
+    private Map<Attribute, GroupElement> mapK;
 
     public ABECPWat11SmallDecryptionKey(Representation repr, ABECPWat11SmallPublicParameters pp) {
-        groupG1 = pp.getGroupG1();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).register(pp.getGroupG1(), "G1").deserialize(repr);
     }
 
-    public ABECPWat11SmallDecryptionKey(Map<Attribute, GroupElement> d, GroupElement d_prime, GroupElement d_prime2) {
-        this.d = d;
-        this.d_prime = d_prime;
-        this.d_prime2 = d_prime2;
+    public ABECPWat11SmallDecryptionKey(Map<Attribute, GroupElement> mapK, GroupElement k, GroupElement l) {
+        this.mapK = mapK;
+        this.k = k;
+        this.l = l;
     }
 
-    public GroupElement getD_prime() {
-        return d_prime;
+    public GroupElement getK() {
+        return k;
     }
 
-    public GroupElement getD_prime2() {
-        return d_prime2;
+    public GroupElement getL() {
+        return l;
     }
 
-    public Map<Attribute, GroupElement> getD() {
-        return d;
+    public Map<Attribute, GroupElement> getMapK() {
+        return mapK;
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((d == null) ? 0 : d.hashCode());
-        result = prime * result + ((d_prime == null) ? 0 : d_prime.hashCode());
-        result = prime * result + ((d_prime2 == null) ? 0 : d_prime2.hashCode());
+        result = prime * result + ((mapK == null) ? 0 : mapK.hashCode());
+        result = prime * result + ((k == null) ? 0 : k.hashCode());
+        result = prime * result + ((l == null) ? 0 : l.hashCode());
         return result;
     }
 
@@ -81,20 +74,20 @@ public class ABECPWat11SmallDecryptionKey implements DecryptionKey {
         if (getClass() != obj.getClass())
             return false;
         ABECPWat11SmallDecryptionKey other = (ABECPWat11SmallDecryptionKey) obj;
-        if (d == null) {
-            if (other.d != null)
+        if (mapK == null) {
+            if (other.mapK != null)
                 return false;
-        } else if (!d.equals(other.d))
+        } else if (!mapK.equals(other.mapK))
             return false;
-        if (d_prime == null) {
-            if (other.d_prime != null)
+        if (k == null) {
+            if (other.k != null)
                 return false;
-        } else if (!d_prime.equals(other.d_prime))
+        } else if (!k.equals(other.k))
             return false;
-        if (d_prime2 == null) {
-            if (other.d_prime2 != null)
+        if (l == null) {
+            if (other.l != null)
                 return false;
-        } else if (!d_prime2.equals(other.d_prime2))
+        } else if (!l.equals(other.l))
             return false;
         return true;
     }

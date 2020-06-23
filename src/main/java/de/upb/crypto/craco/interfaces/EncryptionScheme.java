@@ -2,6 +2,9 @@ package de.upb.crypto.craco.interfaces;
 
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
+import de.upb.crypto.math.serialization.annotations.v2.RepresentationRestorer;
+
+import java.lang.reflect.Type;
 
 /**
  * An EncryptionScheme has the ability to encrypt plaintexts
@@ -20,7 +23,7 @@ import de.upb.crypto.math.serialization.StandaloneRepresentable;
  *
  * @author Jan
  */
-public interface EncryptionScheme extends StandaloneRepresentable {
+public interface EncryptionScheme extends StandaloneRepresentable, RepresentationRestorer {
 
     CipherText encrypt(PlainText plainText, EncryptionKey publicKey);
 
@@ -40,5 +43,20 @@ public interface EncryptionScheme extends StandaloneRepresentable {
 
     default PlainText decrypt(Representation cipherText, Representation privateKey) {
         return decrypt(getCipherText(cipherText), getDecryptionKey(privateKey));
+    }
+
+    default Object recreateFromRepresentation(Type type, Representation repr) {
+        if (type instanceof Class) {
+            if (EncryptionKey.class.isAssignableFrom((Class) type)) {
+                return this.getEncryptionKey(repr);
+            } else if (DecryptionKey.class.isAssignableFrom((Class) type)) {
+                return this.getDecryptionKey(repr);
+            } else if (CipherText.class.isAssignableFrom((Class) type)) {
+                return this.getCipherText(repr);
+            } else if (PlainText.class.isAssignableFrom((Class) type)) {
+                return this.getPlainText(repr);
+            }
+        }
+        throw new IllegalArgumentException("Cannot recreate object of type: " + type.getTypeName());
     }
 }

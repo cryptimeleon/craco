@@ -3,12 +3,10 @@ package de.upb.crypto.craco.abe.fuzzy.small;
 import de.upb.crypto.craco.interfaces.CipherText;
 import de.upb.crypto.craco.interfaces.abe.Attribute;
 import de.upb.crypto.craco.interfaces.abe.SetOfAttributes;
-import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Map;
 
@@ -23,20 +21,12 @@ public class IBEFuzzySW05SmallCipherText implements CipherText {
     private SetOfAttributes omega_prime;
 
     // in G_T
-    @Represented(structure = "groupGT", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "GT")
     private GroupElement e_prime;
 
     // in G_1
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "attr -> G1")
     private Map<Attribute, GroupElement> e;
-
-
-    @SuppressWarnings("unused")
-    private Group groupG1;
-
-    @SuppressWarnings("unused")
-    private Group groupGT;
 
 
     public IBEFuzzySW05SmallCipherText(SetOfAttributes identity, GroupElement E_prime,
@@ -47,13 +37,12 @@ public class IBEFuzzySW05SmallCipherText implements CipherText {
     }
 
     public IBEFuzzySW05SmallCipherText(Representation repr, IBEFuzzySW05SmallPublicParameters pp) {
-        groupGT = pp.getGroupGT();
-        groupG1 = pp.getGroupG1();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).register(pp.getGroupG1(), "G1").register(pp.getGroupGT(), "GT")
+                .deserialize(repr);
     }
 
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public SetOfAttributes getOmega_prime() {
