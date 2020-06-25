@@ -17,7 +17,9 @@ import de.upb.crypto.math.structures.zn.Zp;
 
 public class SPSEQPublicParameters implements PublicParameters {
 
-    // The bilinear map e in the paper.
+    /**
+     * The bilinear map e in the paper.
+      */
     private BilinearMap bilinearMap; // G1 x G2 -> GT
 
     /**

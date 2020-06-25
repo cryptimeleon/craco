@@ -20,25 +20,29 @@ if (!Boolean.valueOf(System.getProperty("disablesnapshot"))) {
         }
         def grgitThis = Grgit.open(dir: rootProject.projectDir)
         def branchThis = grgitThis.branch.current()
-        if (file(libPath + "/.git/refs/heads/" + branchThis.getName()).exists()) {
-            if (grgitLib.branch.current().getName() == branchThis.getName()) {
-                println(lib + ": Branch " + branchThis.getName() + " exists and is checked out already.")
-            } else {
-                throw new GradleException(lib + ": Branch " + branchThis.getName() + " exists but is not checked out. "
-                        + "Please check it out yourself before building.")
-            }
+        if (hasProperty("useCurrentBranch")) {
+            println(lib + ": Parameter 'useCurrentBranch' is set. Using branch '" + grgitLib.branch.current().getName() + "'.")
         } else {
-            println(lib + ": Branch " + branchThis.getName() + " does not exist locally.")
-            if (grgitLib.branch.list { mode = "REMOTE" }.collect { it.getName() }.contains("origin/" + branchThis.getName())) {
-                println(lib + ": Branch " + branchThis.getName() + " exists remotely but not locally. " +
-                        "Please check it out yourself before building.")
-            } else {
-                println(lib + ": Branch " + branchThis.getName() + " does not exist remotely. Using master.")
-                if (grgitLib.branch.current().getName() == "master") {
-                    println(lib + ": Branch master is checked out already. Using it.")
+            if (file(libPath + "/.git/refs/heads/" + branchThis.getName()).exists()) {
+                if (grgitLib.branch.current().getName() == branchThis.getName()) {
+                    println(lib + ": Branch '" + branchThis.getName() + "' exists and is checked out already.")
                 } else {
-                    throw new GradleException(lib + ": Branch master exists but is not checked out. "
+                    throw new GradleException(lib + ": Branch '" + branchThis.getName() + "' exists but is not checked out. "
                             + "Please check it out yourself before building.")
+                }
+            } else {
+                println(lib + ": Branch " + branchThis.getName() + " does not exist locally.")
+                if (grgitLib.branch.list { mode = "REMOTE" }.collect { it.getName() }.contains("origin/" + branchThis.getName())) {
+                    println(lib + ": Branch '" + branchThis.getName() + "' exists remotely but not locally. " +
+                            "Please check it out yourself before building.")
+                } else {
+                    println(lib + ": Branch '" + branchThis.getName() + "' does not exist remotely. Using master.")
+                    if (grgitLib.branch.current().getName() == "master") {
+                        println(lib + ": Branch master is checked out already. Using it.")
+                    } else {
+                        throw new GradleException(lib + ": Branch master exists but is not checked out. "
+                                + "Please check it out yourself before building.")
+                    }
                 }
             }
         }
