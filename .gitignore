@@ -4,3 +4,4 @@ out/**
 build/**
 .idea/**
 .composite-enable
+gradle.properties
