@@ -72,7 +72,7 @@ public class MonotoneSpanProgram extends AccessStructure {
     /**
      * Calculates set of solving secret shares for this monotone span program.
      *
-     * @param setOfParties The set of share-holding parties to consider.
+     * @param setOfParties the set of share-holding parties to consider
      * @return a fulfilling map mapping each share index to the share field element
      * @throws NoSatisfyingSet if the given set of parties cannot satisfy the monotone span program
      * @throws WrongAccessStructureException if the access structure is invalid
