@@ -22,27 +22,27 @@ public class RandomFunction {
     private Zp zPField;
 
     /**
-     * Creates a new random polynomial of <code>grad</code> over the
+     * Creates a new random polynomial of degree <code>deg</code> over the
      * <code>field</code>. The value for position zero is <code>zeroValue</code> .
      *
-     * @param grad      - grad of the created polynomial
+     * @param deg      - degree of the created polynomial
      * @param zeroValue - value for position zero
      * @param zpField   - field over that the polynomial is defined
      */
-    public RandomFunction(BigInteger grad, ZpElement zeroValue, Zp zpField) {
+    public RandomFunction(BigInteger deg, ZpElement zeroValue, Zp zpField) {
         this.zPField = zpField;
 
         values.add(zeroValue);
 
-        if (!grad.equals(BigInteger.ZERO)) {
-            // generate coefficients for X^i i<grad
+        if (!deg.equals(BigInteger.ZERO)) {
+            // generate coefficients for X^i i<deg
             BigInteger counter = BigInteger.ONE;
-            while (!(counter.equals(grad))) {
+            while (!(counter.equals(deg))) {
                 values.add(zpField.getUniformlyRandomElement());
                 counter = counter.add(BigInteger.ONE);
             }
 
-            // generate the coefficient for X^grad, which has to be not equal
+            // generate the coefficient for X^deg, which has to be not equal
             // zero
             ZpElement value;
             do {
