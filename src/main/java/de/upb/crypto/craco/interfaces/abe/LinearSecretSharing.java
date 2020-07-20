@@ -98,7 +98,7 @@ public interface LinearSecretSharing<ShareReceiverType> {
     }
 
     /**
-     * Returns the map that assigns each index i of a share s_i its shareReceiver.
+     * Returns the map that assigns each index i of a share s_i to its shareReceiver.
      */
     Map<Integer, ShareReceiverType> getShareReceiverMap();
 

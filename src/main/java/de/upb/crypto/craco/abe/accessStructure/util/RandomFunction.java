@@ -23,11 +23,11 @@ public class RandomFunction {
 
     /**
      * Creates a new random polynomial of degree <code>deg</code> over the
-     * <code>field</code>. The value for position zero is <code>zeroValue</code> .
+     * <code>field</code>. The value of the zeroth degree coefficient is <code>zeroValue</code> .
      *
-     * @param deg      - degree of the created polynomial
-     * @param zeroValue - value for position zero
-     * @param zpField   - field over that the polynomial is defined
+     * @param deg       - degree of the created polynomial
+     * @param zeroValue - value of zeroth degree coefficient
+     * @param zpField   - field over which the polynomial is defined
      */
     public RandomFunction(BigInteger deg, ZpElement zeroValue, Zp zpField) {
         this.zPField = zpField;
