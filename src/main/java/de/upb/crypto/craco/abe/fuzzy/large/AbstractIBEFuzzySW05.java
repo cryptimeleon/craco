@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.abe.fuzzy.large;
 
 import de.upb.crypto.craco.common.utils.LagrangeUtil;
-import de.upb.crypto.craco.common.utils.PrimeFieldPolynom;
+import de.upb.crypto.craco.common.utils.PrimeFieldPolynomial;
 import de.upb.crypto.craco.common.utils.SecureRandomGenerator;
 import de.upb.crypto.craco.interfaces.DecryptionKey;
 import de.upb.crypto.craco.interfaces.EncryptionKey;
@@ -206,7 +206,7 @@ public class AbstractIBEFuzzySW05 {
         IBEFuzzySW05MasterSecret masterSecret = (IBEFuzzySW05MasterSecret) msk;
 
         // new polynomial q of degree d-1 where q(0) = y
-        final PrimeFieldPolynom q = new PrimeFieldPolynom(zp, pp.getIdentityThresholdD().intValue() - 1);
+        final PrimeFieldPolynomial q = new PrimeFieldPolynomial(zp, pp.getIdentityThresholdD().intValue() - 1);
         // assign non zero values to all coefficients
         q.createRandom(new SecureRandomGenerator());
         q.setCoefficient(masterSecret.getY(), 0);

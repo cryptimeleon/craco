@@ -39,7 +39,7 @@ public class NguyenAccumulator implements DynamicAccumulator<NguyenAccumulatorId
     }
 
     /**
-     * Calculates the {@link NguyenAccumulatorValue} for a set ({@link NguyenAccumulatorIdentity})and thereby
+     * Calculates the {@link NguyenAccumulatorValue} for a set ({@link NguyenAccumulatorIdentity}) and thereby
      * accumulates it.
      * Furthermore it sets the member variables {@link #accumulatorValue} and {@link #identitySet}
      *
@@ -66,7 +66,7 @@ public class NguyenAccumulator implements DynamicAccumulator<NguyenAccumulatorId
     /**
      * Calculates the {@link NguyenAccumulatorValue} for a set ({@link NguyenAccumulatorIdentity}).
      * <p>
-     * This method is used for calculating the {@link NguyenAccumulatorValue} or creation of a {@link NguyenWitness}
+     * This method is used for calculating the {@link NguyenAccumulatorValue} or creation of a {@link NguyenWitness}.
      *
      * @param setOfIdentities {@link NguyenAccumulatorIdentity}
      * @return {@link NguyenAccumulatorValue} for a set ({@link NguyenAccumulatorIdentity})

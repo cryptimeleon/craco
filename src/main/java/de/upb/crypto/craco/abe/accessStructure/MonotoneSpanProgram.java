@@ -103,7 +103,7 @@ public class MonotoneSpanProgram extends AccessStructure {
         int counter = 0;
         for (Integer id : fulfillingSet.getSecond()) {
             labeling[counter] = id;
-            submatrix[counter++] = matrix[id.intValue()];
+            submatrix[counter++] = matrix[id];
         }
 
         ZpElement[] vector = calculateSolvingVector(submatrix);

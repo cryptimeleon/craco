@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.abe.cp.large.distributed;
 
 import de.upb.crypto.craco.abe.cp.large.ABECPWat11MasterSecret;
-import de.upb.crypto.craco.common.utils.PrimeFieldPolynom;
+import de.upb.crypto.craco.common.utils.PrimeFieldPolynomial;
 import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.factory.BilinearGroupFactory;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
@@ -84,7 +84,7 @@ public class DistributedABECPWat11Setup {
         }
         ZpElement y_0 = zp.getUniformlyRandomUnit();
         log.debug("Found msk y_0:" + y_0);
-        PrimeFieldPolynom q_0 = new PrimeFieldPolynom(zp, t - 1);
+        PrimeFieldPolynomial q_0 = new PrimeFieldPolynomial(zp, t - 1);
         q_0.createRandom(RandomGeneratorSupplier.instance().get());
         q_0.setCoefficient(y_0, 0);
         log.debug("Computed polynomial q_0:" + q_0);
