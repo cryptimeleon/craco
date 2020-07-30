@@ -5,6 +5,7 @@ import de.upb.crypto.craco.common.RingElementPlainText;
 import de.upb.crypto.craco.interfaces.PlainText;
 import de.upb.crypto.craco.interfaces.signature.*;
 import de.upb.crypto.craco.sig.ps.PSPublicParameters;
+import de.upb.crypto.math.expressions.exponent.ExponentVariableExpr;
 import de.upb.crypto.math.expressions.group.GroupElementExpression;
 import de.upb.crypto.math.expressions.evaluator.OptGroupElementExpressionEvaluator;
 import de.upb.crypto.math.interfaces.structures.Group;
@@ -13,18 +14,18 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
-
+/**
+ * Implementation of the signature scheme from [PoiSan18] Section 4.2.
+ *
+ * [PoisSan18] Davoid Pointcheval and Olivier Sanders. "Reassessing Security of Randomizable Signatures".
+ * In: Topics in Cryptology – CT-RSA 2018. Ed. by Nigel P. Smart. Springer International Publishing, 2018, pp. 319-338.
+ */
 public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme {
 
-    /**
-     * pp in paper. Public parameters of the Pointcheval Sanders 2018 (Section 4.2)
-     * signature scheme.
-     */
     @Represented
     protected PSPublicParameters pp;
 
@@ -51,11 +52,11 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
         // Pick \tilde{g} from G_2^*
         GroupElement group2ElementTildeG = group2.getUniformlyRandomNonNeutral();
         // Pick x from Z_p^*
-        ZpElement exponentX = zp.getUniformlyRandomUnit();
+        Zp.ZpElement exponentX = zp.getUniformlyRandomUnit();
         // Pick y_1, ..., y_{r+1} from Z_p^* (r is number of messages)
-        ZpElement[] exponentsYi = IntStream.range(0, numberOfMessages+1)
+        Zp.ZpElement[] exponentsYi = IntStream.range(0, numberOfMessages+1)
                 .mapToObj(a -> zp.getUniformlyRandomUnit())
-                .toArray(ZpElement[]::new);
+                .toArray(Zp.ZpElement[]::new);
 
         // Compute \tilde{X} = \tilde{g}^x
         GroupElement group2ElementTildeX = group2ElementTildeG.pow(exponentX);
@@ -63,6 +64,23 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
         GroupElement[] group2ElementsTildeYi = Arrays.stream(exponentsYi)
                 .map(group2ElementTildeG::pow)
                 .toArray(GroupElement[]::new);
+
+
+        // Construct expression for multi-exponentiation used in verify
+        GroupElementExpression leftGroup2ElemExpr = group2ElementTildeX.expr();
+        for (int i = 0; i < numberOfMessages; ++i) {
+            // l = l op \tilde{Y}_i^{m_i}
+            leftGroup2ElemExpr = leftGroup2ElemExpr.opPow(
+                    group2ElementsTildeYi[i].expr(),
+                    new ExponentVariableExpr("m" + i)
+            );
+        }
+        leftGroup2ElemExpr = leftGroup2ElemExpr.opPow(
+                group2ElementsTildeYi[numberOfMessages].expr(),
+                new ExponentVariableExpr("m'")
+        );
+        // optimize
+        new OptGroupElementExpressionEvaluator().precompute(leftGroup2ElemExpr);
 
         // Construct secret signing key
         PS18SigningKey sk = new PS18SigningKey(exponentX, exponentsYi);
@@ -106,7 +124,7 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
                 .getUniformlyRandomNonNeutral();
 
         // m' in Z_p, first element of signature
-        ZpElement exponentPrimeM = zp.getUniformlyRandomElement();
+        Zp.ZpElement exponentPrimeM = zp.getUniformlyRandomElement();
 
         // Compute third element of signature
         GroupElement group1ElementSigma2 = computeSigma2(
@@ -244,9 +262,9 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
      * @return \sigma_2 from paper.
      */
     protected GroupElement computeSigma2(MessageBlock messageBlock, PS18SigningKey sk,
-                                         ZpElement exponentPrimeM, GroupElement sigma1) {
+                                         Zp.ZpElement exponentPrimeM, GroupElement sigma1) {
         // First we compute the exponent = x + \sum_{i=1}{r}{y_i * m_i} + y_{r+1} * m'
-        ZpElement resultExponent = sk.getExponentX();
+        Zp.ZpElement resultExponent = sk.getExponentX();
         for (int i = 0; i < sk.getNumberOfMessages(); ++i) {
             if (messageBlock.get(i) == null) {
                 throw new IllegalArgumentException(
@@ -265,7 +283,7 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
                         String.format("%d'th message element is not an element of Zp.", i)
                 );
             }
-            ZpElement messageElement = (ZpElement) messageRingElement.getRingElement();
+            Zp.ZpElement messageElement = (Zp.ZpElement) messageRingElement.getRingElement();
             resultExponent = resultExponent.add(sk.getExponentsYi()[i].mul(messageElement));
         }
         resultExponent = resultExponent.add(
@@ -288,10 +306,9 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
      * @return element of G_T which is the left hand side of the verification equation.
      */
     protected GroupElement computeLeftHandSide(MessageBlock messageBlock, PS18VerificationKey pk,
-                                               ZpElement exponentPrimeM, GroupElement sigma1) {
+                                               Zp.ZpElement exponentPrimeM, GroupElement sigma1) {
         // Computation of group element from G_2 for left hand side requires sum
         // \tilde{X} * \prod_{i=1}{r}{\tilde{Y}_i^{m_i}} * \tilde{Y}_{r+1}^{m'}
-
         // l = \tilde{X}
         GroupElementExpression leftGroup2ElemExpr = pk.getGroup2ElementTildeX().expr();
         for (int i = 0; i < pk.getNumberOfMessages(); ++i) {
@@ -314,14 +331,13 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
                 );
             }
             Zp.ZpElement messageElement = (Zp.ZpElement) messageRingElement.getRingElement();
-            // l = l op \tilde{Y}_i^{m_i}
             leftGroup2ElemExpr = leftGroup2ElemExpr.opPow(
                     pk.getGroup2ElementsTildeYi()[i].expr(),
                     messageElement
             );
         }
         leftGroup2ElemExpr = leftGroup2ElemExpr.opPow(
-                pk.getGroup2ElementsTildeYi()[pk.getNumberOfMessages()].expr(),
+                pk.getGroup2ElementsTildeYi()[pk.getNumberOfMessages()],
                 exponentPrimeM
         );
 
@@ -329,4 +345,3 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
         return pp.getBilinearMap().apply(sigma1, leftGroup2ElemExpr.evaluate(evaluator));
     }
 }
-

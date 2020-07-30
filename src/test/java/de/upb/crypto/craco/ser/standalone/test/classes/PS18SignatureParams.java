@@ -2,8 +2,8 @@ package de.upb.crypto.craco.ser.standalone.test.classes;
 
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
 import de.upb.crypto.craco.sig.ps.PSPublicParameters;
-import de.upb.crypto.craco.sig.ps.PSPublicParametersGen;
 import de.upb.crypto.craco.sig.ps18.PS18SignatureScheme;
+import de.upb.crypto.craco.sig.ps.PSPublicParametersGen;
 
 import java.util.ArrayList;
 import java.util.Collection;
