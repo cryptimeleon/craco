@@ -48,7 +48,7 @@ public class KeyEncapsulationMechanismTest {
 
     @Test
     public void testEncapsDecrypt() {
-        System.out.println("Testing valid encaps/decaps for " + kem.getRepresentedTypeName() + " ...");
+        System.out.println("Testing valid encaps/decaps for " + kem.getClass().getName() + " ...");
 
         DecryptionKey sk = validKeyPair.getSk();
         EncryptionKey pk = validKeyPair.getPk();
@@ -61,7 +61,7 @@ public class KeyEncapsulationMechanismTest {
 
     @Test
     public void testFailEncryptDecrypt() {
-        System.out.println("Testing invalid encaps/decaps for " + kem.getRepresentedTypeName() + " ...");
+        System.out.println("Testing invalid encaps/decaps for " + kem.getClass().getName() + " ...");
 
         DecryptionKey sk = invalidKeyPair.getSk();
         EncryptionKey pk = invalidKeyPair.getPk();

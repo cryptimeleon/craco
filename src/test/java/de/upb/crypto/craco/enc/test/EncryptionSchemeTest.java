@@ -33,7 +33,7 @@ public class EncryptionSchemeTest {
 
     @Test
     public void testEncryptDecrypt() throws UnsupportedEncodingException {
-        System.out.println("Testing valid encrypt/decrypt for " + encryptionScheme.getRepresentedTypeName() + " ...");
+        System.out.println("Testing valid encrypt/decrypt for " + encryptionScheme.getClass().getName() + " ...");
         PlainText data = plaintextSupplier.get();
 
         DecryptionKey sk = validKeyPair.getSk();
@@ -47,7 +47,7 @@ public class EncryptionSchemeTest {
 
     @Test
     public void testFailEncryptDecrypt() throws UnsupportedEncodingException {
-        System.out.println("Testing invalid encrypt/decrypt for " + encryptionScheme.getRepresentedTypeName() + " ...");
+        System.out.println("Testing invalid encrypt/decrypt for " + encryptionScheme.getClass().getName() + " ...");
 
         PlainText data = plaintextSupplier.get();
 

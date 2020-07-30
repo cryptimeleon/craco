@@ -108,7 +108,7 @@ public class FullIdent implements PredicateEncryptionScheme {
         // in G1
         GroupElement Q_id = H1(pk.getData());
         // in G2
-        GroupElement g_id = pp.getE().apply(Q_id, pp.getP_pub());
+        GroupElement g_id = pp.getBilinearMap().apply(Q_id, pp.getP_pub());
         // sigma is random
         byte[] sigma = new byte[pp.getN().intValue()];
 
@@ -147,7 +147,7 @@ public class FullIdent implements PredicateEncryptionScheme {
         byte[] V = ct.getV();
         byte[] W = ct.getW();
         // V \oplus H2(e(d_id, U))
-        byte[] sigma = ByteUtil.xor(V, H2(pp.getE().apply(sk.getD_id(), U)));
+        byte[] sigma = ByteUtil.xor(V, H2(pp.getBilinearMap().apply(sk.getD_id(), U)));
         // W = M \oplus H_4(sigma)
         byte[] message = ByteUtil.xor(W, H4(sigma));
 

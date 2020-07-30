@@ -38,7 +38,7 @@ public class RepresentationTest {
     @Test
     public void testRepresentation() throws InstantiationException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException, NoSuchMethodException, SecurityException {
-        System.out.println("Testing " + scheme.getRepresentedTypeName());
+        System.out.println("Testing " + scheme.toString());
         // Testing standalone of the scheme
         EncryptionScheme toCompare =
                 scheme.getClass().getConstructor(Representation.class).newInstance(scheme.getRepresentation());

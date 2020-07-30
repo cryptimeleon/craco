@@ -2,7 +2,6 @@ package de.upb.crypto.craco.sig;
 
 import de.upb.crypto.craco.interfaces.PlainText;
 import de.upb.crypto.craco.interfaces.signature.*;
-import de.upb.crypto.math.pairings.debug.DebugGroupLogger;
 import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
 import de.upb.crypto.math.serialization.Representation;
 
@@ -158,7 +157,6 @@ public class SignatureSchemeTester {
 
     protected static void measureTime(String str) {
         if (timerStart == 0) {
-            DebugGroupLogger.reset();
             timerStart = System.currentTimeMillis();
         } else {
             long end = System.currentTimeMillis();

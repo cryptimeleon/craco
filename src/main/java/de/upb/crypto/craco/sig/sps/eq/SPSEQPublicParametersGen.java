@@ -14,8 +14,6 @@ public class SPSEQPublicParametersGen {
      * @return The public parameters for the Pointcheval Sanders signature scheme
      */
     public SPSEQPublicParameters generatePublicParameter(int securityParameter, boolean debugMode) {
-        BilinearMap bilinearMap; // G1 x G2 -> GT
-
         // Get bilinear group from the factory
         BilinearGroupFactory fac = new BilinearGroupFactory(securityParameter);
         fac.setDebugMode(debugMode);
@@ -26,8 +24,6 @@ public class SPSEQPublicParametersGen {
                 new BarretoNaehrigProvider()));
         BilinearGroup group = fac.createBilinearGroup();
 
-        bilinearMap = group.getBilinearMap();
-
-        return new SPSEQPublicParameters(bilinearMap);
+        return new SPSEQPublicParameters(group);
     }
 }

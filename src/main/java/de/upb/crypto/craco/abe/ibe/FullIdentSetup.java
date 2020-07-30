@@ -25,7 +25,7 @@ public class FullIdentSetup {
         // Generate bilinear group
         BilinearGroupFactory fac = new BilinearGroupFactory(securityParameter);
         fac.setDebugMode(debug);
-        fac.setRequirements(BilinearGroup.Type.TYPE_1);
+        fac.setRequirements(BilinearGroup.Type.TYPE_1, true, false, false);
         BilinearGroup group = fac.createBilinearGroup();
 
         doKeyGen(group, block_size);
@@ -43,10 +43,7 @@ public class FullIdentSetup {
 
         pp.setHashToG1(group.getHashIntoG1());
 
-        pp.setGroupG1(group.getG1());
-        pp.setGroupG2(group.getGT());
-
-        pp.setE(group.getBilinearMap());
+        pp.setBilinearGroup(group);
         Zp zp = new Zp(pp.getGroupG1().size());
 
         // Do the scheme setup stuff

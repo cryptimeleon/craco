@@ -1,6 +1,7 @@
 package de.upb.crypto.craco.abe.ibe;
 
 import de.upb.crypto.craco.interfaces.PublicParameters;
+import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.interfaces.hash.HashIntoStructure;
 import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.interfaces.structures.Group;
@@ -10,6 +11,7 @@ import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * The public parameters for the {@link FullIdent} generated in the
@@ -20,15 +22,12 @@ import java.math.BigInteger;
 public class FullIdentPublicParameters implements PublicParameters {
 
     @Represented
-    private Group groupG1, groupG2;
+    private BilinearGroup bilinearGroup; // G1 x G1 -> G2
 
-    @Represented
-    private BilinearMap e; // G1 x G1 -> G2
-
-    @Represented(restorer = "groupG1")
+    @Represented(restorer = "G1")
     private GroupElement p; // Generator of G_1
 
-    @Represented(restorer = "groupG1")
+    @Represented(restorer = "G1")
     private GroupElement p_pub; // s * p
 
     @Represented
@@ -42,7 +41,8 @@ public class FullIdentPublicParameters implements PublicParameters {
     }
 
     public FullIdentPublicParameters(Representation repr) {
-        new ReprUtil(this).deserialize(repr);
+        bilinearGroup = (BilinearGroup) repr.obj().get("bilinearGroup").repr().recreateRepresentable();
+        new ReprUtil(this).register(bilinearGroup).deserialize(repr);
     }
 
     @Override
@@ -51,27 +51,19 @@ public class FullIdentPublicParameters implements PublicParameters {
     }
 
     public Group getGroupG1() {
-        return groupG1;
-    }
-
-    public void setGroupG1(Group groupG1) {
-        this.groupG1 = groupG1;
+        return bilinearGroup.getG1();
     }
 
     public Group getGroupG2() {
-        return groupG2;
+        return bilinearGroup.getG2();
     }
 
-    public void setGroupG2(Group groupG2) {
-        this.groupG2 = groupG2;
+    public BilinearMap getBilinearMap() {
+        return bilinearGroup.getBilinearMap();
     }
 
-    public BilinearMap getE() {
-        return e;
-    }
-
-    public void setE(BilinearMap e) {
-        this.e = e;
+    public void setBilinearGroup(BilinearGroup bilinearGroup) {
+        this.bilinearGroup = bilinearGroup;
     }
 
     public GroupElement getP() {
@@ -100,63 +92,22 @@ public class FullIdentPublicParameters implements PublicParameters {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((p == null) ? 0 : p.hashCode());
-        result = prime * result + ((p_pub == null) ? 0 : p_pub.hashCode());
-        result = prime * result + ((e == null) ? 0 : e.hashCode());
-        result = prime * result + ((groupG1 == null) ? 0 : groupG1.hashCode());
-        result = prime * result + ((groupG2 == null) ? 0 : groupG2.hashCode());
-        result = prime * result + ((hashToG1 == null) ? 0 : hashToG1.hashCode());
-        result = prime * result + ((n == null) ? 0 : n.hashCode());
-        return result;
+        return Objects.hash(bilinearGroup, p, p_pub, n, hashToG1);
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
+        if (obj== null || getClass() != obj.getClass())
             return false;
         FullIdentPublicParameters other = (FullIdentPublicParameters) obj;
-        if (p == null) {
-            if (other.p != null)
-                return false;
-        } else if (!p.equals(other.p))
-            return false;
-        if (p_pub == null) {
-            if (other.p_pub != null)
-                return false;
-        } else if (!p_pub.equals(other.p_pub))
-            return false;
-        if (e == null) {
-            if (other.e != null)
-                return false;
-        } else if (!e.equals(other.e))
-            return false;
-        if (groupG1 == null) {
-            if (other.groupG1 != null)
-                return false;
-        } else if (!groupG1.equals(other.groupG1))
-            return false;
-        if (groupG2 == null) {
-            if (other.groupG2 != null)
-                return false;
-        } else if (!groupG2.equals(other.groupG2))
-            return false;
-        if (hashToG1 == null) {
-            if (other.hashToG1 != null)
-                return false;
-        } else if (!hashToG1.equals(other.hashToG1))
-            return false;
-        if (n == null) {
-            if (other.n != null)
-                return false;
-        } else if (!n.equals(other.n))
-            return false;
-        return true;
+        return Objects.equals(bilinearGroup, other.bilinearGroup)
+                && Objects.equals(p, other.p)
+                && Objects.equals(p_pub, other.p_pub)
+                && Objects.equals(n, other.n)
+                && Objects.equals(hashToG1, other.hashToG1);
+
     }
 
     public HashIntoStructure getHashToG1() {

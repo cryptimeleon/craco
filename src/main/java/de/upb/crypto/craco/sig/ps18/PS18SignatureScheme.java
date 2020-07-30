@@ -7,7 +7,6 @@ import de.upb.crypto.craco.interfaces.signature.*;
 import de.upb.crypto.craco.sig.ps.PSPublicParameters;
 import de.upb.crypto.math.expressions.exponent.ExponentVariableExpr;
 import de.upb.crypto.math.expressions.group.GroupElementExpression;
-import de.upb.crypto.math.expressions.evaluator.OptGroupElementExpressionEvaluator;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
@@ -79,8 +78,7 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
                 group2ElementsTildeYi[numberOfMessages].expr(),
                 new ExponentVariableExpr("m'")
         );
-        // optimize
-        new OptGroupElementExpressionEvaluator().precompute(leftGroup2ElemExpr);
+        leftGroup2ElemExpr.precompute();
 
         // Construct secret signing key
         PS18SigningKey sk = new PS18SigningKey(exponentX, exponentsYi);
@@ -341,7 +339,6 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
                 exponentPrimeM
         );
 
-        OptGroupElementExpressionEvaluator evaluator = new OptGroupElementExpressionEvaluator();
-        return pp.getBilinearMap().apply(sigma1, leftGroup2ElemExpr.evaluate(evaluator));
+        return pp.getBilinearMap().apply(sigma1, leftGroup2ElemExpr.evaluate());
     }
 }

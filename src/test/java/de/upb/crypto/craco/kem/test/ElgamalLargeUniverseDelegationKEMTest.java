@@ -72,7 +72,7 @@ public class ElgamalLargeUniverseDelegationKEMTest {
     public static void setup() throws NoSuchAlgorithmException {
         BilinearGroup bilinearGroup;
         if (debugPairing) {
-            bilinearGroup = new DebugBilinearGroupProvider().provideBilinearGroup(n, BilinearGroup.Type.TYPE_3, 1);
+            bilinearGroup = new DebugBilinearGroupProvider().provideBilinearGroup(n, BilinearGroup.Type.TYPE_3, 1, false);
         } else {
             BarretoNaehrigProvider fac = new BarretoNaehrigProvider();
 

@@ -15,6 +15,7 @@ import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -108,7 +109,7 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
 
 
         // first element of signature, Z in paper
-        GroupElementExpression group1ElementZ = pp.getBilinearMap().getG1().expr();
+        GroupElement group1ElementZ = pp.getBilinearMap().getG1().getNeutralElement();
         // random exponent for signature out of Z_p^*
         ZpElement y = pp.getZp().getUniformlyRandomUnit();
 
@@ -119,18 +120,15 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
                     .equals(pp.getBilinearMap().getG1())) {
                 throw new IllegalArgumentException("Not a valid plain text for this scheme");
             }
-            group1ElementZ.opPow(((GroupElementPlainText) messageBlock.get(i)).get(), sk.getExponentsXi()[i]);
+            group1ElementZ = group1ElementZ.op(
+                    ((GroupElementPlainText) messageBlock.get(i)).get().pow(sk.getExponentsXi()[i])
+            );
         }
-        group1ElementZ.pow(y);
+        group1ElementZ = group1ElementZ.pow(y);
 
-        // second element of signature, Y in paper
-        GroupElementExpression group1ElementSigma2 = pp.getGroup1ElementP().expr().pow(y.inv());
-
-        // third element of signature, \hat{Y} in paper
-        GroupElementExpression group2ElementSigma3 = pp.getGroup2ElementHatP().expr().pow(y.inv());
-        GroupElement sigmaZ = group1ElementZ.evaluate();
-        GroupElement sigmaY = group1ElementSigma2.evaluate();
-        GroupElement sigmaHatY = group2ElementSigma3.evaluate();
+        GroupElement sigmaZ = group1ElementZ.compute();
+        GroupElement sigmaY = pp.getGroup1ElementP().pow(y.inv()).compute();
+        GroupElement sigmaHatY = pp.getGroup2ElementHatP().pow(y.inv()).compute();
 
         return new SPSEQSignature(sigmaZ, sigmaY, sigmaHatY);
     }
@@ -159,50 +157,36 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
         if (sigma.getGroup1ElementSigma2Y().isNeutralElement() || sigma.getGroup1ElementSigma3HatY().isNeutralElement())
             return false;
 
-        GroupElementExpression firstPPE = pp.getBilinearMap().expr();
-        GroupElementExpression secondPPE = pp.getBilinearMap().expr();
-
         // Check if verification equation of multi message signature scheme holds
         // First pairing product equation: e(Z,\hat{Y})^{-1} * \prod_{i \in [l]} e(M_i,\hat{X}_i) = 1_{G_T}
-        firstPPE.op(
-                new PairingExpr(
-                        pp.getBilinearMap(),
-                        sigma.getGroup1ElementSigma1Z().expr(),
-                        sigma.getGroup1ElementSigma3HatY().expr()
-                )
-        ).inv();
+        GroupElement firstPPE = pp.getBilinearMap()
+                .apply(sigma.getGroup1ElementSigma1Z(), sigma.getGroup1ElementSigma3HatY())
+                .inv();
         for (int i = 0; i < pk.getNumberOfMessages(); i++) {
-            firstPPE.op(
-                    new PairingExpr(
-                            pp.getBilinearMap(),
-                            ((GroupElementPlainText) messageBlock.get(i)).get().expr(),
-                            pk.getGroup2ElementsHatXi()[i].expr()
+            firstPPE = firstPPE.op(
+                    pp.getBilinearMap().apply(
+                            ((GroupElementPlainText) messageBlock.get(i)).get(),
+                            pk.getGroup2ElementsHatXi()[i]
                     )
             );
         }
+        firstPPE.compute();
 
         // Second pairing product equation: e(P,\hat{Y})^{-1} * e(Y,\hat{P}) = 1_{G_T}
-        secondPPE.op(
-                new PairingExpr(
-                        pp.getBilinearMap(),
-                        pp.getGroup1ElementP().expr(),
-                        sigma.getGroup1ElementSigma3HatY().expr()
-                )
-        ).inv();
-        secondPPE.op(
-                new PairingExpr(
-                        pp.getBilinearMap(),
-                        sigma.getGroup1ElementSigma2Y().expr(),
-                        pp.getGroup2ElementHatP().expr()
+        GroupElement secondPPE = pp.getBilinearMap()
+                .apply(pp.getGroup1ElementP(), sigma.getGroup1ElementSigma3HatY())
+                .inv();
+        secondPPE = secondPPE.op(
+                pp.getBilinearMap().apply(
+                        sigma.getGroup1ElementSigma2Y(),
+                        pp.getGroup2ElementHatP()
                 )
         );
-
-        GroupElement resultFirst = firstPPE.evaluate();
-        GroupElement resultSecond = secondPPE.evaluate();
+        secondPPE.compute();
 
         GroupElement neutral = pp.getBilinearMap().getGT().getNeutralElement();
 
-        return resultFirst.equals(neutral) && resultSecond.equals(neutral);
+        return firstPPE.equals(neutral) && secondPPE.equals(neutral);
     }
 
     @Override
@@ -294,20 +278,13 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(Object other) {
+        if (this == other)
             return true;
-        if (obj == null)
+        if (other == null || getClass() != other.getClass())
             return false;
-        if (getClass() != obj.getClass())
-            return false;
-        SPSEQSignatureScheme other = (SPSEQSignatureScheme) obj;
-        if (pp == null) {
-            if (other.pp != null)
-                return false;
-        } else if (!pp.equals(other.pp))
-            return false;
-        return true;
+        SPSEQSignatureScheme that = (SPSEQSignatureScheme) other;
+        return Objects.equals(pp, that.pp);
     }
 
     @Override

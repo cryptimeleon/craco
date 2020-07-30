@@ -8,7 +8,6 @@ import de.upb.crypto.craco.interfaces.signature.SigningKey;
 import de.upb.crypto.craco.interfaces.signature.VerificationKey;
 import de.upb.crypto.craco.sig.SignatureSchemeParams;
 import de.upb.crypto.craco.sig.SignatureSchemeTester;
-import de.upb.crypto.math.pairings.debug.DebugGroupLogger;
 import de.upb.crypto.math.structures.zn.Zp;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +25,7 @@ public class SPSEQSignatureSchemeTest {
     static long timerStart = 0;
     static int testIterations = 1;
     private final int NUM_MESSAGES = 2;
-    private final int SECURITY_PARAMETER = 256;
+    private final int SECURITY_PARAMETER = 128;
 
     private SPSEQSignatureScheme spseqScheme;
     private SignatureKeyPair<? extends VerificationKey, ? extends SigningKey> keyPair;
@@ -108,7 +107,6 @@ public class SPSEQSignatureSchemeTest {
 
     protected static void measureTime(String str) {
         if (timerStart == 0) {
-            DebugGroupLogger.reset();
             timerStart = System.currentTimeMillis();
         } else {
             long end = System.currentTimeMillis();
