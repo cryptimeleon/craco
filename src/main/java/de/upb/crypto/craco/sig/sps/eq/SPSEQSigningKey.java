@@ -2,14 +2,12 @@ package de.upb.crypto.craco.sig.sps.eq;
 
 import de.upb.crypto.craco.interfaces.signature.SigningKey;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedArray;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * Class for the secret (signing) key of the SPS-EQ signature scheme.
@@ -22,25 +20,20 @@ public class SPSEQSigningKey implements SigningKey {
     /**
      * x_1, ... , x_l \in Z_p^* in paper.
      */
-    @RepresentedArray(elementRestorer = @Represented(structure = "zp", recoveryMethod = ZpElement.RECOVERY_METHOD))
+    @Represented(restorer="[Zp]")
     protected ZpElement exponentsXi[];
-
-    // pointer field used to store the structure for the representation process; in all other cases this should be null
-    protected Zp zp = null;
 
     public SPSEQSigningKey() {
         super();
     }
 
     public SPSEQSigningKey(Representation repr, Zp zp) {
-        this.zp = zp;
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
-        this.zp = null;
+        new ReprUtil(this).register(zp, "Zp").deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public ZpElement[] getExponentsXi() {
@@ -65,7 +58,6 @@ public class SPSEQSigningKey implements SigningKey {
 
     @Override
     public int hashCode() {
-        int result = Arrays.hashCode(exponentsXi);
-        return result;
+        return Arrays.hashCode(exponentsXi);
     }
 }
