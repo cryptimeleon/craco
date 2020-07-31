@@ -32,6 +32,12 @@ if (!Boolean.valueOf(System.getProperty("disablesnapshot"))) {
                 if (grgitLib.branch.current().getName() == branchThis.getName()) {
                     println(msgPrefix + libPrefix + ": Branch '" + branchThis.getName() + "' exists and is checked out already.")
                 } else {
+                    throw new GradleException(msgPrefix + libPrefix + ": Branch '" + branchThis.getName() + "' exists but is not checked out. "
+                            + "Please check it out yourself before building.")
+                }
+            } else {
+                println(msgPrefix + libPrefix + ": Branch " + branchThis.getName() + " does not exist locally.")
+                if (grgitLib.branch.list { mode = "REMOTE" }.collect { it.getName() }.contains("origin/" + branchThis.getName())) {
                     if (hasProperty("checkoutIfCloned") && cloned) {
                         println(msgPrefix + libPrefix + ": Branch '" + branchThis.getName() + "' exists but is not checked out. "
                                 + "'checkoutIfCloned' is set. Automatically checking it out.")
@@ -41,22 +47,16 @@ if (!Boolean.valueOf(System.getProperty("disablesnapshot"))) {
                             createBranch = true
                         }
                     } else {
-                        throw new GradleException(msgPrefix + libPrefix + ": Branch '" + branchThis.getName() + "' exists but is not checked out. "
-                                + "Please check it out yourself before building.")
+                        throw new GradleException(msgPrefix + libPrefix + ": Branch '" + branchThis.getName()
+                                + "' exists remotely but not locally. Please check it out yourself before building.")
                     }
-                }
-            } else {
-                println(msgPrefix + libPrefix + ": Branch " + branchThis.getName() + " does not exist locally.")
-                if (grgitLib.branch.list { mode = "REMOTE" }.collect { it.getName() }.contains("origin/" + branchThis.getName())) {
-                    println(msgPrefix + libPrefix + ": Branch '" + branchThis.getName() + "' exists remotely but not locally. " +
-                            "Please check it out yourself before building.")
                 } else {
                     println(msgPrefix + libPrefix + ": Branch '" + branchThis.getName() + "' does not exist remotely. Using master.")
                     if (grgitLib.branch.current().getName() == "master") {
                         println(msgPrefix + libPrefix + ": Branch master is checked out already. Using it.")
                     } else {
                         if (hasProperty("checkoutIfCloned") && cloned) {
-                            println(msgPrefix + libPrefix + ": Branch '" + branchThis.getName() + "' exists but is not checked out. "
+                            println(msgPrefix + libPrefix + ": Branch master exists but is not checked out. "
                                     + "'checkoutIfCloned' is set. Automatically checking it out.")
                             grgitLib.checkout {
                                 branch = branchThis.getName()
