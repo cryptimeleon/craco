@@ -31,19 +31,19 @@ public class NguyenAccumulatorPublicParameters implements AccumulatorPublicParam
     private BilinearGroup bilinearGroup;
 
     @UniqueByteRepresented
-    @Represented(restorer = "G1")
+    @Represented(restorer = "bilinearGroup::getG1")
     private GroupElement g;
 
     @UniqueByteRepresented
-    @Represented(restorer = "G2")
+    @Represented(restorer = "bilinearGroup::getG2")
     private GroupElement g_Tilde;
 
     @UniqueByteRepresented
-    @Represented(restorer = "G2")
+    @Represented(restorer = "bilinearGroup::getG2")
     private GroupElement g_Tilde_Power_S;
 
     @UniqueByteRepresented
-    @Represented(restorer = "[G1]")
+    @Represented(restorer = "[bilinearGroup::getG1]")
     private GroupElement[] t;
 
 
@@ -59,8 +59,7 @@ public class NguyenAccumulatorPublicParameters implements AccumulatorPublicParam
     }
 
     public NguyenAccumulatorPublicParameters(Representation repr) {
-        bilinearGroup = (BilinearGroup) repr.obj().get("bilinearGroup").repr().recreateRepresentable();
-        new ReprUtil(this).register(bilinearGroup).deserialize(repr);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override

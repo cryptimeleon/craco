@@ -23,9 +23,9 @@ public class BBSBPublicParameter implements PublicParameters {
     private BilinearGroup bilinearGroup; // G1 x G2 -> GT
     @Represented
     private HashIntoZn hashIntoZp;
-    @Represented(restorer = "G1")
+    @Represented(restorer = "bilinearGroup::getG1")
     private GroupElement g1; // in G1
-    @Represented(restorer = "G2")
+    @Represented(restorer = "bilinearGroup::getG2")
     private GroupElement g2; // in G2
 
     public BBSBPublicParameter(BilinearGroup bilinearGroup, HashIntoZn hashIntoZp) {
@@ -34,8 +34,7 @@ public class BBSBPublicParameter implements PublicParameters {
     }
 
     public BBSBPublicParameter(Representation repr) {
-        bilinearGroup = (BilinearGroup) repr.obj().get("bilinearGroup").repr().recreateRepresentable();
-        new ReprUtil(this).register(bilinearGroup).deserialize(repr);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override

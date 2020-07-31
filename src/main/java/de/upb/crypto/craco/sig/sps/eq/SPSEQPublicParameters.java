@@ -7,6 +7,8 @@ import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 
 import java.util.Objects;
@@ -23,16 +25,19 @@ public class SPSEQPublicParameters implements PublicParameters {
     /**
      * The bilinear group containing map e in the paper.
       */
+    @Represented
     private BilinearGroup bilinearGroup; // G1 x G2 -> GT
 
     /**
      * P \in G_1 in paper.
      */
+    @Represented(restorer = "bilinearGroup::getG1")
     protected GroupElement group1ElementP;
 
     /**
      * \hat{P} \in G_2 in paper.
      */
+    @Represented(restorer = "bilinearGroup::getG2")
     protected GroupElement group2ElementHatP;
 
 
@@ -44,19 +49,12 @@ public class SPSEQPublicParameters implements PublicParameters {
     }
 
     public SPSEQPublicParameters(Representation repr) {
-        bilinearGroup = (BilinearGroup) repr.obj().get("bilinearGroup").repr().recreateRepresentable();
-        group1ElementP = bilinearGroup.getG1().getElement(repr.obj().get("group1ElementP"));
-        group2ElementHatP = bilinearGroup.getG2().getElement(repr.obj().get("group2ElementHatP"));
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        ObjectRepresentation result = new ObjectRepresentation();
-        result.put("bilinearGroup", new RepresentableRepresentation(bilinearGroup));
-        result.put("group1ElementP", group1ElementP.getRepresentation());
-        result.put("group2ElementHatP", group2ElementHatP.getRepresentation());
-
-        return result;
+        return ReprUtil.serialize(this);
     }
 
     /**

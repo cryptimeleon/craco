@@ -25,16 +25,16 @@ public class ABECPWat11SmallPublicParameters implements PublicParameters {
     @Represented
     private BilinearGroup bilinearGroup;
 
-    @Represented(restorer = "G1")
+    @Represented(restorer = "bilinearGroup::getG1")
     private GroupElement g; // Generator of G_1
 
-    @Represented(restorer = "GT")
+    @Represented(restorer = "bilinearGroup::getGT")
     private GroupElement eGGAlpha; // in G_T
 
-    @Represented(restorer = "G1")
+    @Represented(restorer = "bilinearGroup::getG1")
     private GroupElement gA; // in G_1
 
-    @Represented(restorer = "foo -> G1")
+    @Represented(restorer = "foo -> bilinearGroup::getG1")
     private Map<Attribute, GroupElement> h; // Attribute in Universe, Element in
     // G_1
 
@@ -42,8 +42,7 @@ public class ABECPWat11SmallPublicParameters implements PublicParameters {
     }
 
     public ABECPWat11SmallPublicParameters(Representation repr) {
-        bilinearGroup = (BilinearGroup) repr.obj().get("bilinearGroup").repr().recreateRepresentable();
-        new ReprUtil(this).register(bilinearGroup).deserialize(repr);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public Group getGroupG1() {

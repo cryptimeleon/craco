@@ -26,21 +26,20 @@ public class IBEFuzzySW05SmallPublicParameters implements PublicParameters {
     @Represented
     private BigInteger d; // identity threshold
 
-    @Represented(restorer = "G1")
+    @Represented(restorer = "bilinearGroup::getG1")
     private GroupElement g; // in G_1
 
-    @Represented(restorer = "attr -> G1")
+    @Represented(restorer = "attr -> bilinearGroup::getG1")
     private Map<Attribute, GroupElement> T; // in G_1
 
-    @Represented(restorer = "GT")
+    @Represented(restorer = "bilinearGroup::getGT")
     private GroupElement y; // in G_T
 
     @Represented
     private BilinearGroup bilinearGroup;
 
     public IBEFuzzySW05SmallPublicParameters(Representation repr) {
-        bilinearGroup = (BilinearGroup) repr.obj().get("bilinearGroup").repr().recreateRepresentable();
-        new ReprUtil(this).register(bilinearGroup).deserialize(repr);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public IBEFuzzySW05SmallPublicParameters() {

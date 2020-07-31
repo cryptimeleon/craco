@@ -28,13 +28,13 @@ import java.util.Objects;
 public class ABEKPGPSW06SmallPublicParameters implements PublicParameters {
 
     // in groupG1
-    @Represented(restorer = "G1")
+    @Represented(restorer = "bilinearGroup::getG1")
     private GroupElement g;
     // Attribute in universe T_i in groupG1
-    @Represented(restorer = "foo -> G1")
+    @Represented(restorer = "foo -> bilinearGroup::getG1")
     private Map<Attribute, GroupElement> T;
     // in groupGT
-    @Represented(restorer = "GT")
+    @Represented(restorer = "bilinearGroup::getGT")
     private GroupElement Y;
 
     @Represented
@@ -44,8 +44,7 @@ public class ABEKPGPSW06SmallPublicParameters implements PublicParameters {
     }
 
     public ABEKPGPSW06SmallPublicParameters(Representation repr) {
-        bilinearGroup = (BilinearGroup) repr.obj().get("bilinearGroup").repr().recreateRepresentable();
-        new ReprUtil(this).register(bilinearGroup).deserialize(repr);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override

@@ -23,13 +23,13 @@ public class ABECPWat11PublicParameters implements PublicParameters {
     @Represented
     protected BilinearGroup bilinearGroup;
 
-    @Represented(restorer = "G1")
+    @Represented(restorer = "bilinearGroup::getG1")
     protected GroupElement g; // Generator of G_1
 
-    @Represented(restorer = "GT")
+    @Represented(restorer = "bilinearGroup::getGT")
     protected GroupElement y; // in G_T
 
-    @Represented(restorer = "G1")
+    @Represented(restorer = "bilinearGroup::getG1")
     protected GroupElement gA; // in G_1
 
     @Represented
@@ -45,8 +45,7 @@ public class ABECPWat11PublicParameters implements PublicParameters {
     }
 
     public ABECPWat11PublicParameters(Representation repr) {
-        bilinearGroup = (BilinearGroup) repr.obj().get("bilinearGroup").repr().recreateRepresentable();
-        new ReprUtil(this).register(bilinearGroup).deserialize(repr);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public HashIntoStructure getHashToG1() {

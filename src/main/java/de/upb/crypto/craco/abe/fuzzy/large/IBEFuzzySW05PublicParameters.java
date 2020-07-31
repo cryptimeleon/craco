@@ -36,19 +36,19 @@ public class IBEFuzzySW05PublicParameters implements PublicParameters {
     /**
      * generator g \in G_1
      */
-    @Represented(restorer = "G1")
+    @Represented(restorer = "bilinearGroup::getG1")
     private GroupElement g;
 
     /**
      * generator g1 \in G_1
      */
-    @Represented(restorer = "G1")
+    @Represented(restorer = "bilinearGroup::getG1")
     private GroupElement g1;
 
     /**
      * generator g2 \in G_1
      */
-    @Represented(restorer = "G1")
+    @Represented(restorer = "bilinearGroup::getG1")
     private GroupElement g2;
 
     @Represented
@@ -58,8 +58,7 @@ public class IBEFuzzySW05PublicParameters implements PublicParameters {
     private BilinearGroup bilinearGroup;
 
     public IBEFuzzySW05PublicParameters(Representation repr) {
-        bilinearGroup = (BilinearGroup) repr.obj().get("bilinearGroup").repr().recreateRepresentable();
-        new ReprUtil(this).register(bilinearGroup).deserialize(repr);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public IBEFuzzySW05PublicParameters() {

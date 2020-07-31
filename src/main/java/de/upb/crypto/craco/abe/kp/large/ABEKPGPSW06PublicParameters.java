@@ -22,15 +22,15 @@ import java.util.Objects;
  */
 public class ABEKPGPSW06PublicParameters implements PublicParameters {
 
-    @Represented(restorer = "G1")
+    @Represented(restorer = "bilinearGroup::getG1")
     private GroupElement g1Generator;
 
     // T_i in groupG1
-    @Represented(restorer = "foo -> G1")
+    @Represented(restorer = "foo -> bilinearGroup::getG1")
     private Map<BigInteger, GroupElement> t;
 
     // in groupGT
-    @Represented(restorer = "GT")
+    @Represented(restorer = "bilinearGroup::getGT")
     private GroupElement y;
 
     @Represented
@@ -46,8 +46,7 @@ public class ABEKPGPSW06PublicParameters implements PublicParameters {
     }
 
     public ABEKPGPSW06PublicParameters(Representation repr) {
-        bilinearGroup = (BilinearGroup) repr.obj().get("bilinearGroup").repr().recreateRepresentable();
-        new ReprUtil(this).register(bilinearGroup).deserialize(repr);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override

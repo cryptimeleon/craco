@@ -12,10 +12,10 @@ import java.util.Map;
 
 public class DistributedABECPWat11PublicParameters extends ABECPWat11PublicParameters implements PublicParameters {
 
-    @Represented(restorer = "foo -> G1")
+    @Represented(restorer = "foo -> bilinearGroup::getG1")
     private Map<BigInteger, GroupElement> t;
 
-    @Represented(restorer = "foo -> GT")
+    @Represented(restorer = "foo -> bilinearGroup::getGT")
     private Map<Integer, GroupElement> verificationKeys;
 
     @Represented

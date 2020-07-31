@@ -24,10 +24,10 @@ public class FullIdentPublicParameters implements PublicParameters {
     @Represented
     private BilinearGroup bilinearGroup; // G1 x G1 -> G2
 
-    @Represented(restorer = "G1")
+    @Represented(restorer = "bilinearGroup::getG1")
     private GroupElement p; // Generator of G_1
 
-    @Represented(restorer = "G1")
+    @Represented(restorer = "bilinearGroup::getG1")
     private GroupElement p_pub; // s * p
 
     @Represented
@@ -41,8 +41,7 @@ public class FullIdentPublicParameters implements PublicParameters {
     }
 
     public FullIdentPublicParameters(Representation repr) {
-        bilinearGroup = (BilinearGroup) repr.obj().get("bilinearGroup").repr().recreateRepresentable();
-        new ReprUtil(this).register(bilinearGroup).deserialize(repr);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
