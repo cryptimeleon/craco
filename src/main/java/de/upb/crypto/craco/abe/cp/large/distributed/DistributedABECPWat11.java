@@ -85,7 +85,7 @@ public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncr
 
         result = pp.getE().apply(D_prime_xi, pp.getG());
 
-        result = result.op(pp.getE().apply(pp.getG_a(), D_doublePrime_xi).inv());
+        result = result.op(pp.getE().apply(pp.getgA(), D_doublePrime_xi).inv());
         log.debug("Calculated e(D'_serverID, g)/e(g_a, D''_serverID) = e(g,g)^tmp_server_ID: " + result);
         if (!result.equals(pp.getVerificationKeys().get(xi))) {
             return false;
@@ -202,7 +202,7 @@ public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncr
 
         GroupElement D_prime_xi = pp.getG();
         D_prime_xi = D_prime_xi.pow(masterKeyShare.getShare());
-        D_prime_xi = D_prime_xi.op(pp.getG_a().pow(u_xi));
+        D_prime_xi = D_prime_xi.op(pp.getgA().pow(u_xi));
         log.debug("Calculated D'_serverID := g^tmp_serverID * g_a^u_serverID:" + D_prime_xi);
 
         GroupElement D_two_prime_xi = pp.getG().pow(u_xi);
@@ -258,7 +258,7 @@ public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncr
 
     @Override
     public int getServerCount() {
-        return pp.getL_max();
+        return pp.getlMax();
     }
 
     @Override

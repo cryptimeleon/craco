@@ -70,7 +70,7 @@ public class ABECPWat11KEM extends AbstractABECPWat11 implements PredicateKEM<Ke
 
         MonotoneSpanProgram msp = new MonotoneSpanProgram(pk.getPolicy(), zp);
         Map<Integer, Zp.ZpElement> shares = msp.getShares(s);
-        if (!isMonotoneSpanProgramValid(shares, msp, pp.getL_max()))
+        if (!isMonotoneSpanProgramValid(shares, msp, pp.getlMax()))
             throw new IllegalArgumentException("MSP is invalid");
 
         // second part of the ciphertext of the key, see ABECPWat11

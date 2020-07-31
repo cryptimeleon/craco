@@ -55,12 +55,10 @@ public class DistributedABECPWat11Setup {
         log.debug("Setting up: n:" + n + ", l_max:" + l_max + ", t:" + t + ", L:" + L);
         pp = new DistributedABECPWat11PublicParameters();
         pp.setN(n);
-        pp.setL_max(l_max);
+        pp.setlMax(l_max);
 
-        pp.setGroupG1(group.getG1());
-        pp.setGroupGT(group.getGT());
         pp.setHashToG1(group.getHashIntoG1());
-        pp.setE(group.getBilinearMap());
+        pp.setBilinearGroup(group);
 
         log.debug("Finished creating Pairing...");
         Zp zp = new Zp(pp.getGroupG1().size());
@@ -71,7 +69,7 @@ public class DistributedABECPWat11Setup {
         GroupElement g = pp.getGroupG1().getUniformlyRandomNonNeutral();
         pp.setG(g);
         GroupElement g_a = g.pow(a);
-        pp.setG_a(g_a);
+        pp.setgA(g_a);
 
         log.debug("Found a:" + a);
         log.debug("Found g:" + g);

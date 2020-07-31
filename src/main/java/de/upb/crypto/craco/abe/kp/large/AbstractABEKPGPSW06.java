@@ -73,10 +73,10 @@ public class AbstractABEKPGPSW06 {
             Zp.ZpElement lambda_i = share.getValue();
             GroupElement rho_i_element = (GroupElement) pp.getHashToG1().hashIntoStructure(rho_i);
             // R_i = g^r_i
-            GroupElement R_i = pp.getG1_generator().pow(r_i);
+            GroupElement R_i = pp.getG1Generator().pow(r_i);
             // D_i = g^temp * T (rho_i)^r_i (T is the hash into g1 specified in
             // the setup)
-            GroupElement D_i = pp.getG1_generator().pow(lambda_i).op(rho_i_element.pow(r_i));
+            GroupElement D_i = pp.getG1Generator().pow(lambda_i).op(rho_i_element.pow(r_i));
 
             D.put(i, D_i);
             R.put(i, R_i);
@@ -193,7 +193,7 @@ public class AbstractABEKPGPSW06 {
         // \prod_{i \in \omega} e(R_i^{-w_i}, E_{\rho(i)})
         GroupElement factor1 = nonZeroSVElements.get()
                 // map (i, w_i) -> e(R_i^{-w_i}, E_{\rho(i)})
-                .map(elem -> pp.getE()
+                .map(elem -> pp.getBilinearMap()
                         .apply(
                                 rMap.get(index.apply(elem))
                                         .pow(value.apply(elem)).inv(),
@@ -209,7 +209,7 @@ public class AbstractABEKPGPSW06 {
                 .reduce(pp.getGroupG1().getNeutralElement(), GroupElement::op);
 
         // e( \prod_{i \in \omega} D_i^{- w_i}, E'')
-        GroupElement factor2 = pp.getE().apply(dIProd, ct.getETwoPrime());
+        GroupElement factor2 = pp.getBilinearMap().apply(dIProd, ct.getETwoPrime());
 
         return factor1.op(factor2);
     }

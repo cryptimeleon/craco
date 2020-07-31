@@ -74,17 +74,15 @@ public class ABECPWat11Setup {
         pp = new ABECPWat11PublicParameters();
 
         pp.setN(n);
-        pp.setL_max(lMax);
+        pp.setlMax(lMax);
 
-        pp.setGroupG1(group.getG1());
-        pp.setGroupGT(group.getGT());
         if (!watersHash) {
             pp.setHashToG1(group.getHashIntoG1());
         } else {
             HashIntoStructure hashToGroup = new WatersHash(pp.getGroupG1(), n + lMax);
             pp.setHashToG1(hashToGroup);
         }
-        pp.setE(group.getBilinearMap());
+        pp.setBilinearGroup(group);
 
         Zp zp = new Zp(pp.getGroupG1().size());
 
@@ -94,7 +92,7 @@ public class ABECPWat11Setup {
         pp.setG(pp.getGroupG1().getUniformlyRandomNonNeutral());
         // Y = e(g,g)^y = e(g^y, g)
         pp.setY(pp.getE().apply(pp.getG().pow(y), pp.getG()));
-        pp.setG_a(pp.getG().pow(a));
+        pp.setgA(pp.getG().pow(a));
         msk = new ABECPWat11MasterSecret(pp.getG().pow(y));
     }
 

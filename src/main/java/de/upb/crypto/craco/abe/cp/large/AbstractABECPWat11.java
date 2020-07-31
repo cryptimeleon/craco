@@ -87,7 +87,7 @@ public abstract class AbstractABECPWat11 {
             Zp.ZpElement lambdai = entry.getValue();
 
             // element E_i = g^{a \cdot \lambda_i} \cdot T(\rho(i))^{-s}
-            return (pp.getG_a().pow(lambdai)).op(rhoiElement.pow(s).inv());
+            return (pp.getgA().pow(lambdai)).op(rhoiElement.pow(s).inv());
         };
 
         return shares.entrySet().parallelStream().collect(Collectors.toConcurrentMap(keyMapper, valueMapper));
@@ -217,7 +217,7 @@ public abstract class AbstractABECPWat11 {
         GroupElement gy = ((ABECPWat11MasterSecret) msk).get();
 
         Zp.ZpElement u = zp.getUniformlyRandomUnit();
-        GroupElement dPrime = gy.op(pp.getG_a().pow(u));
+        GroupElement dPrime = gy.op(pp.getgA().pow(u));
         GroupElement dPrime2 = pp.getG().pow(u);
 
         Map<Attribute, GroupElement> d = new HashMap<>();

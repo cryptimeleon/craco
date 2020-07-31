@@ -1,7 +1,6 @@
 package de.upb.crypto.craco.abe.cp.small.asymmetric;
 
 import de.upb.crypto.craco.abe.accessStructure.MonotoneSpanProgram;
-import de.upb.crypto.craco.abe.cp.small.ABECPWat11Small;
 import de.upb.crypto.craco.common.GroupElementPlainText;
 import de.upb.crypto.craco.interfaces.*;
 import de.upb.crypto.craco.interfaces.abe.Attribute;
@@ -233,21 +232,18 @@ public class ABECPWat11AsymSmall implements PredicateEncryptionScheme {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((pp == null) ? 0 : pp.hashCode());
-        result = prime * result + ((zp == null) ? 0 : zp.hashCode());
-        return result;
+        return Objects.hash(zp, pp);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o instanceof ABECPWat11AsymSmall) {
-            ABECPWat11AsymSmall other = (ABECPWat11AsymSmall) o;
-            return pp.equals(other.pp);
-        } else {
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || this.getClass() != obj.getClass())
             return false;
-        }
+        ABECPWat11AsymSmall other = (ABECPWat11AsymSmall) obj;
+        return Objects.equals(pp, other.pp)
+                && Objects.equals(zp, other.zp);
     }
 
     private boolean isMonotoneSpanProgramValid(Map<Integer, ZpElement> shares, MonotoneSpanProgram msp, int l_max) {

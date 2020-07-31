@@ -58,9 +58,7 @@ public class IBEFuzzySW05Setup {
         // Public Parameter stuff
         pp = new IBEFuzzySW05PublicParameters();
 
-        pp.setGroupG1(group.getG1());
-        pp.setGroupGT(group.getGT());
-        pp.setE(group.getBilinearMap());
+        pp.setBilinearGroup(group);
 
         Zp zp = new Zp(pp.getGroupG1().size());
 

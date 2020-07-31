@@ -68,7 +68,7 @@ public class ABEKPGPSW06 extends AbstractABEKPGPSW06 implements PredicateEncrypt
         // E' = m * Y^s \in GT
         GroupElement ePrime = pt.get().op(pp.getY().pow(s));
         // E'' = g^s \in G1
-        GroupElement eTwoPrime = pp.getG1_generator().pow(s);
+        GroupElement eTwoPrime = pp.getG1Generator().pow(s);
         // E_i = T(i)^s i \in omega
         Map<Attribute, GroupElement> eElementMap = restoreE(attributes, s);
 

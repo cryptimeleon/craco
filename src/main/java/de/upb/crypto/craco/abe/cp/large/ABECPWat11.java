@@ -88,7 +88,7 @@ public class ABECPWat11 extends AbstractABECPWat11 implements PredicateEncryptio
         // compute E_i = g^{a \cdot \lambda_i} \cdot T(\rho(i))^{-s} for every attribute i
         MonotoneSpanProgram msp = new MonotoneSpanProgram(pk.getPolicy(), zp);
         Map<Integer, ZpElement> shares = msp.getShares(s);
-        if (!isMonotoneSpanProgramValid(shares, msp, pp.getL_max()))
+        if (!isMonotoneSpanProgramValid(shares, msp, pp.getlMax()))
             throw new IllegalArgumentException("MSP is invalid");
 
         Map<BigInteger, GroupElement> elementE = computeE(s, msp, shares);

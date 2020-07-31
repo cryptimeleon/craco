@@ -54,10 +54,7 @@ public class IBEFuzzySW05SmallSetup {
     public void doKeyGen(BilinearGroup group, Collection<? extends Attribute> universe, BigInteger universeThreshold) {
         // Public Parameter stuff
         pp = new IBEFuzzySW05SmallPublicParameters();
-
-        pp.setGroupG1(group.getG1());
-        pp.setGroupGT(group.getGT());
-        pp.setE(group.getBilinearMap());
+        pp.setBilinearGroup(group);
 
         Zp zp = new Zp(pp.getGroupG1().size());
 

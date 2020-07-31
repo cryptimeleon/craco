@@ -60,7 +60,7 @@ public class ABEKPGPSW06KEM extends AbstractABEKPGPSW06 implements PredicateKEM<
         // s <- Z_p
         Zp.ZpElement s = zp.getUniformlyRandomUnit();
         // E'' = g^s \in G1
-        GroupElement eTwoPrime = pp.getG1_generator().pow(s);
+        GroupElement eTwoPrime = pp.getG1Generator().pow(s);
         // E_i = T(i)^s i \in omega
         Map<Attribute, GroupElement> eElementMap = restoreE(attributes, s);
 

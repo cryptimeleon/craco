@@ -50,9 +50,7 @@ public class ABECPWat11SmallSetup {
         // Public Parameter stuff
         pp = new ABECPWat11SmallPublicParameters();
 
-        pp.setGroupG1(group.getG1());
-        pp.setGroupGT(group.getGT());
-        pp.setE(group.getBilinearMap());
+        pp.setBilinearGroup(group);
         Zp zp = new Zp(pp.getGroupG1().size());
 
         ZpElement y = zp.getUniformlyRandomUnit();
