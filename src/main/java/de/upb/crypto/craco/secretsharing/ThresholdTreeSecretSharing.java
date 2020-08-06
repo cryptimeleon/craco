@@ -13,7 +13,6 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -25,8 +24,6 @@ import java.util.stream.Collectors;
  * both {@link Policy} and {@link PolicyFact}.
  */
 public class ThresholdTreeSecretSharing implements LinearSecretSharing<Policy>, StandaloneRepresentable {
-
-    private static final Logger log = Logger.getLogger(ThresholdTreeSecretSharing.class.getName());
 
     @Represented
     private SecretSharingSchemeProvider lsssInstanceProvider;

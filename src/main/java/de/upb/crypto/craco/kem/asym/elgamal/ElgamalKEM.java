@@ -16,7 +16,6 @@ import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.util.RepresentationUtil;
-import org.apache.log4j.Logger;
 
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
@@ -68,7 +67,6 @@ import java.security.NoSuchAlgorithmException;
 
 
 public class ElgamalKEM implements AsymmetricKEM<SymmetricKey> {
-    private static final Logger LOGGER = Logger.getLogger(ElgamalKEM.class);
 
 
     public class KeyAndCiphertextAndNonce {
@@ -184,7 +182,6 @@ public class ElgamalKEM implements AsymmetricKEM<SymmetricKey> {
          * compute H2(R)
          */
 
-        LOGGER.trace("Binary mapping of R: " + new ByteArrayImplementation(R.getUniqueByteRepresentation()));
 
         ByteArrayImplementation r = new ByteArrayImplementation(md.hash(R));
 
@@ -215,14 +212,6 @@ public class ElgamalKEM implements AsymmetricKEM<SymmetricKey> {
         KeyAndCiphertext<SymmetricKey> result = new KeyAndCiphertext<SymmetricKey>();
         result.encapsulatedKey = C;
         result.key = k;
-
-        LOGGER.trace("Encaps: ");
-        LOGGER.trace("R " + R.toString());
-        LOGGER.trace("r " + r.toString());
-        LOGGER.trace("c3 " + encaps.toString());
-        LOGGER.trace("h " + new ByteArrayImplementation(h).toString());
-        LOGGER.trace("s " + s.toString());
-        LOGGER.trace("k " + k.toString());
 
         return new KeyAndCiphertextAndNonce(result, s);
     }
@@ -284,14 +273,6 @@ public class ElgamalKEM implements AsymmetricKEM<SymmetricKey> {
          */
 
         //return k;
-        LOGGER.trace("Decaps: ");
-        LOGGER.trace("R " + R.toString());
-        LOGGER.trace("r " + r.toString());
-        LOGGER.trace("c3 " + C.getSymmetricEncryption().toString());
-        LOGGER.trace("h " + new ByteArrayImplementation(h).toString());
-        LOGGER.trace("s " + s.toString());
-        LOGGER.trace("k " + k.toString());
-
         if (c_prime.getC2().equals(C.getElgamalCipherText().getC2())) {
             return k;
         } else {

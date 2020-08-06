@@ -8,8 +8,6 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.polynomial.Seed;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -25,8 +23,6 @@ import java.util.Arrays;
  * @author Mirko Jürgens, refactoring: Denis Diemert
  */
 public class KWiseDeltaDependentHashFunction implements HashFunction {
-
-    private static final Logger logger = LogManager.getLogger("KWiseDeltaDependentHashFamilyLogger");
 
     @Represented
     private KWiseDeltaDependentHashFamily kWiseDeltaDependentHashFamily;
@@ -46,9 +42,6 @@ public class KWiseDeltaDependentHashFunction implements HashFunction {
         double logTemp = -k * kWiseDeltaDependentHashFamily.getOutputLength() * 0.5;
 
         double logEpsilon = logDelta + logTemp;
-
-        logger.debug("Setting up internal epsilon distribution with logEpsilon: " + logEpsilon + " sampleLength: "
-                + sampleLength + " seed: " + Arrays.toString(seed.getInternalSeed()));
 
         underlyingDistribution = new EpsilonDistribution(sampleLength, logEpsilon, seed);
     }
@@ -81,9 +74,7 @@ public class KWiseDeltaDependentHashFunction implements HashFunction {
             throw new IllegalArgumentException("Invalid input length:  expected " + kWiseDeltaDependentHashFamily
                     .getInputLength() + " bits!");
         // count the element number
-        logger.info("Hashing: " + Arrays.toString(bytes));
         BigInteger unsigned = BigIntegerUtil.getUnsingendBigInteger(bytes);
-        logger.info("Requesting the:" + unsigned + "th sample from the underlying distribution.");
         BigInteger start = unsigned.multiply(BigInteger.valueOf(kWiseDeltaDependentHashFamily.getInputLength()));
         return underlyingDistribution.calculateSample(start, kWiseDeltaDependentHashFamily.getOutputLength());
     }

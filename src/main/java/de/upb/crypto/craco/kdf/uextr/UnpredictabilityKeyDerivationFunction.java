@@ -9,8 +9,6 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.polynomial.Seed;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,7 +17,6 @@ import java.util.Map;
 
 public class UnpredictabilityKeyDerivationFunction implements KeyDerivationFunction<ByteArrayImplementation> {
 
-    private static final Logger logger = LogManager.getLogger(UnpredictabilityKeyDerivationFamily.class.getName());
 
     @Represented
     private UnpredictabilityKeyDerivationFamily unpredictabilityKeyDerivationFamily;
@@ -30,14 +27,12 @@ public class UnpredictabilityKeyDerivationFunction implements KeyDerivationFunct
     public UnpredictabilityKeyDerivationFunction(
             UnpredictabilityKeyDerivationFamily unpredictabilityKeyDerivationFamily, Seed seed) {
         this.unpredictabilityKeyDerivationFamily = unpredictabilityKeyDerivationFamily;
-        logger.debug("Using the provided seed to seed the HashFamilies");
         if (seed.getBitLength() != unpredictabilityKeyDerivationFamily.seedLength()) {
             throw new IllegalArgumentException("Invalid Seed Length");
         }
         functions = new HashMap<>();
         int startIndex = 0;
         for (KWiseDeltaDependentHashFamily family : unpredictabilityKeyDerivationFamily.getFamilyList()) {
-            logger.debug("Using " + family.seedLength() + " bits to seed family " + family);
             functions.put(unpredictabilityKeyDerivationFamily.getFamilyList().indexOf(family),
                     family.seedFunction(new Seed(seed.getInternalSeed(), startIndex, family.seedLength())));
             startIndex = startIndex + family.seedLength();

@@ -8,15 +8,12 @@ import de.upb.crypto.math.serialization.StandaloneRepresentable;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.polynomial.Seed;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UnpredictabilityKeyDerivationFamily implements StandaloneRepresentable {
 
-    private static final Logger logger = LogManager.getLogger(UnpredictabilityKeyDerivationFamily.class.getName());
 
     @Represented(restorer = "[foo]")
     private ArrayList<KWiseDeltaDependentHashFamily> familyList;
@@ -43,9 +40,6 @@ public class UnpredictabilityKeyDerivationFamily implements StandaloneRepresenta
      *                          key-length (as we have no entropy loss)
      */
     public UnpredictabilityKeyDerivationFamily(int securityParameter, int sourceLength, int outputLength) {
-
-        logger.debug("Setting up a UnpredictabilityKeyDerivationFamily with securityParameter: " + securityParameter
-                + " sourceLength: " + sourceLength + " outputLength: " + outputLength);
         inputLength = sourceLength;
 
         this.minEntropy = outputLength;
@@ -55,39 +49,28 @@ public class UnpredictabilityKeyDerivationFamily implements StandaloneRepresenta
         long nk = inputLength * outputLength;
         double t = Math.log(nk) / Math.log(2) + securityParameter;
 
-        logger.debug("T:" + t);
         familyList = new ArrayList<>();
 
         double logT = Math.log(t) / Math.log(2);
-        logger.debug("LogT:" + logT);
         double logk = Math.log(outputLength) / (Math.log(4) - Math.log(3));
-        logger.debug("logK:" + logk);
         double loglogk = Math.log(logk) / Math.log(2);
-        logger.debug("loglogK:" + loglogk);
         double upper = logT + loglogk + 7;
-        logger.debug("upper:" + upper);
 
         int liSum = 0;
         int li = (int) upper + 1;
         int i = 0;
-        logger.debug("---------------------------");
         while (li >= upper) {
             i++;
             double temp = 1 - (Math.pow(3, i) / Math.pow(4, i));
-            logger.debug("temp:" + temp);
             int threshold = (int) Math.floor((1 - (Math.pow(3, i) / Math.pow(4, i))) * outputLength);
             li = threshold - liSum;
-            logger.debug("l_i:" + li);
             liSum += li;
 
             double qi = 4 * Math.ceil(t / li) + 1;
-            logger.debug("qi:" + qi);
             double logDelta = -18 * outputLength;
-            logger.debug("logDelta:" + logDelta);
 
             KWiseDeltaDependentHashFamily family = new KWiseDeltaDependentHashFamily(qi, logDelta, inputLength, li);
             familyList.add(family);
-            logger.debug("-------------------");
         }
         liSum -= li;
         int lr1 = outputLength - liSum;
