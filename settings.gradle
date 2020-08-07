@@ -37,7 +37,7 @@ if (!Boolean.valueOf(System.getProperty("disablesnapshot"))) {
                             + "Please check it out yourself before building.")
                 }
             } else {
-                println(msgPrefix + libPrefix + ": Branch " + branchThis.getName() + " does not exist locally.")
+                println(msgPrefix + libPrefix + ": Branch '" + branchThis.getName() + "' does not exist locally.")
                 if (grgitLib.branch.list { mode = "REMOTE" }.collect { it.getName() }.contains("origin/" + branchThis.getName())) {
                     if (hasProperty("checkoutIfCloned") && cloned) {
                         println(msgPrefix + libPrefix + ": Branch '" + branchThis.getName() + "' exists but is not checked out. "
