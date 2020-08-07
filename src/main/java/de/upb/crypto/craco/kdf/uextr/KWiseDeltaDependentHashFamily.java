@@ -6,8 +6,6 @@ import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StringRepresentation;
 import de.upb.crypto.math.structures.polynomial.Seed;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * An implementation of a q-wise d-independent hash family described in [1].
@@ -27,8 +25,6 @@ import org.apache.logging.log4j.Logger;
  * @author Mirko Jürgens, refactoring: Denis Diemert
  */
 public class KWiseDeltaDependentHashFamily implements HashFamily {
-
-    private static final Logger logger = LogManager.getLogger("KWiseDeltaDependentHashFamilyLogger");
 
     private int inputLength;
 
@@ -51,8 +47,6 @@ public class KWiseDeltaDependentHashFamily implements HashFamily {
      */
     public KWiseDeltaDependentHashFamily(double k, double logDelta, int inputLength, int outputLength) {
         super();
-        logger.debug("Setting up a KWiseDeltaDependentHashFamily with k: " + k + " logDelta: " + logDelta
-                + " inputLength: " + inputLength + " outputLength: " + outputLength);
         this.inputLength = inputLength;
         this.outputLength = outputLength;
         this.k = k;
@@ -71,7 +65,6 @@ public class KWiseDeltaDependentHashFamily implements HashFamily {
 
         // double spampleSpace = 1 / temp2;
         seedLength = (int) (2 * m);
-        logger.debug("Calculated seed-length of: " + seedLength);
     }
 
     public KWiseDeltaDependentHashFamily(Representation repr) {

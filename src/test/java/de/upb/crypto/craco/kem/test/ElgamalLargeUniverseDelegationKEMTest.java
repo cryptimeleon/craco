@@ -30,7 +30,6 @@ import de.upb.crypto.math.serialization.converter.JSONConverter;
 import de.upb.crypto.math.structures.zn.Zn.ZnElement;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
-import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -46,7 +45,6 @@ import static org.junit.Assert.*;
  * @author peter.guenther
  */
 public class ElgamalLargeUniverseDelegationKEMTest {
-    private static final Logger LOGGER = Logger.getLogger(ElgamalLargeUniverseDelegationKEMTest.class.getName());
 
     /**
      * Instantiate groups based on dummy pairing groups (Zn+) or on real pairing groups (BN curves).
@@ -440,8 +438,6 @@ public class ElgamalLargeUniverseDelegationKEMTest {
 
         Policy policy = setupPolicy();
 
-        LOGGER.info("Setup encryption key for policy " + policy);
-
         System.out.println("Setup encryption key for policy " + policy);
 
 
@@ -576,10 +572,6 @@ public class ElgamalLargeUniverseDelegationKEMTest {
         GroupElement b = pairing.apply(scheme.getPublicParameters().v1, sum);
         GroupElement c = pairing.apply(scheme.getPublicParameters().w1, ct.c0);
         GroupElement d = b.op(c);
-        LOGGER.debug("B: " + b);
-        LOGGER.debug("C: " + c);
-        LOGGER.debug("D: " + d);
-        LOGGER.debug("pairingProduct: " + pairingProduct);
         assertEquals(pairingProduct, d);
     }
 
