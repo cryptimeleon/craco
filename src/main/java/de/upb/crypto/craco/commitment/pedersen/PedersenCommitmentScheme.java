@@ -75,11 +75,7 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
         Zp.ZpElement r = generateR(pp.getP());
 
         // Compute c
-        GroupElement g = pp.getG();
-        GroupElementExpression c = new GroupPowExpr(
-                g.expr(),
-                r.asExponentExpression()
-        );
+        GroupElement c = pp.getG().pow(r);
 
         // Prepare the messages for committing
         Zp.ZpElement[] messagesInZp = new Zp.ZpElement[messageBlock.size()];
@@ -102,11 +98,11 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
         for (int i = 0; i < messagesInZp.length; i++) {
             mi = messagesInZp[i];
             hi = pp.getH()[i];
-            c = c.opPow(hi.expr(), mi);
+            c = c.op(hi.pow(mi));
         }
         // Construct the commitment object
         PedersenOpenValue openValue = new PedersenOpenValue(messagesInZp, r);
-        PedersenCommitmentValue com = new PedersenCommitmentValue(c.evaluate());
+        PedersenCommitmentValue com = new PedersenCommitmentValue(c);
         return new PedersenCommitmentPair(com, openValue);
     }
 
@@ -121,20 +117,16 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
      */
     private Zp.ZpElement[] open(PedersenCommitmentValue pedersenCommitmentValue, PedersenOpenValue pedersenOpenValue) {
         Zp.ZpElement[] messages = pedersenOpenValue.getMessages();
-        GroupElement g = pp.getG();
-        GroupElementExpression result = new GroupPowExpr(
-                g.expr(),
-                pedersenOpenValue.getRandomValue().asExponentExpression()
-        );
+        GroupElement result = pp.getG().pow(pedersenOpenValue.getRandomValue());
         Zp.ZpElement mi;
         GroupElement hi;
         for (int i = 0; i < messages.length; i++) {
             mi = messages[i];
             hi = pp.getH()[i];
-            result = result.opPow(hi.expr(), mi);
+            result = result.op(hi.pow(mi));
         }
         GroupElement c = pedersenCommitmentValue.getCommitmentElement();
-        return c.equals(result.evaluate()) ? pedersenOpenValue.getMessages() : null;
+        return c.equals(result) ? pedersenOpenValue.getMessages() : null;
     }
 
     /**

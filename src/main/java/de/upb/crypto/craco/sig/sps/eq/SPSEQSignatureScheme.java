@@ -207,9 +207,9 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
         ZpElement psiInv = psi.inv();
 
         SPSEQSignature sigma = (SPSEQSignature) signature;
-        GroupElement sigmaZ = sigma.getGroup1ElementSigma1Z().expr().pow(psi.mul(mu)).evaluate();
-        GroupElement sigmaY = sigma.getGroup1ElementSigma2Y().expr().pow(psiInv).evaluate();
-        GroupElement sigmaHatY = sigma.getGroup1ElementSigma3HatY().expr().pow(psiInv).evaluate();
+        GroupElement sigmaZ = sigma.getGroup1ElementSigma1Z().pow(psi.mul(mu));
+        GroupElement sigmaY = sigma.getGroup1ElementSigma2Y().pow(psiInv);
+        GroupElement sigmaHatY = sigma.getGroup1ElementSigma3HatY().pow(psiInv);
 
         return new SPSEQSignature(sigmaZ, sigmaY, sigmaHatY);
     }

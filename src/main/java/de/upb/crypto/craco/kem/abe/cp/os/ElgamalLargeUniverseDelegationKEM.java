@@ -164,34 +164,16 @@ public class ElgamalLargeUniverseDelegationKEM
     @Override
     public ByteArrayImplementation decaps(CipherText encapsulatedKey, DecryptionKey sk) throws UnqualifiedKeyException {
 
-        /*generic implementation. Not efficient but adds maybe some SCA resistance*/
-//		TransformationAndDecryptionKey tkdk = this.generateTransformationKey(sk);
-//		CipherText ctTransformed = this.transform(encapsulatedKey, tkdk.transformationKey);
-//		return this.getSchemeForTransformedCiphertexts().decaps(ctTransformed, tkdk.decryptionKey);
-
-
-        /*generate dummy transformation key with secret exponent 1*/
+        // generic implementation. Not efficient but adds maybe some SCA resistance
+        // generate dummy transformation key with secret exponent 1
         TransformationAndDecryptionKey tkAndDk = this.generateTransformationKey(sk, BigInteger.ONE);
-        //To generate test data of decaps, use this:
-        //TransformationAndDecryptionKey tkAndDk = this.generateTransformationKey(sk, BigInteger.valueOf(23));
+        // To generate test data of decaps, use this:
+        // TransformationAndDecryptionKey tkAndDk = this.generateTransformationKey(sk, BigInteger.valueOf(23));
         CipherText ctTransformed = this.transform(encapsulatedKey, tkAndDk.transformationKey);
         /*
          * construct elgamal key for generator e(g1,g2)^alpha and secret key 1
          */
-
-//		ElgamalPrivateKey egsk = new ElgamalPrivateKey(
-//				getPublicParameters().getPairingParameters().getGT(), 
-//				getPublicParameters().getElgamalEncryptionKey().getH(), 
-//				new Zp(getPublicParameters().getGroupSize()).getOneElement());
         return this.getSchemeForTransformedCiphertexts().decaps(ctTransformed, tkAndDk.decryptionKey);
-
-
-//		System.out.println((new JSONConverter()).serialize(ctTransformed.getRepresentation()));
-//		System.out.println(((ElgamalKEMCiphertext) ctTransformed).getSymmetricEncryption());
-//		String s: 
-//		for(byte b : ((ElgamalKEMCiphertext) ctTransformed).getSymmetricEncryption().getData()){
-//			}
-
     }
 
 
@@ -223,23 +205,17 @@ public class ElgamalLargeUniverseDelegationKEM
             throw new UnqualifiedKeyException(
                     "The given transformation key does not satisfy the ciphertext's policy");
 
-        //List<GroupElement> zList = new ArrayList<GroupElement>();
         Map<Integer, ZpElement> solvingVector = msp.getSolvingVector(attributes);
 
 
         /*store pairing product to do batch processing*/
-        // PairingProductExpression expr = pairing.pairingProductExpression();
 
         /*
-         * e(K0,C0)^1
+         * e(K0,C0)
          */
-        // expr.op(tk.k0, ct.c0);
 
-        GroupElementExpression expr = new PairingExpr(
-                pairing,
-                tk.k0.expr(),
-                ct.c0.expr()
-        );
+        GroupElement bPrime = pairing.apply(tk.k0, ct.c0);
+
 
         /*
          * compute product over \prod e(K1,C_i,1)^bi as sum e(K1,\sum C_i,1)^bi
@@ -272,55 +248,23 @@ public class ElgamalLargeUniverseDelegationKEM
              *
              * bi is typically small, hence we prefer to use bilinearity to pull sign into first argument
              */
-            expr = expr.opPow(
-                    new PairingExpr(
-                            pairing,
-                            tk.ki_map.get(rho_i)[0].inv().expr(),
-                            ct.abeComponents.get(i)[1].expr()
-                    ),
-                    b_i
-            );
-            //expr.op(tk.ki_map.get(rho_i)[0].inv(), ct.abeComponents.get(i)[1], b_i);
+            bPrime = bPrime.op(pairing.apply(tk.ki_map.get(rho_i)[0].inv(), ct.abeComponents.get(i)[1]).pow(b_i));
 
             /*
              * e(K_rho(i),3  ; C_i,3)^-bi=e(-K_rho(i),3  ; C_i,3)^bi
              */
-            expr = expr.opPow(
-                    new PairingExpr(
-                            pairing,
-                            tk.ki_map.get(rho_i)[1].inv().expr(),
-                            ct.abeComponents.get(i)[2].expr()
-                    ),
-                    b_i
-            );
-            // expr.op(tk.ki_map.get(rho_i)[1].inv(), ct.abeComponents.get(i)[2], b_i);
+            bPrime = bPrime.op(pairing.apply(tk.ki_map.get(rho_i)[1].inv(), ct.abeComponents.get(i)[2]).pow(b_i));
 
-
-//			assertEquals(pairing.apply(tk.k1,ct.abeKomponents.get(i)[0]),
-//						pairing.apply(, u).op(pairing.apply(t, u))
-//					);
         }
 
 
         /*
          * e(K1,\sum C_i,1)^-bi
          */
-        expr = expr.op(
-                new PairingExpr(
-                        pairing,
-                        tk.k1.inv().expr(),
-                        ci1Sum.expr()
-                )
-        );
-        //expr.op(tk.k1.inv(), ci1Sum);
-
-        GroupElement b = expr.evaluate();
-
-        //	assertEquals(b,this.getPublicParameters().getElgamalEncryptionKey().getH());
-        //	System.out.println("B=" + b);
+        bPrime = bPrime.op(pairing.apply(tk.k1.inv(), ci1Sum));
 
         return new ElgamalKEMCiphertext(
-                new ElgamalCipherText(b, ct.c),
+                new ElgamalCipherText(bPrime, ct.c),
                 ct.encaps
         );
     }
