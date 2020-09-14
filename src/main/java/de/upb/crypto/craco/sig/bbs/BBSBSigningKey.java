@@ -15,7 +15,7 @@ import java.util.Arrays;
  */
 public class BBSBSigningKey implements SigningKey {
     private ZpElement exponentGamma; // gamma in the paper
-    private ZpElement ziExponents[]; // g_1^{z_i} = h_i
+    private ZpElement[] ziExponents; // g_1^{z_i} = h_i
 
     /**
      * Standard constructor

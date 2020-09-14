@@ -29,9 +29,6 @@ public class PSSignature implements Signature {
     @Represented(restorer = "G1")
     protected GroupElement group1ElementSigma2;
 
-    // pointer field used to store the structure for the representation process; in all other cases this should be null
-    protected Group groupG1 = null;
-
     public PSSignature(Representation repr, Group groupG1) {
         new ReprUtil(this).register(groupG1, "G1").deserialize(repr);
     }
@@ -79,7 +76,6 @@ public class PSSignature implements Signature {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(group1ElementSigma1, group1ElementSigma2);
     }
 }

@@ -15,6 +15,7 @@ import de.upb.crypto.math.structures.cartesian.RingElementVector;
 import de.upb.crypto.math.structures.zn.Zp;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class PS18SignatureScheme implements SignatureScheme {
@@ -299,10 +300,7 @@ public class PS18SignatureScheme implements SignatureScheme {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((pp == null) ? 0 : pp.hashCode());
-        return result;
+        return pp.hashCode();
     }
 
     @Override
@@ -314,8 +312,6 @@ public class PS18SignatureScheme implements SignatureScheme {
         if (getClass() != obj.getClass())
             return false;
         PS18SignatureScheme other = (PS18SignatureScheme) obj;
-        if (pp == null) {
-            return other.pp == null;
-        } else return pp.equals(other.pp);
+        return Objects.equals(pp, other.pp);
     }
 }
