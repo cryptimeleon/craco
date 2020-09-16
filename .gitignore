@@ -4,3 +4,4 @@ build/**
 .idea/**
 .composite-enable
 .DS_Store
+gradle.properties
