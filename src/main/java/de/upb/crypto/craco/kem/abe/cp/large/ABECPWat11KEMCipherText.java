@@ -11,6 +11,7 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
 import java.util.Map;
+import java.util.Objects;
 
 public class ABECPWat11KEMCipherText implements CipherText, Representable {
 
@@ -67,22 +68,9 @@ public class ABECPWat11KEMCipherText implements CipherText, Representable {
         if (getClass() != obj.getClass())
             return false;
         ABECPWat11KEMCipherText other = (ABECPWat11KEMCipherText) obj;
-        if (eElementMap == null) {
-            if (other.eElementMap != null)
-                return false;
-        } else if (!eElementMap.equals(other.eElementMap))
-            return false;
-        if (eTwoPrime == null) {
-            if (other.eTwoPrime != null)
-                return false;
-        } else if (!eTwoPrime.equals(other.eTwoPrime))
-            return false;
-        if (policy == null) {
-            if (other.policy != null)
-                return false;
-        } else if (!policy.equals(other.policy))
-            return false;
-        return true;
+        return Objects.equals(eElementMap, other.eElementMap)
+                && Objects.equals(eTwoPrime, other.eTwoPrime)
+                && Objects.equals(policy, other.policy);
     }
 
     @Override

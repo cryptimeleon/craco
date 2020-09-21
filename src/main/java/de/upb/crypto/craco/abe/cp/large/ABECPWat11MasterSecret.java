@@ -7,6 +7,8 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
+import java.util.Objects;
+
 /**
  * The MasterSecret for the {@link ABECPWat11} generated in the
  * {@link ABECPWat11Setup}
@@ -18,15 +20,11 @@ public class ABECPWat11MasterSecret implements MasterSecret {
     @Represented(restorer = "G1")
     private GroupElement g_y; // in G_1
 
-    @SuppressWarnings("unused")
-    private Group groupG1;
-
     public ABECPWat11MasterSecret(GroupElement g_y) {
         this.g_y = g_y;
     }
 
     public ABECPWat11MasterSecret(Group groupG1, Representation repr) {
-        this.groupG1 = groupG1;
         new ReprUtil(this).register(groupG1, "G1").deserialize(repr);
     }
 
@@ -56,11 +54,6 @@ public class ABECPWat11MasterSecret implements MasterSecret {
         if (getClass() != obj.getClass())
             return false;
         ABECPWat11MasterSecret other = (ABECPWat11MasterSecret) obj;
-        if (g_y == null) {
-            if (other.g_y != null)
-                return false;
-        } else if (!g_y.equals(other.g_y))
-            return false;
-        return true;
+        return Objects.equals(g_y, other.g_y);
     }
 }

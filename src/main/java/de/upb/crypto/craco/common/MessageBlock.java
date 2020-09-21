@@ -187,12 +187,7 @@ public class MessageBlock implements PlainText, List<PlainText> {
         if (getClass() != obj.getClass())
             return false;
         MessageBlock other = (MessageBlock) obj;
-        if (messages == null) {
-            if (other.messages != null)
-                return false;
-        } else if (!messages.equals(other.messages))
-            return false;
-        return true;
+        return Objects.equals(messages, other.messages);
     }
 
     @Override

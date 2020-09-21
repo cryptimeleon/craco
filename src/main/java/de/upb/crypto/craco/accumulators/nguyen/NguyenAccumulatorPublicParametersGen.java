@@ -56,15 +56,15 @@ public class NguyenAccumulatorPublicParametersGen implements AccumulatorPublicPa
         BigInteger p = G3.size();
 
         // Generate public parameter
-        GroupElement g = bilinearGroup.getG1().getUniformlyRandomNonNeutral();
-        GroupElement g_Tilde = bilinearGroup.getG2().getUniformlyRandomNonNeutral();
+        GroupElement g = bilinearGroup.getG1().getUniformlyRandomNonNeutral().compute();
+        GroupElement g_Tilde = bilinearGroup.getG2().getUniformlyRandomNonNeutral().compute();
         Zp zp = new Zp(p);
         Zp.ZpElement s = zp.getUniformlyRandomElement();
-        GroupElement g_Tilde_Power_S = g_Tilde.pow(s);
+        GroupElement g_Tilde_Power_S = g_Tilde.pow(s).compute();
 
         GroupElement[] t = new GroupElement[size + 1];
         for (int i = 0; i < t.length; i++) {
-            t[i] = g.pow(s.pow(BigInteger.valueOf(i)));
+            t[i] = g.pow(s.pow(BigInteger.valueOf(i))).compute();
         }
         List<NguyenAccumulatorIdentity> universe = Arrays.asList(new NguyenAccumulatorIdentity(zp
                 .getUniformlyRandomElement()));
@@ -85,7 +85,6 @@ public class NguyenAccumulatorPublicParametersGen implements AccumulatorPublicPa
         BilinearGroupFactory facfac = new BilinearGroupFactory(securityParameter);
         facfac.setRequirements(BilinearGroup.Type.TYPE_3);
         facfac.setDebugMode(debugMode);
-        BilinearGroup group = facfac.createBilinearGroup();
-        return group;
+        return facfac.createBilinearGroup();
     }
 }

@@ -13,6 +13,8 @@ import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
 import de.upb.crypto.math.serialization.ByteArrayRepresentation;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Arrays;
 
@@ -25,6 +27,7 @@ import java.util.Arrays;
 public class ByteArrayImplementation implements PlainText, CipherText, DecryptionKey, EncryptionKey, SymmetricKey,
         KeyIndex, CiphertextIndex, PrfKey, PrfPreimage, PrfImage, UniqueByteRepresentable {
 
+    @Represented
     private byte[] data;
 
     public ByteArrayImplementation(byte[] bytes) {
@@ -32,8 +35,7 @@ public class ByteArrayImplementation implements PlainText, CipherText, Decryptio
     }
 
     public ByteArrayImplementation(Representation repr) {
-        byte[] representatedBytes = repr.obj().get("data").bytes().get();
-        this.data = representatedBytes;
+        new ReprUtil(this).deserialize(repr);
     }
 
     /**
@@ -82,8 +84,8 @@ public class ByteArrayImplementation implements PlainText, CipherText, Decryptio
      * @return
      */
     public ByteArrayImplementation xor(ByteArrayImplementation a) {
-        int min = this.length() < a.length() ? this.length() : a.length();
-        int max = this.length() > a.length() ? this.length() : a.length();
+        int min = Math.min(this.length(), a.length());
+        int max = Math.max(this.length(), a.length());
 
         byte[] result = new byte[max];
         for (int i = 0; i < min; i++) {
@@ -94,9 +96,7 @@ public class ByteArrayImplementation implements PlainText, CipherText, Decryptio
 
     @Override
     public Representation getRepresentation() {
-        ObjectRepresentation toReturn = new ObjectRepresentation();
-        toReturn.put("data", new ByteArrayRepresentation(data));
-        return toReturn;
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -116,9 +116,7 @@ public class ByteArrayImplementation implements PlainText, CipherText, Decryptio
         if (getClass() != obj.getClass())
             return false;
         ByteArrayImplementation other = (ByteArrayImplementation) obj;
-        if (!Arrays.equals(data, other.data))
-            return false;
-        return true;
+        return Arrays.equals(data, other.data);
     }
 
     @Override
@@ -138,5 +136,4 @@ public class ByteArrayImplementation implements PlainText, CipherText, Decryptio
         accumulator.escapeAndAppend(data);
         return accumulator;
     }
-
 }

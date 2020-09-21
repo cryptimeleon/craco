@@ -68,13 +68,13 @@ public class IBEFuzzySW05Setup {
 
         pp.setIdentityThresholdD(universeThreshold);
         // g in G_1
-        pp.setG(pp.getGroupG1().getUniformlyRandomNonNeutral());
+        pp.setG(pp.getGroupG1().getUniformlyRandomNonNeutral().compute());
 
         // g1 = g^y
-        pp.setG1(pp.getG().pow(y));
+        pp.setG1(pp.getG().pow(y).compute());
 
         // g2 in G1
-        pp.setG2(pp.getGroupG1().getUniformlyRandomNonNeutral());
+        pp.setG2(pp.getGroupG1().getUniformlyRandomNonNeutral().compute());
 
         if (!watersHash) {
             pp.setHashToG1(group.getHashIntoG1());
@@ -94,5 +94,4 @@ public class IBEFuzzySW05Setup {
     public IBEFuzzySW05MasterSecret getMasterSecret() {
         return msk;
     }
-
 }

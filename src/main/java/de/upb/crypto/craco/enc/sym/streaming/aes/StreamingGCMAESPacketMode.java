@@ -6,6 +6,7 @@ import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
 import de.upb.crypto.math.serialization.BigIntegerRepresentation;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -59,7 +60,7 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
     private final byte[] initialVector = new byte[initialVectorLength / 8];
 
     private final String transformation = "AES/GCM/PKCS5Padding";
-
+    
     private final int packetSize;
 
     public StreamingGCMAESPacketMode(Representation repr) {

@@ -7,6 +7,8 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
+import java.util.Objects;
+
 /**
  * The master secret for the {@link ABECPWat11Small} generated in the
  * {@link ABECPWat11SmallSetup}.
@@ -54,11 +56,6 @@ public class ABECPWat11SmallMasterSecret implements MasterSecret {
         if (getClass() != obj.getClass())
             return false;
         ABECPWat11SmallMasterSecret other = (ABECPWat11SmallMasterSecret) obj;
-        if (gAlpha == null) {
-            if (other.gAlpha != null)
-                return false;
-        } else if (!gAlpha.equals(other.gAlpha))
-            return false;
-        return true;
+        return Objects.equals(gAlpha, other.gAlpha);
     }
 }

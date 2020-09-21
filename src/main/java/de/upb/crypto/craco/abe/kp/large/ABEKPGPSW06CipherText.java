@@ -10,6 +10,7 @@ import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A {@link CipherText} for the {@link ABEKPGPSW06}.
@@ -40,11 +41,12 @@ public class ABEKPGPSW06CipherText extends ABEKPGPSW06KEMCipherText {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof ABEKPGPSW06CipherText)) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
             return false;
-        }
         ABEKPGPSW06CipherText other = (ABEKPGPSW06CipherText) o;
-        return super.equals(other) && ePrime.equals(other.ePrime);
+        return super.equals(other) && Objects.equals(ePrime, other.ePrime);
     }
 
     @Override
@@ -54,5 +56,4 @@ public class ABEKPGPSW06CipherText extends ABEKPGPSW06KEMCipherText {
         result = prime * result + ((ePrime == null) ? 0 : ePrime.hashCode());
         return result;
     }
-
 }

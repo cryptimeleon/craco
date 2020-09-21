@@ -96,7 +96,7 @@ public class AbstractIBEFuzzySW05 {
                             GroupElement hashedi = (GroupElement) pp.getHashToG1()
                                     .hashIntoStructure((i.subtract(BigInteger.ONE))
                                             .toString(10));
-                            return hashedi.pow(s);
+                            return hashedi.pow(s).compute();
                         }
                 ));
     }
@@ -162,7 +162,7 @@ public class AbstractIBEFuzzySW05 {
         GroupElement denominator = pp.getE().apply(dProduct, ct.getETwoPrime());
 
         // compute (numerator / denominator)^{-1} to be consistent with the other KEM's
-        return denominator.op(numerator.inv());
+        return denominator.op(numerator.inv()).compute();
     }
 
     /*
@@ -226,8 +226,8 @@ public class AbstractIBEFuzzySW05 {
             // D_i = g_2^q(i) * T(i-1)^r
             GroupElement dElement = pp.getG2().pow(q.evaluate(i.getAttribute())).op(temp.pow(r));
 
-            rMap.put(i.getAttribute(), rElement);
-            dMap.put(i.getAttribute(), dElement);
+            rMap.put(i.getAttribute(), rElement.compute());
+            dMap.put(i.getAttribute(), dElement.compute());
         }
         return new IBEFuzzySW05DecryptionKey(dMap, rMap, omega);
     }

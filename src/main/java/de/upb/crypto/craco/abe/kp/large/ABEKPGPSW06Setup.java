@@ -71,10 +71,10 @@ public class ABEKPGPSW06Setup {
         ZpElement y = zp.getUniformlyRandomUnit();
 
         // g_1 <- G_1 \setminus {1}
-        pp.setG1Generator(pp.getGroupG1().getUniformlyRandomNonNeutral());
+        pp.setG1Generator(pp.getGroupG1().getUniformlyRandomNonNeutral().compute());
 
         // Y = e(g,g)^y = e(g^y, g)
-        pp.setY(pp.getBilinearMap().apply(pp.getG1Generator().pow(y), pp.getG1Generator()));
+        pp.setY(pp.getBilinearMap().apply(pp.getG1Generator().pow(y).compute(), pp.getG1Generator()));
 
         msk = new ABEKPGPSW06MasterSecret(y);
 
@@ -82,7 +82,7 @@ public class ABEKPGPSW06Setup {
         Map<BigInteger, GroupElement> T = new HashMap<>();
 
         for (int i = 0; i < n + 1; i++) {
-            T.put(BigInteger.valueOf(i), pp.getG1Generator().pow(zp.getUniformlyRandomUnit()));
+            T.put(BigInteger.valueOf(i), pp.getG1Generator().pow(zp.getUniformlyRandomUnit()).compute());
         }
         pp.setT(T);
     }

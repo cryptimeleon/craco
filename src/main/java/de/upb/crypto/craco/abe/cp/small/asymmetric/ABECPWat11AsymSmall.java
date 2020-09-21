@@ -63,9 +63,9 @@ public class ABECPWat11AsymSmall implements PredicateEncryptionScheme {
 
         GroupElement encryptionFactor = pp.getEGgAlpha().pow(s);
         // C = M \cdot e(g_1, g_2)^{\alpha s}
-        GroupElement c = pt.get().op(encryptionFactor);
+        GroupElement c = pt.get().op(encryptionFactor).compute();
         // C' = g_2^s
-        GroupElement cPrime = pp.getG2().pow(s);
+        GroupElement cPrime = pp.getG2().pow(s).compute();
 
         // compute E_i = g^{a \cdot \lambda_i} \cdot T(\rho(i))^{-s} for every attribute i
         MonotoneSpanProgram msp = new MonotoneSpanProgram(pk.getPolicy(), zp);
@@ -85,9 +85,9 @@ public class ABECPWat11AsymSmall implements PredicateEncryptionScheme {
             ZpElement lambdaI = share.getValue();
             ZpElement rI = zp.getUniformlyRandomUnit();
             // C_i = (g_1^a)^lambda_i * attr_{rho_i}^{-r_i}
-            GroupElement cElementI = pp.getGA().pow(lambdaI).op(pp.getAttrs().get(rhoI).pow(rI).inv());
+            GroupElement cElementI = pp.getGA().pow(lambdaI).op(pp.getAttrs().get(rhoI).pow(rI).inv()).compute();
             // D_i = g_2^r_1
-            GroupElement dElementI = pp.getG2().pow(rI);
+            GroupElement dElementI = pp.getG2().pow(rI).compute();
 
             mapC.put(i, cElementI);
             mapD.put(i, dElementI);
@@ -139,7 +139,6 @@ public class ABECPWat11AsymSmall implements PredicateEncryptionScheme {
                 zList.add(map1);
             }
         }
-        // TODO: Use multiexponentiation here
         Optional<GroupElement> reduced = zList.stream().parallel().reduce(GroupElement::op);
         GroupElement tmp = pp.getE().getGT().getNeutralElement();
         if (reduced.isPresent()) {
@@ -148,7 +147,7 @@ public class ABECPWat11AsymSmall implements PredicateEncryptionScheme {
 
         GroupElement map = pp.getE().apply(sk.getK(), c.getCPrime());
         map = map.op(tmp.inv());
-        return new GroupElementPlainText(message.op(map.inv()));
+        return new GroupElementPlainText(message.op(map.inv()).compute());
 
     }
 
@@ -191,15 +190,15 @@ public class ABECPWat11AsymSmall implements PredicateEncryptionScheme {
 
         Zp.ZpElement t = zp.getUniformlyRandomUnit();
         // K = gAlpha * (g1^{at})
-        GroupElement k = gAlpha.op(pp.getGA().pow(t));
+        GroupElement k = gAlpha.op(pp.getGA().pow(t)).compute();
         // L = g2^t
-        GroupElement l = pp.getG2().pow(t);
+        GroupElement l = pp.getG2().pow(t).compute();
 
         Map<Attribute, GroupElement> mapKx = new HashMap<>();
         // \forall x in attributes : Kx = h_x^t
         for (Attribute x : attributes) {
             GroupElement kx = pp.getAttrs().get(x).pow(t);
-            mapKx.put(x, kx);
+            mapKx.put(x, kx.compute());
         }
         return new ABECPWat11AsymSmallDecryptionKey(k, l, mapKx);
     }

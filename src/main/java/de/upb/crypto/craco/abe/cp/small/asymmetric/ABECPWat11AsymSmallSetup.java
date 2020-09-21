@@ -57,23 +57,23 @@ public class ABECPWat11AsymSmallSetup {
         ZpElement a = zp.getUniformlyRandomUnit();
 
         // generator g1 in G_1
-        pp.setG1(pp.getGroupG1().getUniformlyRandomNonNeutral());
+        pp.setG1(pp.getGroupG1().getUniformlyRandomNonNeutral().compute());
         // generator g2 in G_2
-        pp.setG2(pp.getGroupG2().getUniformlyRandomNonNeutral());
+        pp.setG2(pp.getGroupG2().getUniformlyRandomNonNeutral().compute());
         // g_1^alpha for master secret key
         GroupElement g1Alpha = pp.getG1().pow(alpha);
         // eGgAlpha = e(g_1, g_2)^alpha = e(g_1^alpha, g_2)
-        pp.setEGgAlpha(pp.getE().apply(g1Alpha, pp.getG2()));
+        pp.setEGgAlpha(pp.getE().apply(g1Alpha, pp.getG2()).compute());
         // gA = g_1^a
-        pp.setGA(pp.getG1().pow(a));
+        pp.setGA(pp.getG1().pow(a).compute());
 
         // msk = g^y
-        msk = new ABECPWat11AsymSmallMasterSecret(g1Alpha);
+        msk = new ABECPWat11AsymSmallMasterSecret(g1Alpha.compute());
 
         Map<Attribute, GroupElement> attrs = new HashMap<>();
         // \for all x in univese T_x = RandomNonNeutral in G1
         for (Attribute attribute : universe) {
-            attrs.put(attribute, pp.getGroupG1().getUniformlyRandomNonNeutral());
+            attrs.put(attribute, pp.getGroupG1().getUniformlyRandomNonNeutral().compute());
         }
         pp.setAttrs(attrs);
     }

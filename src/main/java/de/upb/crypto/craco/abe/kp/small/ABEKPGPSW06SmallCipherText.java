@@ -7,9 +7,12 @@ import de.upb.crypto.math.serialization.MapRepresentation;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A {@link CipherText} for the {@link ABEKPGPSW06Small}.
@@ -19,8 +22,10 @@ import java.util.Map;
 public class ABEKPGPSW06SmallCipherText implements CipherText {
 
     //E_prime := m * Y^s \in G_T
+    @Represented(restorer = "GT")
     private GroupElement E_prime;
     //E_i := T_i^s , i \in attributes, T_i \in G1
+    @Represented(restorer = "attr -> G1")
     private Map<Attribute, GroupElement> E;
 
     public ABEKPGPSW06SmallCipherText(GroupElement E_prime, Map<Attribute, GroupElement> E) {
@@ -28,22 +33,14 @@ public class ABEKPGPSW06SmallCipherText implements CipherText {
         this.E = E;
     }
 
-    public ABEKPGPSW06SmallCipherText(Representation representation, ABEKPGPSW06SmallPublicParameters kpp) {
-        E = new HashMap<Attribute, GroupElement>();
-        representation.obj().get("E").map().forEach(entry -> E
-                .put((Attribute) entry.getKey().repr().recreateRepresentable(), kpp.getGroupG1()
-                        .getElement(entry.getValue())));
-        E_prime = kpp.getGroupGT().getElement(representation.obj().get("E_prime"));
+    public ABEKPGPSW06SmallCipherText(Representation repr, ABEKPGPSW06SmallPublicParameters kpp) {
+        new ReprUtil(this).register(kpp.getGroupGT(), "GT").register(kpp.getGroupG1(), "G1")
+                .deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        ObjectRepresentation repr = new ObjectRepresentation();
-        MapRepresentation map = new MapRepresentation();
-        E.forEach((a, g) -> map.put(new RepresentableRepresentation(a), g.getRepresentation()));
-        repr.put("E", map);
-        repr.put("E_prime", E_prime.getRepresentation());
-        return repr;
+        return ReprUtil.serialize(this);
     }
 
     public GroupElement getE_prime() {
@@ -72,17 +69,8 @@ public class ABEKPGPSW06SmallCipherText implements CipherText {
         if (getClass() != obj.getClass())
             return false;
         ABEKPGPSW06SmallCipherText other = (ABEKPGPSW06SmallCipherText) obj;
-        if (E == null) {
-            if (other.E != null)
-                return false;
-        } else if (!E.equals(other.E))
-            return false;
-        if (E_prime == null) {
-            if (other.E_prime != null)
-                return false;
-        } else if (!E_prime.equals(other.E_prime))
-            return false;
-        return true;
+        return Objects.equals(E, other.E)
+                && Objects.equals(E_prime, other.E_prime);
     }
 
 }

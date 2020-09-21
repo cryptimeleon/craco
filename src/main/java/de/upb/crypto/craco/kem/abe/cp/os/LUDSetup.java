@@ -66,7 +66,7 @@ public class LUDSetup {
 
         GroupElement ht = gt.pow(alpha);
 
-        ElgamalPublicKey egpk = new ElgamalPublicKey(pp.getGT(), gt, ht);
+        ElgamalPublicKey egpk = new ElgamalPublicKey(gt, ht);
 
         LUDPublicParameters pub = new LUDPublicParameters(elgamalKEM, pp, egpk,
                 g1, g2, u1, u2, h1, h2, v1, v2, w1, w2);

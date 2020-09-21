@@ -50,9 +50,9 @@ public class FullIdentSetup {
         // s <- Zp*
         ZpElement s = zp.getUniformlyRandomUnit();
         // P is a generator in G1
-        pp.setP(pp.getGroupG1().getUniformlyRandomNonNeutral());
+        pp.setP(pp.getGroupG1().getUniformlyRandomNonNeutral().compute());
         // P_pub = P^s
-        pp.setP_pub(pp.getP().pow(s));
+        pp.setP_pub(pp.getP().pow(s).compute());
         msk = new FullIdentMasterSecret(s);
     }
 

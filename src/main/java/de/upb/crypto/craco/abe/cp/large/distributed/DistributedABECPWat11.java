@@ -94,9 +94,9 @@ public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncr
         for (Attribute i : keyShare.getKeyIndex()) {
             result = pp.getE().apply(pp.getG(), D_xi.get(i));
 
-            if (!result
-                    .equals(pp.getE().apply(D_doublePrime_xi, (GroupElement) pp.getHashToG1().hashIntoStructure(i)))) {
-
+            if (!result.equals(
+                    pp.getE().apply(D_doublePrime_xi, (GroupElement) pp.getHashToG1().hashIntoStructure(i))
+            )) {
                 return false;
             }
         }
@@ -173,11 +173,11 @@ public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncr
             for (Attribute i : attributes) {
                 GroupElement D_xi_i = D_xi.get(i);
                 D_xi_i = D_xi_i.pow(delta_xi_S_prime_zero);
-                D.put(i, D.get(i).op(D_xi_i));
+                D.put(i, D.get(i).op(D_xi_i).compute());
             }
         }
 
-        return new ABECPWat11DecryptionKey(D, D_prime, D_doublePrime);
+        return new ABECPWat11DecryptionKey(D, D_prime.compute(), D_doublePrime.compute());
     }
 
     @Override
@@ -202,10 +202,10 @@ public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncr
 
         GroupElement D_prime_xi = pp.getG();
         D_prime_xi = D_prime_xi.pow(masterKeyShare.getShare());
-        D_prime_xi = D_prime_xi.op(pp.getgA().pow(u_xi));
+        D_prime_xi = D_prime_xi.op(pp.getgA().pow(u_xi)).compute();
         log.debug("Calculated D'_serverID := g^tmp_serverID * g_a^u_serverID:" + D_prime_xi);
 
-        GroupElement D_two_prime_xi = pp.getG().pow(u_xi);
+        GroupElement D_two_prime_xi = pp.getG().pow(u_xi).compute();
         log.debug("Caluclated D''_serverID := g^u_serverID: " + D_two_prime_xi);
 
         Map<Attribute, GroupElement> D_xi = new HashMap<>();
@@ -213,7 +213,7 @@ public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncr
             // T(i)^x_u_i
 
             GroupElement D_i = (GroupElement) pp.getHashToG1().hashIntoStructure(i);
-            D_i = D_i.pow(u_xi);
+            D_i = D_i.pow(u_xi).compute();
 
             D_xi.put(i, D_i);
         }
@@ -224,11 +224,7 @@ public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncr
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((pp == null) ? 0 : pp.hashCode());
-        result = prime * result + ((zp == null) ? 0 : zp.hashCode());
-        return result;
+        return Objects.hash(zp, pp);
     }
 
     @Override
@@ -238,12 +234,12 @@ public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncr
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof DistributedABECPWat11) {
-            DistributedABECPWat11 other = (DistributedABECPWat11) obj;
-            return pp.equals(other.pp);
-        } else {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
             return false;
-        }
+        DistributedABECPWat11 other = (DistributedABECPWat11) obj;
+        return Objects.equals(pp, other.pp);
     }
 
     @Override

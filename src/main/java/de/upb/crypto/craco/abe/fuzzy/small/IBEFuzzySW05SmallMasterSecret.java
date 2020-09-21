@@ -9,6 +9,7 @@ import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * The {@link MasterSecret} for the {@link IBEFuzzySW05Small} generated
@@ -48,17 +49,8 @@ public class IBEFuzzySW05SmallMasterSecret implements MasterSecret {
         if (getClass() != obj.getClass())
             return false;
         IBEFuzzySW05SmallMasterSecret other = (IBEFuzzySW05SmallMasterSecret) obj;
-        if (t == null) {
-            if (other.t != null)
-                return false;
-        } else if (!t.equals(other.t))
-            return false;
-        if (y == null) {
-            if (other.y != null)
-                return false;
-        } else if (!y.equals(other.y))
-            return false;
-        return true;
+        return Objects.equals(t, other.t)
+                && Objects.equals(y, other.y);
     }
 
     @Override

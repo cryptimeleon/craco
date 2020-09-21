@@ -50,9 +50,9 @@ public class ABEKPGPSW06SmallSetup {
         ZpElement y = zp.getUniformlyRandomUnit();
 
         // g in G_1
-        pp.setG(pp.getGroupG1().getUniformlyRandomNonNeutral());
+        pp.setG(pp.getGroupG1().getUniformlyRandomNonNeutral().compute());
         // Y = E (g, g)^y \in G_T
-        pp.setY(pp.getE().apply(pp.getG(), pp.getG()).pow(y));
+        pp.setY(pp.getE().apply(pp.getG(), pp.getG()).pow(y).compute());
 
         // attribute in universe, t_i in Z_{size(g1)}
         HashMap<Attribute, ZpElement> t = new HashMap<Attribute, ZpElement>();
@@ -64,7 +64,7 @@ public class ABEKPGPSW06SmallSetup {
             GroupElement T_i = pp.getG().pow(t_i);
 
             t.put(attribute, t_i);
-            T.put(attribute, T_i);
+            T.put(attribute, T_i.compute());
         }
         pp.setT(T);
         msk = new ABEKPGPSW06SmallMasterSecret(y, t);

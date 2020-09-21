@@ -15,6 +15,7 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 
 /**
@@ -102,7 +103,7 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
         }
         // Construct the commitment object
         PedersenOpenValue openValue = new PedersenOpenValue(messagesInZp, r);
-        PedersenCommitmentValue com = new PedersenCommitmentValue(c);
+        PedersenCommitmentValue com = new PedersenCommitmentValue(c.compute());
         return new PedersenCommitmentPair(com, openValue);
     }
 
@@ -236,10 +237,8 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-
         PedersenCommitmentScheme other = (PedersenCommitmentScheme) obj;
-
-        return pp != null ? pp.equals(other.pp) : other.pp == null;
+        return Objects.equals(pp, other.pp);
     }
 
     @Override

@@ -7,6 +7,7 @@ import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 public class DistributedABECPWat11MasterKeyShare implements StandaloneRepresentable, MasterKeyShare {
 
@@ -57,14 +58,8 @@ public class DistributedABECPWat11MasterKeyShare implements StandaloneRepresenta
         if (getClass() != obj.getClass())
             return false;
         DistributedABECPWat11MasterKeyShare other = (DistributedABECPWat11MasterKeyShare) obj;
-        if (serverID != other.serverID)
-            return false;
-        if (share == null) {
-            if (other.share != null)
-                return false;
-        } else if (!share.equals(other.share))
-            return false;
-        return true;
+        return Objects.equals(serverID, other.serverID)
+                && Objects.equals(share, other.share);
     }
 
 }

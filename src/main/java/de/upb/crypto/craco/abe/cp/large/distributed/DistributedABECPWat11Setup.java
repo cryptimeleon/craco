@@ -67,9 +67,9 @@ public class DistributedABECPWat11Setup {
 
         ZpElement a = zp.getUniformlyRandomUnit();
         GroupElement g = pp.getGroupG1().getUniformlyRandomNonNeutral();
-        pp.setG(g);
+        pp.setG(g.compute());
         GroupElement g_a = g.pow(a);
-        pp.setgA(g_a);
+        pp.setgA(g_a.compute());
 
         log.debug("Found a:" + a);
         log.debug("Found g:" + g);
@@ -89,7 +89,7 @@ public class DistributedABECPWat11Setup {
 
         GroupElement Y = pp.getE().apply(pp.getG(), pp.getG()).pow(y_0);
         log.debug("Computed Y:= e(g, g)^y_0 : " + Y);
-        pp.setY(Y);
+        pp.setY(Y.compute());
 
         Map<Integer, GroupElement> VK = new HashMap<>();
         masterKeyShares = new HashSet<>();
@@ -97,23 +97,22 @@ public class DistributedABECPWat11Setup {
 
         for (int xi = 1; xi <= L; xi++) {
             log.debug("Creating master key share for server id:" + xi);
-            int serverID = xi;
-            BigInteger tmp = q_0.evaluate(BigInteger.valueOf(serverID));
+            BigInteger tmp = q_0.evaluate(BigInteger.valueOf(xi));
             log.debug("Calculated tmp: = q_0 (serverID) : " + tmp);
-            VK.put(xi, pp.getE().apply(pp.getG(), pp.getG()).pow(tmp));
+            VK.put(xi, pp.getE().apply(pp.getG(), pp.getG()).pow(tmp).compute());
             log.debug("Calculated VK_serverID := Y_serverID := e(g,g)^tmp : " + VK.get(xi));
-            masterKeyShares.add(new DistributedABECPWat11MasterKeyShare(serverID, tmp));
+            masterKeyShares.add(new DistributedABECPWat11MasterKeyShare(xi, tmp));
         }
         pp.setVerificationKeys(VK);
         Map<BigInteger, GroupElement> T = new HashMap<>();
         for (BigInteger i : N) {
             ZpElement t_i = zp.getUniformlyRandomUnit();
-            T.put(i, pp.getG().pow(t_i));
+            T.put(i, pp.getG().pow(t_i).compute());
         }
         pp.setT(T);
         pp.setThreshold(t);
 
-        msk = new ABECPWat11MasterSecret(g.pow(y_0));
+        msk = new ABECPWat11MasterSecret(g.pow(y_0).compute());
     }
 
     public DistributedABECPWat11PublicParameters getPublicParameters() {

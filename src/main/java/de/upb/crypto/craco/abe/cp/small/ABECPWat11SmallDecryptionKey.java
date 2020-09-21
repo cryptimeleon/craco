@@ -10,6 +10,7 @@ import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A {@link DecryptionKey} for the {@link ABECPWat11Small} that stores a
@@ -74,22 +75,8 @@ public class ABECPWat11SmallDecryptionKey implements DecryptionKey {
         if (getClass() != obj.getClass())
             return false;
         ABECPWat11SmallDecryptionKey other = (ABECPWat11SmallDecryptionKey) obj;
-        if (mapK == null) {
-            if (other.mapK != null)
-                return false;
-        } else if (!mapK.equals(other.mapK))
-            return false;
-        if (k == null) {
-            if (other.k != null)
-                return false;
-        } else if (!k.equals(other.k))
-            return false;
-        if (l == null) {
-            if (other.l != null)
-                return false;
-        } else if (!l.equals(other.l))
-            return false;
-        return true;
+        return Objects.equals(mapK, other.mapK)
+                && Objects.equals(k, other.k)
+                && Objects.equals(l, other.l);
     }
-
 }

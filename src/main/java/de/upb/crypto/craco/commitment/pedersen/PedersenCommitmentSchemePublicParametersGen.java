@@ -51,10 +51,10 @@ public class PedersenCommitmentSchemePublicParametersGen implements CommitmentSc
     public PedersenPublicParameters setup(Group group, int numberOfMessages) {
         // Generate public parameter
         GroupElement[] h = new GroupElement[numberOfMessages];
-        GroupElement g = group.getGenerator();
+        GroupElement g = group.getGenerator().compute();
 
         for (int i = 0; i < h.length; i++) {
-            h[i] = group.getUniformlyRandomElement();
+            h[i] = group.getUniformlyRandomElement().compute();
         }
         return new PedersenPublicParameters(g, h, group);
     }

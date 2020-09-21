@@ -10,6 +10,8 @@ import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 
+import java.util.Objects;
+
 public class NguyenAccumulatorIdentity implements AccumulatorIdentity, UniqueByteRepresentable {
 
     @UniqueByteRepresented
@@ -39,12 +41,10 @@ public class NguyenAccumulatorIdentity implements AccumulatorIdentity, UniqueByt
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof NguyenAccumulatorIdentity)) return false;
-
-        NguyenAccumulatorIdentity that = (NguyenAccumulatorIdentity) o;
-
-        if (!identity.equals(that.identity)) return false;
-        return zp.equals(that.zp);
+        if (o == null || getClass() != o.getClass()) return false;
+        NguyenAccumulatorIdentity other = (NguyenAccumulatorIdentity) o;
+        return Objects.equals(identity, other.identity)
+                && Objects.equals(zp, other.zp);
     }
 
     @Override

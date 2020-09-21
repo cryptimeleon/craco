@@ -61,12 +61,14 @@ public class ABECPWat11Small implements PredicateEncryptionScheme {
      * Checks if the number of shared attributes (the lines in the MSP) are
      * valid and if the MSP is injective (all lines are different attributes).
      *
-     * @param shares
+     * @param shares maps share indices to the shares
+     * @param msp the msp to check
+     * @param lMax the maximum number of shares allowed
      * @return true if MSP is valid, else false.
      */
-    private boolean isMonotoneSpanProgramValid(Map<Integer, ZpElement> shares, MonotoneSpanProgram msp, int l_max) {
+    private boolean isMonotoneSpanProgramValid(Map<Integer, ZpElement> shares, MonotoneSpanProgram msp, int lMax) {
         // check for line count
-        if (shares.size() > l_max) {
+        if (shares.size() > lMax) {
             return false;
         } else {
             Set<Attribute> attributes = new HashSet<>();
@@ -95,10 +97,10 @@ public class ABECPWat11Small implements PredicateEncryptionScheme {
 
         // C = M \cdot e(g,g)^{\alpha s} \in G_T
         GroupElement c = groupElementPlainText.get();
-        c = c.op(pp.geteGGAlpha().pow(s));
+        c = c.op(pp.geteGGAlpha().pow(s)).compute();
 
         // C' = g^s \in G_1
-        GroupElement cPrime = pp.getG().pow(s);
+        GroupElement cPrime = pp.getG().pow(s).compute();
         // Get the public policy
         MonotoneSpanProgram msp = new MonotoneSpanProgram(pk.getPolicy(), zp);
 
@@ -123,9 +125,9 @@ public class ABECPWat11Small implements PredicateEncryptionScheme {
             ZpElement rI = zp.getUniformlyRandomUnit();
             // C_i = (g^a)^\lambda_i * h_{\rho_i}^{-r_i}
             GroupElement cI = pp.getgA().pow(lambdaI);
-            cI = cI.op(pp.getH().get(rhoI).pow(rI).inv());
+            cI = cI.op(pp.getH().get(rhoI).pow(rI).inv()).compute();
             // D_i = g^r_i
-            GroupElement dI = pp.getG().pow(rI);
+            GroupElement dI = pp.getG().pow(rI).compute();
 
             mapC.put(i, cI);
             mapD.put(i, dI);
@@ -194,7 +196,7 @@ public class ABECPWat11Small implements PredicateEncryptionScheme {
         GroupElement map = pp.getE().apply(c.getcPrime(), k);
         // e(C', K) / (\prod_{i \in I}{(e(C_i, L) \cdot e(D_i, K_{\rho(i)})^{\omega_i}} = e(g,g)^{\alpha s}
         map = map.op(tmp.inv());
-        return new GroupElementPlainText(message.op(map.inv()));
+        return new GroupElementPlainText(message.op(map.inv()).compute());
     }
 
     @Override
@@ -247,15 +249,15 @@ public class ABECPWat11Small implements PredicateEncryptionScheme {
 
         ZpElement u = zp.getUniformlyRandomUnit();
         // d_prime = g_y * (g_a^u)
-        GroupElement d_prime = g_y.op(pp.getgA().pow(u));
+        GroupElement d_prime = g_y.op(pp.getgA().pow(u)).compute();
         // d_prime2 = g^u \in G_T
-        GroupElement d_prime2 = pp.getG().pow(u);
+        GroupElement d_prime2 = pp.getG().pow(u).compute();
 
         Map<Attribute, GroupElement> d = new HashMap<>();
         // \forall x in attributes : d_x = T_x^u
         for (Attribute x : attributes) {
             GroupElement d_x = pp.getH().get(x).pow(u);
-            d.put(x, d_x);
+            d.put(x, d_x.compute());
         }
         return new ABECPWat11SmallDecryptionKey(d, d_prime, d_prime2);
     }
@@ -309,12 +311,12 @@ public class ABECPWat11Small implements PredicateEncryptionScheme {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof ABECPWat11Small) {
-            ABECPWat11Small other = (ABECPWat11Small) o;
-            return pp.equals(other.pp);
-        } else {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
             return false;
-        }
+        ABECPWat11Small other = (ABECPWat11Small) o;
+        return Objects.equals(pp, other.pp);
     }
 
     public ABECPWat11SmallPublicParameters getPublicParameters() {

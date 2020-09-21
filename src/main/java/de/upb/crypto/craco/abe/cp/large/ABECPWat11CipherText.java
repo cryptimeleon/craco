@@ -10,6 +10,7 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A {@link CipherText} for {@link ABECPWat11}.
@@ -49,11 +50,13 @@ public class ABECPWat11CipherText extends ABECPWat11KEMCipherText {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof ABECPWat11CipherText)) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
             return false;
-        }
         ABECPWat11CipherText other = (ABECPWat11CipherText) obj;
-        return super.equals(other) && ePrime.equals(other.ePrime);
+        return super.equals(other)
+                && Objects.equals(ePrime, other.ePrime);
     }
 
 }

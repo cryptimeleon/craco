@@ -6,10 +6,13 @@ import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zn;
 import de.upb.crypto.math.structures.zn.Zn.ZnElement;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * Encryption scheme originally presented by Elgamal in [1]. The key generation, encryption and decryption algorithm can
@@ -35,6 +38,7 @@ import java.math.BigInteger;
  */
 public class ElgamalEncryption implements AsymmetricEncryptionScheme {
 
+    @Represented
     Group groupG;
 
     public ElgamalEncryption(Group groupG) {
@@ -42,7 +46,7 @@ public class ElgamalEncryption implements AsymmetricEncryptionScheme {
     }
 
     public ElgamalEncryption(Representation repr) {
-        groupG = (Group) repr.obj().get("groupG").repr().recreateRepresentable();
+        new ReprUtil(this).deserialize(repr);
     }
 
     public Group getGroup() {
@@ -85,14 +89,13 @@ public class ElgamalEncryption implements AsymmetricEncryptionScheme {
         GroupElement g = ((ElgamalPublicKey) publicKey).getG();
         GroupElement h = ((ElgamalPublicKey) publicKey).getH();
 
-
         //c1 = g^r
         GroupElement c1 = g.pow(random);
 
         //c2 = h^r * plaintext
         GroupElement c2 = h.pow(random).op(groupElementPlaintext);
 
-        return new ElgamalCipherText(c1, c2);
+        return new ElgamalCipherText(c1.compute(), c2.compute());
     }
 
     @Override
@@ -108,7 +111,7 @@ public class ElgamalEncryption implements AsymmetricEncryptionScheme {
         ZnElement a = ((ElgamalPrivateKey) privateKey).getA();
         GroupElement u = cpCipherText.getC1().pow(a);
         GroupElement m = u.inv().op(cpCipherText.getC2());
-        return new ElgamalPlainText(m);
+        return new ElgamalPlainText(m.compute());
     }
 
     /**
@@ -126,7 +129,7 @@ public class ElgamalEncryption implements AsymmetricEncryptionScheme {
         //choose a random generator of the group
         GroupElement generator = groupG.getUniformlyRandomNonNeutral();
 
-        GroupElement h = generator.pow(a);
+        GroupElement h = generator.pow(a).compute();
 
         //create a elgamal private key
         ElgamalPrivateKey privateKey = new ElgamalPrivateKey(groupG, generator, a, h);
@@ -149,42 +152,29 @@ public class ElgamalEncryption implements AsymmetricEncryptionScheme {
 
     @Override
     public ElgamalPublicKey getEncryptionKey(Representation repr) {
-        GroupElement g = groupG.getElement(repr.obj().get("g"));
-        GroupElement h = groupG.getElement(repr.obj().get("h"));
-        return new ElgamalPublicKey(groupG, g, h);
-
+        return new ElgamalPublicKey(repr, groupG);
     }
 
     @Override
     public ElgamalPrivateKey getDecryptionKey(Representation repr) {
-        //return new ElgamalPrivateKey(repr);
-        ElgamalPublicKey pub = getEncryptionKey(repr.obj().get("publicKey"));
-
-        Zn zn = new Zn(this.getGroup().size());
-        ZnElement a = zn.getElement(repr.obj().get("a"));
-        return new ElgamalPrivateKey(pub, a);
+        return new ElgamalPrivateKey(repr, groupG.getZn());
     }
 
     @Override
     public Representation getRepresentation() {
-        ObjectRepresentation toReturn = new ObjectRepresentation();
-        toReturn.put("groupG", new RepresentableRepresentation(groupG));
-        return toReturn;
+        return ReprUtil.serialize(this);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof ElgamalEncryption) {
-            ElgamalEncryption other = (ElgamalEncryption) o;
-            return groupG.equals(other.groupG);
-        } else {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ElgamalEncryption other = (ElgamalEncryption) o;
+        return Objects.equals(groupG, other.groupG);
     }
 
     @Override
     public int hashCode() {
-        return groupG.hashCode();
+        return groupG != null ? groupG.hashCode() : 0;
     }
-
 }

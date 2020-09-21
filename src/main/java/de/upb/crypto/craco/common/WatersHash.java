@@ -12,45 +12,37 @@ import de.upb.crypto.math.serialization.ListRepresentation;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.HashIntoZn;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class WatersHash implements HashIntoStructure {
+    @Represented
     private Group g;
-
+    @Represented(restorer = "[g]")
     protected List<GroupElement> T;
 
     public WatersHash(Group g, int n) {
         T = new ArrayList<>();
         this.g = g;
         for (int i = 1; i <= n; i++) {
-            T.add(g.getUniformlyRandomNonNeutral());
+            T.add(g.getUniformlyRandomNonNeutral().compute());
         }
     }
 
     public WatersHash(Representation repr) {
-        g = (Group) repr.obj().get("g").repr().recreateRepresentable();
-        T = new ArrayList<>();
-        repr.obj().get("T").list().forEach(t -> T.add(g.getElement(t)));
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        ObjectRepresentation repr = new ObjectRepresentation();
-        repr.put("g", new RepresentableRepresentation(g));
-        ListRepresentation tRepr =
-                new ListRepresentation(T.stream().map(GroupElement::getRepresentation).collect(Collectors.toList()));
-        repr.put("T", tRepr);
-
-        return repr;
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -70,7 +62,6 @@ public class WatersHash implements HashIntoStructure {
         }
 
         return result;
-
     }
 
     public List<GroupElement> getT() {
@@ -98,12 +89,7 @@ public class WatersHash implements HashIntoStructure {
         if (getClass() != obj.getClass())
             return false;
         WatersHash other = (WatersHash) obj;
-        if (T == null) {
-            if (other.T != null)
-                return false;
-        } else if (!T.equals(other.T))
-            return false;
-        return true;
+        return Objects.equals(T, other.T);
     }
 
     @Override

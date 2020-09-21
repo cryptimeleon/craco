@@ -6,6 +6,8 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
+import java.util.Objects;
+
 /**
  * A {@link DecryptionKey} for the {@link FullIdent}.
  * <p>
@@ -54,11 +56,6 @@ public class FullIdentDecryptionKey implements DecryptionKey {
         if (getClass() != obj.getClass())
             return false;
         FullIdentDecryptionKey other = (FullIdentDecryptionKey) obj;
-        if (d_id == null) {
-            if (other.d_id != null)
-                return false;
-        } else if (!d_id.equals(other.d_id))
-            return false;
-        return true;
+        return Objects.equals(d_id, other.d_id);
     }
 }

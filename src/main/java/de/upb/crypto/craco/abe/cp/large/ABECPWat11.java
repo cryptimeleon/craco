@@ -81,9 +81,9 @@ public class ABECPWat11 extends AbstractABECPWat11 implements PredicateEncryptio
 
         GroupElement encryptionFactor = pp.getY().pow(s);
         // m \cdot Y^s = m \cdot E(g,g)^{ys}
-        GroupElement ePrime = pt.get().op(encryptionFactor);
+        GroupElement ePrime = pt.get().op(encryptionFactor).compute();
         // g^s \in G_1
-        GroupElement eTwoPrime = pp.getG().pow(s);
+        GroupElement eTwoPrime = pp.getG().pow(s).compute();
 
         // compute E_i = g^{a \cdot \lambda_i} \cdot T(\rho(i))^{-s} for every attribute i
         MonotoneSpanProgram msp = new MonotoneSpanProgram(pk.getPolicy(), zp);
@@ -106,7 +106,7 @@ public class ABECPWat11 extends AbstractABECPWat11 implements PredicateEncryptio
         ABECPWat11DecryptionKey sk = (ABECPWat11DecryptionKey) privateKey;
         ABECPWat11CipherText c = (ABECPWat11CipherText) cipherText;
         GroupElement encryptionFactor = restoreYs(sk, c);
-        return new GroupElementPlainText(c.getEPrime().op(encryptionFactor.inv()));
+        return new GroupElementPlainText(c.getEPrime().op(encryptionFactor.inv()).compute());
     }
 
     @Override

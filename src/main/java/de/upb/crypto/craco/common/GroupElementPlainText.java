@@ -9,6 +9,8 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 
+import java.util.Objects;
+
 public class GroupElementPlainText implements PlainText, UniqueByteRepresentable {
 
     @UniqueByteRepresented
@@ -53,17 +55,11 @@ public class GroupElementPlainText implements PlainText, UniqueByteRepresentable
         if (getClass() != obj.getClass())
             return false;
         GroupElementPlainText other = (GroupElementPlainText) obj;
-        if (p == null) {
-            if (other.p != null)
-                return false;
-        } else if (!p.equals(other.p))
-            return false;
-        return true;
+        return Objects.equals(p, other.p);
     }
 
     @Override
     public ByteAccumulator updateAccumulator(ByteAccumulator accumulator) {
         return AnnotatedUbrUtil.autoAccumulate(accumulator, this);
     }
-
 }

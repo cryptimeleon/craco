@@ -91,7 +91,7 @@ public class NguyenAccumulator implements DynamicAccumulator<NguyenAccumulatorId
         for (int i = 0; i < coefficients.length; i++) {
             product = product.op(pp.getT()[i].pow((Zp.ZpElement) coefficients[i]));
         }
-        return product;
+        return product.compute();
     }
 
     private PolynomialRing.Polynomial createPoly(NguyenAccumulatorIdentity identity, PolynomialRing polynomialRing) {
@@ -336,7 +336,7 @@ public class NguyenAccumulator implements DynamicAccumulator<NguyenAccumulatorId
         Zp.ZpElement identityDifference = insertedSingleIdentity.getIdentity().add(singleIdentity.getIdentity().neg());
         GroupElement witPower = oldWitness.pow(identityDifference);
         GroupElement result = accumulatorValue.op(witPower);
-        return new NguyenWitness(result);
+        return new NguyenWitness(result.compute());
     }
 
     /**
@@ -367,7 +367,7 @@ public class NguyenAccumulator implements DynamicAccumulator<NguyenAccumulatorId
         Zp.ZpElement identityDifferenceInverse = identityDifference.inv();
         GroupElement quotient = oldWitness.op(accumulatorValue.inv());
         GroupElement result = quotient.pow(identityDifferenceInverse);
-        return new NguyenWitness(result);
+        return new NguyenWitness(result.compute());
     }
 
 
@@ -398,7 +398,6 @@ public class NguyenAccumulator implements DynamicAccumulator<NguyenAccumulatorId
 
     @Override
     public int hashCode() {
-
         return Objects.hash(pp, accumulatorValue, identitySet);
     }
 
