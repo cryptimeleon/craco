@@ -152,12 +152,12 @@ public class ElgamalEncryption implements AsymmetricEncryptionScheme {
 
     @Override
     public ElgamalPublicKey getEncryptionKey(Representation repr) {
-        return new ElgamalPublicKey(repr, groupG);
+        return new ElgamalPublicKey(repr);
     }
 
     @Override
     public ElgamalPrivateKey getDecryptionKey(Representation repr) {
-        return new ElgamalPrivateKey(repr, groupG.getZn());
+        return new ElgamalPrivateKey(repr, groupG.getZn(), this);
     }
 
     @Override

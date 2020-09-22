@@ -8,6 +8,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.serialization.StandaloneRepresentable;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.util.RepresentationUtil;
@@ -22,32 +23,48 @@ import java.util.Objects;
 public class ElgamalPublicKey implements EncryptionKey {
 
     /**
+     * The group of this Elgamal-Algorithm
+     */
+    @Represented
+    private Group groupG;
+
+    /**
      * The public parameter g \in groupG
      */
     @UniqueByteRepresented
-    @Represented(restorer = "G")
+    @Represented(restorer = "groupG")
     private GroupElement g;
 
     /**
      * The public parameter h:=g^a, (where a is the private key) \in groupG
      */
     @UniqueByteRepresented
-    @Represented(restorer = "G")
+    @Represented(restorer = "groupG")
     private GroupElement h;
 
     /**
      * Creates a new ElgamalPublic Key
-
+     *
+     * @param groupG the group
      * @param g      the generator of groupG
      * @param h      the public parameter h, where h := g^a (a is the private exponent)
      */
-    public ElgamalPublicKey(GroupElement g, GroupElement h) {
+    public ElgamalPublicKey(Group groupG, GroupElement g, GroupElement h) {
+        this.groupG = groupG;
         this.g = g;
         this.h = h;
     }
 
-    public ElgamalPublicKey(Representation repr, Group groupG) {
-        new ReprUtil(this).register(groupG, "G").deserialize(repr);
+    public ElgamalPublicKey(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
+    }
+
+    public void setGroupG(Group groupG) {
+        this.groupG = groupG;
+    }
+
+    public Group getGroupG() {
+        return groupG;
     }
 
     public GroupElement getG() {
@@ -68,6 +85,7 @@ public class ElgamalPublicKey implements EncryptionKey {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((g == null) ? 0 : g.hashCode());
+        result = prime * result + ((groupG == null) ? 0 : groupG.hashCode());
         result = prime * result + ((h == null) ? 0 : h.hashCode());
         return result;
     }
@@ -82,6 +100,7 @@ public class ElgamalPublicKey implements EncryptionKey {
             return false;
         ElgamalPublicKey other = (ElgamalPublicKey) obj;
         return Objects.equals(g, other.g)
+                && Objects.equals(groupG, other.groupG)
                 && Objects.equals(h, other.h);
     }
 

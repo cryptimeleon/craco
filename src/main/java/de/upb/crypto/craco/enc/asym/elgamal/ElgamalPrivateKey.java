@@ -1,6 +1,7 @@
 package de.upb.crypto.craco.enc.asym.elgamal;
 
 import de.upb.crypto.craco.interfaces.DecryptionKey;
+import de.upb.crypto.craco.interfaces.EncryptionKey;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
@@ -29,16 +30,16 @@ public class ElgamalPrivateKey implements DecryptionKey {
     /**
      * The public key
      **/
-    @Represented
+    @Represented(restorer = "Scheme")
     private ElgamalPublicKey publicKey;
 
-    public ElgamalPrivateKey(Representation repr, Zn zn) {
-        new ReprUtil(this).register(zn, "Zn").deserialize(repr);
+    public ElgamalPrivateKey(Representation repr, Zn zn, ElgamalEncryption scheme) {
+        new ReprUtil(this).register(zn, "Zn").register(scheme, "Scheme").deserialize(repr);
     }
 
     private void init(Group groupG, GroupElement g, ZnElement a, GroupElement h) {
         this.a = a;
-        this.publicKey = new ElgamalPublicKey(g, h);
+        this.publicKey = new ElgamalPublicKey(groupG, g, h);
     }
 
     public ElgamalPrivateKey(ElgamalPublicKey pub, ZnElement a) {

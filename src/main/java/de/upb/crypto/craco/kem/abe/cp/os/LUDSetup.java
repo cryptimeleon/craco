@@ -9,6 +9,7 @@ import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * Factory for ElgamalLargeUniverseDelegationKEM.
@@ -17,14 +18,10 @@ import java.math.BigInteger;
  */
 public class LUDSetup {
 
-
     private LUDMasterSecret msk;
     private ElgamalLargeUniverseDelegationKEM scheme;
 
-    public LUDSetup() {
-
-    }
-
+    public LUDSetup() { }
 
     public void setup(BilinearGroup pp, HashFunction md) {
         BigInteger p = pp.getG1().size();
@@ -43,7 +40,7 @@ public class LUDSetup {
 
         GroupElement g1 = pp.getG1().getGenerator();
         GroupElement g2 = pp.getG2().getGenerator();
-        GroupElement gt = pp.getBilinearMap().apply(g1, g2);
+        GroupElement gt = pp.getBilinearMap().apply(g1, g2).compute();
 
         ZpElement a = zp.getUniformlyRandomElement();
         ZpElement b = zp.getUniformlyRandomElement();
@@ -51,22 +48,22 @@ public class LUDSetup {
         ZpElement d = zp.getUniformlyRandomElement();
         ZpElement alpha = zp.getUniformlyRandomElement();
 
-        GroupElement u1 = g1.pow(a);
-        GroupElement u2 = g2.pow(a);
+        GroupElement u1 = g1.pow(a).compute();
+        GroupElement u2 = g2.pow(a).compute();
 
-        GroupElement h1 = g1.pow(b);
-        GroupElement h2 = g2.pow(b);
+        GroupElement h1 = g1.pow(b).compute();
+        GroupElement h2 = g2.pow(b).compute();
 
-        GroupElement v1 = g1.pow(c);
-        GroupElement v2 = g2.pow(c);
+        GroupElement v1 = g1.pow(c).compute();
+        GroupElement v2 = g2.pow(c).compute();
 
-        GroupElement w1 = g1.pow(d);
-        GroupElement w2 = g2.pow(d);
+        GroupElement w1 = g1.pow(d).compute();
+        GroupElement w2 = g2.pow(d).compute();
 
 
-        GroupElement ht = gt.pow(alpha);
+        GroupElement ht = gt.pow(alpha).compute();
 
-        ElgamalPublicKey egpk = new ElgamalPublicKey(gt, ht);
+        ElgamalPublicKey egpk = new ElgamalPublicKey(pp.getGT(), gt, ht);
 
         LUDPublicParameters pub = new LUDPublicParameters(elgamalKEM, pp, egpk,
                 g1, g2, u1, u2, h1, h2, v1, v2, w1, w2);
@@ -87,8 +84,7 @@ public class LUDSetup {
     public ElgamalLargeUniverseDelegationKEM getScheme() {
         return scheme;
     }
-
-
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -98,27 +94,16 @@ public class LUDSetup {
         return result;
     }
 
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
         if (obj == null)
             return false;
-        if (!(obj instanceof LUDSetup))
+        if (getClass() != obj.getClass())
             return false;
         LUDSetup other = (LUDSetup) obj;
-        if (msk == null) {
-            if (other.msk != null)
-                return false;
-        } else if (!msk.equals(other.msk))
-            return false;
-        if (scheme == null) {
-            if (other.scheme != null)
-                return false;
-        } else if (!scheme.equals(other.scheme))
-            return false;
-        return true;
+        return Objects.equals(msk, other.msk)
+                && Objects.equals(scheme, other.scheme);
     }
-
 }

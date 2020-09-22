@@ -9,6 +9,8 @@ import de.upb.crypto.math.serialization.StandaloneRepresentable;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
+import java.util.Objects;
+
 /**
  * Class for encryption keys of ElgamalLargeUniverseDelegationKEM.
  * <p>
@@ -34,14 +36,12 @@ public class LUDEncryptionKey implements EncryptionKey, StandaloneRepresentable 
     }
 
     public LUDEncryptionKey(Representation repr) {
-        //this.policy = (Policy) ((RepresentableRepresentation) repr).recreateRepresentable();
         new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
         return ReprUtil.serialize(this);
-        //return new RepresentableRepresentation(policy);
     }
 
     @Override
@@ -58,21 +58,14 @@ public class LUDEncryptionKey implements EncryptionKey, StandaloneRepresentable 
             return true;
         if (obj == null)
             return false;
-        if (!(obj instanceof LUDEncryptionKey))
+        if (getClass() != obj.getClass())
             return false;
         LUDEncryptionKey other = (LUDEncryptionKey) obj;
-        if (policy == null) {
-            if (other.policy != null)
-                return false;
-        } else if (!policy.equals(other.policy))
-            return false;
-        return true;
+        return Objects.equals(policy, other.policy);
     }
 
     @Override
     public ByteAccumulator updateAccumulator(ByteAccumulator accumulator) {
         return policy.updateAccumulator(accumulator);
     }
-
-
 }

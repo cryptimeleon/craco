@@ -10,6 +10,7 @@ import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class ABEKPGPSW06KEMCipherText implements CipherText {
     /**
@@ -71,11 +72,9 @@ public class ABEKPGPSW06KEMCipherText implements CipherText {
 
         ABEKPGPSW06KEMCipherText that = (ABEKPGPSW06KEMCipherText) o;
 
-        if (attributes != null ? !attributes.equals(that.attributes) : that.attributes != null)
-            return false;
-        if (eTwoPrime != null ? !eTwoPrime.equals(that.eTwoPrime) : that.eTwoPrime != null)
-            return false;
-        return eElementMap != null ? eElementMap.equals(that.eElementMap) : that.eElementMap == null;
+        return Objects.equals(attributes, that.attributes)
+                && Objects.equals(eTwoPrime, that.eTwoPrime)
+                && Objects.equals(eElementMap, that.eElementMap);
     }
 
     @Override

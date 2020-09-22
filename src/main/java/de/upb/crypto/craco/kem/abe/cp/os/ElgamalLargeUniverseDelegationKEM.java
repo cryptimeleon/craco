@@ -54,7 +54,6 @@ public class ElgamalLargeUniverseDelegationKEM
 
     public ElgamalLargeUniverseDelegationKEM(LUDPublicParameters pp) {
         this.pp = pp;
-
     }
 
     public ElgamalLargeUniverseDelegationKEM(Representation r) {
@@ -98,7 +97,7 @@ public class ElgamalLargeUniverseDelegationKEM
         /*
          * we need additional element s blinded in g2
          */
-        GroupElement c0 = g.pow(s);
+        GroupElement c0 = g.pow(s).compute();
 
 
         MonotoneSpanProgram msp = new MonotoneSpanProgram(ek.getPolicy(), zp);
@@ -130,17 +129,17 @@ public class ElgamalLargeUniverseDelegationKEM
             /*
              * C_i,1=w2^lambda_i v2^ti
              */
-            Ci[0] = w.pow(lambda_i).op(v.pow(ti));
+            Ci[0] = w.pow(lambda_i).op(v.pow(ti)).compute();
 
             /*
              * C_i,2=(u2^H(\rho(i)) h2)^-ti
              */
-            Ci[1] = u.pow(hash).op(h).pow(ti).inv();
+            Ci[1] = u.pow(hash).op(h).pow(ti).inv().compute();
 
             /*
              * C_i,3=g2^ti
              */
-            Ci[2] = g.pow(ti);
+            Ci[2] = g.pow(ti).compute();
 
             ciphertextComponents.put(i, Ci);
         }
@@ -264,7 +263,7 @@ public class ElgamalLargeUniverseDelegationKEM
         bPrime = bPrime.op(pairing.apply(tk.k1.inv(), ci1Sum));
 
         return new ElgamalKEMCiphertext(
-                new ElgamalCipherText(bPrime, ct.c),
+                new ElgamalCipherText(bPrime.compute(), ct.c),
                 ct.encaps
         );
     }
@@ -299,7 +298,7 @@ public class ElgamalLargeUniverseDelegationKEM
         ElgamalPrivateKey elgamalDecryptionKey = new ElgamalPrivateKey(
                 this.getPublicParameters().getPairingParameters().getGT(),
                 //here, the following key is given as <g,h>=<e(g1,g2),e(g1,g2)^alpha>
-                this.getPublicParameters().getElgamalEncryptionKey().getH().pow(z),
+                this.getPublicParameters().getElgamalEncryptionKey().getH().pow(z).compute(),
                 z.inv(),
                 this.getPublicParameters().getElgamalEncryptionKey().getH()
         );
@@ -311,8 +310,8 @@ public class ElgamalLargeUniverseDelegationKEM
          */
         LUDDecryptionKey dk = (LUDDecryptionKey) original;
 
-        GroupElement k0 = dk.k0.pow(z);
-        GroupElement k1 = dk.k1.pow(z);
+        GroupElement k0 = dk.k0.pow(z).compute();
+        GroupElement k1 = dk.k1.pow(z).compute();
 
         Map<Attribute, GroupElement[]> transmap = dk.ki_map;
 
@@ -320,8 +319,8 @@ public class ElgamalLargeUniverseDelegationKEM
 
         for (Map.Entry<Attribute, GroupElement[]> entry : transmap.entrySet()) {
             GroupElement k23[] = new GroupElement[2];
-            k23[0] = entry.getValue()[0].pow(z);
-            k23[1] = entry.getValue()[1].pow(z);
+            k23[0] = entry.getValue()[0].pow(z).compute();
+            k23[1] = entry.getValue()[1].pow(z).compute();
             map.put(entry.getKey(), k23);
         }
 
@@ -368,20 +367,20 @@ public class ElgamalLargeUniverseDelegationKEM
          * K_ai,3=(u1^H(ai) h1)^r_ai v1^-r
          */
         GroupElement K0 = this.getPublicParameters().g1.pow(alpha)
-                .op(this.getPublicParameters().w1.pow(r));
+                .op(this.getPublicParameters().w1.pow(r)).compute();
 
 
-        GroupElement K1 = this.getPublicParameters().g1.pow(r);
+        GroupElement K1 = this.getPublicParameters().g1.pow(r).compute();
 
         HashIntoStructure hashIntoExponent = new HashIntoZn(zp.getCharacteristic());
 
         for (Attribute ai : attributes) {
             GroupElement[] k23 = new GroupElement[2];
             ZpElement ri = zp.getUniformlyRandomElement();
-            k23[0] = this.getPublicParameters().g1.pow(ri);
+            k23[0] = this.getPublicParameters().g1.pow(ri).compute();
             k23[1] = this.getPublicParameters().u1.pow((ZnElement) hashIntoExponent.hashIntoStructure(ai))
                     .op(this.getPublicParameters().h1).pow(ri)
-                    .op(this.getPublicParameters().v1.pow(r.neg()));
+                    .op(this.getPublicParameters().v1.pow(r.neg())).compute();
             map.put(ai, k23);
 
         }
@@ -434,39 +433,7 @@ public class ElgamalLargeUniverseDelegationKEM
 
     @Override
     public LUDCipherText getEncapsulatedKey(Representation repr) {
-        LUDCipherText result = new LUDCipherText();
-        ObjectRepresentation or = (ObjectRepresentation) repr;
-        RepresentationUtil.restoreStandaloneRepresentable(result, or, "policy");
-        RepresentationUtil.restoreStandaloneRepresentable(result, or, "encaps");
-
-        Group group2 = this.getPublicParameters().getPairingParameters().getG2();
-        Group targetGroup = this.getPublicParameters().getPairingParameters().getGT();
-
-        RepresentationUtil.restoreElement(result, or, "c0", group2);
-        RepresentationUtil.restoreElement(result, or, "c", targetGroup);
-
-        Map<BigInteger, GroupElement[]> map = new HashMap<>();
-
-        /*
-         * recreate map with attribute based key components.
-         */
-        MapRepresentation mr = (MapRepresentation) or.get("abeComponents");
-
-        for (Map.Entry<Representation, Representation> entry : mr.getMap().entrySet()) {
-            BigInteger i = ((BigIntegerRepresentation) entry.getKey()).get();
-
-            ListRepresentation lr = ((ListRepresentation) entry.getValue());
-            ArrayList<GroupElement> list = new ArrayList<GroupElement>();
-
-            for (Representation er : lr) {
-                list.add(group2.getElement(er));
-            }
-
-
-            map.put(i, list.toArray(new GroupElement[list.size()]));
-        }
-        result.setAbeComponents(map);
-        return result;
+        return new LUDCipherText(repr, pp.getPairingParameters().getG2(), pp.getPairingParameters().getGT());
     }
 
     @Override
@@ -477,29 +444,7 @@ public class ElgamalLargeUniverseDelegationKEM
 
     @Override
     public LUDDecryptionKey getDecapsulationKey(Representation repr) {
-
-        ObjectRepresentation or = (ObjectRepresentation) repr;
-        Group G1 = this.getPublicParameters().getPairingParameters().getG1();
-        GroupElement k0 = G1.getElement(or.get("k0"));
-        GroupElement k1 = G1.getElement(or.get("k1"));
-        Map<Attribute, List<GroupElement>> map = new HashMap<>();
-        map = RepresentationUtil.recreateMapOfLists(or.get("map"), G1);
-        Map<Attribute, GroupElement[]> elementmap = new HashMap<>();
-        /*
-         * recreate map with attribute based key components.
-         * TODO: try to implement generic method
-         */
-        for (Map.Entry<Attribute, List<GroupElement>> entry : map.entrySet()) {
-            GroupElement[] list = new GroupElement[entry.getValue().size()];
-            int i = 0;
-            for (GroupElement elem : entry.getValue()) {
-                list[i] = elem;
-                i++;
-            }
-            elementmap.put(entry.getKey(), list);
-        }
-
-        return new LUDDecryptionKey(k0, k1, elementmap);
+        return new LUDDecryptionKey(repr, pp.getPairingParameters().getG1());
     }
 
     @Override
@@ -516,15 +461,10 @@ public class ElgamalLargeUniverseDelegationKEM
             return true;
         if (obj == null)
             return false;
-        if (!(obj instanceof ElgamalLargeUniverseDelegationKEM))
+        if (getClass() != obj.getClass())
             return false;
         ElgamalLargeUniverseDelegationKEM other = (ElgamalLargeUniverseDelegationKEM) obj;
-        if (pp == null) {
-            if (other.pp != null)
-                return false;
-        } else if (!pp.equals(other.pp))
-            return false;
-        return true;
+        return Objects.equals(pp, other.pp);
     }
 
 
