@@ -10,7 +10,6 @@ import de.upb.crypto.craco.interfaces.pe.PredicateEncryptionScheme;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
-import org.apache.logging.log4j.Level;
 
 import java.math.BigInteger;
 import java.util.Map;
@@ -74,10 +73,7 @@ public class ABECPWat11 extends AbstractABECPWat11 implements PredicateEncryptio
         GroupElementPlainText pt = (GroupElementPlainText) plainText;
         ABECPWat11EncryptionKey pk = (ABECPWat11EncryptionKey) publicKey;
 
-        logger.log(Level.DEBUG, "Encrypting plaintext " + pt + " with key " + pk);
-
         ZpElement s = zp.getUniformlyRandomUnit();
-        logger.debug("Generated random secret " + s);
 
         GroupElement encryptionFactor = pp.getY().pow(s);
         // m \cdot Y^s = m \cdot E(g,g)^{ys}

@@ -15,8 +15,6 @@ import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -48,9 +46,7 @@ import java.util.*;
  * @author Christian Stroh, refactoring: Fabian Eidens, Mirko Jürgens
  */
 public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncryptionScheme {
-
-    private static final Logger log = LogManager.getLogger("DistributedCPLogger");
-
+    
     private DistributedABECPWat11PublicParameters pp;
     private Zp zp;
 
@@ -75,7 +71,6 @@ public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncr
         GroupElement result;
 
         int xi = keyShare.getServerID();
-        log.debug("Starting shareVerify for KeyShare from serverID: " + xi);
 
         GroupElement D_prime_xi = keyShare.getD_prime();
 
@@ -85,8 +80,8 @@ public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncr
 
         result = pp.getE().apply(D_prime_xi, pp.getG());
 
-        result = result.op(pp.getE().apply(pp.getgA(), D_doublePrime_xi).inv());
-        log.debug("Calculated e(D'_serverID, g)/e(g_a, D''_serverID) = e(g,g)^tmp_server_ID: " + result);
+
+        result = result.op(pp.getE().apply(pp.getG_a(), D_doublePrime_xi).inv());
         if (!result.equals(pp.getVerificationKeys().get(xi))) {
             return false;
         }
@@ -117,7 +112,6 @@ public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncr
         ks.forEach(e -> keyShares.add((DistributedABECPWat11KeyShare) e));
 
         SetOfAttributes attributes = keyShares.iterator().next().getKeyIndex();
-        log.debug("Creating DecryptionKey from the given KeyShares ");
 
         if (attributes.size() > pp.getN()) {
             throw new IllegalArgumentException(
@@ -197,16 +191,12 @@ public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncr
 
         int serverID = masterKeyShare.getServerID();
         ZpElement u_xi = zp.getUniformlyRandomUnit();
-        log.debug("Generating key share for serverID: " + serverID + " and KeyIndex:" + attributes);
-        log.debug("Found u_serverID: " + u_xi);
 
         GroupElement D_prime_xi = pp.getG();
         D_prime_xi = D_prime_xi.pow(masterKeyShare.getShare());
         D_prime_xi = D_prime_xi.op(pp.getgA().pow(u_xi)).compute();
-        log.debug("Calculated D'_serverID := g^tmp_serverID * g_a^u_serverID:" + D_prime_xi);
 
         GroupElement D_two_prime_xi = pp.getG().pow(u_xi).compute();
-        log.debug("Caluclated D''_serverID := g^u_serverID: " + D_two_prime_xi);
 
         Map<Attribute, GroupElement> D_xi = new HashMap<>();
         for (Attribute i : attributes) {

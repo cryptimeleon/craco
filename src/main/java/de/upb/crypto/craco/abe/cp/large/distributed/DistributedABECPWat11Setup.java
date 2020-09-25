@@ -8,8 +8,6 @@ import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -25,8 +23,6 @@ public class DistributedABECPWat11Setup {
 
     ABECPWat11MasterSecret msk;
 
-    private static final Logger log = LogManager.getLogger("DistributedCPLogger");
-
     /**
      * Sets up public parameters and the master key shares for a given security
      * parameter securityParameter. The parameter n specifies the maximum number
@@ -41,7 +37,6 @@ public class DistributedABECPWat11Setup {
      * @param L                 server count
      */
     public void doKeyGen(int securityParameter, int n, int l_max, int t, int L, boolean debug) {
-        log.debug("Setting up: security:" + securityParameter);
         // Generate bilinear group
         BilinearGroupFactory fac = new BilinearGroupFactory(securityParameter);
         fac.setDebugMode(debug);
@@ -52,7 +47,6 @@ public class DistributedABECPWat11Setup {
     }
 
     public void doKeyGen(BilinearGroup group, int n, int l_max, int t, int L) {
-        log.debug("Setting up: n:" + n + ", l_max:" + l_max + ", t:" + t + ", L:" + L);
         pp = new DistributedABECPWat11PublicParameters();
         pp.setN(n);
         pp.setlMax(l_max);
@@ -60,7 +54,6 @@ public class DistributedABECPWat11Setup {
         pp.setHashToG1(group.getHashIntoG1());
         pp.setBilinearGroup(group);
 
-        log.debug("Finished creating Pairing...");
         Zp zp = new Zp(pp.getGroupG1().size());
 
         // Do the scheme setup stuff
@@ -69,39 +62,34 @@ public class DistributedABECPWat11Setup {
         GroupElement g = pp.getGroupG1().getUniformlyRandomNonNeutral();
         pp.setG(g.compute());
         GroupElement g_a = g.pow(a);
+
         pp.setgA(g_a.compute());
-
-        log.debug("Found a:" + a);
-        log.debug("Found g:" + g);
-        log.debug("Computed g^a:" + g_a);
-
         Set<BigInteger> N = new HashSet<>();
 
         for (int i = 1; i <= n + 1; i++) {
             N.add(BigInteger.valueOf(i));
         }
         ZpElement y_0 = zp.getUniformlyRandomUnit();
-        log.debug("Found msk y_0:" + y_0);
-        PrimeFieldPolynomial q_0 = new PrimeFieldPolynomial(zp, t - 1);
+
+        PrimeFieldPolynom q_0 = new PrimeFieldPolynom(zp, t - 1);
+
         q_0.createRandom(RandomGeneratorSupplier.instance().get());
         q_0.setCoefficient(y_0, 0);
-        log.debug("Computed polynomial q_0:" + q_0);
 
         GroupElement Y = pp.getE().apply(pp.getG(), pp.getG()).pow(y_0);
-        log.debug("Computed Y:= e(g, g)^y_0 : " + Y);
+
         pp.setY(Y.compute());
+
+        pp.setY(Y);
 
         Map<Integer, GroupElement> VK = new HashMap<>();
         masterKeyShares = new HashSet<>();
-        log.debug("Creating master key shares...");
 
         for (int xi = 1; xi <= L; xi++) {
-            log.debug("Creating master key share for server id:" + xi);
-            BigInteger tmp = q_0.evaluate(BigInteger.valueOf(xi));
-            log.debug("Calculated tmp: = q_0 (serverID) : " + tmp);
+            int serverID = xi;
+            BigInteger tmp = q_0.evaluate(BigInteger.valueOf(serverID));
             VK.put(xi, pp.getE().apply(pp.getG(), pp.getG()).pow(tmp).compute());
-            log.debug("Calculated VK_serverID := Y_serverID := e(g,g)^tmp : " + VK.get(xi));
-            masterKeyShares.add(new DistributedABECPWat11MasterKeyShare(xi, tmp));
+            masterKeyShares.add(new DistributedABECPWat11MasterKeyShare(serverID, tmp));
         }
         pp.setVerificationKeys(VK);
         Map<BigInteger, GroupElement> T = new HashMap<>();

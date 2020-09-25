@@ -19,8 +19,6 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -35,8 +33,6 @@ import java.util.stream.Stream;
  * of the implementation.
  */
 public abstract class AbstractABECPWat11 {
-
-    protected static final Logger logger = LogManager.getLogger("CPLULogger");
 
     /**
      * The public parameters of this scheme.
@@ -108,7 +104,6 @@ public abstract class AbstractABECPWat11 {
         GroupElement dPrime = sk.getD_prime();
         GroupElement dTwoPrime = sk.getD_prime2();
         Map<Attribute, GroupElement> d = sk.getD();
-        logger.debug("Decrypting " + c + " with key " + sk);
 
         MonotoneSpanProgram msp = new MonotoneSpanProgram(c.getPolicy(), zp);
         Set<Attribute> attributeSetS = d.keySet();

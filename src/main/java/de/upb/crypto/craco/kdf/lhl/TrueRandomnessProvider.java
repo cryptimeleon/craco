@@ -1,7 +1,5 @@
 package de.upb.crypto.craco.kdf.lhl;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -21,7 +19,6 @@ import java.security.SecureRandom;
  * @author Mirko Jürgens
  */
 public class TrueRandomnessProvider {
-    private static final Logger logger = LogManager.getLogger("TrueRandomnessLogger");
 
     private static String invoke_url = "https://api.random.org/json-rpc/1/invoke";
 
@@ -30,13 +27,9 @@ public class TrueRandomnessProvider {
     public static String getTrulyRandomNumbers(int bitLength) {
         String toReturn = null;
         try {
-            logger.debug("Trying to obtain truly random bits via random.org...");
             toReturn = cummultativeAPICall(bitLength);
-            logger.debug("Succeeded!");
         } catch (IOException | ParseException e) {
             byte[] b = new byte[bitLength / 8];
-            logger.debug("Failed to retrieve random bits...");
-            logger.debug("Generating random bits via SecureRandom...");
             new SecureRandom().nextBytes(b);
             StringBuilder builder = new StringBuilder();
             for (byte byt : b) {

@@ -11,7 +11,6 @@ import de.upb.crypto.math.structures.zn.Zp;
 
 import java.math.BigInteger;
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -31,8 +30,6 @@ import java.util.stream.IntStream;
  * {@link ThresholdTreeSecretSharing}.
  */
 public class ShamirSecretSharing implements LinearSecretSharing<Policy> {
-    private static Logger log = Logger.getLogger(ShamirSecretSharing.class.getName());
-
     private ThresholdPolicy policy;
     private Zp field;
 
@@ -207,8 +204,6 @@ public class ShamirSecretSharing implements LinearSecretSharing<Policy> {
         //Verify that the reconstruction worked
         Zp.ZpElement reconstructedSecret = reconstruct(minimalQualifiedShares);
         if (!reconstructedSecret.equals(secret)) {
-            log.warning(String.format("Failed to reconstruct secret %s using %s. Got %s",
-                    secret, minimalQualifiedShares, reconstructedSecret));
             return false;
         }
 
@@ -222,9 +217,6 @@ public class ShamirSecretSharing implements LinearSecretSharing<Policy> {
             Zp.ZpElement element = field.createZnElement(BigInteger.valueOf(entry.getKey()));
             Zp.ZpElement interpolation = (Zp.ZpElement) polynomial.evaluate(element);
             if (!interpolation.equals(entry.getValue())) {
-                log.warning(String.format("Reconstructed polynomial does not match shares at index %s." +
-                                "Expected: %s ; Actual: %s",
-                        element, entry.getValue(), interpolation));
                 return false;
             }
         }

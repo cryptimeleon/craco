@@ -58,7 +58,6 @@ public class ABECPWat11KEM extends AbstractABECPWat11 implements PredicateKEM<Ke
         ABECPWat11EncryptionKey pk = (ABECPWat11EncryptionKey) publicKey;
 
         Zp.ZpElement s = zp.getUniformlyRandomUnit();
-        logger.debug("Generated random secret " + s);
 
         // message: Y^s = e(g,g)^{ys} \in G_T
         GroupElement kemMessage = pp.getY().pow(s);

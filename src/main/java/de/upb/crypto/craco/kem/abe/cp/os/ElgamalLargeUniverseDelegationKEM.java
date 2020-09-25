@@ -15,8 +15,6 @@ import de.upb.crypto.craco.interfaces.proxy.TransformationKey;
 import de.upb.crypto.craco.kem.asym.elgamal.ElgamalKEM;
 import de.upb.crypto.craco.kem.asym.elgamal.ElgamalKEM.KeyAndCiphertextAndNonce;
 import de.upb.crypto.craco.kem.asym.elgamal.ElgamalKEMCiphertext;
-import de.upb.crypto.math.expressions.group.GroupElementExpression;
-import de.upb.crypto.math.expressions.group.PairingExpr;
 import de.upb.crypto.math.interfaces.hash.HashIntoStructure;
 import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.interfaces.structures.Group;
@@ -27,7 +25,6 @@ import de.upb.crypto.math.structures.zn.HashIntoZn;
 import de.upb.crypto.math.structures.zn.Zn.ZnElement;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
-import org.apache.log4j.Logger;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -47,7 +44,6 @@ import java.util.Map.Entry;
 
 public class ElgamalLargeUniverseDelegationKEM
         implements PredicateKEM<SymmetricKey>, DelegatedPartialDecapsulationScheme<SymmetricKey> {
-    private static final Logger LOGGER = Logger.getLogger(ElgamalLargeUniverseDelegationKEM.class.getName());
 
     private final LUDPublicParameters pp;
 
@@ -152,7 +148,6 @@ public class ElgamalLargeUniverseDelegationKEM
                 (ElgamalKEMCiphertext) kcn.keyAndCiphertext.encapsulatedKey,
                 c0,
                 ciphertextComponents);
-        LOGGER.trace("C: " + ct);
 
         KeyAndCiphertext<SymmetricKey> result = new KeyAndCiphertext<SymmetricKey>();
         result.encapsulatedKey = ct;
