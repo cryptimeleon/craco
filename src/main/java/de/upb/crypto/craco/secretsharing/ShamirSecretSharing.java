@@ -242,7 +242,6 @@ public class ShamirSecretSharing implements LinearSecretSharing<Policy> {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(policy, field);
     }
 }

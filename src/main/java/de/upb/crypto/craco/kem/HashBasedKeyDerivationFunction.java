@@ -9,6 +9,7 @@ import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * A basic approach of a {@link KeyDerivationFunction} using a hash function. This class can be used to generate key
@@ -75,9 +76,7 @@ public class HashBasedKeyDerivationFunction implements KeyDerivationFunction<Sym
         if (getClass() != obj.getClass())
             return false;
         HashBasedKeyDerivationFunction other = (HashBasedKeyDerivationFunction) obj;
-        if (hashFunction == null) {
-            return other.hashFunction == null;
-        } else return hashFunction.equals(other.hashFunction);
+        return Objects.equals(hashFunction, other.hashFunction);
     }
 
 }

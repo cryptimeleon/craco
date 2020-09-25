@@ -6,47 +6,32 @@ import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.ListRepresentation;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.util.RepresentationUtil;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * @author Fabian Eidens
  */
 public class BBSBVerificationKey implements VerificationKey {
+    @Represented(restorer = "G2")
     private GroupElement w; // in G_2
+    @Represented(restorer = "[G2]")
     private GroupElement[] uiG2Elements; // u_i's in G_2
 
     public BBSBVerificationKey() {
         super();
     }
 
-    public BBSBVerificationKey(Group groupG2, Representation repr) {
-        ListRepresentation listRepr = repr.obj().get("uiG2Elements").list();
-
-        uiG2Elements = new GroupElement[listRepr.size()];
-        for (int i = 0; i < listRepr.size(); i++) {
-            uiG2Elements[i] = groupG2.getElement(listRepr.get(i));
-        }
-
-        w = groupG2.getElement(repr.obj().get("w"));
-
+    public BBSBVerificationKey(Representation repr, Group groupG2) {
+        new ReprUtil(this).register(groupG2, "G2").deserialize(repr);
     }
 
     public Representation getRepresentation() {
-        ObjectRepresentation repr = new ObjectRepresentation();
-
-        RepresentationUtil.putElement(this, repr, "w");
-
-        ListRepresentation listRep = new ListRepresentation();
-
-        for (GroupElement ui : uiG2Elements) {
-            listRep.put(ui.getRepresentation());
-        }
-
-        repr.put("uiG2Elements", listRep);
-
-        return repr;
+        return ReprUtil.serialize(this);
     }
 
     public GroupElement getW() {
@@ -87,14 +72,8 @@ public class BBSBVerificationKey implements VerificationKey {
         if (getClass() != obj.getClass())
             return false;
         BBSBVerificationKey other = (BBSBVerificationKey) obj;
-        if (!Arrays.equals(uiG2Elements, other.uiG2Elements))
-            return false;
-        if (w == null) {
-            if (other.w != null)
-                return false;
-        } else if (!w.equals(other.w))
-            return false;
-        return true;
+        return Objects.equals(w, other.w)
+                && Arrays.equals(uiG2Elements, other.uiG2Elements);
     }
 
 }

@@ -70,7 +70,7 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
 
         // \hat{X_i}'s in paper
         GroupElement[] group2ElementsHatXi =
-                Arrays.stream(exponentsXi).map(group2ElementTildeG::pow).toArray(GroupElement[]::new);
+                Arrays.stream(exponentsXi).map(x -> group2ElementTildeG.pow(x).compute()).toArray(GroupElement[]::new);
 
         // Set secret key (signing key)
         SPSEQSigningKey sk = new SPSEQSigningKey();
@@ -207,9 +207,9 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
         ZpElement psiInv = psi.inv();
 
         SPSEQSignature sigma = (SPSEQSignature) signature;
-        GroupElement sigmaZ = sigma.getGroup1ElementSigma1Z().pow(psi.mul(mu));
-        GroupElement sigmaY = sigma.getGroup1ElementSigma2Y().pow(psiInv);
-        GroupElement sigmaHatY = sigma.getGroup1ElementSigma3HatY().pow(psiInv);
+        GroupElement sigmaZ = sigma.getGroup1ElementSigma1Z().pow(psi.mul(mu)).compute();
+        GroupElement sigmaY = sigma.getGroup1ElementSigma2Y().pow(psiInv).compute();
+        GroupElement sigmaHatY = sigma.getGroup1ElementSigma3HatY().pow(psiInv).compute();
 
         return new SPSEQSignature(sigmaZ, sigmaY, sigmaHatY);
     }
@@ -236,8 +236,13 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
             throw new IllegalArgumentException("Not a valid element 'mu' for change representative for this scheme");
         }
         // apply pow(mu) to every message element: M_i^{mu}
-        return new MessageBlock(((MessageBlock) plainText).parallelStream().map(m -> ((GroupElementPlainText) m).get().pow(mu)).
-                map(GroupElementPlainText::new).collect(Collectors.toList()));
+        return new MessageBlock(
+                ((MessageBlock) plainText)
+                        .parallelStream()
+                        .map(m -> ((GroupElementPlainText) m).get().pow(mu).compute())
+                        .map(GroupElementPlainText::new)
+                        .collect(Collectors.toList())
+        );
     }
 
     @Override

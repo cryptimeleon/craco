@@ -43,7 +43,7 @@ public class PS18SignatureScheme implements SignatureScheme {
         Zp zp = pp.getZp();
 
         // Pick \tilde{g} from G_2^*
-        GroupElement group2ElementTildeG = group2.getUniformlyRandomNonNeutral();
+        GroupElement group2ElementTildeG = group2.getUniformlyRandomNonNeutral().compute();
         // Pick x from Z_p^*
         Zp.ZpElement exponentX = zp.getUniformlyRandomUnit();
         // Pick y_1, ..., y_{r+1} from Z_p^* (r is number of messages)
@@ -51,10 +51,10 @@ public class PS18SignatureScheme implements SignatureScheme {
                 .mapToObj(a -> zp.getUniformlyRandomUnit()));
 
         // Compute \tilde{X} = \tilde{g}^x
-        GroupElement group2ElementTildeX = group2ElementTildeG.pow(exponentX);
+        GroupElement group2ElementTildeX = group2ElementTildeG.pow(exponentX).compute();
         // Compute (\tilde{Y_1}, ..., \tilde{Y_{r+1}}) = (\tilde{g}^{y_1}, ..., \tilde{g}^{y_{r+1}})
         GroupElementVector group2ElementsTildeYi =
-                new GroupElementVector(exponentsYi.map(x -> group2ElementTildeG.pow((Zp.ZpElement) x)));
+                new GroupElementVector(exponentsYi.map(x -> group2ElementTildeG.pow((Zp.ZpElement) x).compute()));
 
 
         // Precompute for bases in multi-exponentiation

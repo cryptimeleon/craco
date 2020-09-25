@@ -36,9 +36,6 @@ public class PSVerificationKey implements VerificationKey {
     @Represented(restorer = "[G2]")
     protected GroupElement[] group2ElementsTildeYi;
 
-    // pointer field used to store the structure for the representation process; in all other cases this should be null
-    protected Group groupG2 = null;
-
     public PSVerificationKey() {
         super();
     }
@@ -92,7 +89,6 @@ public class PSVerificationKey implements VerificationKey {
 
     @Override
     public int hashCode() {
-
         int result = Objects.hash(group2ElementTildeG, group2ElementTildeX);
         result = 31 * result + Arrays.hashCode(group2ElementsTildeYi);
         return result;
