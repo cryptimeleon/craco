@@ -71,7 +71,7 @@ public class DistributedABECPWat11Setup {
         }
         ZpElement y_0 = zp.getUniformlyRandomUnit();
 
-        PrimeFieldPolynom q_0 = new PrimeFieldPolynom(zp, t - 1);
+        PrimeFieldPolynomial q_0 = new PrimeFieldPolynomial(zp, t - 1);
 
         q_0.createRandom(RandomGeneratorSupplier.instance().get());
         q_0.setCoefficient(y_0, 0);

@@ -81,7 +81,7 @@ public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncr
         result = pp.getE().apply(D_prime_xi, pp.getG());
 
 
-        result = result.op(pp.getE().apply(pp.getG_a(), D_doublePrime_xi).inv());
+        result = result.op(pp.getE().apply(pp.getgA(), D_doublePrime_xi).inv());
         if (!result.equals(pp.getVerificationKeys().get(xi))) {
             return false;
         }
