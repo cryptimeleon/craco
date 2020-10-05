@@ -41,11 +41,10 @@ public class ABECPWat11KEM extends AbstractABECPWat11 implements PredicateKEM<Ke
 
     /**
      * Essentially {@link ABECPWat11#encrypt(PlainText, EncryptionKey)} but instead of encrypting some {@link PlainText}
-     * m, it outputs the first component of the ciphertext ({@link ABECPWat11CipherText#ePrime}) dropping the factor
-     * m as a key
+     * m, it outputs the first component of the ciphertext ({@code ePrime} from {@link ABECPWat11CipherText}) 
+     * dropping the factor m as a key
      * along with the second ({@link ABECPWat11KEMCipherText#eTwoPrime}) and third ({@link ABECPWat11KEMCipherText}
-     * #E) component as the
-     * encapsulation of this key.
+     * #E) component as the encapsulation of this key.
      *
      * @param publicKey {@link ABECPWat11EncryptionKey} created by
      *                  {@link ABECPWat11#generateEncryptionKey(de.upb.crypto.craco.common.interfaces.pe.CiphertextIndex)}
@@ -59,7 +58,6 @@ public class ABECPWat11KEM extends AbstractABECPWat11 implements PredicateKEM<Ke
         ABECPWat11EncryptionKey pk = (ABECPWat11EncryptionKey) publicKey;
 
         Zp.ZpElement s = zp.getUniformlyRandomUnit();
-        logger.debug("Generated random secret " + s);
 
         // message: Y^s = e(g,g)^{ys} \in G_T
         GroupElement kemMessage = pp.getY().pow(s);
@@ -70,7 +68,7 @@ public class ABECPWat11KEM extends AbstractABECPWat11 implements PredicateKEM<Ke
 
         MonotoneSpanProgram msp = new MonotoneSpanProgram(pk.getPolicy(), zp);
         Map<Integer, Zp.ZpElement> shares = msp.getShares(s);
-        if (!isMonotoneSpanProgramValid(shares, msp, pp.getL_max()))
+        if (!isMonotoneSpanProgramValid(shares, msp, pp.getlMax()))
             throw new IllegalArgumentException("MSP is invalid");
 
         // second part of the ciphertext of the key, see ABECPWat11
@@ -80,8 +78,8 @@ public class ABECPWat11KEM extends AbstractABECPWat11 implements PredicateKEM<Ke
         KeyAndCiphertext<KeyMaterial> output = new KeyAndCiphertext<>();
 
         // use log_2(|G_T|) as min-entropy of source, because kemMessage is distributed uniformly at random in G_T
-        output.key = new UniqueByteKeyMaterial(kemMessage, pp.getGroupGT().size().bitLength());
-        output.encapsulatedKey = new ABECPWat11KEMCipherText(pk.getPolicy(), E_two_prime, E);
+        output.key = new UniqueByteKeyMaterial(kemMessage.compute(), pp.getGroupGT().size().bitLength());
+        output.encapsulatedKey = new ABECPWat11KEMCipherText(pk.getPolicy(), E_two_prime.compute(), E);
 
         return output;
     }
@@ -108,7 +106,7 @@ public class ABECPWat11KEM extends AbstractABECPWat11 implements PredicateKEM<Ke
     }
 
     public CipherText getEncapsulatedKey(Representation repr) {
-        return new ABECPWat11CipherText(repr, pp);
+        return new ABECPWat11KEMCipherText(repr, pp);
     }
 
     public EncryptionKey getEncapsulationKey(Representation repr) {
@@ -121,6 +119,12 @@ public class ABECPWat11KEM extends AbstractABECPWat11 implements PredicateKEM<Ke
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof ABECPWat11KEM && super.equals(o);
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (getClass() != o.getClass())
+            return false; 
+        return super.equals(o);
     }
 }

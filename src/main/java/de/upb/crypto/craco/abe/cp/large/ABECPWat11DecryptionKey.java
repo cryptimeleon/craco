@@ -7,11 +7,11 @@ import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A {@link DecryptionKey} for the {@link ABECPWat11} that stores
@@ -24,19 +24,14 @@ import java.util.Map;
  */
 public class ABECPWat11DecryptionKey implements DecryptionKey {
 
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "G1")
     private GroupElement d_prime, d_prime2;
 
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "attr -> G1")
     private Map<Attribute, GroupElement> d;
 
-    @SuppressWarnings("unused")
-    private Group groupG1;
-
     public ABECPWat11DecryptionKey(Representation repr, ABECPWat11PublicParameters pp) {
-        groupG1 = pp.getGroupG1();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).register(pp.getGroupG1(), "G1").deserialize(repr);
     }
 
     public ABECPWat11DecryptionKey(Map<Attribute, GroupElement> d, GroupElement d_prime, GroupElement d_prime2) {
@@ -59,7 +54,7 @@ public class ABECPWat11DecryptionKey implements DecryptionKey {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -81,21 +76,8 @@ public class ABECPWat11DecryptionKey implements DecryptionKey {
         if (getClass() != obj.getClass())
             return false;
         ABECPWat11DecryptionKey other = (ABECPWat11DecryptionKey) obj;
-        if (d == null) {
-            if (other.d != null)
-                return false;
-        } else if (!d.equals(other.d))
-            return false;
-        if (d_prime == null) {
-            if (other.d_prime != null)
-                return false;
-        } else if (!d_prime.equals(other.d_prime))
-            return false;
-        if (d_prime2 == null) {
-            if (other.d_prime2 != null)
-                return false;
-        } else if (!d_prime2.equals(other.d_prime2))
-            return false;
-        return true;
+        return Objects.equals(d, other.d)
+                && Objects.equals(d_prime, other.d_prime)
+                && Objects.equals(d_prime2, other.d_prime2);
     }
 }

@@ -3,31 +3,26 @@ package de.upb.crypto.craco.kem.abe.cp.large;
 import de.upb.crypto.craco.abe.cp.large.ABECPWat11PublicParameters;
 import de.upb.crypto.craco.common.interfaces.CipherText;
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
-import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representable;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
 import java.util.Map;
+import java.util.Objects;
 
 public class ABECPWat11KEMCipherText implements CipherText, Representable {
 
     @Represented
     protected Policy policy;
 
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer="G1")
     protected GroupElement eTwoPrime; // in G_1
 
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer="int -> G1")
     protected Map<BigInteger, GroupElement> eElementMap; // in G_1
-
-    @SuppressWarnings("unused")
-    protected Group groupG1;
 
     public ABECPWat11KEMCipherText(Policy policy, GroupElement eTwoPrime, Map<BigInteger, GroupElement> eElementMap) {
         this.policy = policy;
@@ -36,8 +31,7 @@ public class ABECPWat11KEMCipherText implements CipherText, Representable {
     }
 
     public ABECPWat11KEMCipherText(Representation repr, ABECPWat11PublicParameters pp) {
-        groupG1 = pp.getGroupG1();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).register(pp.getGroupG1(), "G1").deserialize(repr);
     }
 
     public ABECPWat11KEMCipherText() {
@@ -74,27 +68,14 @@ public class ABECPWat11KEMCipherText implements CipherText, Representable {
         if (getClass() != obj.getClass())
             return false;
         ABECPWat11KEMCipherText other = (ABECPWat11KEMCipherText) obj;
-        if (eElementMap == null) {
-            if (other.eElementMap != null)
-                return false;
-        } else if (!eElementMap.equals(other.eElementMap))
-            return false;
-        if (eTwoPrime == null) {
-            if (other.eTwoPrime != null)
-                return false;
-        } else if (!eTwoPrime.equals(other.eTwoPrime))
-            return false;
-        if (policy == null) {
-            if (other.policy != null)
-                return false;
-        } else if (!policy.equals(other.policy))
-            return false;
-        return true;
+        return Objects.equals(eElementMap, other.eElementMap)
+                && Objects.equals(eTwoPrime, other.eTwoPrime)
+                && Objects.equals(policy, other.policy);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

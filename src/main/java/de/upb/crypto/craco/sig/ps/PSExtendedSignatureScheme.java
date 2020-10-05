@@ -1,7 +1,6 @@
 package de.upb.crypto.craco.sig.ps;
 
 import de.upb.crypto.craco.commitment.pedersen.PedersenCommitmentScheme;
-import de.upb.crypto.craco.commitment.pedersen.PedersenPublicParameters;
 import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.RingElementPlainText;
 import de.upb.crypto.craco.common.interfaces.PlainText;
@@ -11,6 +10,7 @@ import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.craco.sig.ps.PSSignatureScheme;
 
 import java.util.Arrays;
 
@@ -20,13 +20,13 @@ import java.util.Arrays;
  * <p>
  * The signing key remains the same, but the verification key is extended to store the generator g and the
  * group-elements Y-i from group 1. The extended implementation of the
- * {@link de.upb.crypto.craco.sig.ps.PSSignatureScheme}
+ * {@link PSSignatureScheme}
  * allows the usage of the {@link PSExtendedVerificationKey} containing the generator g and the
  * group-elements Y-i from group 1 and enable 'signing messages blindly'
  * when used in a {@link PedersenCommitmentScheme}:
  * it allows for being able to blind and unblind messages before and after signing them. This is
  * achieved by using the same g and Y-i in the
- * {@link PedersenPublicParameters} as provided by the
+ * {@link de.upb.crypto.craco.commitment.pedersen.PedersenCommitmentScheme} as provided by the
  * {@link PSExtendedSignatureScheme}. This case allows a user to receive a signature on a commitment for a message and
  * to then calculate the signature for the uncommited message and thereby receiving a signature of a signer for a
  * message without the signer knowing the content of the message.
@@ -38,7 +38,7 @@ import java.util.Arrays;
  * Report 2015/525, 2015.
  * </p>
  */
-public class PSExtendedSignatureScheme extends de.upb.crypto.craco.sig.ps.PSSignatureScheme implements SignatureScheme {
+public class PSExtendedSignatureScheme extends PSSignatureScheme{
 
     public PSExtendedSignatureScheme(PSPublicParameters pp) {
         super(pp);
@@ -72,7 +72,7 @@ public class PSExtendedSignatureScheme extends de.upb.crypto.craco.sig.ps.PSSign
         GroupElement group1ElementG = getPp().getBilinearMap().getG1().getGenerator();
         // Y_i enabling optional blinding/unblinding
         GroupElement[] group1ElementsYi = Arrays.stream(shortKey.getSigningKey().getExponentsYi())
-                .map(group1ElementG::pow).toArray(GroupElement[]::new);
+                .map(y -> group1ElementG.pow(y).compute()).toArray(GroupElement[]::new);
 
         // Set the extended verification key for a Pointcheval Sanders signature scheme
         final PSVerificationKey shortVerificationKey = shortKey.getVerificationKey();
@@ -114,8 +114,8 @@ public class PSExtendedSignatureScheme extends de.upb.crypto.craco.sig.ps.PSSign
         GroupElement sigma2 = signature.getGroup1ElementSigma2();
 
         // Calculate the randomized signature (o_1', o_2') = ((o_1)^u,(o_2 (o_1)^r)^u)
-        GroupElement sigma1prime = sigma1.pow(u);
-        GroupElement sigma2prime = sigma2.op(sigma1.pow(random)).pow(u);
+        GroupElement sigma1prime = sigma1.pow(u).compute();
+        GroupElement sigma2prime = sigma2.op(sigma1.pow(random)).pow(u).compute();
 
         return new PSSignature(sigma1prime, sigma2prime);
     }
@@ -145,7 +145,7 @@ public class PSExtendedSignatureScheme extends de.upb.crypto.craco.sig.ps.PSSign
 
         // Calculating the signature
         final GroupElement g1 = verificationKey.getGroup1ElementG();
-        GroupElement sigma1 = g1.pow(u);
+        GroupElement sigma1 = g1.pow(u).compute();
         final Zp.ZpElement signingKeyX = signingKey.getExponentX();
         GroupElement sigma2 = g1.pow(signingKeyX).op(blindingElement);
         for (int i = 0; i < messageBlock.size(); ++i) {
@@ -155,7 +155,7 @@ public class PSExtendedSignatureScheme extends de.upb.crypto.craco.sig.ps.PSSign
             sigma2 = sigma2.op(group1YiElement.pow(zpMessageElement));
         }
         sigma2 = sigma2.pow(u);
-        return new PSSignature(sigma1, sigma2);
+        return new PSSignature(sigma1, sigma2.compute());
     }
 
     /**
@@ -172,6 +172,6 @@ public class PSExtendedSignatureScheme extends de.upb.crypto.craco.sig.ps.PSSign
         final GroupElement sigma1 = signature.getGroup1ElementSigma1();
         final GroupElement sigma2 = signature.getGroup1ElementSigma2();
         final GroupElement unblindedSigma2 = sigma2.op(sigma1.pow(blindingRandomness).inv());
-        return new PSSignature(sigma1, unblindedSigma2);
+        return new PSSignature(sigma1, unblindedSigma2.compute());
     }
 }

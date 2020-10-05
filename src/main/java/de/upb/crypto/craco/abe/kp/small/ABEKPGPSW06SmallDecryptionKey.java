@@ -5,10 +5,13 @@ import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.*;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A {@link DecryptionKey} for the {@link ABEKPGPSW06Small} that
@@ -21,7 +24,9 @@ import java.util.Map;
  */
 public class ABEKPGPSW06SmallDecryptionKey implements DecryptionKey {
 
+    @Represented
     private Policy policy;
+    @Represented(restorer = "int -> G1")
     private Map<BigInteger, GroupElement> D;
 
     public ABEKPGPSW06SmallDecryptionKey(Policy policy, Map<BigInteger, GroupElement> d) {
@@ -30,20 +35,12 @@ public class ABEKPGPSW06SmallDecryptionKey implements DecryptionKey {
     }
 
     public ABEKPGPSW06SmallDecryptionKey(Representation repr, ABEKPGPSW06SmallPublicParameters kpp) {
-        D = new HashMap<BigInteger, GroupElement>();
-        repr.obj().get("D").map().getMap()
-                .forEach((key, value) -> D.put(key.bigInt().get(), kpp.getGroupG1().getElement(value)));
-        policy = (Policy) repr.obj().get("policy").repr().recreateRepresentable();
+        new ReprUtil(this).register(kpp.getGroupG1(), "G1").deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        ObjectRepresentation repr = new ObjectRepresentation();
-        repr.put("policy", new RepresentableRepresentation(policy));
-        MapRepresentation tRepr = new MapRepresentation();
-        D.forEach((key, value) -> tRepr.put(new BigIntegerRepresentation(key), value.getRepresentation()));
-        repr.put("D", tRepr);
-        return repr;
+        return ReprUtil.serialize(this);
     }
 
     public Policy getPolicy() {
@@ -72,17 +69,8 @@ public class ABEKPGPSW06SmallDecryptionKey implements DecryptionKey {
         if (getClass() != obj.getClass())
             return false;
         ABEKPGPSW06SmallDecryptionKey other = (ABEKPGPSW06SmallDecryptionKey) obj;
-        if (D == null) {
-            if (other.D != null)
-                return false;
-        } else if (!D.equals(other.D))
-            return false;
-        if (policy == null) {
-            if (other.policy != null)
-                return false;
-        } else if (!policy.equals(other.policy))
-            return false;
-        return true;
+        return Objects.equals(D, other.D)
+                && Objects.equals(policy, other.policy);
     }
 
 }

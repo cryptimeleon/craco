@@ -7,14 +7,14 @@ import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
-;
+;import java.util.Objects;
 
 /**
  * An {@link EncryptionKey} for the {@link ABECPWat11Small} that stores a
- * {@link} Policy as {@link CiphertextIndex}.
+ * {@link Policy} as {@link CiphertextIndex}.
  * <p>
  * This key should be created by
  * {@link ABECPWat11Small#generateEncryptionKey(de.upb.crypto.craco.common.interfaces.pe.CiphertextIndex)}
@@ -32,7 +32,7 @@ public class ABECPWat11SmallEncryptionKey implements EncryptionKey {
     }
 
     public ABECPWat11SmallEncryptionKey(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public Policy getPolicy() {
@@ -41,7 +41,7 @@ public class ABECPWat11SmallEncryptionKey implements EncryptionKey {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -61,12 +61,7 @@ public class ABECPWat11SmallEncryptionKey implements EncryptionKey {
         if (getClass() != obj.getClass())
             return false;
         ABECPWat11SmallEncryptionKey other = (ABECPWat11SmallEncryptionKey) obj;
-        if (policy == null) {
-            if (other.policy != null)
-                return false;
-        } else if (!policy.equals(other.policy))
-            return false;
-        return true;
+        return Objects.equals(policy, other.policy);
     }
 
     @Override

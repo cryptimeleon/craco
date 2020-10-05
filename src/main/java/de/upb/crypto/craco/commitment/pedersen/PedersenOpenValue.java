@@ -4,11 +4,11 @@ import de.upb.crypto.craco.commitment.interfaces.OpenValue;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedArray;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -18,21 +18,19 @@ public class PedersenOpenValue implements OpenValue {
     private Zp zp;
 
     @UniqueByteRepresented
-    @RepresentedArray(elementRestorer = @Represented(structure = "zp", recoveryMethod = Zp.ZpElement.RECOVERY_METHOD))
+    @Represented(restorer = "[zp]")
     private Zp.ZpElement[] messages;
 
     @UniqueByteRepresented
-    @Represented(structure = "zp", recoveryMethod = Zp.ZpElement.RECOVERY_METHOD)
-    private Zp.ZpElement randomness;
+    @Represented
+    private BigInteger randomness;
 
-    public PedersenOpenValue(Zp.ZpElement[] messages, Zp.ZpElement randomness) {
-        this.messages = messages;
+    public PedersenOpenValue(BigInteger randomness) {
         this.randomness = randomness;
-        this.zp = randomness.getStructure();
     }
 
-    public PedersenOpenValue(Representation representation) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(representation, this);
+    public PedersenOpenValue(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
 
     }
 
@@ -40,21 +38,18 @@ public class PedersenOpenValue implements OpenValue {
         return messages;
     }
 
-    public Zp.ZpElement getRandomValue() {
+    public BigInteger getRandomValue() {
         return randomness;
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
     public ByteAccumulator updateAccumulator(ByteAccumulator byteAccumulator) {
-        for (Zp.ZpElement message : messages) {
-            byteAccumulator.escapeAndSeparate(message);
-        }
-        byteAccumulator.append(randomness);
+        byteAccumulator.append(randomness.toByteArray());
         return byteAccumulator;
     }
 
@@ -63,15 +58,11 @@ public class PedersenOpenValue implements OpenValue {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PedersenOpenValue that = (PedersenOpenValue) o;
-        return Objects.equals(zp, that.zp) &&
-                Arrays.equals(messages, that.messages) &&
-                Objects.equals(randomness, that.randomness);
+        return randomness.equals(that.randomness);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(zp, randomness);
-        result = 31 * result + Arrays.hashCode(messages);
-        return result;
+        return Objects.hash(randomness);
     }
 }

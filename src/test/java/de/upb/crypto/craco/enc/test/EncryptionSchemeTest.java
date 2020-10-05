@@ -11,8 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Supplier;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(value = Parameterized.class)
 public class EncryptionSchemeTest {
@@ -34,7 +33,7 @@ public class EncryptionSchemeTest {
 
     @Test
     public void testEncryptDecrypt() throws UnsupportedEncodingException {
-        System.out.println("Testing valid encrypt/decrypt for " + encryptionScheme.getRepresentedTypeName() + " ...");
+        System.out.println("Testing valid encrypt/decrypt for " + encryptionScheme.getClass().getName() + " ...");
         PlainText data = plaintextSupplier.get();
 
         DecryptionKey sk = validKeyPair.getSk();
@@ -43,12 +42,12 @@ public class EncryptionSchemeTest {
         // Do an encryption/decryption run
         CipherText cipherText = encryptionScheme.encrypt(data, pk);
         PlainText decryptedCipherText = encryptionScheme.decrypt(cipherText, sk);
-        assertTrue(data.equals(decryptedCipherText));
+        assertEquals(data, decryptedCipherText);
     }
 
     @Test
     public void testFailEncryptDecrypt() throws UnsupportedEncodingException {
-        System.out.println("Testing invalid encrypt/decrypt for " + encryptionScheme.getRepresentedTypeName() + " ...");
+        System.out.println("Testing invalid encrypt/decrypt for " + encryptionScheme.getClass().getName() + " ...");
 
         PlainText data = plaintextSupplier.get();
 
@@ -59,7 +58,7 @@ public class EncryptionSchemeTest {
         CipherText cipherText = encryptionScheme.encrypt(data, pk);
         try {
             PlainText decryptedCipherText = encryptionScheme.decrypt(cipherText, sk);
-            assertFalse(data.equals(decryptedCipherText));
+            assertNotEquals(data, decryptedCipherText);
         } catch (Exception e) {
             assertTrue(e instanceof UnqualifiedKeyException); //schemes should throw UnqualifiedKeyExceptions if the
             // key is not fit to decrypt.
@@ -79,6 +78,7 @@ public class EncryptionSchemeTest {
         schemes.addAll(ABECPWat11SmallParams.getParams());
         schemes.addAll(ABEKPGPSW06Params.getParams());
         schemes.addAll(DistributedABECPWat11Params.getParams());
+        schemes.addAll(ABECPWat11AsymSmallParams.getParams());
         return schemes;
     }
 

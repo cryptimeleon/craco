@@ -10,7 +10,6 @@ import de.upb.crypto.craco.common.interfaces.pe.PredicateEncryptionScheme;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
-import org.apache.logging.log4j.Level;
 
 import java.math.BigInteger;
 import java.util.Map;
@@ -74,21 +73,18 @@ public class ABECPWat11 extends AbstractABECPWat11 implements PredicateEncryptio
         GroupElementPlainText pt = (GroupElementPlainText) plainText;
         ABECPWat11EncryptionKey pk = (ABECPWat11EncryptionKey) publicKey;
 
-        logger.log(Level.DEBUG, "Encrypting plaintext " + pt + " with key " + pk);
-
         ZpElement s = zp.getUniformlyRandomUnit();
-        logger.debug("Generated random secret " + s);
 
         GroupElement encryptionFactor = pp.getY().pow(s);
         // m \cdot Y^s = m \cdot E(g,g)^{ys}
-        GroupElement ePrime = pt.get().op(encryptionFactor);
+        GroupElement ePrime = pt.get().op(encryptionFactor).compute();
         // g^s \in G_1
-        GroupElement eTwoPrime = pp.getG().pow(s);
+        GroupElement eTwoPrime = pp.getG().pow(s).compute();
 
         // compute E_i = g^{a \cdot \lambda_i} \cdot T(\rho(i))^{-s} for every attribute i
         MonotoneSpanProgram msp = new MonotoneSpanProgram(pk.getPolicy(), zp);
         Map<Integer, ZpElement> shares = msp.getShares(s);
-        if (!isMonotoneSpanProgramValid(shares, msp, pp.getL_max()))
+        if (!isMonotoneSpanProgramValid(shares, msp, pp.getlMax()))
             throw new IllegalArgumentException("MSP is invalid");
 
         Map<BigInteger, GroupElement> elementE = computeE(s, msp, shares);
@@ -106,7 +102,7 @@ public class ABECPWat11 extends AbstractABECPWat11 implements PredicateEncryptio
         ABECPWat11DecryptionKey sk = (ABECPWat11DecryptionKey) privateKey;
         ABECPWat11CipherText c = (ABECPWat11CipherText) cipherText;
         GroupElement encryptionFactor = restoreYs(sk, c);
-        return new GroupElementPlainText(c.getEPrime().op(encryptionFactor.inv()));
+        return new GroupElementPlainText(c.getEPrime().op(encryptionFactor.inv()).compute());
     }
 
     @Override

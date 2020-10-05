@@ -5,27 +5,23 @@ import de.upb.crypto.craco.common.RingElementPlainText;
 import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.craco.sig.interfaces.*;
 import de.upb.crypto.craco.sig.ps.PSPublicParameters;
-import de.upb.crypto.math.expressions.group.*;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.structures.cartesian.GroupElementVector;
+import de.upb.crypto.math.structures.cartesian.RingElementVector;
 import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
+public class PS18SignatureScheme implements SignatureScheme {
 
-public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme {
-
-    /**
-     * pp in paper. Public parameters of the Pointcheval Sanders 2018 (Section 4.2)
-     * signature scheme.
-     */
     @Represented
-    protected PSPublicParameters pp;
+    PSPublicParameters pp;
 
     public PS18SignatureScheme(PSPublicParameters pp) {
         this.pp = pp;
@@ -40,7 +36,6 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
         return ReprUtil.serialize(this);
     }
 
-    @Override
     public SignatureKeyPair<? extends PS18VerificationKey, ? extends PS18SigningKey>
     generateKeyPair(int numberOfMessages) {
         // get exponent field and store group2 for shorter usage
@@ -48,20 +43,23 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
         Zp zp = pp.getZp();
 
         // Pick \tilde{g} from G_2^*
-        GroupElement group2ElementTildeG = group2.getUniformlyRandomNonNeutral();
+        GroupElement group2ElementTildeG = group2.getUniformlyRandomNonNeutral().compute();
         // Pick x from Z_p^*
-        ZpElement exponentX = zp.getUniformlyRandomUnit();
+        Zp.ZpElement exponentX = zp.getUniformlyRandomUnit();
         // Pick y_1, ..., y_{r+1} from Z_p^* (r is number of messages)
-        ZpElement[] exponentsYi = IntStream.range(0, numberOfMessages+1)
-                .mapToObj(a -> zp.getUniformlyRandomUnit())
-                .toArray(ZpElement[]::new);
+        RingElementVector exponentsYi = RingElementVector.fromStream(IntStream.range(0, numberOfMessages + 1)
+                .mapToObj(a -> zp.getUniformlyRandomUnit()));
 
         // Compute \tilde{X} = \tilde{g}^x
-        GroupElement group2ElementTildeX = group2ElementTildeG.pow(exponentX);
+        GroupElement group2ElementTildeX = group2ElementTildeG.pow(exponentX).compute();
         // Compute (\tilde{Y_1}, ..., \tilde{Y_{r+1}}) = (\tilde{g}^{y_1}, ..., \tilde{g}^{y_{r+1}})
-        GroupElement[] group2ElementsTildeYi = Arrays.stream(exponentsYi)
-                .map(group2ElementTildeG::pow)
-                .toArray(GroupElement[]::new);
+        GroupElementVector group2ElementsTildeYi =
+                new GroupElementVector(exponentsYi.map(x -> group2ElementTildeG.pow((Zp.ZpElement) x).compute()));
+
+
+        // Precompute for bases in multi-exponentiation
+        group2ElementTildeX.precomputePow();
+        group2ElementsTildeYi.map(GroupElement::precomputePow);
 
         // Construct secret signing key
         PS18SigningKey sk = new PS18SigningKey(exponentX, exponentsYi);
@@ -105,7 +103,7 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
                 .getUniformlyRandomNonNeutral();
 
         // m' in Z_p, first element of signature
-        ZpElement exponentPrimeM = zp.getUniformlyRandomElement();
+        Zp.ZpElement exponentPrimeM = zp.getUniformlyRandomElement();
 
         // Compute third element of signature
         GroupElement group1ElementSigma2 = computeSigma2(
@@ -155,6 +153,127 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
         return leftHandSide.equals(rightHandSide);
     }
 
+    /**
+     * Computes sigma_2 in paper. Since this computation is shared between the regular
+     * [PS18] and the random oracle version – just with a different exponentPrimeM –
+     * we outsource it to this method.
+     *
+     * @param messageBlock message to sign.
+     * @param sk signing key.
+     * @param exponentPrimeM m' in paper.
+     * @param sigma1 \sigma_1 (also h) in paper.
+     * @return \sigma_2 from paper.
+     */
+    protected GroupElement computeSigma2(MessageBlock messageBlock, PS18SigningKey sk,
+                                         Zp.ZpElement exponentPrimeM, GroupElement sigma1) {
+        // First we compute the exponent = x + \sum_{i=1}{r}{y_i * m_i} + y_{r+1} * m'
+        Zp.ZpElement resultExponent = sk.getExponentX();
+        for (int i = 0; i < sk.getNumberOfMessages(); ++i) {
+            if (messageBlock.get(i) == null) {
+                throw new IllegalArgumentException(
+                        String.format("%d'th message element is null.", i)
+                );
+            }
+            PlainText messagePartI = messageBlock.get(i);
+            if (!(messagePartI instanceof RingElementPlainText)) {
+                throw new IllegalArgumentException(
+                        String.format("%d'th message element is not a 'RingElementPlainText' instance.", i)
+                );
+            }
+            RingElementPlainText messageRingElement = (RingElementPlainText) messagePartI;
+            if (!(messageRingElement.getRingElement().getStructure().equals(pp.getZp()))) {
+                throw new IllegalArgumentException(
+                        String.format("%d'th message element is not an element of Zp.", i)
+                );
+            }
+            Zp.ZpElement messageElement = (Zp.ZpElement) messageRingElement.getRingElement();
+            resultExponent = resultExponent.add(sk.getExponentsYi().get(i).mul(messageElement));
+        }
+        resultExponent = resultExponent.add(
+                sk.getExponentsYi().get(sk.getNumberOfMessages()).mul(exponentPrimeM)
+        );
+        // Now we exponentiate h with the exponent and return that as sigma_2.
+        return sigma1.pow(resultExponent.getInteger());
+    }
+
+    /**
+     * Computes left hand side of verification equation. Since this computation is shared between the regular
+     * [PS18] and the random oracle version – just with a different exponentPrimeM –
+     * we outsource it to this method.
+     *
+     * @param messageBlock message to verify signature for.
+     * @param pk public verification key
+     * @param exponentPrimeM m' in paper. First element of signature (for 4.2) or computed from message
+     *                       using random oracle (hash function) (for ROM from 4.3).
+     * @param sigma1 \sigma_1 in paper. Either second or first element of signature (see above).
+     * @return element of G_T which is the left hand side of the verification equation.
+     */
+    protected GroupElement computeLeftHandSide(MessageBlock messageBlock, PS18VerificationKey pk,
+                                               Zp.ZpElement exponentPrimeM, GroupElement sigma1) {
+        // Computation of group element from G_2 for left hand side requires sum
+        // \tilde{X} * \prod_{i=1}{r}{\tilde{Y}_i^{m_i}} * \tilde{Y}_{r+1}^{m'}
+        // l = \tilde{X}
+        GroupElement leftGroup2Elem = pk.getGroup2ElementTildeX();
+        for (int i = 0; i < pk.getNumberOfMessages(); ++i) {
+            if (messageBlock.get(i) == null) {
+                throw new IllegalArgumentException(
+                        String.format("%d'th message element is null.", i)
+                );
+            }
+            PlainText messagePartI = messageBlock.get(i);
+            if (!(messagePartI instanceof RingElementPlainText)) {
+                throw new IllegalArgumentException(
+                        String.format("%d'th message element is not a 'RingElementPlainText' " +
+                                "instance.", i)
+                );
+            }
+            RingElementPlainText messageRingElement = (RingElementPlainText) messagePartI;
+            if (!(messageRingElement.getRingElement().getStructure().equals(pp.getZp()))) {
+                throw new IllegalArgumentException(
+                        String.format("%d'th message element is not an element of Zp.", i)
+                );
+            }
+            Zp.ZpElement messageElement = (Zp.ZpElement) messageRingElement.getRingElement();
+            leftGroup2Elem = leftGroup2Elem.op(
+                    pk.getGroup2ElementsTildeYi().get(i).pow(messageElement)
+            );
+        }
+        leftGroup2Elem = leftGroup2Elem.op(
+                pk.getGroup2ElementsTildeYi().get(pk.getNumberOfMessages()).pow(exponentPrimeM)
+        );
+
+        return pp.getBilinearMap().apply(sigma1, leftGroup2Elem);
+    }
+
+    @Override
+    public PlainText mapToPlaintext(byte[] bytes, SigningKey sk) {
+        return mapToPlaintext(bytes, ((PS18SigningKey) sk).getNumberOfMessages());
+    }
+
+    @Override
+    public PlainText mapToPlaintext(byte[] bytes, VerificationKey pk) {
+        return mapToPlaintext(bytes, ((PS18VerificationKey) pk).getNumberOfMessages());
+    }
+
+    @Override
+    public int getMaxNumberOfBytesForMapToPlaintext() {
+        return (pp.getZp().size().bitLength() - 1) / 8;
+    }
+
+    protected MessageBlock mapToPlaintext(byte[] bytes, int messageBlockLength) {
+        //Result will be a vector (zp.injectiveValueOf(bytes), 0, ..., 0)
+        Zp zp = pp.getZp();
+        RingElementPlainText zero = new RingElementPlainText(zp.getZeroElement());
+
+        RingElementPlainText[] msgBlock = new RingElementPlainText[messageBlockLength];
+        msgBlock[0] = new RingElementPlainText(zp.injectiveValueOf(bytes));
+        for (int i = 1; i < msgBlock.length; i++) {
+            msgBlock[i] = zero;
+        }
+
+        return new MessageBlock(msgBlock);
+    }
+
     @Override
     public PlainText getPlainText(Representation repr) {
         return new MessageBlock(repr, RingElementPlainText::new);
@@ -180,41 +299,8 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
     }
 
     @Override
-    public PlainText mapToPlaintext(byte[] bytes, VerificationKey pk) {
-        return mapToPlaintext(bytes, ((PS18VerificationKey) pk).getNumberOfMessages());
-    }
-
-    @Override
-    public PlainText mapToPlaintext(byte[] bytes, SigningKey sk) {
-        return mapToPlaintext(bytes, ((PS18SigningKey) sk).getNumberOfMessages());
-    }
-
-    @Override
-    public int getMaxNumberOfBytesForMapToPlaintext() {
-        return (pp.getZp().size().bitLength() - 1) / 8;
-    }
-
-    private MessageBlock mapToPlaintext(byte[] bytes, int messageBlockLength) {
-        //Result will be a vector (zp.injectiveValueOf(bytes), 0, ..., 0)
-        Zp zp = pp.getZp();
-        RingElementPlainText zero = new RingElementPlainText(zp.getZeroElement());
-
-        RingElementPlainText[] msgBlock = new RingElementPlainText[messageBlockLength];
-        msgBlock[0] = new RingElementPlainText(zp.injectiveValueOf(bytes));
-        for (int i = 1; i < msgBlock.length; i++) {
-            msgBlock[i] = zero;
-        }
-
-        return new MessageBlock(msgBlock);
-    }
-
-
-    @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((pp == null) ? 0 : pp.hashCode());
-        return result;
+        return pp.hashCode();
     }
 
     @Override
@@ -226,106 +312,6 @@ public class PS18SignatureScheme implements StandardMultiMessageSignatureScheme 
         if (getClass() != obj.getClass())
             return false;
         PS18SignatureScheme other = (PS18SignatureScheme) obj;
-        if (pp == null) {
-            return other.pp == null;
-        } else return pp.equals(other.pp);
-    }
-
-    /**
-     * Computes sigma_2 in paper. Since this computation is shared between the regular
-     * [PS18] and the random oracle version – just with a different exponentPrimeM –
-     * we outsource it to this method.
-     *
-     * @param messageBlock message to sign.
-     * @param sk signing key.
-     * @param exponentPrimeM m' in paper.
-     * @param sigma1 \sigma_1 (also h) in paper.
-     * @return \sigma_2 from paper.
-     */
-    protected GroupElement computeSigma2(MessageBlock messageBlock, PS18SigningKey sk,
-                                         ZpElement exponentPrimeM, GroupElement sigma1) {
-        // First we compute the exponent = x + \sum_{i=1}{r}{y_i * m_i} + y_{r+1} * m'
-        ZpElement resultExponent = sk.getExponentX();
-        for (int i = 0; i < sk.getNumberOfMessages(); ++i) {
-            if (messageBlock.get(i) == null) {
-                throw new IllegalArgumentException(
-                        String.format("%d'th message element is null.", i)
-                );
-            }
-            PlainText messagePartI = messageBlock.get(i);
-            if (!(messagePartI instanceof RingElementPlainText)) {
-                throw new IllegalArgumentException(
-                        String.format("%d'th message element is not a 'RingElementPlainText' instance.", i)
-                );
-            }
-            RingElementPlainText messageRingElement = (RingElementPlainText) messagePartI;
-            if (!(messageRingElement.getRingElement().getStructure().equals(pp.getZp()))) {
-                throw new IllegalArgumentException(
-                        String.format("%d'th message element is not an element of Zp.", i)
-                );
-            }
-            ZpElement messageElement = (ZpElement) messageRingElement.getRingElement();
-            resultExponent = resultExponent.add(sk.getExponentsYi()[i].mul(messageElement));
-        }
-        resultExponent = resultExponent.add(
-                sk.getExponentsYi()[sk.getNumberOfMessages()].mul(exponentPrimeM)
-        );
-        // Now we exponentiate h with the exponent and return that as sigma_2.
-        return sigma1.pow(resultExponent.getInteger());
-    }
-
-    /**
-     * Computes left hand side of verification equation. Since this computation is shared between the regular
-     * [PS18] and the random oracle version – just with a different exponentPrimeM –
-     * we outsource it to this method.
-     *
-     * @param messageBlock message to verify signature for.
-     * @param pk public verification key
-     * @param exponentPrimeM m' in paper. First element of signature (for 4.2) or computed from message
-     *                       using random oracle (hash function) (for ROM from 4.3).
-     * @param sigma1 \sigma_1 in paper. Either second or first element of signature (see above).
-     * @return element of G_T which is the left hand side of the verification equation.
-     */
-    protected GroupElement computeLeftHandSide(MessageBlock messageBlock, PS18VerificationKey pk,
-                                               ZpElement exponentPrimeM, GroupElement sigma1) {
-        // Computation of group element from G_2 for left hand side requires sum
-        // \tilde{X} * \prod_{i=1}{r}{\tilde{Y}_i^{m_i}} * \tilde{Y}_{r+1}^{m'}
-
-        // l = \tilde{X}
-        GroupElementExpression leftGroup2ElemExpr = pk.getGroup2ElementTildeX().expr();
-        for (int i = 0; i < pk.getNumberOfMessages(); ++i) {
-            if (messageBlock.get(i) == null) {
-                throw new IllegalArgumentException(
-                        String.format("%d'th message element is null.", i)
-                );
-            }
-            PlainText messagePartI = messageBlock.get(i);
-            if (!(messagePartI instanceof RingElementPlainText)) {
-                throw new IllegalArgumentException(
-                        String.format("%d'th message element is not a 'RingElementPlainText' " +
-                                "instance.", i)
-                );
-            }
-            RingElementPlainText messageRingElement = (RingElementPlainText) messagePartI;
-            if (!(messageRingElement.getRingElement().getStructure().equals(pp.getZp()))) {
-                throw new IllegalArgumentException(
-                        String.format("%d'th message element is not an element of Zp.", i)
-                );
-            }
-            Zp.ZpElement messageElement = (Zp.ZpElement) messageRingElement.getRingElement();
-            // l = l op \tilde{Y}_i^{m_i}
-            leftGroup2ElemExpr = leftGroup2ElemExpr.opPow(
-                    pk.getGroup2ElementsTildeYi()[i].expr(),
-                    messageElement
-            );
-        }
-        leftGroup2ElemExpr = leftGroup2ElemExpr.opPow(
-                pk.getGroup2ElementsTildeYi()[pk.getNumberOfMessages()].expr(),
-                exponentPrimeM
-        );
-
-        OptGroupElementExpressionEvaluator evaluator = new OptGroupElementExpressionEvaluator();
-        return pp.getBilinearMap().apply(sigma1, leftGroup2ElemExpr.evaluate(evaluator));
+        return Objects.equals(pp, other.pp);
     }
 }
-

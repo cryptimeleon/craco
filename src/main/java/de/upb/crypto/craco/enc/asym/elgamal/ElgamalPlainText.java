@@ -9,6 +9,8 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 
+import java.util.Objects;
+
 /**
  * An elgamal plaintext, which is an element of the specified group.
  *
@@ -56,12 +58,7 @@ public class ElgamalPlainText implements PlainText, UniqueByteRepresentable {
         if (getClass() != obj.getClass())
             return false;
         ElgamalPlainText other = (ElgamalPlainText) obj;
-        if (plaintext == null) {
-            if (other.plaintext != null)
-                return false;
-        } else if (!plaintext.equals(other.plaintext))
-            return false;
-        return true;
+        return Objects.equals(plaintext, other.plaintext);
     }
 
     public GroupElement getPlaintext() {

@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.abe.fuzzy.large;
 
 import de.upb.crypto.craco.common.utils.LagrangeUtil;
-import de.upb.crypto.craco.common.utils.PrimeFieldPolynom;
+import de.upb.crypto.craco.common.utils.PrimeFieldPolynomial;
 import de.upb.crypto.craco.common.utils.SecureRandomGenerator;
 import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.common.interfaces.EncryptionKey;
@@ -15,6 +15,7 @@ import de.upb.crypto.craco.kem.fuzzy.large.IBEFuzzySW05KEMCipherText;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.craco.interfaces.pe.PredicateEncryptionScheme;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -78,7 +79,7 @@ public class AbstractIBEFuzzySW05 {
     }
 
     /**
-     * Computes {@link IBEFuzzySW05KEMCipherText#eElementMap} in the fuzzy IBE encaps and encrypt.
+     * Computes {@link IBEFuzzySW05KEMCipherText#getEElementMap()} in the fuzzy IBE encaps and encrypt.
      *
      * @param omega identity
      * @param s     secret value
@@ -95,7 +96,7 @@ public class AbstractIBEFuzzySW05 {
                             GroupElement hashedi = (GroupElement) pp.getHashToG1()
                                     .hashIntoStructure((i.subtract(BigInteger.ONE))
                                             .toString(10));
-                            return hashedi.pow(s);
+                            return hashedi.pow(s).compute();
                         }
                 ));
     }
@@ -115,8 +116,8 @@ public class AbstractIBEFuzzySW05 {
      * Then, Y^{s} = (Numerator / Denominator)^{-1}
      *
      * @param ct           ciphertext or encapsulated key for which Y^s shall be restored
-     * @param dElementMap  {@link IBEFuzzySW05DecryptionKey#dElementMap}
-     * @param rElementMap  {@link IBEFuzzySW05DecryptionKey#rElementMap}
+     * @param dElementMap  {@link IBEFuzzySW05DecryptionKey#getDElementMap()}
+     * @param rElementMap  {@link IBEFuzzySW05DecryptionKey#getRElementMap()}
      * @param attributeSet a subset of the intersection of the ciphertext's and secret key's identity of size d. It
      *                     is assumed
      *                     that the size of the set is correct.
@@ -161,7 +162,7 @@ public class AbstractIBEFuzzySW05 {
         GroupElement denominator = pp.getE().apply(dProduct, ct.getETwoPrime());
 
         // compute (numerator / denominator)^{-1} to be consistent with the other KEM's
-        return denominator.op(numerator.inv());
+        return denominator.op(numerator.inv()).compute();
     }
 
     /*
@@ -184,8 +185,8 @@ public class AbstractIBEFuzzySW05 {
      * decrypt ciphertexts where getPredicate().check(kind, cind) = 1.
      * <p>
      * Generates an {@link DecryptionKey} out of the given {@link Identity}. This {@link DecryptionKey} can only decrypt
-     * cipher texts if there are at least {@link IBEFuzzySW05PublicParameters#getD()} attributes in the intersection
-     * of this
+     * cipher texts if there are at least {@link IBEFuzzySW05PublicParameters#getIdentityThresholdD()} attributes in the
+     * intersection of this
      * {@link Identity} and the {@link Identity} of the respective {@link EncryptionKey}.
      *
      * @param msk  the master secret obtained during setup.
@@ -205,7 +206,7 @@ public class AbstractIBEFuzzySW05 {
         IBEFuzzySW05MasterSecret masterSecret = (IBEFuzzySW05MasterSecret) msk;
 
         // new polynomial q of degree d-1 where q(0) = y
-        final PrimeFieldPolynom q = new PrimeFieldPolynom(zp, pp.getIdentityThresholdD().intValue() - 1);
+        final PrimeFieldPolynomial q = new PrimeFieldPolynomial(zp, pp.getIdentityThresholdD().intValue() - 1);
         // assign non zero values to all coefficients
         q.createRandom(new SecureRandomGenerator());
         q.setCoefficient(masterSecret.getY(), 0);
@@ -225,8 +226,8 @@ public class AbstractIBEFuzzySW05 {
             // D_i = g_2^q(i) * T(i-1)^r
             GroupElement dElement = pp.getG2().pow(q.evaluate(i.getAttribute())).op(temp.pow(r));
 
-            rMap.put(i.getAttribute(), rElement);
-            dMap.put(i.getAttribute(), dElement);
+            rMap.put(i.getAttribute(), rElement.compute());
+            dMap.put(i.getAttribute(), dElement.compute());
         }
         return new IBEFuzzySW05DecryptionKey(dMap, rMap, omega);
     }
@@ -270,18 +271,17 @@ public class AbstractIBEFuzzySW05 {
      */
 
     /**
-     * {@inheritDoc}
-     * <p>
      * This scheme uses a {@link Identity} as {@link KeyIndex} and {@link CiphertextIndex}. The {@link Predicate} is
      * that there are at least {@link IBEFuzzySW05PublicParameters#getIdentityThresholdD()} attributes in the
      * intersection.
+     * See {@link PredicateEncryptionScheme} for more information on predicates and their usage.
      */
     public Predicate getPredicate() {
         return (kind, cind) -> {
             if (!(kind instanceof Identity))
                 throw new IllegalArgumentException("Identity expected as KeyIndex");
             if (!(cind instanceof Identity))
-                throw new IllegalArgumentException("Identity expceted as CiphertextIndex");
+                throw new IllegalArgumentException("Identity expected as CiphertextIndex");
             Identity iCind = (Identity) cind;
             Identity iKind = (Identity) kind;
             return iCind.intersect(iKind).getAttributes().size() >= pp.getIdentityThresholdD().intValue();

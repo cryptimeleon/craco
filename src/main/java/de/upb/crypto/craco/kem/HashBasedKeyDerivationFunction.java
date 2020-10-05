@@ -5,10 +5,11 @@ import de.upb.crypto.craco.common.interfaces.SymmetricKey;
 import de.upb.crypto.math.hash.impl.SHA256HashFunction;
 import de.upb.crypto.math.interfaces.hash.HashFunction;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * A basic approach of a {@link KeyDerivationFunction} using a hash function. This class can be used to generate key
@@ -34,12 +35,12 @@ public class HashBasedKeyDerivationFunction implements KeyDerivationFunction<Sym
     }
 
     public HashBasedKeyDerivationFunction(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -75,12 +76,7 @@ public class HashBasedKeyDerivationFunction implements KeyDerivationFunction<Sym
         if (getClass() != obj.getClass())
             return false;
         HashBasedKeyDerivationFunction other = (HashBasedKeyDerivationFunction) obj;
-        if (hashFunction == null) {
-            if (other.hashFunction != null)
-                return false;
-        } else if (!hashFunction.equals(other.hashFunction))
-            return false;
-        return true;
+        return Objects.equals(hashFunction, other.hashFunction);
     }
 
 }

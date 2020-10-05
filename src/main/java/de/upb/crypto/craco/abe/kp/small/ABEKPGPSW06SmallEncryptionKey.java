@@ -9,6 +9,10 @@ import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
+
+import java.util.Objects;
 
 /**
  * An {@link EncryptionKey} for the {@link ABEKPGPSW06Small} that
@@ -21,6 +25,7 @@ import de.upb.crypto.math.serialization.Representation;
  */
 public class ABEKPGPSW06SmallEncryptionKey implements EncryptionKey {
     @UniqueByteRepresented
+    @Represented
     private SetOfAttributes attributes;
 
     public ABEKPGPSW06SmallEncryptionKey(SetOfAttributes attributes) {
@@ -28,14 +33,12 @@ public class ABEKPGPSW06SmallEncryptionKey implements EncryptionKey {
     }
 
     public ABEKPGPSW06SmallEncryptionKey(Representation repr) {
-        this.attributes = (SetOfAttributes) repr.obj().get("attributes").repr().recreateRepresentable();
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        ObjectRepresentation repr = new ObjectRepresentation();
-        repr.put("attributes", new RepresentableRepresentation(attributes));
-        return repr;
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -55,15 +58,7 @@ public class ABEKPGPSW06SmallEncryptionKey implements EncryptionKey {
         if (getClass() != obj.getClass())
             return false;
         ABEKPGPSW06SmallEncryptionKey other = (ABEKPGPSW06SmallEncryptionKey) obj;
-        if (attributes == null) {
-            if (other.attributes != null)
-                return false;
-        } else if (!(other.attributes.containsAll(attributes))) {
-            return false;
-        } else if (!(attributes.containsAll(other.attributes))) {
-            return false;
-        }
-        return true;
+        return Objects.equals(attributes, other.attributes);
     }
 
     public SetOfAttributes getAttributes() {

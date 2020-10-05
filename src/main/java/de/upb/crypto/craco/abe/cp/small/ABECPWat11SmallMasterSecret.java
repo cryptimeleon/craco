@@ -4,8 +4,10 @@ import de.upb.crypto.craco.common.interfaces.pe.MasterSecret;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
+
+import java.util.Objects;
 
 /**
  * The master secret for the {@link ABECPWat11Small} generated in the
@@ -16,28 +18,24 @@ import de.upb.crypto.math.serialization.annotations.Represented;
 public class ABECPWat11SmallMasterSecret implements MasterSecret {
 
 
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
-    private GroupElement g_y; // in G_1
+    @Represented(restorer = "G1")
+    private GroupElement gAlpha; // in G_1
 
-    @SuppressWarnings("unused")
-    private Group groupG1;
-
-    public ABECPWat11SmallMasterSecret(GroupElement g_y) {
-        this.g_y = g_y;
+    public ABECPWat11SmallMasterSecret(GroupElement gAlpha) {
+        this.gAlpha = gAlpha;
     }
 
     public ABECPWat11SmallMasterSecret(Representation repr, Group groupG1) {
-        this.groupG1 = groupG1;
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).register(groupG1, "G1").deserialize(repr);
     }
 
     public GroupElement get() {
-        return g_y;
+        return gAlpha;
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
 
@@ -45,7 +43,7 @@ public class ABECPWat11SmallMasterSecret implements MasterSecret {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((g_y == null) ? 0 : g_y.hashCode());
+        result = prime * result + ((gAlpha == null) ? 0 : gAlpha.hashCode());
         return result;
     }
 
@@ -58,11 +56,6 @@ public class ABECPWat11SmallMasterSecret implements MasterSecret {
         if (getClass() != obj.getClass())
             return false;
         ABECPWat11SmallMasterSecret other = (ABECPWat11SmallMasterSecret) obj;
-        if (g_y == null) {
-            if (other.g_y != null)
-                return false;
-        } else if (!g_y.equals(other.g_y))
-            return false;
-        return true;
+        return Objects.equals(gAlpha, other.gAlpha);
     }
 }

@@ -4,11 +4,13 @@ import de.upb.crypto.craco.accumulators.interfaces.AccumulatorWitness;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
+
+import java.util.Objects;
 
 public class NguyenWitness implements AccumulatorWitness {
-    @Represented(structure = "group", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "group")
     private GroupElement value;
 
     @Represented
@@ -19,8 +21,8 @@ public class NguyenWitness implements AccumulatorWitness {
         this.group = value.getStructure();
     }
 
-    public NguyenWitness(Representation representation) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(representation, this);
+    public NguyenWitness(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
     }
 
     public GroupElement getValue() {
@@ -34,12 +36,10 @@ public class NguyenWitness implements AccumulatorWitness {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof NguyenWitness)) return false;
-
-        NguyenWitness that = (NguyenWitness) o;
-
-        if (!value.equals(that.value)) return false;
-        return group.equals(that.group);
+        if (o == null || getClass() != o.getClass()) return false;
+        NguyenWitness other = (NguyenWitness) o;
+        return Objects.equals(value, other.value)
+                && Objects.equals(group, other.group);
     }
 
     @Override
@@ -56,6 +56,6 @@ public class NguyenWitness implements AccumulatorWitness {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 }

@@ -57,11 +57,8 @@ public class ABEKPGPSW06Setup {
      */
     public void doKeyGen(BilinearGroup group, int n, boolean watersHash) {
         pp = new ABEKPGPSW06PublicParameters();
+        pp.setBilinearGroup(group);
         pp.setN(BigInteger.valueOf(n));
-
-        pp.setGroupG1(group.getG1());
-        pp.setGroupG2(group.getG2());
-        pp.setGroupGT(group.getGT());
 
         if (!watersHash) {
             pp.setHashToG1(group.getHashIntoG1());
@@ -73,13 +70,11 @@ public class ABEKPGPSW06Setup {
         Zp zp = new Zp(group.getG1().size());
         ZpElement y = zp.getUniformlyRandomUnit();
 
-        pp.setE(group.getBilinearMap());
-
         // g_1 <- G_1 \setminus {1}
-        pp.setG1_generator(pp.getGroupG1().getUniformlyRandomNonNeutral());
+        pp.setG1Generator(pp.getGroupG1().getUniformlyRandomNonNeutral().compute());
 
         // Y = e(g,g)^y = e(g^y, g)
-        pp.setY(pp.getE().apply(pp.getG1_generator().pow(y), pp.getG1_generator()));
+        pp.setY(pp.getBilinearMap().apply(pp.getG1Generator().pow(y).compute(), pp.getG1Generator()));
 
         msk = new ABEKPGPSW06MasterSecret(y);
 
@@ -87,7 +82,7 @@ public class ABEKPGPSW06Setup {
         Map<BigInteger, GroupElement> T = new HashMap<>();
 
         for (int i = 0; i < n + 1; i++) {
-            T.put(BigInteger.valueOf(i), pp.getG1_generator().pow(zp.getUniformlyRandomUnit()));
+            T.put(BigInteger.valueOf(i), pp.getG1Generator().pow(zp.getUniformlyRandomUnit()).compute());
         }
         pp.setT(T);
     }

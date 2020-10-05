@@ -3,6 +3,7 @@ package de.upb.crypto.craco.sig.bbs;
 import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.factory.BilinearGroupFactory;
 import de.upb.crypto.math.structures.zn.HashIntoZn;
+import de.upb.crypto.math.structures.zn.HashIntoZp;
 
 /**
  * Does the key generation for the BBS-B signature scheme respectively organization in the anonymous credential system
@@ -35,16 +36,7 @@ public class BBSBKeyGen {
     }
 
     public BBSBPublicParameter doKeyGen(BilinearGroup group) {
-        pp = new BBSBPublicParameter();
-
-        pp.setGroupG1(group.getG1());
-        pp.setGroupG2(group.getG2());
-        pp.setGroupGT(group.getGT());
-
-        pp.setGroupHom(group.getHomomorphismG2toG1());
-        pp.setHashIntoZp((HashIntoZn) group.getHashIntoZGroupExponent());
-        pp.setBilinearMap(group.getBilinearMap());
-
+        pp = new BBSBPublicParameter(group, (HashIntoZn) group.getHashIntoZGroupExponent());
         pp.setG2(pp.getGroupG1().getUniformlyRandomElement());
         pp.setG1(pp.getGroupHom().apply(pp.getG2()));
 

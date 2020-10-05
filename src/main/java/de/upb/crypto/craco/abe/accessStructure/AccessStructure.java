@@ -22,23 +22,23 @@ import java.util.Set;
 public abstract class AccessStructure implements LinearSecretSharing<PolicyFact> {
 
     /**
-     * the policy as a tree
+     * The access policy as a tree.
      */
     protected TreeNode thresholdTree;
 
     /**
-     * the field over that the shares of the secret and the constants of the
-     * solving vector will be calculated
+     * The field over which the shares of the secret and the constants of the
+     * solving vector will be calculated.
      */
     protected Zp field;
 
     /**
-     * The map used for getShareReceiver(i) calls.
+     * Maps share indices .
      */
     protected HashMap<Integer, PolicyFact> shareReceivers;
 
     /**
-     * Constructs the access structure from 'policy' to share over 'field'.
+     * Constructs the access structure from {@code policy} to share over {@code field}.
      */
     public AccessStructure(Policy policy, Zp field) {
         this.field = field;

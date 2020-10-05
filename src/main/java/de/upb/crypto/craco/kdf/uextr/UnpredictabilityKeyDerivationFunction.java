@@ -6,12 +6,9 @@ import de.upb.crypto.craco.kem.KeyMaterial;
 import de.upb.crypto.math.hash.impl.ByteArrayAccumulator;
 import de.upb.crypto.math.interfaces.hash.HashFunction;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.polynomial.Seed;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -20,25 +17,22 @@ import java.util.Map;
 
 public class UnpredictabilityKeyDerivationFunction implements KeyDerivationFunction<ByteArrayImplementation> {
 
-    private static final Logger logger = LogManager.getLogger(UnpredictabilityKeyDerivationFamily.class.getName());
 
     @Represented
     private UnpredictabilityKeyDerivationFamily unpredictabilityKeyDerivationFamily;
     // maps index-> function
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented)
+    @Represented(restorer = "int -> foo")
     private Map<Integer, KWiseDeltaDependentHashFunction> functions;
 
     public UnpredictabilityKeyDerivationFunction(
             UnpredictabilityKeyDerivationFamily unpredictabilityKeyDerivationFamily, Seed seed) {
         this.unpredictabilityKeyDerivationFamily = unpredictabilityKeyDerivationFamily;
-        logger.debug("Using the provided seed to seed the HashFamilies");
         if (seed.getBitLength() != unpredictabilityKeyDerivationFamily.seedLength()) {
             throw new IllegalArgumentException("Invalid Seed Length");
         }
         functions = new HashMap<>();
         int startIndex = 0;
         for (KWiseDeltaDependentHashFamily family : unpredictabilityKeyDerivationFamily.getFamilyList()) {
-            logger.debug("Using " + family.seedLength() + " bits to seed family " + family);
             functions.put(unpredictabilityKeyDerivationFamily.getFamilyList().indexOf(family),
                     family.seedFunction(new Seed(seed.getInternalSeed(), startIndex, family.seedLength())));
             startIndex = startIndex + family.seedLength();
@@ -46,12 +40,12 @@ public class UnpredictabilityKeyDerivationFunction implements KeyDerivationFunct
     }
 
     public UnpredictabilityKeyDerivationFunction(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -100,11 +94,8 @@ public class UnpredictabilityKeyDerivationFunction implements KeyDerivationFunct
         if (!getOuterType().equals(other.getOuterType()))
             return false;
         if (functions == null) {
-            if (other.functions != null)
-                return false;
-        } else if (!functions.equals(other.functions))
-            return false;
-        return true;
+            return other.functions == null;
+        } else return functions.equals(other.functions);
     }
 
     private UnpredictabilityKeyDerivationFamily getOuterType() {

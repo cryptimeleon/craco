@@ -3,10 +3,13 @@ package de.upb.crypto.craco.enc.asym.elgamal;
 import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
-import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zn;
 import de.upb.crypto.math.structures.zn.Zn.ZnElement;
+
+import java.util.Objects;
 
 /**
  * An elgamal private key.
@@ -15,17 +18,21 @@ import de.upb.crypto.math.structures.zn.Zn.ZnElement;
  */
 public class ElgamalPrivateKey implements DecryptionKey {
 
-
     /**
      * The private parameter a.
      */
+    @Represented(restorer = "Zn")
     private ZnElement a;
 
     /**
      * The public key
      **/
+    @Represented(restorer = "Scheme")
     private ElgamalPublicKey publicKey;
 
+    public ElgamalPrivateKey(Representation repr, Zn zn, ElgamalEncryption scheme) {
+        new ReprUtil(this).register(zn, "Zn").register(scheme, "Scheme").deserialize(repr);
+    }
 
     private void init(Group groupG, GroupElement g, ZnElement a, GroupElement h) {
         this.a = a;
@@ -116,10 +123,7 @@ public class ElgamalPrivateKey implements DecryptionKey {
 
     @Override
     public Representation getRepresentation() {
-        ObjectRepresentation or = new ObjectRepresentation();
-        or.put("a", this.getA().getRepresentation());
-        or.put("publicKey", this.getPublicKey().getRepresentation());
-        return or;
+        return ReprUtil.serialize(this);
     }
 
     public ZnElement getA() {
@@ -128,7 +132,7 @@ public class ElgamalPrivateKey implements DecryptionKey {
 
 
     public Group getGroupG() {
-        return publicKey.getGroupG();
+        return publicKey.getG().getStructure();
     }
 
     public GroupElement getG() {
@@ -153,17 +157,8 @@ public class ElgamalPrivateKey implements DecryptionKey {
         if (getClass() != obj.getClass())
             return false;
         ElgamalPrivateKey other = (ElgamalPrivateKey) obj;
-        if (a == null) {
-            if (other.a != null)
-                return false;
-        } else if (!a.equals(other.a))
-            return false;
-        if (publicKey == null) {
-            if (other.publicKey != null)
-                return false;
-        } else if (!publicKey.equals(other.publicKey))
-            return false;
-        return true;
+        return Objects.equals(a, other.a)
+                && Objects.equals(publicKey, other.publicKey);
     }
 
 

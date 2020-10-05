@@ -27,10 +27,10 @@ import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
 import de.upb.crypto.math.serialization.converter.JSONConverter;
+import de.upb.crypto.math.structures.groups.basic.BasicBilinearGroup;
 import de.upb.crypto.math.structures.zn.Zn.ZnElement;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
-import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -46,7 +46,6 @@ import static org.junit.Assert.*;
  * @author peter.guenther
  */
 public class ElgamalLargeUniverseDelegationKEMTest {
-    private static final Logger LOGGER = Logger.getLogger(ElgamalLargeUniverseDelegationKEMTest.class.getName());
 
     /**
      * Instantiate groups based on dummy pairing groups (Zn+) or on real pairing groups (BN curves).
@@ -72,11 +71,11 @@ public class ElgamalLargeUniverseDelegationKEMTest {
     public static void setup() throws NoSuchAlgorithmException {
         BilinearGroup bilinearGroup;
         if (debugPairing) {
-            bilinearGroup = new DebugBilinearGroupProvider().provideBilinearGroup(n, BilinearGroup.Type.TYPE_3, 1);
+            bilinearGroup = new BasicBilinearGroup(new DebugBilinearGroupProvider().provideBilinearGroup(n, BilinearGroup.Type.TYPE_3, 1, false));
         } else {
             BarretoNaehrigProvider fac = new BarretoNaehrigProvider();
 
-            bilinearGroup = fac.provideBilinearGroupFromSpec(BarretoNaehrigProvider.ParamSpecs.SFC256);
+            bilinearGroup = new BasicBilinearGroup(fac.provideBilinearGroupFromSpec(BarretoNaehrigProvider.ParamSpecs.SFC256));
         }
 
 
@@ -440,8 +439,6 @@ public class ElgamalLargeUniverseDelegationKEMTest {
 
         Policy policy = setupPolicy();
 
-        LOGGER.info("Setup encryption key for policy " + policy);
-
         System.out.println("Setup encryption key for policy " + policy);
 
 
@@ -576,10 +573,6 @@ public class ElgamalLargeUniverseDelegationKEMTest {
         GroupElement b = pairing.apply(scheme.getPublicParameters().v1, sum);
         GroupElement c = pairing.apply(scheme.getPublicParameters().w1, ct.c0);
         GroupElement d = b.op(c);
-        LOGGER.debug("B: " + b);
-        LOGGER.debug("C: " + c);
-        LOGGER.debug("D: " + d);
-        LOGGER.debug("pairingProduct: " + pairingProduct);
         assertEquals(pairingProduct, d);
     }
 

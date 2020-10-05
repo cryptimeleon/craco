@@ -13,6 +13,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(value = Parameterized.class)
@@ -37,25 +38,25 @@ public class RepresentationTest {
     @Test
     public void testRepresentation() throws InstantiationException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException, NoSuchMethodException, SecurityException {
-        System.out.println("Testing " + scheme.getRepresentedTypeName());
+        System.out.println("Testing " + scheme.toString());
         // Testing standalone of the scheme
         EncryptionScheme toCompare =
                 scheme.getClass().getConstructor(Representation.class).newInstance(scheme.getRepresentation());
         System.out.println("Testing the standalone property of the scheme...");
-        assertTrue(scheme.equals(toCompare));
+        assertEquals(scheme, toCompare);
         //testing the representations of the scheme
         System.out.println("Testing the deserialization of an EncryptionKey...");
-        assertTrue(encryptionKey.equals(scheme.getEncryptionKey(encryptionKey.getRepresentation())));
+        assertEquals(encryptionKey, scheme.getEncryptionKey(encryptionKey.getRepresentation()));
         System.out.println("Testing the deserialization of a DecryptionKey...");
-        assertTrue(decryptionKey.equals(scheme.getDecryptionKey(decryptionKey.getRepresentation())));
+        assertEquals(decryptionKey, scheme.getDecryptionKey(decryptionKey.getRepresentation()));
         System.out.println("Testing the deserialization of a PlainText...");
-        assertTrue(plainText.equals(scheme.getPlainText(plainText.getRepresentation())));
+        assertEquals(plainText, scheme.getPlainText(plainText.getRepresentation()));
         System.out.println("Testing the deserialization of a CipherText...");
-        assertTrue(cipherText.equals(scheme.getCipherText(cipherText.getRepresentation())));
+        assertEquals(cipherText, scheme.getCipherText(cipherText.getRepresentation()));
         if (scheme instanceof PredicateEncryptionScheme) {
             PredicateEncryptionScheme predScheme = (PredicateEncryptionScheme) scheme;
             System.out.println("Testing the deserialization of a MasterSecret...");
-            assertTrue(masterSecret.equals(predScheme.getMasterSecret(masterSecret.getRepresentation())));
+            assertEquals(masterSecret, predScheme.getMasterSecret(masterSecret.getRepresentation()));
         }
 
     }
@@ -72,6 +73,7 @@ public class RepresentationTest {
         toReturn.add(IBEFuzzySW05SmallParams.getParams());
         toReturn.add(IBEFuzzySW05Params.getParams());
         toReturn.add(FullIdentParams.getParams());
+        toReturn.add(ABECPWat11AsymSmallParams.getParams());
         return toReturn;
     }
 }

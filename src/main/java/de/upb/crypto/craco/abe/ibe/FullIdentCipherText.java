@@ -2,13 +2,13 @@ package de.upb.crypto.craco.abe.ibe;
 
 import de.upb.crypto.craco.common.interfaces.CipherText;
 import de.upb.crypto.craco.common.interfaces.pe.CiphertextIndex;
-import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * The {@link CiphertextIndex} for {@link FullIdent}.
@@ -17,7 +17,7 @@ import java.util.Arrays;
  */
 public class FullIdentCipherText implements CipherText {
 
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "G1")
     private GroupElement u; // P^r \in G1
 
     @Represented
@@ -26,9 +26,6 @@ public class FullIdentCipherText implements CipherText {
     @Represented
     private byte[] w; // M \oplus H_4(sigma)
 
-    @SuppressWarnings("unused")
-    private Group groupG1;
-
     public FullIdentCipherText(GroupElement U, byte[] V, byte[] W) {
         this.u = U;
         this.v = V;
@@ -36,13 +33,12 @@ public class FullIdentCipherText implements CipherText {
     }
 
     public FullIdentCipherText(Representation repr, FullIdentPublicParameters pp) {
-        groupG1 = pp.getGroupG1();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).register(pp.getGroupG1(), "G1").deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public GroupElement getU() {
@@ -76,18 +72,8 @@ public class FullIdentCipherText implements CipherText {
         if (getClass() != obj.getClass())
             return false;
         FullIdentCipherText other = (FullIdentCipherText) obj;
-        if (u == null) {
-            if (other.u != null)
-                return false;
-        } else if (!u.equals(other.u))
-            return false;
-        if (!Arrays.equals(v, other.v)) {
-            return false;
-        }
-        if (!Arrays.equals(w, other.w)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(u, other.u)
+                && Arrays.equals(v, other.v)
+                && Arrays.equals(w, other.w);
     }
-
 }

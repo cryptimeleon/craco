@@ -3,15 +3,16 @@ package de.upb.crypto.craco.abe.cp.large.distributed;
 import de.upb.crypto.craco.abe.interfaces.distributed.MasterKeyShare;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 public class DistributedABECPWat11MasterKeyShare implements StandaloneRepresentable, MasterKeyShare {
 
     @Represented
-    private int serverID;
+    private Integer serverID;
 
     @Represented
     private BigInteger share;
@@ -23,7 +24,7 @@ public class DistributedABECPWat11MasterKeyShare implements StandaloneRepresenta
     }
 
     public DistributedABECPWat11MasterKeyShare(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public int getServerID() {
@@ -36,7 +37,7 @@ public class DistributedABECPWat11MasterKeyShare implements StandaloneRepresenta
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -57,14 +58,8 @@ public class DistributedABECPWat11MasterKeyShare implements StandaloneRepresenta
         if (getClass() != obj.getClass())
             return false;
         DistributedABECPWat11MasterKeyShare other = (DistributedABECPWat11MasterKeyShare) obj;
-        if (serverID != other.serverID)
-            return false;
-        if (share == null) {
-            if (other.share != null)
-                return false;
-        } else if (!share.equals(other.share))
-            return false;
-        return true;
+        return Objects.equals(serverID, other.serverID)
+                && Objects.equals(share, other.share);
     }
 
 }

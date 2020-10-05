@@ -8,12 +8,11 @@ import de.upb.crypto.craco.common.interfaces.policy.PolicyFact;
 import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -25,8 +24,6 @@ import java.util.stream.Collectors;
  * both {@link Policy} and {@link PolicyFact}.
  */
 public class ThresholdTreeSecretSharing implements LinearSecretSharing<Policy>, StandaloneRepresentable {
-
-    private static final Logger log = Logger.getLogger(ThresholdTreeSecretSharing.class.getName());
 
     @Represented
     private SecretSharingSchemeProvider lsssInstanceProvider;
@@ -62,8 +59,8 @@ public class ThresholdTreeSecretSharing implements LinearSecretSharing<Policy>, 
         this.secretSharingTree = (InnerSecretSharingNode) createTree(policy);
     }
 
-    public ThresholdTreeSecretSharing(Representation representation) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(representation, this);
+    public ThresholdTreeSecretSharing(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
         this.secretSharingTree = (InnerSecretSharingNode) createTree(this.rootThresholdPolicy);
     }
 
@@ -559,7 +556,7 @@ public class ThresholdTreeSecretSharing implements LinearSecretSharing<Policy>, 
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override

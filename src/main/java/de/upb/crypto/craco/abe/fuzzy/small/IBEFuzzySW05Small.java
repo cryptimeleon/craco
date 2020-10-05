@@ -19,6 +19,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 /**
  * Fuzzy IBE with MSP.
@@ -101,9 +102,9 @@ public class IBEFuzzySW05Small implements PredicateEncryptionScheme {
         // for all attributes i in the public key : E_i = T_(i-1)^s
         for (Attribute i : identity) {
             GroupElement e_i = pp.getT().get(i).pow(s);
-            e_map.put(i, e_i);
+            e_map.put(i, e_i.compute());
         }
-        return new IBEFuzzySW05SmallCipherText(identity, e_prime, e_map);
+        return new IBEFuzzySW05SmallCipherText(identity, e_prime.compute(), e_map);
     }
 
     @Override
@@ -148,8 +149,7 @@ public class IBEFuzzySW05Small implements PredicateEncryptionScheme {
             throw new WrongAccessStructureException("The attributes provided in the identity are not in the universe.");
         }
 
-        return new GroupElementPlainText(ct.getE_prime().op(tmp.inv()));
-
+        return new GroupElementPlainText(ct.getE_prime().op(tmp.inv()).compute());
     }
 
     @Override
@@ -188,12 +188,12 @@ public class IBEFuzzySW05Small implements PredicateEncryptionScheme {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof IBEFuzzySW05Small) {
-            IBEFuzzySW05Small other = (IBEFuzzySW05Small) o;
-            return pp.equals(other.pp);
-        } else {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
             return false;
-        }
+        IBEFuzzySW05Small other = (IBEFuzzySW05Small) o;
+        return Objects.equals(pp, other.pp);
     }
 
     @Override
@@ -242,7 +242,7 @@ public class IBEFuzzySW05Small implements PredicateEncryptionScheme {
                 // M_i_u = M_i_u / t_p_i
                 m_i_u = (ZpElement) m_i_u.div(t_p_i);
                 // D_i = g^M_i_u
-                d.put(BigInteger.valueOf(i), pp.getG().pow(m_i_u.getInteger()));
+                d.put(BigInteger.valueOf(i), pp.getG().pow(m_i_u.getInteger()).compute());
             }
         } catch (NullPointerException e) {
             throw new WrongAccessStructureException("The attributes provided in the identity are not in the universe.");
@@ -276,19 +276,15 @@ public class IBEFuzzySW05Small implements PredicateEncryptionScheme {
      */
     @Override
     public Predicate getPredicate() {
-        return new Predicate() {
-
-            @Override
-            public boolean check(KeyIndex kind, CiphertextIndex cind) {
-                if (!(kind instanceof SetOfAttributes))
-                    throw new IllegalArgumentException("SetOfAttributes expected as KeyIndex");
-                if (!(cind instanceof SetOfAttributes))
-                    throw new IllegalArgumentException("SetOfAttributes expceted as CiphertextIndex");
-                SetOfAttributes iCind = (SetOfAttributes) cind;
-                SetOfAttributes iKind = (SetOfAttributes) kind;
-                iCind.retainAll(iKind);
-                return iCind.size() >= pp.getD().intValue();
-            }
+        return (kind, cind) -> {
+            if (!(kind instanceof SetOfAttributes))
+                throw new IllegalArgumentException("SetOfAttributes expected as KeyIndex");
+            if (!(cind instanceof SetOfAttributes))
+                throw new IllegalArgumentException("SetOfAttributes expceted as CiphertextIndex");
+            SetOfAttributes iCind = (SetOfAttributes) cind;
+            SetOfAttributes iKind = (SetOfAttributes) kind;
+            iCind.retainAll(iKind);
+            return iCind.size() >= pp.getD().intValue();
         };
     }
 

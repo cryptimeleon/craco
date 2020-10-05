@@ -2,9 +2,8 @@ package de.upb.crypto.craco.sig.ps;
 
 import de.upb.crypto.craco.sig.interfaces.SigningKey;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedArray;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
@@ -22,31 +21,26 @@ public class PSSigningKey implements SigningKey {
     /**
      * x \in Z_p in paper.
      */
-    @Represented(structure = "zp", recoveryMethod = ZpElement.RECOVERY_METHOD)
+    @Represented(restorer = "Zp")
     protected ZpElement exponentX;
 
     /**
      * y_1, ... , y_n \in Z_p in paper.
      */
-    @RepresentedArray(elementRestorer = @Represented(structure = "zp", recoveryMethod = ZpElement.RECOVERY_METHOD))
-    protected ZpElement exponentsYi[];
-
-    // pointer field used to store the structure for the representation process; in all other cases this should be null
-    protected Zp zp = null;
+    @Represented(restorer = "[Zp]")
+    protected ZpElement[] exponentsYi;
 
     public PSSigningKey() {
         super();
     }
 
     public PSSigningKey(Representation repr, Zp zp) {
-        this.zp = zp;
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
-        this.zp = null;
+        new ReprUtil(this).register(zp, "Zp").deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public ZpElement getExponentX() {
@@ -80,7 +74,6 @@ public class PSSigningKey implements SigningKey {
 
     @Override
     public int hashCode() {
-
         int result = Objects.hash(exponentX);
         result = 31 * result + Arrays.hashCode(exponentsYi);
         return result;

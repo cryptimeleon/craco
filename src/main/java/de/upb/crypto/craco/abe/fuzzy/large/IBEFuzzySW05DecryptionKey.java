@@ -5,15 +5,14 @@ import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
 import de.upb.crypto.craco.common.interfaces.pe.MasterSecret;
 import de.upb.crypto.craco.kem.fuzzy.large.IBEFuzzySW05KEM;
-import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A {@link DecryptionKey} for the {@link IBEFuzzySW05} and {@link IBEFuzzySW05KEM}.
@@ -27,22 +26,17 @@ public class IBEFuzzySW05DecryptionKey implements DecryptionKey {
     /**
      * { D_i \in G_1 }_i for i \in {@link #identity}
      */
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "int -> G1")
     private Map<BigInteger, GroupElement> dElementMap;
 
     /**
      * {R_i \in G_1 }_i for i \in {@link #identity}
      */
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "int -> G1")
     private Map<BigInteger, GroupElement> rElementMap;
 
     @Represented
     private Identity identity;
-
-    @SuppressWarnings("unused")
-    private Group groupG1;
 
     public IBEFuzzySW05DecryptionKey(Map<BigInteger, GroupElement> dElementMap,
                                      Map<BigInteger, GroupElement> rElementMap, Identity identity) {
@@ -52,13 +46,12 @@ public class IBEFuzzySW05DecryptionKey implements DecryptionKey {
     }
 
     public IBEFuzzySW05DecryptionKey(Representation repr, IBEFuzzySW05PublicParameters kpp) {
-        groupG1 = kpp.getGroupG1();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).register(kpp.getGroupG1(), "G1").deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public Map<BigInteger, GroupElement> getDElementMap() {
@@ -92,23 +85,9 @@ public class IBEFuzzySW05DecryptionKey implements DecryptionKey {
         if (getClass() != obj.getClass())
             return false;
         IBEFuzzySW05DecryptionKey other = (IBEFuzzySW05DecryptionKey) obj;
-        if (dElementMap == null) {
-            if (other.dElementMap != null)
-                return false;
-        } else if (!dElementMap.equals(other.dElementMap))
-            return false;
-        if (rElementMap == null) {
-            if (other.rElementMap != null)
-                return false;
-        } else if (!rElementMap.equals(other.rElementMap))
-            return false;
-        if (identity == null) {
-            if (other.identity != null)
-                return false;
-        } else if (!identity.equals(other.identity))
-            return false;
-        return true;
+        return Objects.equals(dElementMap, other.dElementMap)
+                && Objects.equals(rElementMap, other.rElementMap)
+                && Objects.equals(identity, other.identity);
     }
-
 }
 

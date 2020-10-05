@@ -3,15 +3,14 @@ package de.upb.crypto.craco.abe.kp.large;
 import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
-import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A {@link DecryptionKey} for the {@link ABEKPGPSW06} that stores a {@link Policy} as {@link KeyIndex}.
@@ -25,16 +24,11 @@ public class ABEKPGPSW06DecryptionKey implements DecryptionKey {
     @Represented
     private Policy policy;
 
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "int -> G1")
     private Map<BigInteger, GroupElement> dElementMap;
 
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "int -> G1")
     private Map<BigInteger, GroupElement> rElementMap;
-
-    @SuppressWarnings("unused")
-    private Group groupG1;
 
     public ABEKPGPSW06DecryptionKey(Policy policy, Map<BigInteger, GroupElement> dElementMap,
                                     Map<BigInteger, GroupElement> rElementMap) {
@@ -44,13 +38,12 @@ public class ABEKPGPSW06DecryptionKey implements DecryptionKey {
     }
 
     public ABEKPGPSW06DecryptionKey(Representation repr, ABEKPGPSW06PublicParameters kpp) {
-        groupG1 = kpp.getGroupG1();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).register(kpp.getGroupG1(), "G1").deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public Policy getPolicy() {
@@ -84,22 +77,9 @@ public class ABEKPGPSW06DecryptionKey implements DecryptionKey {
         if (getClass() != obj.getClass())
             return false;
         ABEKPGPSW06DecryptionKey other = (ABEKPGPSW06DecryptionKey) obj;
-        if (dElementMap == null) {
-            if (other.dElementMap != null)
-                return false;
-        } else if (!dElementMap.equals(other.dElementMap))
-            return false;
-        if (rElementMap == null) {
-            if (other.rElementMap != null)
-                return false;
-        } else if (!rElementMap.equals(other.rElementMap))
-            return false;
-        if (policy == null) {
-            if (other.policy != null)
-                return false;
-        } else if (!policy.equals(other.policy))
-            return false;
-        return true;
+        return Objects.equals(dElementMap, other.dElementMap)
+                && Objects.equals(rElementMap, other.rElementMap)
+                && Objects.equals(policy, other.policy);
     }
 
 }

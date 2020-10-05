@@ -49,9 +49,9 @@ public class IBEFuzzySW05 extends AbstractIBEFuzzySW05 implements PredicateEncry
         Identity omegaPrime = pk.getIdentity();
         // E' = m * Y^s
         GroupElement message = pt.get();
-        GroupElement ePrime = message.op(yToTheS);
+        GroupElement ePrime = message.op(yToTheS).compute();
         // E'' = g^s
-        GroupElement eTwoPrime = pp.getG().pow(s);
+        GroupElement eTwoPrime = pp.getG().pow(s).compute();
         Map<BigInteger, GroupElement> eElementMap = computeE(omegaPrime, s);
 
         return new IBEIBEFuzzySW05SW05CipherText(omegaPrime, ePrime, eTwoPrime, eElementMap);
@@ -83,7 +83,7 @@ public class IBEFuzzySW05 extends AbstractIBEFuzzySW05 implements PredicateEncry
         Set<BigIntegerAttribute> attributeSet = subset(intersection, pp.getIdentityThresholdD().intValue());
         GroupElement message = ct.getEPrime().op(restoreYs(ct, dMap, rMap, attributeSet).inv());
 
-        return new GroupElementPlainText(message);
+        return new GroupElementPlainText(message.compute());
     }
 
     @Override
@@ -98,9 +98,10 @@ public class IBEFuzzySW05 extends AbstractIBEFuzzySW05 implements PredicateEncry
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof IBEFuzzySW05)) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
             return false;
-        }
         IBEFuzzySW05 other = (IBEFuzzySW05) o;
         return super.equals(other);
     }

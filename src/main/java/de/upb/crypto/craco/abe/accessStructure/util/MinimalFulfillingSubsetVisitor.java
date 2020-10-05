@@ -8,65 +8,94 @@ import java.util.Set;
 
 /**
  * Given a set of shares (with identifiers 0,...,n-1),
- * computes a minimal subset that can be used to reconstruct
+ * this visitor computes a minimal subset that can be used to reconstruct
  * a shared secret.
  */
 public class MinimalFulfillingSubsetVisitor implements
         Visitor<Pair<Integer, ArrayList<Integer>>> {
 
     /**
-     * the set of parties for that it will be checked whether they fulfill the
-     * access structure or not
+     * The set of party share identifiers that are used to check fulfillment of the access structure.
+     * These are the shares that we have and want to compare against the shares required by the visited node.
      */
     private Set<Integer> setOfShares;
 
     /**
-     * threshold of the node on that this instance is performed
+     * Threshold of the node visited by this visitor.
      */
     private int threshold;
 
+    /**
+     * Specifies how many children of the current visited node are fulfilled.
+     */
     private int numberOfFulfilledChildren = 0;
 
-    private ArrayList<Pair<Integer, ArrayList<Integer>>> list; //hooray for good variable names...
+    /**
+     * Contains pairs representing fulfilled children nodes of the current node.
+     * First element of the pair specifies the number of fulfilled leaf nodes reachable from that child
+     * (at most its threshold).
+     * Second element contains identifiers of the fulfilled shares.
+     */
+    private ArrayList<Pair<Integer, ArrayList<Integer>>> fulfilledChildrenInfo;
 
+    /**
+     * Whether the threshold of the current node is reached, i.e. it is fulfilled.
+     */
     private boolean fulfilled = false;
 
+    /**
+     * Whether we visited a leaf node.
+     */
     private boolean leaf = false;
 
+    /**
+     * If this visitor is used to visit a leaf node, this is set to the share identifier of that leaf node.
+     */
     private int leafNumber;
 
     public MinimalFulfillingSubsetVisitor(Set<Integer> setOfShareIdentifers) {
         this.setOfShares = setOfShareIdentifers;
-        list = new ArrayList<Pair<Integer, ArrayList<Integer>>>();
+        fulfilledChildrenInfo = new ArrayList<>();
     }
 
+    /**
+     * If the threshold of the visited node is fulfilled, this method computes
+     * a pair containing the number of fulfilled leaf nodes reachable from the visited node
+     * (at most the node's threshold), as well a {@link ArrayList} containing
+     * the share identifiers of the fulfilled leafs.
+     * This identifies a minimal subset of shares necessary to fulfill this node.
+     */
     @Override
     public Pair<Integer, ArrayList<Integer>> getResultOfCurrentNode() {
         if (fulfilled) {
             ArrayList<Integer> arraylist = new ArrayList<>();
-            Integer minimalNumberOfFulfilledLeafs = 0;
+            int minimalNumberOfFulfilledLeafs = 0;
             if (leaf) {
+                // This node is a leaf, no need to do any deeper checks.
                 arraylist.add(leafNumber);
                 minimalNumberOfFulfilledLeafs = 1;
             } else {
+                // Not a leaf node, check the current node's children for fulfillment.
                 Integer counter = 0;
 
-                Collections.sort(list);
+                Collections.sort(fulfilledChildrenInfo);
 
-                for (Pair<Integer, ArrayList<Integer>> entry : list) {
+                for (Pair<Integer, ArrayList<Integer>> entry : fulfilledChildrenInfo) {
                     counter++;
                     minimalNumberOfFulfilledLeafs = minimalNumberOfFulfilledLeafs
                             + entry.getFirst();
                     arraylist.addAll(entry.getSecond());
 
+                    // Since we are interested in a minimal set of shares required to reconstruct the secret,
+                    // we can stop once we reach the threshold.
                     if (counter.equals(threshold))
                         break;
                 }
             }
-            return new Pair<Integer, ArrayList<Integer>>(
+            return new Pair<>(
                     minimalNumberOfFulfilledLeafs, arraylist);
         } else {
-            return new Pair<Integer, ArrayList<Integer>>(0, null);
+            return new Pair<>(0, null);
         }
     }
 
@@ -75,16 +104,29 @@ public class MinimalFulfillingSubsetVisitor implements
         return new MinimalFulfillingSubsetVisitor(setOfShares);
     }
 
+    /**
+     * If the given result contains a fulfilled child, {@code numberOfFulfilledChildren} is incremented,
+     * and, if the current node's threshold is reached, it is marked as fulfilled.
+     * Furthermore, the result is added to {@code fulfilledChildrenInfo}.
+     */
     @Override
-    public void putResultOfChild(Pair<Integer, ArrayList<Integer>> input) {
-        if (!(input.getFirst() == 0)) {
+    public void putResultOfChild(Pair<Integer, ArrayList<Integer>> result) {
+        if (!(result.getFirst() == 0)) {
             numberOfFulfilledChildren = numberOfFulfilledChildren + 1;
             if (numberOfFulfilledChildren == threshold)
                 fulfilled = true;
-            list.add(input);
+            fulfilledChildrenInfo.add(result);
         }
     }
 
+    /**
+     * Sets {@code threshold} to the threshold of the given tree node.
+     * If the given node is a leaf node (threshold is zero), this method additionally uses the set of share
+     * identifiers specified in this {@link MinimalFulfillingSubsetVisitor} instance to check whether one of them
+     * fulfills the share requirement of the given leaf node.
+     *
+     * @param currentNode The tree node to visit.
+     */
     @Override
     public void visit(TreeNode currentNode)
             throws WrongAccessStructureException {
@@ -99,9 +141,8 @@ public class MinimalFulfillingSubsetVisitor implements
                 }
             } else {
                 throw new WrongAccessStructureException(
-                        "Tree contains a node with children and Threshold 0 \n 0 is not a valid threshold");
+                        "Tree contains a node with children and Threshold 0. \n 0 is not a valid threshold.");
             }
         }
     }
-
 }

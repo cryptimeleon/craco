@@ -6,8 +6,8 @@ import de.upb.crypto.craco.prf.PrfKey;
 import de.upb.crypto.craco.prf.PrfPreimage;
 import de.upb.crypto.craco.prf.PseudorandomFunction;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -16,6 +16,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 
 /**
  * AES as a pseudorandom function (permutation) f_k : {0,1}^l -> {0,1}^l
@@ -25,7 +26,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class AesPseudorandomFunction implements PseudorandomFunction {
     @Represented
-    protected int keylength; //length of keys in bit
+    protected Integer keylength; //length of keys in bit
 
     /**
      * Instantiates the PRP
@@ -37,12 +38,12 @@ public class AesPseudorandomFunction implements PseudorandomFunction {
     }
 
     public AesPseudorandomFunction(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -95,10 +96,12 @@ public class AesPseudorandomFunction implements PseudorandomFunction {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return obj != null
-                && obj instanceof AesPseudorandomFunction
-                && ((AesPseudorandomFunction) obj).keylength == keylength;
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        AesPseudorandomFunction other = (AesPseudorandomFunction) o;
+        return Objects.equals(keylength, other.keylength);
     }
-
 }

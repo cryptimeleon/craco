@@ -3,14 +3,13 @@ package de.upb.crypto.craco.abe.fuzzy.small;
 import de.upb.crypto.craco.common.interfaces.CipherText;
 import de.upb.crypto.craco.abe.interfaces.Attribute;
 import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
-import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * The {@link CipherText} for the {@link IBEFuzzySW05Small}
@@ -23,20 +22,12 @@ public class IBEFuzzySW05SmallCipherText implements CipherText {
     private SetOfAttributes omega_prime;
 
     // in G_T
-    @Represented(structure = "groupGT", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "GT")
     private GroupElement e_prime;
 
     // in G_1
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "attr -> G1")
     private Map<Attribute, GroupElement> e;
-
-
-    @SuppressWarnings("unused")
-    private Group groupG1;
-
-    @SuppressWarnings("unused")
-    private Group groupGT;
 
 
     public IBEFuzzySW05SmallCipherText(SetOfAttributes identity, GroupElement E_prime,
@@ -47,13 +38,12 @@ public class IBEFuzzySW05SmallCipherText implements CipherText {
     }
 
     public IBEFuzzySW05SmallCipherText(Representation repr, IBEFuzzySW05SmallPublicParameters pp) {
-        groupGT = pp.getGroupGT();
-        groupG1 = pp.getGroupG1();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).register(pp.getGroupG1(), "G1").register(pp.getGroupGT(), "GT")
+                .deserialize(repr);
     }
 
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public SetOfAttributes getOmega_prime() {
@@ -87,21 +77,8 @@ public class IBEFuzzySW05SmallCipherText implements CipherText {
         if (getClass() != obj.getClass())
             return false;
         IBEFuzzySW05SmallCipherText other = (IBEFuzzySW05SmallCipherText) obj;
-        if (e == null) {
-            if (other.e != null)
-                return false;
-        } else if (!e.equals(other.e))
-            return false;
-        if (e_prime == null) {
-            if (other.e_prime != null)
-                return false;
-        } else if (!e_prime.equals(other.e_prime))
-            return false;
-        if (omega_prime == null) {
-            if (other.omega_prime != null)
-                return false;
-        } else if (!omega_prime.containsAll(other.omega_prime) || !other.omega_prime.containsAll(omega_prime))
-            return false;
-        return true;
+        return Objects.equals(e, other.e)
+                && Objects.equals(e_prime, other.e_prime)
+                && Objects.equals(omega_prime, other.omega_prime);
     }
 }

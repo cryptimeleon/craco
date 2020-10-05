@@ -6,8 +6,7 @@ import de.upb.crypto.math.hash.impl.SHA256HashFunction;
 import de.upb.crypto.math.interfaces.hash.HashFunction;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
-import de.upb.crypto.math.interfaces.structures.RingUnitGroup;
-import de.upb.crypto.math.interfaces.structures.Subgroup;
+import de.upb.crypto.math.interfaces.structures.RingGroup;
 import de.upb.crypto.math.structures.zn.Zp;
 
 import java.math.BigInteger;
@@ -26,16 +25,11 @@ public class ElgamalKEMParams {
         Zp zp = new Zp(new BigInteger(p, 16));
 
         /* multiplicative subgroup of field */
-        RingUnitGroup zpStar = new RingUnitGroup(zp);
-
-        /* generator of prime order subgroup */
-        GroupElement generator = zpStar.new RingUnitGroupElement(zp.createZnElement(new BigInteger(g, 16)));
-
-        /* get prime order subgroup */
-        Group group = new Subgroup(zpStar, generator, new BigInteger(q, 16));
+        RingGroup zpStar = RingGroup.unitGroupOf(zp);
+;
         HashFunction md = new SHA256HashFunction();
         ArrayList<StandaloneTestParams> toReturn = new ArrayList<>();
-        ElgamalKEM kem = new ElgamalKEM(group, md);
+        ElgamalKEM kem = new ElgamalKEM(zpStar, md);
         toReturn.add(new StandaloneTestParams(kem.getClass(), kem));
         return toReturn;
     }

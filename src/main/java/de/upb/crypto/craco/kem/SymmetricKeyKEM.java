@@ -5,8 +5,10 @@ import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.common.interfaces.EncryptionKey;
 import de.upb.crypto.craco.common.interfaces.SymmetricKey;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
+
+import java.util.Objects;
 
 /**
  * A KEM that is implemented by the composition of a {@link KeyEncapsulationMechanism} providing {@link KeyMaterial} and
@@ -39,7 +41,7 @@ public abstract class SymmetricKeyKEM implements KeyEncapsulationMechanism<Symme
     }
 
     public SymmetricKeyKEM(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     /**
@@ -107,12 +109,9 @@ public abstract class SymmetricKeyKEM implements KeyEncapsulationMechanism<Symme
             return true;
         if (o == null || getClass() != o.getClass())
             return false;
-
-        SymmetricKeyKEM that = (SymmetricKeyKEM) o;
-
-        if (kem != null ? !kem.equals(that.kem) : that.kem != null)
-            return false;
-        return kdf != null ? kdf.equals(that.kdf) : that.kdf == null;
+        SymmetricKeyKEM other = (SymmetricKeyKEM) o;
+        return Objects.equals(kem, other.kem)
+                && Objects.equals(kdf, other.kdf);
     }
 
     @Override
@@ -124,8 +123,6 @@ public abstract class SymmetricKeyKEM implements KeyEncapsulationMechanism<Symme
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
-
+        return ReprUtil.serialize(this);
     }
-
 }

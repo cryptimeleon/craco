@@ -6,16 +6,10 @@ import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.structures.cartesian.GroupElementVector;
 
-import java.util.Arrays;
 import java.util.Objects;
 
-/**
- * Public (verification) key for the Pointcheval Sanders 2018 (Section 4.2)
- * signature scheme.
- *
- * @author Raphael Heitjohann
- */
 public class PS18VerificationKey implements VerificationKey {
 
     /**
@@ -33,12 +27,11 @@ public class PS18VerificationKey implements VerificationKey {
     /**
      * \tilde{Y_1}, ..., \tilde{Y_{r+1}} in paper.
      */
-    @Represented(restorer = "[G2]")
-    private GroupElement[] group2ElementsTildeYi;
+    @Represented(restorer = "G2")
+    private GroupElementVector group2ElementsTildeYi;
 
-    public PS18VerificationKey(GroupElement group2ElementTildeG,
-                               GroupElement group2ElementTildeX,
-                               GroupElement[] group2ElementsTildeYi) {
+    public PS18VerificationKey(GroupElement group2ElementTildeG, GroupElement group2ElementTildeX,
+                               GroupElementVector group2ElementsTildeYi) {
         this.group2ElementTildeG = group2ElementTildeG;
         this.group2ElementTildeX = group2ElementTildeX;
         this.group2ElementsTildeYi = group2ElementsTildeYi;
@@ -76,16 +69,16 @@ public class PS18VerificationKey implements VerificationKey {
         this.group2ElementTildeX = group2ElementTildeX;
     }
 
-    public GroupElement[] getGroup2ElementsTildeYi() {
+    public GroupElementVector getGroup2ElementsTildeYi() {
         return group2ElementsTildeYi;
     }
 
-    public void setGroup2ElementsTildeYi(GroupElement[] group2ElementsTildeYi) {
+    public void setGroup2ElementsTildeYi(GroupElementVector group2ElementsTildeYi) {
         this.group2ElementsTildeYi = group2ElementsTildeYi;
     }
 
     public int getNumberOfMessages() {
-        return group2ElementsTildeYi.length - 1;
+        return group2ElementsTildeYi.length() - 1;
     }
 
     @Override
@@ -95,13 +88,11 @@ public class PS18VerificationKey implements VerificationKey {
         PS18VerificationKey that = (PS18VerificationKey) o;
         return Objects.equals(group2ElementTildeG, that.group2ElementTildeG)
                 && Objects.equals(group2ElementTildeX, that.group2ElementTildeX)
-                && Arrays.equals(group2ElementsTildeYi, that.group2ElementsTildeYi);
+                && Objects.equals(group2ElementsTildeYi, that.group2ElementsTildeYi);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(group2ElementTildeG, group2ElementTildeX);
-        result = 31 * result + Arrays.hashCode(group2ElementsTildeYi);
-        return result;
+        return Objects.hash(group2ElementTildeG, group2ElementTildeX, group2ElementsTildeYi);
     }
 }

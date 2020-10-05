@@ -34,7 +34,7 @@ import java.util.Map.Entry;
  * expressive, efficient, and provably secure realization. In Public Key
  * Cryptography, pages 53–70. Springer, 2011
  *
- * @author Marius Dransfeld, refactoring: Fabian Eidens, Mirko Jürgens
+ * @author Marius Dransfeld, refactoring: Fabian Eidens, Mirko Jürgens, Raphael Heitjohann
  */
 public class ABECPWat11Small implements PredicateEncryptionScheme {
 
@@ -61,12 +61,14 @@ public class ABECPWat11Small implements PredicateEncryptionScheme {
      * Checks if the number of shared attributes (the lines in the MSP) are
      * valid and if the MSP is injective (all lines are different attributes).
      *
-     * @param shares
+     * @param shares maps share indices to the shares
+     * @param msp the msp to check
+     * @param lMax the maximum number of shares allowed
      * @return true if MSP is valid, else false.
      */
-    private boolean isMonotoneSpanProgramValid(Map<Integer, ZpElement> shares, MonotoneSpanProgram msp, int l_max) {
+    private boolean isMonotoneSpanProgramValid(Map<Integer, ZpElement> shares, MonotoneSpanProgram msp, int lMax) {
         // check for line count
-        if (shares.size() > l_max) {
+        if (shares.size() > lMax) {
             return false;
         } else {
             Set<Attribute> attributes = new HashSet<>();
@@ -93,44 +95,44 @@ public class ABECPWat11Small implements PredicateEncryptionScheme {
 
         ZpElement s = zp.getUniformlyRandomUnit();
 
-        // E_prime = m \cdot Y^s \in G_T
-        GroupElement E_prime = groupElementPlainText.get();
-        E_prime = E_prime.op(pp.getY().pow(s));
+        // C = M \cdot e(g,g)^{\alpha s} \in G_T
+        GroupElement c = groupElementPlainText.get();
+        c = c.op(pp.geteGGAlpha().pow(s)).compute();
 
-        // E_two_prime = g^s \in G_1
-        GroupElement E_two_prime = pp.getG().pow(s);
+        // C' = g^s \in G_1
+        GroupElement cPrime = pp.getG().pow(s).compute();
         // Get the public policy
         MonotoneSpanProgram msp = new MonotoneSpanProgram(pk.getPolicy(), zp);
 
         // Split s in a set of shares
         Map<Integer, ZpElement> shares = msp.getShares(s);
 
-        if (!isMonotoneSpanProgramValid(shares, msp, pp.getT().size()))
+        if (!isMonotoneSpanProgramValid(shares, msp, pp.getH().size()))
             throw new IllegalArgumentException("MSP is invalid");
 
-        // in G_1
-        Map<BigInteger, GroupElement> E1 = new HashMap<>();
-        // in G_1
-        Map<BigInteger, GroupElement> E2 = new HashMap<>();
+        // Mapping C in G_1
+        Map<BigInteger, GroupElement> mapC = new HashMap<>();
+        // Mapping D in G_1
+        Map<BigInteger, GroupElement> mapD = new HashMap<>();
 
         for (Entry<Integer, ZpElement> share : shares.entrySet()) {
             // the row of the share
             BigInteger i = BigInteger.valueOf(share.getKey());
             // the party linked to this share
-            Attribute rho_i = (Attribute) msp.getShareReceiver(share.getKey());
+            Attribute rhoI = (Attribute) msp.getShareReceiver(share.getKey());
             // the share /constant
-            ZpElement lambda_i = share.getValue();
-            ZpElement r_i = zp.getUniformlyRandomUnit();
-            // E1_i = (g^a)^lambda_i * T_{rho_i} ^-r_i
-            GroupElement E1_i = pp.getG_a().pow(lambda_i);
-            E1_i = E1_i.op(pp.getT().get(rho_i).pow(r_i).inv());
-            // E2_i = g^r_i
-            GroupElement E2_i = pp.getG().pow(r_i);
+            ZpElement lambdaI = share.getValue();
+            ZpElement rI = zp.getUniformlyRandomUnit();
+            // C_i = (g^a)^\lambda_i * h_{\rho_i}^{-r_i}
+            GroupElement cI = pp.getgA().pow(lambdaI);
+            cI = cI.op(pp.getH().get(rhoI).pow(rI).inv()).compute();
+            // D_i = g^r_i
+            GroupElement dI = pp.getG().pow(rI).compute();
 
-            E1.put(i, E1_i);
-            E2.put(i, E2_i);
+            mapC.put(i, cI);
+            mapD.put(i, dI);
         }
-        return new ABECPWat11SmallCipherText(pk.getPolicy(), E_prime, E_two_prime, E1, E2);
+        return new ABECPWat11SmallCipherText(pk.getPolicy(), c, cPrime, mapC, mapD);
     }
 
     @Override
@@ -142,52 +144,59 @@ public class ABECPWat11Small implements PredicateEncryptionScheme {
 
         ABECPWat11SmallCipherText c = (ABECPWat11SmallCipherText) cipherText;
         ABECPWat11SmallDecryptionKey sk = (ABECPWat11SmallDecryptionKey) privateKey;
-        GroupElement D_prime = sk.getD_prime();
-        GroupElement D_two_prime = sk.getD_prime2();
-        Map<Attribute, GroupElement> D = sk.getD();
+        GroupElement k = sk.getK();
+        GroupElement l = sk.getL();
+        Map<Attribute, GroupElement> mapK = sk.getMapK();
 
         MonotoneSpanProgram msp = new MonotoneSpanProgram(c.getPolicy(), zp);
 
         // the attributes of the decryption key
-        Set<Attribute> S = D.keySet();
+        Set<Attribute> S = mapK.keySet();
 
         if (!msp.isQualified(S)) {
             throw new UnqualifiedKeyException("The given decryption key does not satisfy the MSP");
         }
 
-        GroupElement message = c.getE_prime();
+        GroupElement message = c.getC();
 
-        List<GroupElement> zList = new ArrayList<GroupElement>();
+        // List that accumulates factors for the product computation of the left side of the decryption equation
+        // The evaluation can then automatically be parallelized using Java streams
+        List<GroupElement> productList = new ArrayList<GroupElement>();
 
-        for (Entry<Integer, ZpElement> w_i : msp.getSolvingVector(S).entrySet()) {
+        for (Entry<Integer, ZpElement> omegaI : msp.getSolvingVector(S).entrySet()) {
             // the row of the share
-            BigInteger i = BigInteger.valueOf(w_i.getKey());
+            BigInteger i = BigInteger.valueOf(omegaI.getKey());
             // the party linked to this share
-            Attribute rho_i = (Attribute) msp.getShareReceiver(w_i.getKey());
+            Attribute rhoI = (Attribute) msp.getShareReceiver(omegaI.getKey());
 
-            if (!w_i.getValue().getInteger().equals(BigInteger.ZERO)) {
-                GroupElement E1_i = c.getE1().get(i);
-                GroupElement E2_i = c.getE2().get(i);
-                GroupElement D_rho_i = D.get(rho_i);
+            if (!omegaI.getValue().getInteger().equals(BigInteger.ZERO)) {
+                GroupElement cI = c.getMapC().get(i);
+                GroupElement dI = c.getMapD().get(i);
+                GroupElement kRhoI = mapK.get(rhoI);
 
-                GroupElement map1 = pp.getE().apply(E1_i, D_two_prime);
-                GroupElement map2 = pp.getE().apply(E2_i, D_rho_i);
+                // e(C_i, L)
+                GroupElement map1 = pp.getE().apply(cI, l);
+                // e(D_i, K_{\rho(i)}
+                GroupElement map2 = pp.getE().apply(dI, kRhoI);
 
+                // e(C_i, L) \cdot e(D_i, K_{\rho(i)}
                 map1 = map1.op(map2);
-                map1 = map1.pow(w_i.getValue().getInteger());
-                zList.add(map1);
+                // (e(C_i, L) \cdot e(D_i, K_{\rho(i)})^{\omega_i}
+                map1 = map1.pow(omegaI.getValue().getInteger());
+                productList.add(map1);
             }
         }
-        Optional<GroupElement> reduced = zList.stream().parallel().reduce((elem1, elem2) -> elem1.op(elem2));
+        Optional<GroupElement> reduced = productList.stream().parallel().reduce(GroupElement::op);
         GroupElement tmp = pp.getE().getGT().getNeutralElement();
         if (reduced.isPresent()) {
             tmp = reduced.get();
         }
 
-        GroupElement map = pp.getE().apply(c.getE_two_prime(), D_prime);
+        // e(C', K)
+        GroupElement map = pp.getE().apply(c.getcPrime(), k);
+        // e(C', K) / (\prod_{i \in I}{(e(C_i, L) \cdot e(D_i, K_{\rho(i)})^{\omega_i}} = e(g,g)^{\alpha s}
         map = map.op(tmp.inv());
-        return new GroupElementPlainText(message.op(map.inv()));
-
+        return new GroupElementPlainText(message.op(map.inv()).compute());
     }
 
     @Override
@@ -240,15 +249,15 @@ public class ABECPWat11Small implements PredicateEncryptionScheme {
 
         ZpElement u = zp.getUniformlyRandomUnit();
         // d_prime = g_y * (g_a^u)
-        GroupElement d_prime = g_y.op(pp.getG_a().pow(u));
+        GroupElement d_prime = g_y.op(pp.getgA().pow(u)).compute();
         // d_prime2 = g^u \in G_T
-        GroupElement d_prime2 = pp.getG().pow(u);
+        GroupElement d_prime2 = pp.getG().pow(u).compute();
 
         Map<Attribute, GroupElement> d = new HashMap<>();
         // \forall x in attributes : d_x = T_x^u
         for (Attribute x : attributes) {
-            GroupElement d_x = pp.getT().get(x).pow(u);
-            d.put(x, d_x);
+            GroupElement d_x = pp.getH().get(x).pow(u);
+            d.put(x, d_x.compute());
         }
         return new ABECPWat11SmallDecryptionKey(d, d_prime, d_prime2);
     }
@@ -302,12 +311,12 @@ public class ABECPWat11Small implements PredicateEncryptionScheme {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof ABECPWat11Small) {
-            ABECPWat11Small other = (ABECPWat11Small) o;
-            return pp.equals(other.pp);
-        } else {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
             return false;
-        }
+        ABECPWat11Small other = (ABECPWat11Small) o;
+        return Objects.equals(pp, other.pp);
     }
 
     public ABECPWat11SmallPublicParameters getPublicParameters() {

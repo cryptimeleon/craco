@@ -50,30 +50,28 @@ public class ABECPWat11SmallSetup {
         // Public Parameter stuff
         pp = new ABECPWat11SmallPublicParameters();
 
-        pp.setGroupG1(group.getG1());
-        pp.setGroupGT(group.getGT());
-        pp.setE(group.getBilinearMap());
+        pp.setBilinearGroup(group);
         Zp zp = new Zp(pp.getGroupG1().size());
 
         ZpElement y = zp.getUniformlyRandomUnit();
         ZpElement a = zp.getUniformlyRandomUnit();
 
         // g in G_1
-        pp.setG(pp.getGroupG1().getUniformlyRandomNonNeutral());
+        pp.setG(pp.getGroupG1().getUniformlyRandomNonNeutral().compute());
         // Y = E (g, g)^y \in G_T
-        pp.setY(pp.getE().apply(pp.getG(), pp.getG()).pow(y));
+        pp.seteGGAlpha(pp.getE().apply(pp.getG(), pp.getG()).pow(y).compute());
         // g_a = g^a \in G_1
-        pp.setG_a(pp.getG().pow(a));
+        pp.setgA(pp.getG().pow(a).compute());
 
         // msk = g^y
-        msk = new ABECPWat11SmallMasterSecret(pp.getG().pow(y));
+        msk = new ABECPWat11SmallMasterSecret(pp.getG().pow(y).compute());
 
         Map<Attribute, GroupElement> t = new HashMap<>();
         // \for all x in univese T_x = RandomNonNeutral in G1
         for (Attribute attribute : universe) {
-            t.put(attribute, pp.getGroupG1().getUniformlyRandomNonNeutral());
+            t.put(attribute, pp.getGroupG1().getUniformlyRandomNonNeutral().compute());
         }
-        pp.setT(t);
+        pp.setH(t);
     }
 
     public ABECPWat11SmallPublicParameters getPublicParameters() {

@@ -6,6 +6,9 @@ import de.upb.crypto.craco.common.interfaces.EncryptionKey;
 import de.upb.crypto.craco.common.interfaces.UnqualifiedKeyException;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
+import de.upb.crypto.math.serialization.annotations.v2.RepresentationRestorer;
+
+import java.lang.reflect.Type;
 
 /**
  * A mechanism that is able to generate random symmetric keys and
@@ -23,7 +26,7 @@ import de.upb.crypto.math.serialization.StandaloneRepresentable;
  * Adaptive Chosen Ciphertext Attack. SIAM Journal on Computing 33, no. 1 (2003): 167-226.
  * Page 201.
  */
-public interface KeyEncapsulationMechanism<T> extends StandaloneRepresentable {
+public interface KeyEncapsulationMechanism<T> extends StandaloneRepresentable, RepresentationRestorer {
     public static class KeyAndCiphertext<T> {
         public T key;
         public CipherText encapsulatedKey;
@@ -50,4 +53,17 @@ public interface KeyEncapsulationMechanism<T> extends StandaloneRepresentable {
     public EncryptionKey getEncapsulationKey(Representation repr);
 
     public DecryptionKey getDecapsulationKey(Representation repr);
+
+    default Object recreateFromRepresentation(Type type, Representation repr) {
+        if (type instanceof Class) {
+            if (EncryptionKey.class.isAssignableFrom((Class) type)) {
+                return this.getEncapsulationKey(repr);
+            } else if (DecryptionKey.class.isAssignableFrom((Class) type)) {
+                return this.getDecapsulationKey(repr);
+            } else if (CipherText.class.isAssignableFrom((Class) type)) {
+                return this.getEncapsulatedKey(repr);
+            }
+        }
+        throw new IllegalArgumentException("Cannot recreate object of type: " + type.getTypeName());
+    }
 }

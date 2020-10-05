@@ -10,12 +10,12 @@ import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedArray;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Arrays;
 import java.util.Objects;
+
 
 /**
  * Extension of the verification key for a Pointcheval Sanders Signature Scheme to store the generator g and the
@@ -35,26 +35,22 @@ public class PSExtendedVerificationKey extends PSVerificationKey
     // Added parameters to enable blindly signing messages in combination with the Pedersen commitment scheme
     // g for enabling optional blinding/unblinding
     @UniqueByteRepresented
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "G1")
     private GroupElement group1ElementG;
 
     // Y_i for enabling optional blinding/unblinding
     @UniqueByteRepresented
-    @RepresentedArray(elementRestorer = @Represented(structure = "groupG1", recoveryMethod = GroupElement
-            .RECOVERY_METHOD))
+    @Represented(restorer = "[G1]")
     private GroupElement[] group1ElementsYi;
-
-    // pointer field used to store the structure for the representation process; in all other cases this should be null
-    private Group groupG1 = null;
 
     /**
      * Extended constructor for the extended verification key in the ACS allowing direct instantiation.
      *
      * @param group1Element         {@link GroupElement} g is a generator from {@link Group} 1
-     * @param group1ElementsYi      {@link GroupElement[]} Y_i from {@link Group} 1
+     * @param group1ElementsYi      Array of {@link GroupElement} containing Y_i from {@link Group} 1
      * @param group2ElementTildeG   {@link GroupElement} g_Tilde is a generator from {@link Group} 2
      * @param group2ElementTildeX   {@link GroupElement} x_Tilde from {@link Group} 1
-     * @param group2ElementsTildeYi {@link GroupElement[]} Y_i_Tilde from {@link Group} 2
+     * @param group2ElementsTildeYi Array of {@link GroupElement} containing  Y_i_Tilde from {@link Group} 2
      */
     public PSExtendedVerificationKey(GroupElement group1Element, GroupElement[] group1ElementsYi,
                                      GroupElement group2ElementTildeG, GroupElement group2ElementTildeX,
@@ -75,16 +71,13 @@ public class PSExtendedVerificationKey extends PSVerificationKey
      * @param repr    {@link Representation} of {@link PSExtendedVerificationKey}
      */
     public PSExtendedVerificationKey(Group groupG1, Group groupG2, Representation repr) {
-        this.groupG1 = groupG1;
-        this.groupG2 = groupG2;
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
-        this.groupG1 = null;
-        this.groupG2 = null;
+        super();
+        new ReprUtil(this).register(groupG1, "G1").register(groupG2, "G2").deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public GroupElement getGroup1ElementG() {
@@ -115,7 +108,6 @@ public class PSExtendedVerificationKey extends PSVerificationKey
 
     @Override
     public int hashCode() {
-
         int result = Objects.hash(super.hashCode(), group1ElementG);
         result = 31 * result + Arrays.hashCode(group1ElementsYi);
         return result;

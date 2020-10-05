@@ -1,7 +1,5 @@
 package de.upb.crypto.craco.abe.interfaces.distributed;
 
-import de.upb.crypto.craco.abe.interfaces.distributed.KeyShare;
-import de.upb.crypto.craco.abe.interfaces.distributed.MasterKeyShare;
 import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.common.interfaces.EncryptionScheme;
 import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
@@ -12,7 +10,7 @@ import java.util.List;
 /**
  * Interface for distributed crypto schemes.
  * <p>
- * The idea is that the {@link MasterKey} is divided into L
+ * The idea is that the {@link de.upb.crypto.craco.common.interfaces.pe.MasterSecret} is divided into L
  * {@link MasterKeyShare}. These Shares are distributed over L servers.
  * <p>
  * A KeyShare is generated out of a MasterKeyShare.

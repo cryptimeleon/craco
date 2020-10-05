@@ -31,7 +31,5 @@ public class StreamingCBCAES extends AbstractStreamingSymmetricScheme {
             throws InvalidAlgorithmParameterException, InvalidKeyException {
         SecretKeySpec keySpec = new SecretKeySpec(symmetricKey.getData(), "AES");
         cipher.init(mode, keySpec, new IvParameterSpec(initialVector));
-
     }
-
 }

@@ -1,11 +1,14 @@
 package de.upb.crypto.craco.sig.ps;
 
 import de.upb.crypto.craco.common.interfaces.PublicParameters;
+import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
+
+import java.util.Objects;
 
 /**
  * Class for the public parameters of the Pointcheval Sanders signature scheme.
@@ -17,23 +20,23 @@ public class PSPublicParameters implements PublicParameters {
 
     // The bilinear map e in the paper.
     @Represented
-    private BilinearMap bilinearMap; // G1 x G2 -> GT
+    private BilinearGroup bilinearGroup; // G1 x G2 -> GT
     @Represented
     private Zp zp;
 
-    public PSPublicParameters(BilinearMap bilinearMap) {
+    public PSPublicParameters(BilinearGroup bilinearGroup) {
         super();
-        this.bilinearMap = bilinearMap;
-        this.zp = new Zp(bilinearMap.getG1().size());
+        this.bilinearGroup = bilinearGroup;
+        this.zp = new Zp(bilinearGroup.getG1().size());
     }
 
     public PSPublicParameters(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     /**
@@ -44,30 +47,21 @@ public class PSPublicParameters implements PublicParameters {
     }
 
     public BilinearMap getBilinearMap() {
-        return bilinearMap;
+        return bilinearGroup.getBilinearMap();
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((bilinearMap == null) ? 0 : bilinearMap.hashCode());
-        return result;
+        return Objects.hash(bilinearGroup);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(Object other) {
+        if (this == other)
             return true;
-        if (obj == null)
+        if (other == null || getClass() != other.getClass())
             return false;
-        if (getClass() != obj.getClass())
-            return false;
-        PSPublicParameters other = (PSPublicParameters) obj;
-        if ((bilinearMap == null) != (other.bilinearMap == null)) {
-            return false;
-        } else if (!bilinearMap.equals(other.bilinearMap))
-            return false;
-        return true;
+        PSPublicParameters that = (PSPublicParameters) other;
+        return Objects.equals(bilinearGroup, that.bilinearGroup);
     }
 }

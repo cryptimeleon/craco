@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A KEM based on the Fuzzy IBE large universe construction ({@link IBEFuzzySW05}.
+ * A KEM based on the Fuzzy IBE large universe construction ({@link IBEFuzzySW05}).
  * <p>
  * For the basic idea of the construction consider a {@link IBEIBEFuzzySW05SW05CipherText} (\omega', E', E'', (E_i)_{
  * i}) of
@@ -51,9 +51,9 @@ public class IBEFuzzySW05KEM extends AbstractIBEFuzzySW05 implements PredicateKE
     /**
      * Essentially {@link IBEFuzzySW05#encrypt(PlainText, EncryptionKey)} but instead of encrypting some
      * {@link PlainText} m, it outputs the first component of the ciphertext
-     * ({@link IBEIBEFuzzySW05SW05CipherText#ePrime) dropping
+     * ({@link IBEIBEFuzzySW05SW05CipherText#getEPrime()} ) dropping
      * the factor m as a key along with the second ({@link IBEFuzzySW05KEMCipherText#eTwoPrime}) and third
-     * ({@link IBEFuzzySW05KEMCipherText#eElementMap) component as the encapsulation of this key.
+     * ({@link IBEFuzzySW05KEMCipherText#eElementMap}) component as the encapsulation of this key.
      *
      * @param publicKey {@link IBEFuzzySW05EncryptionKey } created by
      *                  {@link AbstractIBEFuzzySW05#generateEncryptionKey(CiphertextIndex)}

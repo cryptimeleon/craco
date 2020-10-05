@@ -6,11 +6,14 @@ import de.upb.crypto.math.serialization.MapRepresentation;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * The master secret for the {@link ABEKPGPSW06Small} generated in the
@@ -20,8 +23,10 @@ import java.util.Map;
  */
 public class ABEKPGPSW06SmallMasterSecret implements MasterSecret {
 
+    @Represented(restorer = "Zp")
     private ZpElement y;
 
+    @Represented(restorer = "attr -> Zp")
     private Map<Attribute, ZpElement> t;
 
     public ABEKPGPSW06SmallMasterSecret(ZpElement y, Map<Attribute, ZpElement> t) {
@@ -30,23 +35,12 @@ public class ABEKPGPSW06SmallMasterSecret implements MasterSecret {
     }
 
     public ABEKPGPSW06SmallMasterSecret(Representation repr, ABEKPGPSW06SmallPublicParameters kpp) {
-        Zp zp = new Zp(kpp.getGroupG1().size());
-        this.y = zp.getElement(repr.obj().get("y"));
-        t = new HashMap<Attribute, ZpElement>();
-        repr.obj().get("t").map().forEach(entry -> t.put((Attribute) entry.getKey().repr().recreateRepresentable(),
-                zp.getElement(entry.getValue())));
+        new ReprUtil(this).register(new Zp(kpp.getGroupG1().size()), "Zp").deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        ObjectRepresentation repr = new ObjectRepresentation();
-        repr.put("y", y.getRepresentation());
-        MapRepresentation map = new MapRepresentation();
-        t.forEach((a, g) -> map.put(new RepresentableRepresentation(a), g.getRepresentation()));
-
-        repr.put("t", map);
-
-        return repr;
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -58,17 +52,8 @@ public class ABEKPGPSW06SmallMasterSecret implements MasterSecret {
         if (getClass() != obj.getClass())
             return false;
         ABEKPGPSW06SmallMasterSecret other = (ABEKPGPSW06SmallMasterSecret) obj;
-        if (t == null) {
-            if (other.t != null)
-                return false;
-        } else if (!t.equals(other.t))
-            return false;
-        if (y == null) {
-            if (other.y != null)
-                return false;
-        } else if (!y.equals(other.y))
-            return false;
-        return true;
+        return Objects.equals(t, other.t)
+                && Objects.equals(y, other.y);
     }
 
     @Override

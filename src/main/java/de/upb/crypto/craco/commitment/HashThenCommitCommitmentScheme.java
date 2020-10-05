@@ -2,14 +2,14 @@ package de.upb.crypto.craco.commitment;
 
 import de.upb.crypto.craco.commitment.interfaces.CommitmentPair;
 import de.upb.crypto.craco.commitment.interfaces.CommitmentScheme;
-import de.upb.crypto.craco.commitment.interfaces.CommitmentValue;
+import de.upb.crypto.craco.commitment.interfaces.Commitment;
 import de.upb.crypto.craco.commitment.interfaces.OpenValue;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
 import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.math.interfaces.hash.HashFunction;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Objects;
 
@@ -38,10 +38,10 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
     /**
      * Constructor for a {@link HashThenCommitCommitmentScheme}-instance from a {@link Representation}
      *
-     * @param representation {@link Representation} of a {@link HashThenCommitCommitmentScheme} instance.
+     * @param repr {@link Representation} of a {@link HashThenCommitCommitmentScheme} instance.
      */
-    public HashThenCommitCommitmentScheme(Representation representation) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(representation, this);
+    public HashThenCommitCommitmentScheme(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
     }
 
     /**
@@ -67,16 +67,16 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
 
     /**
      * Verification that the 'announced' {@link PlainText} ( message) equals the result (original message) of opening
-     * the {@link CommitmentValue} with the {@link OpenValue} for hashing of the original message.
+     * the {@link Commitment} with the {@link OpenValue} for hashing of the original message.
      *
-     * @param commitmentValue {@link CommitmentValue} of the encapsulated {@link CommitmentScheme}.
+     * @param commitment {@link Commitment} of the encapsulated {@link CommitmentScheme}.
      * @param openValue       {@link OpenValue} of the encapsulated {@link CommitmentScheme}.
      * @param plainText       {@link PlainText} (original message) of the encapsulated {@link CommitmentScheme}.
      * @return Boolean value whether the opened message equals the announced message is successful
      * (true) or not (false).
      */
     @Override
-    public boolean verify(CommitmentValue commitmentValue, OpenValue openValue, PlainText plainText) {
+    public boolean verify(Commitment commitment, OpenValue openValue, PlainText plainText) {
         ByteArrayImplementation pt;
         if (!(plainText instanceof ByteArrayImplementation)) {
             pt = (ByteArrayImplementation) mapToPlainText(plainText.getUniqueByteRepresentation());
@@ -86,7 +86,7 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
         // hash
         byte[] hashedBytes = hashFunction.hash(pt.getData());
         PlainText hashedPlainText = encapsulatedScheme.mapToPlainText(hashedBytes);
-        return encapsulatedScheme.verify(commitmentValue, openValue, hashedPlainText);
+        return encapsulatedScheme.verify(commitment, openValue, hashedPlainText);
     }
 
     /**
@@ -100,6 +100,16 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
         return new ByteArrayImplementation(bytes);
     }
 
+    @Override
+    public Commitment getCommitment(Representation repr) {
+        return encapsulatedScheme.getCommitment(repr);
+    }
+
+    @Override
+    public OpenValue getOpenValue(Representation repr) {
+        return encapsulatedScheme.getOpenValue(repr);
+    }
+
     /**
      * The representation of this object. Used for serialization.
      *
@@ -108,16 +118,16 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
      */
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        HashThenCommitCommitmentScheme that = (HashThenCommitCommitmentScheme) o;
-        return Objects.equals(encapsulatedScheme, that.encapsulatedScheme) &&
-                Objects.equals(hashFunction, that.hashFunction);
+        HashThenCommitCommitmentScheme other = (HashThenCommitCommitmentScheme) o;
+        return Objects.equals(encapsulatedScheme, other.encapsulatedScheme) &&
+                Objects.equals(hashFunction, other.hashFunction);
     }
 
     @Override

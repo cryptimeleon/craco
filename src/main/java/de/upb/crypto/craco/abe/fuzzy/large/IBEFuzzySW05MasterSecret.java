@@ -2,10 +2,12 @@ package de.upb.crypto.craco.abe.fuzzy.large;
 
 import de.upb.crypto.craco.common.interfaces.pe.MasterSecret;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+
+import java.util.Objects;
 
 /**
  * The {@link MasterSecret} of the {@link IBEFuzzySW05} generated
@@ -15,24 +17,29 @@ import de.upb.crypto.math.structures.zn.Zp.ZpElement;
  */
 public class IBEFuzzySW05MasterSecret implements MasterSecret {
 
-    @Represented(structure = "zp", recoveryMethod = ZpElement.RECOVERY_METHOD)
+    @Represented(restorer = "zp")
     private ZpElement y;
-
-    @SuppressWarnings("unused")
-    private Zp zp;
 
     public IBEFuzzySW05MasterSecret(ZpElement y) {
         this.y = y;
     }
 
     public IBEFuzzySW05MasterSecret(Representation repr, IBEFuzzySW05PublicParameters kpp) {
-        zp = new Zp(kpp.getGroupG1().size());
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        Zp zp = new Zp(kpp.getGroupG1().size());
+        new ReprUtil(this).register(zp, "zp").deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((y == null) ? 0 : y.hashCode());
+        return result;
     }
 
     @Override
@@ -44,24 +51,10 @@ public class IBEFuzzySW05MasterSecret implements MasterSecret {
         if (getClass() != obj.getClass())
             return false;
         IBEFuzzySW05MasterSecret other = (IBEFuzzySW05MasterSecret) obj;
-        if (y == null) {
-            if (other.y != null)
-                return false;
-        } else if (!y.equals(other.y))
-            return false;
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((y == null) ? 0 : y.hashCode());
-        return result;
+        return Objects.equals(y, other.y);
     }
 
     public ZpElement getY() {
         return y;
     }
-
 }

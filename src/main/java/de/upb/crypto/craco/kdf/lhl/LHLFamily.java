@@ -2,11 +2,12 @@ package de.upb.crypto.craco.kdf.lhl;
 
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.polynomial.Seed;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * A standard implementation of a Key-Derivation function using the Leftover-Hash-Lemma and 2-universal HashFunctions.
@@ -20,7 +21,7 @@ public class LHLFamily implements StandaloneRepresentable {
             "The given source of randomness has an insufficent amount of entropy for this key derivation process.";
 
     @Represented
-    protected int securityParameter, inputLength, outputLength, minEntropy;
+    protected Integer securityParameter, inputLength, outputLength, minEntropy;
 
     @Represented
     protected UniversalHashFamily family;
@@ -55,7 +56,7 @@ public class LHLFamily implements StandaloneRepresentable {
     }
 
     public LHLFamily(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     public int getSeedLength() {
@@ -68,7 +69,7 @@ public class LHLFamily implements StandaloneRepresentable {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -92,20 +93,11 @@ public class LHLFamily implements StandaloneRepresentable {
         if (getClass() != obj.getClass())
             return false;
         LHLFamily other = (LHLFamily) obj;
-        if (family == null) {
-            if (other.family != null)
-                return false;
-        } else if (!family.equals(other.family))
-            return false;
-        if (inputLength != other.inputLength)
-            return false;
-        if (minEntropy != other.minEntropy)
-            return false;
-        if (outputLength != other.outputLength)
-            return false;
-        if (securityParameter != other.securityParameter)
-            return false;
-        return true;
+        return Objects.equals(family, other.family)
+                && Objects.equals(inputLength, other.inputLength)
+                && Objects.equals(minEntropy, other.minEntropy)
+                && Objects.equals(outputLength, other.outputLength)
+                && Objects.equals(securityParameter, other.securityParameter);
     }
 
     public LHLKeyDerivationFunction seed() {

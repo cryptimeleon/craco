@@ -11,8 +11,7 @@ import de.upb.crypto.math.hash.impl.SHA256HashFunction;
 import de.upb.crypto.math.interfaces.hash.HashFunction;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
-import de.upb.crypto.math.interfaces.structures.RingUnitGroup;
-import de.upb.crypto.math.interfaces.structures.Subgroup;
+import de.upb.crypto.math.interfaces.structures.RingGroup;
 import de.upb.crypto.math.structures.zn.Zp;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,7 +23,6 @@ import static org.junit.Assert.*;
 
 public class ElgamalKEMTest {
 
-    static Group group;
     static ElgamalPrivateKey sk;
     static ElgamalKEM kem;
     static HashFunction md;
@@ -45,20 +43,11 @@ public class ElgamalKEMTest {
         Zp zp = new Zp(new BigInteger(p, 16));
 
         /*multiplicative subgroup of field*/
-        RingUnitGroup zpStar = new RingUnitGroup(zp);
-
-        /*generator of prime order subgroup*/
-        GroupElement generator = zpStar.new RingUnitGroupElement(zp.createZnElement(new BigInteger(g, 16)));
-
-        /*get prime order subgroup*/
-        group = new Subgroup(zpStar, generator, new BigInteger(q, 16));
-
-        System.out.println("Perform test in " + group.toString());
-
+        RingGroup zpStar = RingGroup.unitGroupOf(zp);
 
         md = new SHA256HashFunction();
 
-        kem = new ElgamalKEM(group, md);
+        kem = new ElgamalKEM(zpStar, md);
 
 
         KeyPair keypair = kem.generateKeyPair();

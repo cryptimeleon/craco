@@ -9,8 +9,6 @@ import de.upb.crypto.math.structures.quotient.F2FiniteFieldExtension.F2FiniteFie
 import de.upb.crypto.math.structures.quotient.FiniteFieldExtension.FiniteFieldElement;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -29,8 +27,6 @@ import java.util.Arrays;
  * @author Mirko Jürgens
  */
 public class EpsilonDistribution implements StandaloneRepresentable {
-
-    private static final Logger logger = LogManager.getLogger("EpsilonDistributionLogger");
 
     /**
      * n in the paper
@@ -60,7 +56,8 @@ public class EpsilonDistribution implements StandaloneRepresentable {
 
     /**
      * @param sampleLength
-     * @param epsilon
+     * @param logEpsilon
+     * @param seed
      */
     public EpsilonDistribution(int sampleLength, double logEpsilon, Seed seed) {
 
@@ -73,21 +70,15 @@ public class EpsilonDistribution implements StandaloneRepresentable {
         // logEPsilon = log((n-1) * 2^-m)
         // logEPsilon = log (n-1) - m
         // log (n-1) - logEPsilon = m
-
-        logger.debug("Setting up an epsilon distribution with sampleLength: " + sampleLength + " logEpsilon: " + logEpsilon + " Seed: " + Arrays
-                .toString(seed.getInternalSeed()));
+        
 
         m = (Math.log((sampleLength - 1)) / Math.log(2)) - logEpsilon;
-
-        logger.debug("Calculated degree of F2 is: " + m);
 
         Zp ring = new Zp(BigInteger.valueOf(2));
 
         PolynomialRing polyRing = new PolynomialRing(ring);
 
         Polynomial random = IrreducibleSupplier.getIrreducible((int) m);
-
-        logger.debug("Irreducible Polynomial is: " + random);
 
         baseField = new F2FiniteFieldExtension(random);
 
@@ -101,8 +92,6 @@ public class EpsilonDistribution implements StandaloneRepresentable {
 
         y = baseField.new F2FiniteFieldElement(
                 polyRing.new Polynomial(new Seed(seed.getInternalSeed(), (int) m, (int) m)));
-
-        logger.debug("Interpreted Seed as polynomial x:" + x + " and y:" + y);
     }
 
     public EpsilonDistribution(Representation repr) {
@@ -112,19 +101,13 @@ public class EpsilonDistribution implements StandaloneRepresentable {
         sampleLength = obj.get("sampleLength").bigInt().getInt();
         baseField = (F2FiniteFieldExtension) obj.get("baseField").repr().recreateRepresentable();
         x = baseField.getElement(obj.get("x"));
-        logger.debug("Read x from representation " + x);
         y = baseField.getElement(obj.get("y"));
-        logger.debug("Read y from representation " + y);
-
     }
 
     public byte[] calculateSample(BigInteger start, int length) {
-        logger.info("Sampling the source " + this + " (" + length + " bits) ");
-
         F2FiniteFieldElement temp = baseField.new F2FiniteFieldElement((FiniteFieldElement) x.pow(start));
         ZpElement scalar = temp.getRepresentative().scalarProduct(y.getRepresentative());
-
-        logger.info("Starting to sample bits...");
+        
         String output = "" + scalar.getInteger().intValue();
 
         for (int i = 1; i < length; i++) {
@@ -132,7 +115,6 @@ public class EpsilonDistribution implements StandaloneRepresentable {
             scalar = temp.getRepresentative().scalarProduct(y.getRepresentative());
             output = output + "" + scalar.getInteger().intValue();
         }
-        logger.info("Finished sampling the bits. The bits are " + output);
 
         BigInteger res = new BigInteger(output, 2);
         return res.toByteArray();
@@ -154,8 +136,6 @@ public class EpsilonDistribution implements StandaloneRepresentable {
 
     @Override
     public Representation getRepresentation() {
-        logger.debug("Putting x in representation " + x);
-        logger.debug("Putting y in representation " + y);
         ObjectRepresentation obj = new ObjectRepresentation();
         obj.put("epsilon", new StringRepresentation(Double.toString(epsilon)));
         obj.put("m", new StringRepresentation(Double.toString(m)));

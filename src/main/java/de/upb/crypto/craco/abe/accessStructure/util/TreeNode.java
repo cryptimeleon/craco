@@ -27,7 +27,7 @@ public interface TreeNode {
      * child is performed an <code>getResultOfCurrentNode</code> and then the
      * result is used as input for <code>putResultOfChild</code>
      *
-     * @param <E>
+     * @param <F>
      * @param visitor
      * @return
      * @throws WrongAccessStructureException

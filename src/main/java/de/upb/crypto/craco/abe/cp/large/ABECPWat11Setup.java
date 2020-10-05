@@ -4,6 +4,7 @@ import de.upb.crypto.craco.common.WatersHash;
 import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.factory.BilinearGroupFactory;
 import de.upb.crypto.math.interfaces.hash.HashIntoStructure;
+import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
@@ -74,28 +75,27 @@ public class ABECPWat11Setup {
         pp = new ABECPWat11PublicParameters();
 
         pp.setN(n);
-        pp.setL_max(lMax);
+        pp.setlMax(lMax);
 
-        pp.setGroupG1(group.getG1());
-        pp.setGroupGT(group.getGT());
         if (!watersHash) {
             pp.setHashToG1(group.getHashIntoG1());
         } else {
             HashIntoStructure hashToGroup = new WatersHash(pp.getGroupG1(), n + lMax);
             pp.setHashToG1(hashToGroup);
         }
-        pp.setE(group.getBilinearMap());
+        pp.setBilinearGroup(group);
 
         Zp zp = new Zp(pp.getGroupG1().size());
 
         // Do the scheme setup stuff
         ZpElement y = zp.getUniformlyRandomUnit();
         ZpElement a = zp.getUniformlyRandomUnit();
-        pp.setG(pp.getGroupG1().getUniformlyRandomNonNeutral());
+        pp.setG(pp.getGroupG1().getUniformlyRandomNonNeutral().compute());
         // Y = e(g,g)^y = e(g^y, g)
-        pp.setY(pp.getE().apply(pp.getG().pow(y), pp.getG()));
-        pp.setG_a(pp.getG().pow(a));
-        msk = new ABECPWat11MasterSecret(pp.getG().pow(y));
+        GroupElement gY = pp.getG().pow(y).compute();
+        pp.setY(pp.getE().apply(gY, pp.getG()));
+        pp.setgA(pp.getG().pow(a).compute());
+        msk = new ABECPWat11MasterSecret(gY);
     }
 
     /**

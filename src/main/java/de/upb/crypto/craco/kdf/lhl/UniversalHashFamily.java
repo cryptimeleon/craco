@@ -2,12 +2,13 @@ package de.upb.crypto.craco.kdf.lhl;
 
 import de.upb.crypto.craco.kdf.interfaces.HashFamily;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.polynomial.Seed;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Objects;
 
 /**
  * The basic approach of a 2-universal hash family. This family is defined as
@@ -24,11 +25,11 @@ public class UniversalHashFamily implements HashFamily {
 
     // n
     @Represented
-    protected int inputLength;
+    protected Integer inputLength;
 
     // m
     @Represented
-    protected int outputLength;
+    protected Integer outputLength;
 
     @Represented
     protected BigInteger p;
@@ -58,12 +59,12 @@ public class UniversalHashFamily implements HashFamily {
     }
 
     public UniversalHashFamily(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -130,20 +131,9 @@ public class UniversalHashFamily implements HashFamily {
         if (getClass() != obj.getClass())
             return false;
         UniversalHashFamily other = (UniversalHashFamily) obj;
-        if (inputLength != other.inputLength)
-            return false;
-        if (m == null) {
-            if (other.m != null)
-                return false;
-        } else if (!m.equals(other.m))
-            return false;
-        if (outputLength != other.outputLength)
-            return false;
-        if (p == null) {
-            if (other.p != null)
-                return false;
-        } else if (!p.equals(other.p))
-            return false;
-        return true;
+        return Objects.equals(inputLength, other.inputLength)
+                && Objects.equals(m, other.m)
+                && Objects.equals(outputLength, other.outputLength)
+                && Objects.equals(p, other.p);
     }
 }

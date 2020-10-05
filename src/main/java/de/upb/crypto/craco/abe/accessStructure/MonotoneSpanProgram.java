@@ -16,7 +16,6 @@ import java.util.*;
 /**
  * Access structure realized by using the monotone span programs.
  *
- * @param <E> type of the attributes
  * @author pschleiter, Fabian Eidens (refactor)
  */
 public class MonotoneSpanProgram extends AccessStructure {
@@ -25,6 +24,13 @@ public class MonotoneSpanProgram extends AccessStructure {
         super(policy, field);
     }
 
+    /**
+     * Calculates shares for the given secret.
+     *
+     * @param secret the secret to calculate shares for
+     * @return a map mapping each share index to the corresponding share field element
+     * @throws WrongAccessStructureException if monotone span program matrix generation fails
+     */
     @Override
     public Map<Integer, ZpElement> getShares(ZpElement secret) throws WrongAccessStructureException {
         ArrayList<ArrayList<ZpElement>> matrix = new ArrayList<>();
@@ -52,11 +58,25 @@ public class MonotoneSpanProgram extends AccessStructure {
         return result;
     }
 
+    /**
+     * Calculates number of columns of the monotone span program matrix given by this instance.
+     *
+     * @return number of columns of the monotone span program matrix
+     * @throws WrongAccessStructureException if monotone span program matrix generation fails
+     */
     public int getNumberOfColumns() throws WrongAccessStructureException {
         ArrayList<ArrayList<ZpElement>> convert = new ArrayList<>();
         return generateMatrix(convert);
     }
 
+    /**
+     * Calculates set of solving secret shares for this monotone span program.
+     *
+     * @param setOfParties the set of share-holding parties to consider
+     * @return a fulfilling map mapping each share index to the share field element
+     * @throws NoSatisfyingSet if the given set of parties cannot satisfy the monotone span program
+     * @throws WrongAccessStructureException if the access structure is invalid
+     */
     @Override
     public Map<Integer, ZpElement> getSolvingVector(
             Set<? extends PolicyFact> setOfParties) throws NoSatisfyingSet, WrongAccessStructureException {
@@ -83,7 +103,7 @@ public class MonotoneSpanProgram extends AccessStructure {
         int counter = 0;
         for (Integer id : fulfillingSet.getSecond()) {
             labeling[counter] = id;
-            submatrix[counter++] = matrix[id.intValue()];
+            submatrix[counter++] = matrix[id];
         }
 
         ZpElement[] vector = calculateSolvingVector(submatrix);
@@ -99,18 +119,18 @@ public class MonotoneSpanProgram extends AccessStructure {
     }
 
     /**
-     * This method returns a String, that contain a representation of the
-     * monotone span program contained by this class. The layout of the string
+     * This method returns a String that contains a representation of the
+     * monotone span program given by this instance. The layout of the string
      * is designed for access structures that contain only threshold nodes with at
      * most 999 leaves.
      *
-     * @return String representing the monotone span program
-     * @throws WrongAccessStructureException
+     * @return string representing the monotone span program
+     * @throws WrongAccessStructureException if monotone span program matrix generation fails
      */
     public String toStringFor3DigitsGates() throws WrongAccessStructureException {
         ArrayList<ArrayList<ZpElement>> matrix = new ArrayList<>();
         int size = generateMatrix(matrix);
-        String output = new String();
+        String output = "";
 
         int rowCounter = 0;
         int columnCounter = 0;
@@ -134,11 +154,11 @@ public class MonotoneSpanProgram extends AccessStructure {
 
     /**
      * This method gets a <code>matrix</code> and returns a vector v such that v
-     * * matrix = (1,0,...,0)
+     * * matrix = (1,0,...,0).
      *
-     * @param matrix
-     * @return
-     * @throws NoSatisfyingSet will be thrown if no such vector v exists
+     * @param matrix the matrix to calculate solving vector for
+     * @return the solving vector
+     * @throws NoSatisfyingSet if no such vector v exists
      */
     private ZpElement[] calculateSolvingVector(ZpElement[][] matrix) throws NoSatisfyingSet {
         int numberOfRows = matrix.length;
@@ -201,12 +221,14 @@ public class MonotoneSpanProgram extends AccessStructure {
     }
 
     /**
-     * change the representation of the matrix from a 2 dimensional ArrayList to
-     * a 2 dimensional array
+     * Change the representation of the matrix from a 2 dimensional {@code ArrayList} to
+     * a 2-dimensional array. Allows expanding the number of columns of the converted matrix.
+     * Added columns are filled with zeros.
      *
-     * @param size
-     * @param matrix
-     * @return
+     * @param size number of columns of the resulting array
+     * @param matrix matrix to convert
+     * @return two dimensional array containing the elements of the given matrix with additional columns added using the
+     *         {@code size} parameter filled with zeros.
      */
     private ZpElement[][] convertRepresentationOfMatrix(int size, ArrayList<ArrayList<ZpElement>> matrix) {
         int i = 0;
@@ -230,13 +252,13 @@ public class MonotoneSpanProgram extends AccessStructure {
     }
 
     /**
-     * Generates the matrix for access structure represented by this instance.
+     * Generates the matrix for the access structure represented by this instance.
      * The matrix is stored in the input parameter <code>matrix</code> and the
      * pairs of the labeling function is <code>attributes</code>.
      *
-     * @param matrix object that contains after performing this method the matrix
+     * @param matrix contains the generated matrix after the method is done
      * @return the number of columns
-     * @throws WrongAccessStructureException
+     * @throws WrongAccessStructureException if performing visitor fails
      */
     private Integer generateMatrix(ArrayList<ArrayList<ZpElement>> matrix) throws WrongAccessStructureException {
         ArrayList<ZpElement> prefix = new ArrayList<>();
@@ -249,15 +271,13 @@ public class MonotoneSpanProgram extends AccessStructure {
     }
 
     /**
-     * subtract the row i form the row j such that the value in row j of matrix
-     * <code>matrix</code> has in column <code>column</code> the value 0. The
-     * matrix i will also subtracted form row j in matrix <code>vectors</code>.
-     *
-     * @param vectors
-     * @param matrix
-     * @param column
-     * @param i
-     * @param j
+     * Takes the given {@code matrix} and subtracts row {@code i} from row {@code j}.
+     * The subtrahend is scaled such that the resulting value in column {@code column} of row {@code j} is zero.
+     * For example, for {@code i = 0, j = 1, column = 2} and a matrix {@code A} with {@code A(0,2) = 3, A(1,2) = 6},
+     * the scaling factor is {@code 6/3 = 2}. Hence, the resulting matrix {@code A'} will have value
+     * {@code A'(1,2) = 6 - 2 * 3 = 0}.
+     * The same is done for the given {@code vectors} matrix although the scaling factor calculated from {@code matrix}
+     * is reused.
      */
     private void subtractRowIFromRowJ(ZpElement[][] vectors, ZpElement[][] matrix, int column, int i, int j) {
         ZpElement factor = (ZpElement) field.getOneElement().div(matrix[i][column]).mul(matrix[j][column]);
@@ -273,13 +293,7 @@ public class MonotoneSpanProgram extends AccessStructure {
     }
 
     /**
-     * change the row i and j with each other in matrix <code>matrix</code> and
-     * <code>vectors</code>
-     *
-     * @param vectors
-     * @param matrix
-     * @param i
-     * @param j
+     * Swap rows {@code i} and {@code j} in both {@code matrix} and {@code vectors}.
      */
     private void swapRows(ZpElement[][] vectors, ZpElement[][] matrix, int i, int j) {
         ZpElement[] tempVector = vectors[i];

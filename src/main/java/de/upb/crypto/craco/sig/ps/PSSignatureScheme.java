@@ -7,13 +7,14 @@ import de.upb.crypto.craco.sig.interfaces.*;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 /**
@@ -46,7 +47,7 @@ public class PSSignatureScheme implements StandardMultiMessageSignatureScheme {
     }
 
     public PSSignatureScheme(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
@@ -55,19 +56,19 @@ public class PSSignatureScheme implements StandardMultiMessageSignatureScheme {
         BigInteger size = pp.getBilinearMap().getG1().size();
         Group group2 = pp.getBilinearMap().getG2();
         Zp zp = new Zp(size);
-        GroupElement group2ElementTildeG = group2.getUniformlyRandomNonNeutral();
+        GroupElement group2ElementTildeG = group2.getUniformlyRandomNonNeutral().compute();
 
         // x in paper
         ZpElement exponentX = zp.getUniformlyRandomElement();
         // y_i's in paper
-        ZpElement exponentsYi[] = IntStream.range(0, numberOfMessages).mapToObj(a -> zp.getUniformlyRandomElement())
+        ZpElement[] exponentsYi = IntStream.range(0, numberOfMessages).mapToObj(a -> zp.getUniformlyRandomElement())
                 .toArray(ZpElement[]::new);
 
         // \tilde{X} in paper
-        GroupElement group2ElementX = group2ElementTildeG.pow(exponentX);
+        GroupElement group2ElementX = group2ElementTildeG.pow(exponentX).compute();
         // \tilde{Y_i}'s in paper
         GroupElement[] group2ElementsYi =
-                Arrays.stream(exponentsYi).map(group2ElementTildeG::pow).toArray(GroupElement[]::new);
+                Arrays.stream(exponentsYi).map(y -> group2ElementTildeG.pow(y).compute()).toArray(GroupElement[]::new);
 
         // Set secret key (signing key)
         PSSigningKey sk = new PSSigningKey();
@@ -104,7 +105,7 @@ public class PSSignatureScheme implements StandardMultiMessageSignatureScheme {
         }
 
         // first element of signature, sigma_1 in paper
-        GroupElement group1ElementH = pp.getBilinearMap().getG1().getUniformlyRandomNonNeutral();
+        GroupElement group1ElementH = pp.getBilinearMap().getG1().getUniformlyRandomNonNeutral().compute();
 
         // compute resultExponent = x + y_i * m_i
         ZpElement resultExponent = pp.getZp().getZeroElement();
@@ -124,7 +125,7 @@ public class PSSignatureScheme implements StandardMultiMessageSignatureScheme {
         }
 
         // second element of signature, sigma_2 in paper
-        GroupElement group1ElementSigma2 = group1ElementH.pow(resultExponent.getInteger());
+        GroupElement group1ElementSigma2 = group1ElementH.pow(resultExponent.getInteger()).compute();
 
         return new PSSignature(group1ElementH, group1ElementSigma2);
     }
@@ -172,16 +173,12 @@ public class PSSignatureScheme implements StandardMultiMessageSignatureScheme {
 
         leftHandSide = pp.getBilinearMap().apply(sigma.getGroup1ElementSigma1(), group2Elem);
 
-        if (leftHandSide.equals(rightHandSide))
-            return true;
-
-        // verification equation does not hold true
-        return false;
+        return leftHandSide.equals(rightHandSide);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -225,12 +222,7 @@ public class PSSignatureScheme implements StandardMultiMessageSignatureScheme {
         if (getClass() != obj.getClass())
             return false;
         PSSignatureScheme other = (PSSignatureScheme) obj;
-        if (pp == null) {
-            if (other.pp != null)
-                return false;
-        } else if (!pp.equals(other.pp))
-            return false;
-        return true;
+        return Objects.equals(pp, other.pp);
     }
 
     @Override

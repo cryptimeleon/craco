@@ -4,11 +4,11 @@ import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.abe.interfaces.Attribute;
 import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
 import de.upb.crypto.craco.kem.abe.interfaces.proxy.TransformationKey;
+import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
-import de.upb.crypto.math.serialization.MapRepresentation;
-import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.util.RepresentationUtil;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -31,17 +31,23 @@ import java.util.Set;
  */
 public class LUDDecryptionKey implements DecryptionKey, TransformationKey {
 
+    @Represented(restorer = "G1")
     public GroupElement k0;
+
+    @Represented(restorer = "G1")
     public GroupElement k1;
 
+    @Represented(restorer = "attr -> [G1]")
     public Map<Attribute, GroupElement[]> ki_map;
 
     public LUDDecryptionKey(GroupElement k0, GroupElement k1, Map<Attribute, GroupElement[]> map) {
         this.k0 = k0;
         this.k1 = k1;
         this.ki_map = map;
+    }
 
-
+    public LUDDecryptionKey(Representation repr, Group groupG1) {
+        new ReprUtil(this).register(groupG1, "G1").deserialize(repr);
     }
 
     public Set<Attribute> getAttributes() {
@@ -54,12 +60,7 @@ public class LUDDecryptionKey implements DecryptionKey, TransformationKey {
 
     @Override
     public Representation getRepresentation() {
-        ObjectRepresentation r = new ObjectRepresentation();
-        RepresentationUtil.putElement(this, r, "k0");
-        RepresentationUtil.putElement(this, r, "k1");
-        MapRepresentation mr = RepresentationUtil.representMapOfLists(ki_map);
-        r.put("map", mr);
-        return r;
+        return ReprUtil.serialize(this);
     }
 
     public GroupElement getK0() {

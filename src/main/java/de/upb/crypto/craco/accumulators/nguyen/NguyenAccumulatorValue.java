@@ -4,15 +4,17 @@ import de.upb.crypto.craco.accumulators.interfaces.AccumulatorValue;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
+
+import java.util.Objects;
 
 /**
  * An accumulator value for the Nguyen accumulator scheme, i.e. a short representation of a set.
  * the value is g^(\prod (x_i + secret))
  */
 public class NguyenAccumulatorValue implements AccumulatorValue {
-    @Represented(structure = "group", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "group")
     private GroupElement value;
 
     @Represented
@@ -23,8 +25,8 @@ public class NguyenAccumulatorValue implements AccumulatorValue {
         this.group = value.getStructure();
     }
 
-    public NguyenAccumulatorValue(Representation representation) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(representation, this);
+    public NguyenAccumulatorValue(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
     }
 
     public GroupElement getValue() {
@@ -34,12 +36,10 @@ public class NguyenAccumulatorValue implements AccumulatorValue {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof NguyenAccumulatorValue)) return false;
-
-        NguyenAccumulatorValue that = (NguyenAccumulatorValue) o;
-
-        if (!getValue().equals(that.getValue())) return false;
-        return group.equals(that.group);
+        if (o == null || getClass() != o.getClass()) return false;
+        NguyenAccumulatorValue other = (NguyenAccumulatorValue) o;
+        return Objects.equals(value, other.value)
+                && Objects.equals(group, other.group);
     }
 
     @Override
@@ -51,6 +51,6 @@ public class NguyenAccumulatorValue implements AccumulatorValue {
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 }

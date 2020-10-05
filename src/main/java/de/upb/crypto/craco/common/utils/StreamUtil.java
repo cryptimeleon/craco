@@ -19,7 +19,7 @@ public final class StreamUtil {
 
     /**
      * Starts a thread that reads data from an InputStream and writes them into an
-     * OutputStream This thread closes the output stream when its done.
+     * OutputStream. This thread closes the output stream when its done.
      *
      * @param readFrom the stream to read the data from
      * @param writeTo  the stream to write the data to
@@ -54,10 +54,10 @@ public final class StreamUtil {
     /**
      * Copy all bytes from in to out.
      *
-     * @param in
-     * @param out
-     * @param bufferSize
-     * @throws IOException
+     * @param in the stream to copy bytes from
+     * @param out the stream to copy bytes to
+     * @param bufferSize the buffer for storing the bytes between reading and writing
+     * @throws IOException if something goes wrong during writing/reading
      */
     public static void copy(InputStream in, OutputStream out, int bufferSize) throws IOException {
         byte[] buf = new byte[bufferSize];
@@ -68,11 +68,11 @@ public final class StreamUtil {
     }
 
     /**
-     * Copy all bytes from in to out.
+     * Copy all bytes from in to out using a static buffer size of 1024 bytes.
      *
-     * @param in
-     * @param out
-     * @throws IOException
+     * @param in the stream to copy bytes from
+     * @param out the stream to copy bytes to
+     * @throws IOException if something goes wrong during writing/reading
      */
     public static void copy(InputStream in, OutputStream out) throws IOException {
         copy(in, out, 1024);

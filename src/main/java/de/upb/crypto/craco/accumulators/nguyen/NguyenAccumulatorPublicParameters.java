@@ -1,6 +1,7 @@
 package de.upb.crypto.craco.accumulators.nguyen;
 
 import de.upb.crypto.craco.accumulators.interfaces.AccumulatorPublicParameters;
+import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
@@ -9,10 +10,8 @@ import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedArray;
-import de.upb.crypto.math.serialization.annotations.RepresentedList;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 
 import java.math.BigInteger;
@@ -22,54 +21,45 @@ import java.util.Objects;
 
 public class NguyenAccumulatorPublicParameters implements AccumulatorPublicParameters, UniqueByteRepresentable {
 
-    @RepresentedList(elementRestorer = @Represented)
+    @Represented(restorer = "[foo]")
     List<NguyenAccumulatorIdentity> universe;
-    // for Representation purposes
-    @Represented
-    Group g1;
-
-    @Represented
-    Group g2;
 
     @Represented
     private BigInteger p;
 
     @Represented
-    private BilinearMap bilinearMap;
+    private BilinearGroup bilinearGroup;
 
     @UniqueByteRepresented
-    @Represented(structure = "g1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "bilinearGroup::getG1")
     private GroupElement g;
 
     @UniqueByteRepresented
-    @Represented(structure = "g2", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "bilinearGroup::getG2")
     private GroupElement g_Tilde;
 
     @UniqueByteRepresented
-    @Represented(structure = "g2", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "bilinearGroup::getG2")
     private GroupElement g_Tilde_Power_S;
 
     @UniqueByteRepresented
-    @RepresentedArray(elementRestorer = @Represented(structure = "g1", recoveryMethod = GroupElement
-            .RECOVERY_METHOD))
+    @Represented(restorer = "[bilinearGroup::getG1]")
     private GroupElement[] t;
 
 
-    public NguyenAccumulatorPublicParameters(BigInteger p, BilinearMap bilinearMap, GroupElement g, GroupElement
+    public NguyenAccumulatorPublicParameters(BigInteger p, BilinearGroup bilinearGroup, GroupElement g, GroupElement
             g_Tilde, GroupElement g_Tilde_Power_S, GroupElement[] t, List<NguyenAccumulatorIdentity> universe) {
         this.p = p;
-        this.bilinearMap = bilinearMap;
+        this.bilinearGroup = bilinearGroup;
         this.g = g;
         this.g_Tilde = g_Tilde;
         this.g_Tilde_Power_S = g_Tilde_Power_S;
         this.t = t;
         this.universe = universe;
-        this.g1 = bilinearMap.getG1();
-        this.g2 = bilinearMap.getG2();
     }
 
-    public NguyenAccumulatorPublicParameters(Representation representation) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(representation, this);
+    public NguyenAccumulatorPublicParameters(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
@@ -87,7 +77,7 @@ public class NguyenAccumulatorPublicParameters implements AccumulatorPublicParam
     }
 
     public BilinearMap getBilinearMap() {
-        return bilinearMap;
+        return bilinearGroup.getBilinearMap();
     }
 
     public GroupElement getG() {
@@ -112,29 +102,26 @@ public class NguyenAccumulatorPublicParameters implements AccumulatorPublicParam
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        NguyenAccumulatorPublicParameters that = (NguyenAccumulatorPublicParameters) o;
-        return Objects.equals(universe, that.universe) &&
-                Objects.equals(g1, that.g1) &&
-                Objects.equals(g2, that.g2) &&
-                Objects.equals(p, that.p) &&
-                Objects.equals(bilinearMap, that.bilinearMap) &&
-                Objects.equals(g, that.g) &&
-                Objects.equals(g_Tilde, that.g_Tilde) &&
-                Objects.equals(g_Tilde_Power_S, that.g_Tilde_Power_S) &&
-                Arrays.equals(t, that.t);
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        NguyenAccumulatorPublicParameters other = (NguyenAccumulatorPublicParameters) obj;
+        return Objects.equals(universe, other.universe) &&
+                Objects.equals(p, other.p) &&
+                Objects.equals(bilinearGroup, other.bilinearGroup) &&
+                Objects.equals(g, other.g) &&
+                Objects.equals(g_Tilde, other.g_Tilde) &&
+                Objects.equals(g_Tilde_Power_S, other.g_Tilde_Power_S) &&
+                Arrays.equals(t, other.t);
     }
 
     @Override
     public int hashCode() {
-
-        int result = Objects.hash(universe, g1, g2, p, bilinearMap, g, g_Tilde, g_Tilde_Power_S);
+        int result = Objects.hash(universe, p, bilinearGroup, g, g_Tilde, g_Tilde_Power_S);
         result = 31 * result + Arrays.hashCode(t);
         return result;
     }

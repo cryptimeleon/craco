@@ -7,8 +7,10 @@ import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
+
+import java.util.Objects;
 
 /**
  * An {@link EncryptionKey} for the {@link ABEKPGPSW06} that
@@ -30,12 +32,12 @@ public class ABEKPGPSW06EncryptionKey implements EncryptionKey {
     }
 
     public ABEKPGPSW06EncryptionKey(Representation repr) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -55,15 +57,7 @@ public class ABEKPGPSW06EncryptionKey implements EncryptionKey {
         if (getClass() != obj.getClass())
             return false;
         ABEKPGPSW06EncryptionKey other = (ABEKPGPSW06EncryptionKey) obj;
-        if (attributes == null) {
-            if (other.attributes != null)
-                return false;
-        } else if (!(other.attributes.containsAll(attributes))) {
-            return false;
-        } else if (!(attributes.containsAll(other.attributes))) {
-            return false;
-        }
-        return true;
+        return Objects.equals(attributes, other.attributes);
     }
 
     public SetOfAttributes getAttributes() {

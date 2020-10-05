@@ -6,6 +6,10 @@ import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
+
+import java.util.Objects;
 
 /**
  * Class for encryption keys of ElgamalLargeUniverseDelegationKEM.
@@ -16,6 +20,7 @@ import de.upb.crypto.math.serialization.StandaloneRepresentable;
  */
 public class LUDEncryptionKey implements EncryptionKey, StandaloneRepresentable {
 
+    @Represented
     private Policy policy;
 
     public LUDEncryptionKey(Policy p) {
@@ -30,13 +35,13 @@ public class LUDEncryptionKey implements EncryptionKey, StandaloneRepresentable 
         return this.policy;
     }
 
-    public LUDEncryptionKey(Representation r) {
-        this.policy = (Policy) ((RepresentableRepresentation) r).recreateRepresentable();
+    public LUDEncryptionKey(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        return new RepresentableRepresentation(policy);
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -53,21 +58,14 @@ public class LUDEncryptionKey implements EncryptionKey, StandaloneRepresentable 
             return true;
         if (obj == null)
             return false;
-        if (!(obj instanceof LUDEncryptionKey))
+        if (getClass() != obj.getClass())
             return false;
         LUDEncryptionKey other = (LUDEncryptionKey) obj;
-        if (policy == null) {
-            if (other.policy != null)
-                return false;
-        } else if (!policy.equals(other.policy))
-            return false;
-        return true;
+        return Objects.equals(policy, other.policy);
     }
 
     @Override
     public ByteAccumulator updateAccumulator(ByteAccumulator accumulator) {
         return policy.updateAccumulator(accumulator);
     }
-
-
 }

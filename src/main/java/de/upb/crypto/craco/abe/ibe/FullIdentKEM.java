@@ -8,6 +8,7 @@ import de.upb.crypto.craco.kem.HashBasedKeyDerivationFunction;
 import de.upb.crypto.math.serialization.Representation;
 
 import java.security.SecureRandom;
+import java.util.Objects;
 
 /**
  * A KEM that produces AES keys encapsulated via ABE
@@ -69,15 +70,7 @@ public class FullIdentKEM extends AbstractHybridConstructionKEM {
         if (getClass() != obj.getClass())
             return false;
         FullIdentKEM other = (FullIdentKEM) obj;
-        if (random == null) {
-            if (other.random != null)
-                return false;
-        }
-        if (scheme == null) {
-            if (other.scheme != null)
-                return false;
-        } else if (!scheme.equals(other.scheme))
-            return false;
-        return true;
+        return Objects.equals(scheme, other.scheme)
+                && ((random == null && other.random == null) || (random != null && other.random != null));
     }
 }

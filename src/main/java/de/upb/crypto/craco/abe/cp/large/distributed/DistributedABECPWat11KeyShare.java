@@ -3,35 +3,30 @@ package de.upb.crypto.craco.abe.cp.large.distributed;
 import de.upb.crypto.craco.abe.interfaces.Attribute;
 import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
 import de.upb.crypto.craco.abe.interfaces.distributed.KeyShare;
-import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
-import de.upb.crypto.math.serialization.annotations.RepresentedMap;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class DistributedABECPWat11KeyShare implements KeyShare {
 
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "G1")
     private GroupElement d_prime;
 
-    @Represented(structure = "groupG1", recoveryMethod = GroupElement.RECOVERY_METHOD)
+    @Represented(restorer = "G1")
     private GroupElement d_two_prime;
 
     @Represented
-    private int serverID;
+    private Integer serverID;
 
-    @RepresentedMap(keyRestorer = @Represented, valueRestorer = @Represented(structure = "groupG1", recoveryMethod =
-            GroupElement.RECOVERY_METHOD))
+    @Represented(restorer = "foo -> G1")
     private Map<Attribute, GroupElement> d_xi;
 
     @Represented
     private SetOfAttributes omega;
-
-    @SuppressWarnings("unused")
-    private Group groupG1;
 
     public DistributedABECPWat11KeyShare(GroupElement d_prime, GroupElement d_two_prime, int serverID,
                                          Map<Attribute, GroupElement> d_xi, SetOfAttributes omega) {
@@ -43,12 +38,11 @@ public class DistributedABECPWat11KeyShare implements KeyShare {
     }
 
     public DistributedABECPWat11KeyShare(Representation repr, DistributedABECPWat11PublicParameters pp) {
-        groupG1 = pp.getGroupG1();
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(repr, this);
+        new ReprUtil(this).register(pp.getGroupG1(), "G1").deserialize(repr);
     }
 
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     public GroupElement getD_prime() {
@@ -75,14 +69,7 @@ public class DistributedABECPWat11KeyShare implements KeyShare {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((d_prime == null) ? 0 : d_prime.hashCode());
-        result = prime * result + ((d_two_prime == null) ? 0 : d_two_prime.hashCode());
-        result = prime * result + ((d_xi == null) ? 0 : d_xi.hashCode());
-        result = prime * result + ((omega == null) ? 0 : omega.hashCode());
-        result = prime * result + serverID;
-        return result;
+        return Objects.hash(d_prime, d_two_prime, d_xi, omega, serverID);
     }
 
     @Override
@@ -94,28 +81,10 @@ public class DistributedABECPWat11KeyShare implements KeyShare {
         if (getClass() != obj.getClass())
             return false;
         DistributedABECPWat11KeyShare other = (DistributedABECPWat11KeyShare) obj;
-        if (d_prime == null) {
-            if (other.d_prime != null)
-                return false;
-        } else if (!d_prime.equals(other.d_prime))
-            return false;
-        if (d_two_prime == null) {
-            if (other.d_two_prime != null)
-                return false;
-        } else if (!d_two_prime.equals(other.d_two_prime))
-            return false;
-        if (d_xi == null) {
-            if (other.d_xi != null)
-                return false;
-        } else if (!d_xi.equals(other.d_xi))
-            return false;
-        if (omega == null) {
-            if (other.omega != null)
-                return false;
-        } else if (!omega.equals(other.omega))
-            return false;
-        if (serverID != other.serverID)
-            return false;
-        return true;
+        return Objects.equals(d_prime, other.d_prime)
+                && Objects.equals(d_two_prime, other.d_two_prime)
+                && Objects.equals(d_xi, other.d_xi)
+                && Objects.equals(omega, other.omega)
+                && Objects.equals(serverID, other.serverID);
     }
 }

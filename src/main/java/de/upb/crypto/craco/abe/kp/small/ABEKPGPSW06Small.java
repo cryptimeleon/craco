@@ -70,7 +70,7 @@ public class ABEKPGPSW06Small implements PredicateEncryptionScheme {
         ZpElement s = zp.getUniformlyRandomUnit();
 
         // m*Y^s
-        GroupElement E_prime = pt.get().op(pp.getY().pow(s));
+        GroupElement E_prime = pt.get().op(pp.getY().pow(s)).compute();
 
         // The attributes of the key w' \subset universe
         SetOfAttributes attributes = pk.getAttributes();
@@ -78,7 +78,7 @@ public class ABEKPGPSW06Small implements PredicateEncryptionScheme {
         HashMap<Attribute, GroupElement> E = new HashMap<>();
         for (Attribute i : attributes) {
             GroupElement E_i = pp.getT().get(i).pow(s);
-            E.put(i, E_i);
+            E.put(i, E_i.compute());
         }
         return new ABEKPGPSW06SmallCipherText(E_prime, E);
     }
@@ -121,9 +121,9 @@ public class ABEKPGPSW06Small implements PredicateEncryptionScheme {
         }
 
         GroupElement tmp;
-        tmp = zList.stream().parallel().reduce((elem1, elem2) -> elem1.op(elem2))
+        tmp = zList.stream().parallel().reduce(GroupElement::op)
                 .orElseThrow(() -> new IllegalStateException("Empty solving vector!"));
-        return new GroupElementPlainText(ct.getE_prime().op(tmp.inv()));
+        return new GroupElementPlainText(ct.getE_prime().op(tmp.inv()).compute());
     }
 
     @Override
@@ -188,7 +188,7 @@ public class ABEKPGPSW06Small implements PredicateEncryptionScheme {
                 ZpElement t_p_i = kpmsk.getT().get(rho_i);
                 M_i_u = (ZpElement) M_i_u.div(t_p_i);
 
-                D.put(i, pp.getG().pow(M_i_u));
+                D.put(i, pp.getG().pow(M_i_u).compute());
 
             } catch (NullPointerException e) {
                 throw new WrongAccessStructureException(
@@ -217,17 +217,14 @@ public class ABEKPGPSW06Small implements PredicateEncryptionScheme {
 
     @Override
     public Predicate getPredicate() {
-        return new Predicate() {
-            @Override
-            public boolean check(KeyIndex kind, CiphertextIndex cind) {
-                if (!(kind instanceof Policy))
-                    throw new IllegalArgumentException("Policy expected as KeyIndex");
-                if (!(cind instanceof SetOfAttributes))
-                    throw new IllegalArgumentException("SetOfAttributes as CiphertextIndex expected");
-                Policy policy = (Policy) kind;
-                SetOfAttributes soa = (SetOfAttributes) cind;
-                return policy.isFulfilled(soa);
-            }
+        return (kind, cind) -> {
+            if (!(kind instanceof Policy))
+                throw new IllegalArgumentException("Policy expected as KeyIndex");
+            if (!(cind instanceof SetOfAttributes))
+                throw new IllegalArgumentException("SetOfAttributes as CiphertextIndex expected");
+            Policy policy = (Policy) kind;
+            SetOfAttributes soa = (SetOfAttributes) cind;
+            return policy.isFulfilled(soa);
         };
     }
 
@@ -242,12 +239,12 @@ public class ABEKPGPSW06Small implements PredicateEncryptionScheme {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof ABEKPGPSW06Small) {
-            ABEKPGPSW06Small other = (ABEKPGPSW06Small) o;
-            return pp.equals(other.pp);
-        } else {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
             return false;
-        }
+        ABEKPGPSW06Small other = (ABEKPGPSW06Small) o;
+        return Objects.equals(pp, other.pp);
     }
 
     public ABEKPGPSW06SmallPublicParameters getPublicParameters() {

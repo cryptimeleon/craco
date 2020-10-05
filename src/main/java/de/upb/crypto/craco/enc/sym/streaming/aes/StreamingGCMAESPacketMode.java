@@ -6,9 +6,6 @@ import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
 import de.upb.crypto.math.serialization.BigIntegerRepresentation;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -46,10 +43,6 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
 
     public static final int DEFAULT_KEY_SIZE = 128;
 
-    private final Logger encryptLogger = LogManager.getLogger("StreamingAESEncrypt");
-
-    private final Logger decryptLogger = LogManager.getLogger("StreamingAESDecrypt");
-
     private final int symmetricKeyLength; // in bit
 
     private final int initialVectorLength = 96; // in bit
@@ -59,7 +52,7 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
     private final byte[] initialVector = new byte[initialVectorLength / 8];
 
     private final String transformation = "AES/GCM/PKCS5Padding";
-
+    
     private final int packetSize;
 
     public StreamingGCMAESPacketMode(Representation repr) {
@@ -207,12 +200,9 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
                 if (byteOffset == 0) {
                     // init the IV
                     createRandomIV();
-                    encryptLogger.log(Level.DEBUG, String.format("Created IV: %s", Arrays.toString(initialVector)));
                     initV = new BigInteger(initialVector);
                 }
                 if (byteOffset < (initialVectorLengthInBytes)) {
-                    encryptLogger.log(Level.DEBUG,
-                            String.format("Read the %d byte of the IV (%d)", byteOffset, initialVector[byteOffset]));
                     // the IV was not fully read yet
                     // cast it to an unsigned int
                     byteOffset++;
@@ -228,8 +218,6 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
                     }
                     // we have data now
                     byte toReturn = bufferedCipherText[bufferedCipherTextOffset];
-                    encryptLogger.log(Level.DEBUG, String.format("Returned encrypted byte %d (position %d)", toReturn,
-                            bufferedCipherTextOffset));
                     bufferedCipherTextOffset++;
                     // 04.11.2016 mirkoj this causes an integer overflow
                     // byteOffset++;
@@ -245,17 +233,12 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
              *         inputstream could not provide any data
              */
             public int bufferPacket() {
-                encryptLogger.log(Level.DEBUG, String.format("Creating a new encrypted packet (offset:%d, size:%d)",
-                        bufferedCipherTextOffset, bufferedCipherTextSize));
                 try {
                     // we don't have any buffered data
                     // start an encryption run
                     byte[] plainText = new byte[packetSize];
                     int read = in.read(plainText);
-                    encryptLogger.log(Level.DEBUG,
-                            String.format("Trying to read %d bytes, read %d bytes", packetSize, read));
                     if (read == -1) {
-                        encryptLogger.log(Level.DEBUG, "Returning -1, since we couldn't encrypt any data");
                         // we couldn't read any plaintext data
                         return -1;
                     }
@@ -283,10 +266,6 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
                     cipher.updateAAD(aad);
                     // encrypt
                     bufferedCipherText = cipher.doFinal(plainText);
-                    encryptLogger.log(Level.DEBUG,
-                            String.format("(Round %d): Encrypted %s to %s (length: %d)", packetRound.intValue(),
-                                    Arrays.toString(plainText), Arrays.toString(bufferedCipherText),
-                                    bufferedCipherText.length));
                     bufferedCipherTextSize = bufferedCipherText.length;
                     bufferedCipherTextOffset = 0;
                     packetRound = packetRound.add(BigInteger.ONE);
@@ -304,7 +283,6 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
                     if (byteOffset == 0) {
                         // init the IV
                         createRandomIV();
-                        encryptLogger.log(Level.DEBUG, String.format("Created IV: %s", Arrays.toString(initialVector)));
                         initV = new BigInteger(initialVector);
                     }
                     int remainingIVBytes = initialVectorLengthInBytes - byteOffset;
@@ -571,8 +549,6 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
 
                 // we have data now
                 byte toReturn = bufferedPlainText[bufferedPlainTextOffset];
-                decryptLogger.log(Level.DEBUG,
-                        String.format("Returned encrypted byte %d (position %d)", toReturn, bufferedPlainTextOffset));
                 bufferedPlainTextOffset++;
                 //byteOffset++;
                 // cast it to an unsigned int
@@ -586,17 +562,12 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
              *         inputstream could not provide any data
              */
             public int bufferPacket() {
-                decryptLogger.log(Level.DEBUG, String.format("Creating a new encrypted packet (offset:%d, size:%d)",
-                        bufferedPlainTextOffset, bufferedPlainTextSize));
                 try {
                     // we don't have any buffered data
                     // start an encryption run
                     byte[] cipherText = new byte[cipherPacketSize];
                     int read = in.read(cipherText);
-                    decryptLogger.log(Level.DEBUG,
-                            String.format("Trying to read %d bytes, read %d bytes", packetSize, read));
                     if (read == -1) {
-                        decryptLogger.log(Level.DEBUG, "Returning -1, since we couldn't encrypt any data");
                         // we couldn't read any plaintext data
                         return -1;
                     }
@@ -624,10 +595,6 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
                     cipher.updateAAD(aad);
                     // encrypt
                     bufferedPlainText = cipher.doFinal(cipherText);
-                    decryptLogger.log(Level.DEBUG,
-                            String.format("(Round %d): Encrypted %s to %s (length: %d)", packetRound.intValue(),
-                                    Arrays.toString(cipherText), Arrays.toString(bufferedPlainText),
-                                    bufferedPlainText.length));
                     bufferedPlainTextSize = bufferedPlainText.length;
                     bufferedPlainTextOffset = 0;
                     packetRound = packetRound.add(BigInteger.ONE);
@@ -737,16 +704,12 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
                     initialVector[byteOffset] = (byte) b;
                     // received the last byte of the iv
                     if (byteOffset == ivLengthInBytes - 1) {
-                        decryptLogger.log(Level.DEBUG,
-                                String.format("Combined IV to: %s", Arrays.toString(initialVector)));
                         initV = new BigInteger(initialVector);
                     }
                     // 04.11.2016 mirkoj needed since the counter down below is
                     // disabled
                     byteOffset++;
                 } else {
-                    decryptLogger.log(Level.DEBUG,
-                            String.format("Wrote encrypted byte %d in the buffer (pos %d) ", b, bufferedDataOffset));
                     bufferedData[bufferedDataOffset] = (byte) b;
                     bufferedDataOffset++;
 
@@ -788,9 +751,6 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
                     byte[] plainText = cipher.doFinal(bufferedData);
                     out.write(plainText, 0, bufferedDataOffset - tagLengthInBytes);
 
-                    decryptLogger.log(Level.DEBUG,
-                            String.format("(Round %d): Decrypted %s to %s (lenght: %d)", packetRound.intValue(),
-                                    Arrays.toString(bufferedData), Arrays.toString(plainText), plainText.length));
                     bufferedData = new byte[cipherPacketSize];
                     packetRound = packetRound.add(BigInteger.ONE);
                 } catch (InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException
@@ -893,8 +853,6 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((decryptLogger == null) ? 0 : decryptLogger.hashCode());
-        result = prime * result + ((encryptLogger == null) ? 0 : encryptLogger.hashCode());
         result = prime * result + Arrays.hashCode(initialVector);
         result = prime * result + initialVectorLength;
         result = prime * result + packetSize;
@@ -913,16 +871,6 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
         if (getClass() != obj.getClass())
             return false;
         StreamingGCMAESPacketMode other = (StreamingGCMAESPacketMode) obj;
-        if (decryptLogger == null) {
-            if (other.decryptLogger != null)
-                return false;
-        } else if (!decryptLogger.equals(other.decryptLogger))
-            return false;
-        if (encryptLogger == null) {
-            if (other.encryptLogger != null)
-                return false;
-        } else if (!encryptLogger.equals(other.encryptLogger))
-            return false;
         if (!Arrays.equals(initialVector, other.initialVector))
             return false;
         if (initialVectorLength != other.initialVectorLength)

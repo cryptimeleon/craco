@@ -5,7 +5,11 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.util.RepresentationUtil;
+
+import java.util.Objects;
 
 /**
  * The cipher text representation of an elgamal-encrypted plaintext.
@@ -16,21 +20,22 @@ public class ElgamalCipherText implements CipherText {
     /**
      * c1 := g^r
      */
+    @Represented(restorer = "G")
     private GroupElement c1;
     /**
      * c2 := h^r *m
      */
+    @Represented(restorer = "G")
     private GroupElement c2;
 
     /**
      * Creates a ciphertext object from the given representation of its elements and the specified group.
      *
-     * @param representation the representation of c1 and c2
+     * @param repr the representation of c1 and c2
      * @param group          the group of the encryption
      */
-    public ElgamalCipherText(Representation representation, Group group) {
-        c1 = group.getElement(representation.obj().get("c1"));
-        c2 = group.getElement(representation.obj().get("c2"));
+    public ElgamalCipherText(Representation repr, Group group) {
+        new ReprUtil(this).register(group, "G").deserialize(repr);
     }
 
     /**
@@ -46,10 +51,7 @@ public class ElgamalCipherText implements CipherText {
 
     @Override
     public Representation getRepresentation() {
-        ObjectRepresentation toReturn = new ObjectRepresentation();
-        RepresentationUtil.putElement(this, toReturn, "c1");
-        RepresentationUtil.putElement(this, toReturn, "c2");
-        return toReturn;
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -75,17 +77,8 @@ public class ElgamalCipherText implements CipherText {
         if (getClass() != obj.getClass())
             return false;
         ElgamalCipherText other = (ElgamalCipherText) obj;
-        if (c1 == null) {
-            if (other.c1 != null)
-                return false;
-        } else if (c2 == null) {
-            if (other.c2 != null)
-                return false;
-        } else if (!c1.equals(other.c1))
-            return false;
-        else if (!c2.equals(other.c2))
-            return false;
-        return true;
+        return Objects.equals(c1, other.c1)
+                && Objects.equals(c2, other.c2);
     }
 
     public GroupElement getC1() {

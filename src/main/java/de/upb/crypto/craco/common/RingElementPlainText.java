@@ -8,6 +8,8 @@ import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 
+import java.util.Objects;
+
 public class RingElementPlainText implements PlainText {
     private RingElement element;
 
@@ -51,12 +53,7 @@ public class RingElementPlainText implements PlainText {
         if (getClass() != obj.getClass())
             return false;
         RingElementPlainText other = (RingElementPlainText) obj;
-        if (element == null) {
-            if (other.element != null)
-                return false;
-        } else if (!element.equals(other.element))
-            return false;
-        return true;
+        return Objects.equals(element, other.element);
     }
 
     @Override

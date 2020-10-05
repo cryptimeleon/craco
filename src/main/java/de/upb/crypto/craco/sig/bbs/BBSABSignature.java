@@ -5,9 +5,13 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.util.RepresentationUtil;
 import de.upb.crypto.math.structures.zn.Zn;
 import de.upb.crypto.math.structures.zn.Zn.ZnElement;
+
+import java.util.Objects;
 
 /**
  * Class for a signature of the BBS-A and BBS-B signature scheme.
@@ -16,41 +20,24 @@ import de.upb.crypto.math.structures.zn.Zn.ZnElement;
  */
 public class BBSABSignature implements Signature {
 
+    @Represented(restorer = "G1")
     private GroupElement elementA;
+    
+    @Represented(restorer = "Zp")
     private ZnElement exponentX, exponentS;
-
-    private static final String[] group1Elements = {"elementA"};
-    private static final String[] elementRepresentableExponents = {"exponentX", "exponentS"};
 
     /**
      * Restore the SignedMessage from Representation
      *
      * @param repr
-     * @param gmpk
+     * @param groupG1
      */
     public BBSABSignature(Representation repr, Group groupG1) {
-        for (String member : group1Elements) {
-            RepresentationUtil.restoreElement(this, repr, member, groupG1);
-        }
-
-        Zn zp = new Zn(groupG1.size());
-
-        for (String member : elementRepresentableExponents) {
-            RepresentationUtil.restoreElement(this, repr, member, zp);
-        }
+        new ReprUtil(this).register(groupG1, "G1").register(new Zn(groupG1.size()), "Zp").deserialize(repr);
     }
 
     public Representation getRepresentation() {
-        ObjectRepresentation repr = new ObjectRepresentation();
-        for (String member : group1Elements) {
-            RepresentationUtil.putElement(this, repr, member);
-        }
-        for (String member : elementRepresentableExponents) {
-            RepresentationUtil.putElement(this, repr, member);
-        }
-
-
-        return repr;
+        return ReprUtil.serialize(this);
     }
 
     /**
@@ -113,22 +100,9 @@ public class BBSABSignature implements Signature {
         if (getClass() != obj.getClass())
             return false;
         BBSABSignature other = (BBSABSignature) obj;
-        if (elementA == null) {
-            if (other.elementA != null)
-                return false;
-        } else if (!elementA.equals(other.elementA))
-            return false;
-        if (exponentS == null) {
-            if (other.exponentS != null)
-                return false;
-        } else if (!exponentS.equals(other.exponentS))
-            return false;
-        if (exponentX == null) {
-            if (other.exponentX != null)
-                return false;
-        } else if (!exponentX.equals(other.exponentX))
-            return false;
-        return true;
+        return Objects.equals(elementA, other.elementA)
+                && Objects.equals(exponentS, other.exponentS)
+                && Objects.equals(exponentX, other.exponentX);
     }
 
 }

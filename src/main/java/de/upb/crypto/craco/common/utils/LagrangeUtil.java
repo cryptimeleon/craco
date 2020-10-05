@@ -7,7 +7,7 @@ import java.math.BigInteger;
 import java.util.Set;
 
 /**
- * Definition 2.9 in the paper: Lagrange coefficient.
+ * Utility class for computing Lagrange coefficient/evaluating Lagrange basis polynomials.
  *
  * @author Marius Dransfeld
  */
@@ -17,12 +17,12 @@ public final class LagrangeUtil {
     }
 
     /**
-     * Compute the Lagrange coefficient
+     * Compute the Lagrange coefficient {@code l_j(x)}.
      *
-     * @param i
-     * @param S
-     * @param x
-     * @return
+     * @param i jth x coordinate
+     * @param S set of x coordinates
+     * @param x x coordinate to evaluate the lagrange basis polynomial at
+     * @return the lagrange basis polynomial evaluated at coordinate {@code x}.
      */
     public static ZpElement computeCoefficient(ZpElement i, Set<BigInteger> S,
                                                ZpElement x) {
@@ -41,13 +41,13 @@ public final class LagrangeUtil {
     }
 
     /**
-     * Compute the Lagrange coefficient
+     * Compute the Lagrange coefficient {@code l_j(x)} over the specified field.
      *
-     * @param i
-     * @param S
-     * @param x
-     * @param field
-     * @return
+     * @param i jth x coordinate
+     * @param S set of x coordinates
+     * @param x x coordinate to evaluate the lagrange basis polynomial at
+     * @param field the field to do the computation over
+     * @returnthe lagrange basis polynomial evaluated at coordinate {@code x} in the given field
      */
     public static BigInteger computeCoefficient(BigInteger i, Set<BigInteger> S, BigInteger x,
                                                 Zp field) {

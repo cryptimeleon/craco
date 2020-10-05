@@ -3,6 +3,9 @@ package de.upb.crypto.craco.sig.interfaces;
 import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
+import de.upb.crypto.math.serialization.annotations.v2.RepresentationRestorer;
+
+import java.lang.reflect.Type;
 
 /**
  * An SignatureScheme has the ability to sign plaintexts
@@ -24,7 +27,7 @@ import de.upb.crypto.math.serialization.StandaloneRepresentable;
  *
  * @author feidens
  */
-public interface SignatureScheme extends StandaloneRepresentable {
+public interface SignatureScheme extends StandaloneRepresentable, RepresentationRestorer {
     /**
      * Signing algrithm of the signature scheme. The secret key should contain all information
      * necessary to sign, therefore public key is not needed.
@@ -64,8 +67,7 @@ public interface SignatureScheme extends StandaloneRepresentable {
      * these bytes (e.g., the byte array is too long).
      * <p>
      * The contract is that VerificationKey pk and SigningKey sk are compatible (in the sense that verify(m,sign(m,
-     * sk),pk) == true),
-     * then mapToPlaintext(bytes, pk) equals mapToPlaintext(bytes, sk) for all bytes.
+     * sk),pk) == true), then mapToPlaintext(bytes, pk) equals mapToPlaintext(bytes, sk) for all bytes.
      *
      * @param bytes bytes to be mapped to a {@link PlainText}
      * @param pk    the verification key for which the resulting PlainText should be valid
@@ -102,4 +104,20 @@ public interface SignatureScheme extends StandaloneRepresentable {
      * @return maximal number of bytes that can be given to {@link #mapToPlaintext}.
      */
     int getMaxNumberOfBytesForMapToPlaintext();
+
+
+    default Object recreateFromRepresentation(Type type, Representation repr) {
+        if (type instanceof Class) {
+            if (SigningKey.class.isAssignableFrom((Class) type)) {
+                return this.getSigningKey(repr);
+            } else if (VerificationKey.class.isAssignableFrom((Class) type)) {
+                return this.getVerificationKey(repr);
+            } else if (Signature.class.isAssignableFrom((Class) type)) {
+                return this.getSignature(repr);
+            } else if (PlainText.class.isAssignableFrom((Class) type)) {
+                return this.getPlainText(repr);
+            }
+        }
+        throw new IllegalArgumentException("Cannot recreate object of type: " + type.getTypeName());
+    }
 }

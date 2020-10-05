@@ -13,6 +13,8 @@ import de.upb.crypto.craco.kem.AbstractHybridPredicateKEM;
 import de.upb.crypto.craco.kem.HashBasedKeyDerivationFunction;
 import de.upb.crypto.math.serialization.Representation;
 
+import java.util.Objects;
+
 /**
  * A KEM that produces AES keys encapsulated via ABE
  *
@@ -91,12 +93,7 @@ public class ABECPWat11SmallKEM extends AbstractHybridPredicateKEM {
         if (getClass() != obj.getClass())
             return false;
         ABECPWat11SmallKEM other = (ABECPWat11SmallKEM) obj;
-        if (scheme == null) {
-            if (other.scheme != null)
-                return false;
-        } else if (!scheme.equals(other.scheme))
-            return false;
-        return true;
+        return Objects.equals(scheme, other.scheme);
     }
 
 }

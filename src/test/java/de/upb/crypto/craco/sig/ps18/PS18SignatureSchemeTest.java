@@ -13,7 +13,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class PS18SignatureSchemeTest {
-
     private PS18SignatureScheme psScheme;
     private SignatureKeyPair<? extends VerificationKey, ? extends SigningKey> keyPair;
     private SignatureKeyPair<? extends VerificationKey, ? extends SigningKey> wrongKeyPair;

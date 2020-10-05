@@ -6,14 +6,16 @@ import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
+
+import java.util.Objects;
 
 public class NguyenAccumulatorIdentity implements AccumulatorIdentity, UniqueByteRepresentable {
 
     @UniqueByteRepresented
-    @Represented(structure = "zp", recoveryMethod = Zp.ZpElement.RECOVERY_METHOD)
+    @Represented(restorer = "zp")
     private Zp.ZpElement identity;
 
     @Represented
@@ -24,8 +26,8 @@ public class NguyenAccumulatorIdentity implements AccumulatorIdentity, UniqueByt
         this.zp = identity.getStructure();
     }
 
-    public NguyenAccumulatorIdentity(Representation representation) {
-        AnnotatedRepresentationUtil.restoreAnnotatedRepresentation(representation, this);
+    public NguyenAccumulatorIdentity(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
     }
 
     public Zp.ZpElement getIdentity() {
@@ -39,12 +41,10 @@ public class NguyenAccumulatorIdentity implements AccumulatorIdentity, UniqueByt
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof NguyenAccumulatorIdentity)) return false;
-
-        NguyenAccumulatorIdentity that = (NguyenAccumulatorIdentity) o;
-
-        if (!identity.equals(that.identity)) return false;
-        return zp.equals(that.zp);
+        if (o == null || getClass() != o.getClass()) return false;
+        NguyenAccumulatorIdentity other = (NguyenAccumulatorIdentity) o;
+        return Objects.equals(identity, other.identity)
+                && Objects.equals(zp, other.zp);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class NguyenAccumulatorIdentity implements AccumulatorIdentity, UniqueByt
 
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     @Override
