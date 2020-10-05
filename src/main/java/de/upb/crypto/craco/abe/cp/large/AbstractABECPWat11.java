@@ -80,7 +80,7 @@ public abstract class AbstractABECPWat11 {
             Zp.ZpElement lambdai = entry.getValue();
 
             // element E_i = g^{a \cdot \lambda_i} \cdot T(\rho(i))^{-s}
-            return (pp.getgA().pow(lambdai)).op(rhoiElement.pow(s).inv().compute());
+            return pp.getgA().pow(lambdai).op(rhoiElement.pow(s).inv()).compute();
         };
 
         return shares.entrySet().parallelStream().collect(Collectors.toConcurrentMap(keyMapper, valueMapper));
