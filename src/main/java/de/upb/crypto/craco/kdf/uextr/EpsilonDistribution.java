@@ -11,7 +11,6 @@ import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 
 /**
  * Implementation of an \epsilon -biased distribution using polynomials in the

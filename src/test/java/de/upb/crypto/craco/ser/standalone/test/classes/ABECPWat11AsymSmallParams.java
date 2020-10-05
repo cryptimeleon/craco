@@ -3,8 +3,8 @@ package de.upb.crypto.craco.ser.standalone.test.classes;
 import de.upb.crypto.craco.abe.cp.small.asymmetric.ABECPWat11AsymSmall;
 import de.upb.crypto.craco.abe.cp.small.asymmetric.ABECPWat11AsymSmallPublicParameters;
 import de.upb.crypto.craco.abe.cp.small.asymmetric.ABECPWat11AsymSmallSetup;
-import de.upb.crypto.craco.interfaces.abe.SetOfAttributes;
-import de.upb.crypto.craco.interfaces.abe.StringAttribute;
+import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
+import de.upb.crypto.craco.abe.interfaces.StringAttribute;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
 
 import java.util.ArrayList;

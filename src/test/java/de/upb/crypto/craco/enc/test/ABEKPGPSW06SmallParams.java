@@ -1,5 +1,9 @@
 package de.upb.crypto.craco.enc.test;
 
+import de.upb.crypto.craco.abe.interfaces.Attribute;
+import de.upb.crypto.craco.abe.interfaces.BigIntegerAttribute;
+import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
+import de.upb.crypto.craco.abe.interfaces.StringAttribute;
 import de.upb.crypto.craco.abe.kp.small.ABEKPGPSW06Small;
 import de.upb.crypto.craco.abe.kp.small.ABEKPGPSW06SmallMasterSecret;
 import de.upb.crypto.craco.abe.kp.small.ABEKPGPSW06SmallPublicParameters;
@@ -9,10 +13,6 @@ import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.common.interfaces.EncryptionKey;
 import de.upb.crypto.craco.common.interfaces.KeyPair;
 import de.upb.crypto.craco.common.interfaces.PlainText;
-import de.upb.crypto.craco.abe.interfaces.Attribute;
-import de.upb.crypto.craco.abe.interfaces.BigIntegerAttribute;
-import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
-import de.upb.crypto.craco.abe.interfaces.StringAttribute;
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
 

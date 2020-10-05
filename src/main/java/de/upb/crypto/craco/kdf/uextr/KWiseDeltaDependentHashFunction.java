@@ -10,7 +10,6 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.polynomial.Seed;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 
 /**
  * A seeded {@link HashFunction} of a {@link KWiseDeltaDependentHashFamily}.

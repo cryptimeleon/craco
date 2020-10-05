@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.abe.fuzzy.small;
 
-import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
+import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
 import de.upb.crypto.craco.common.interfaces.pe.MasterSecret;
 import de.upb.crypto.math.interfaces.structures.GroupElement;

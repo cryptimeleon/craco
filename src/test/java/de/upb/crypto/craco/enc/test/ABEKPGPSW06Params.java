@@ -1,5 +1,6 @@
 package de.upb.crypto.craco.enc.test;
 
+import de.upb.crypto.craco.abe.interfaces.Attribute;
 import de.upb.crypto.craco.abe.kp.large.ABEKPGPSW06;
 import de.upb.crypto.craco.abe.kp.large.ABEKPGPSW06MasterSecret;
 import de.upb.crypto.craco.abe.kp.large.ABEKPGPSW06PublicParameters;
@@ -8,7 +9,6 @@ import de.upb.crypto.craco.abe.util.ABEKPGPSW06TestParamsGenerator;
 import de.upb.crypto.craco.common.GroupElementPlainText;
 import de.upb.crypto.craco.common.interfaces.KeyPair;
 import de.upb.crypto.craco.common.interfaces.PlainText;
-import de.upb.crypto.craco.abe.interfaces.Attribute;
 
 import java.util.ArrayList;
 import java.util.List;

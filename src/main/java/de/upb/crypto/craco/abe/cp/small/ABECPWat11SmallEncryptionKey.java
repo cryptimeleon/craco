@@ -10,7 +10,9 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
-;import java.util.Objects;
+import java.util.Objects;
+
+;
 
 /**
  * An {@link EncryptionKey} for the {@link ABECPWat11Small} that stores a

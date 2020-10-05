@@ -14,7 +14,6 @@ import de.upb.crypto.math.structures.cartesian.GroupElementVector;
 import de.upb.crypto.math.structures.cartesian.RingElementVector;
 import de.upb.crypto.math.structures.zn.Zp;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.IntStream;
 

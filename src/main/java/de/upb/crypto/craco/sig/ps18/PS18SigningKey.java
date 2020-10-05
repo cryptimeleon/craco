@@ -8,7 +8,6 @@ import de.upb.crypto.math.structures.cartesian.RingElementVector;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 /**

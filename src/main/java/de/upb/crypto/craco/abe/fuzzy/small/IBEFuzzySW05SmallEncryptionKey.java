@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.abe.fuzzy.small;
 
-import de.upb.crypto.craco.common.interfaces.EncryptionKey;
 import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
+import de.upb.crypto.craco.common.interfaces.EncryptionKey;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;

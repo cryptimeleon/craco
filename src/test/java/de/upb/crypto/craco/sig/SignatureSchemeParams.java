@@ -2,11 +2,11 @@ package de.upb.crypto.craco.sig;
 
 import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.craco.common.interfaces.PublicParameters;
+import de.upb.crypto.craco.sig.hashthensign.params.HashThenSignParams;
 import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
 import de.upb.crypto.craco.sig.interfaces.SignatureScheme;
 import de.upb.crypto.craco.sig.interfaces.SigningKey;
 import de.upb.crypto.craco.sig.interfaces.VerificationKey;
-import de.upb.crypto.craco.sig.hashthensign.params.HashThenSignParams;
 
 /**
  * Parameter for a signature scheme test. These parameters can be reused to instantiate {@link HashThenSignParams} to

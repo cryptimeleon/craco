@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.abe.fuzzy.large;
 
+import de.upb.crypto.craco.abe.interfaces.BigIntegerAttribute;
 import de.upb.crypto.craco.common.GroupElementPlainText;
 import de.upb.crypto.craco.common.interfaces.*;
-import de.upb.crypto.craco.abe.interfaces.BigIntegerAttribute;
 import de.upb.crypto.craco.common.interfaces.pe.PredicateEncryptionScheme;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;

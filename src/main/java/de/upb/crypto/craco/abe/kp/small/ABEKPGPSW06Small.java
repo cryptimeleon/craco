@@ -2,13 +2,13 @@ package de.upb.crypto.craco.abe.kp.small;
 
 import de.upb.crypto.craco.abe.accessStructure.MonotoneSpanProgram;
 import de.upb.crypto.craco.abe.accessStructure.exception.WrongAccessStructureException;
+import de.upb.crypto.craco.abe.interfaces.Attribute;
+import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
 import de.upb.crypto.craco.common.GroupElementPlainText;
 import de.upb.crypto.craco.common.interfaces.CipherText;
 import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.common.interfaces.EncryptionKey;
 import de.upb.crypto.craco.common.interfaces.PlainText;
-import de.upb.crypto.craco.abe.interfaces.Attribute;
-import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
 import de.upb.crypto.craco.common.interfaces.pe.*;
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
