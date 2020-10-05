@@ -82,7 +82,6 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
             throw new UnsupportedOperationException("The message list and parameter list lengths are not compatible!");
         }
 
-
         Zn.ZnElement r = group.getUniformlyRandomExponent();
         GroupElement c = getPedersenExpression(r.getInteger(), messageBlock);
 

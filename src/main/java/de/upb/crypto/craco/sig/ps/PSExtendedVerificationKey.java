@@ -108,7 +108,6 @@ public class PSExtendedVerificationKey extends PSVerificationKey
 
     @Override
     public int hashCode() {
-
         int result = Objects.hash(super.hashCode(), group1ElementG);
         result = 31 * result + Arrays.hashCode(group1ElementsYi);
         return result;

@@ -7,6 +7,8 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
+import java.util.Objects;
+
 public class ABECPWat11AsymSmallMasterSecret implements MasterSecret {
 
     @Represented(restorer = "G1")
@@ -47,8 +49,6 @@ public class ABECPWat11AsymSmallMasterSecret implements MasterSecret {
         if (getClass() != obj.getClass())
             return false;
         ABECPWat11AsymSmallMasterSecret other = (ABECPWat11AsymSmallMasterSecret) obj;
-        if (gAlpha == null) {
-            return other.gAlpha == null;
-        } else return gAlpha.equals(other.gAlpha);
+        return Objects.equals(gAlpha, other.gAlpha);
     }
 }

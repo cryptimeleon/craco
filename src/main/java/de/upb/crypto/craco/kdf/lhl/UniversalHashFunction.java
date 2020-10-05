@@ -44,11 +44,9 @@ public class UniversalHashFunction implements HashFunction {
 
         UniversalHashFunction that = (UniversalHashFunction) o;
 
-        if (!Objects.equals(universalHashFamily, that.universalHashFamily))
-            return false;
-        if (!Objects.equals(a, that.a))
-            return false;
-        return Objects.equals(b, that.b);
+        return Objects.equals(universalHashFamily, that.universalHashFamily)
+            && Objects.equals(a, that.a)
+            && Objects.equals(b, that.b);
     }
 
     @Override

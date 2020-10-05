@@ -15,10 +15,13 @@ import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.util.RepresentationUtil;
 
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 
 /**
  * This class implements the Fujisaki Okamoto transformation (FOT) of an ElGamal
@@ -68,7 +71,6 @@ import java.security.NoSuchAlgorithmException;
 
 public class ElgamalKEM implements AsymmetricKEM<SymmetricKey> {
 
-
     public class KeyAndCiphertextAndNonce {
         public KeyAndCiphertext<SymmetricKey> keyAndCiphertext;
         public BigInteger nonce;
@@ -83,11 +85,13 @@ public class ElgamalKEM implements AsymmetricKEM<SymmetricKey> {
     /**
      * The underlying ElGamal encryption scheme
      */
+    @Represented
     private ElgamalEncryption encryptionScheme;
 
     /**
      * Hash function to construct H1 and H2
      */
+    @Represented
     private HashFunction messageDigest;
 
     /**
@@ -105,10 +109,8 @@ public class ElgamalKEM implements AsymmetricKEM<SymmetricKey> {
         this.messageDigest = md;
     }
 
-    public ElgamalKEM(Representation r) throws NoSuchAlgorithmException {
-        ObjectRepresentation or = (ObjectRepresentation) r;
-        RepresentationUtil.restoreStandaloneRepresentable(this, or, "encryptionScheme");
-        this.messageDigest = (HashFunction) r.obj().get("md").repr().recreateRepresentable();
+    public ElgamalKEM(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
@@ -126,38 +128,22 @@ public class ElgamalKEM implements AsymmetricKEM<SymmetricKey> {
             return true;
         if (obj == null)
             return false;
-        if (!(obj instanceof ElgamalKEM))
+        if (getClass() != obj.getClass())
             return false;
         ElgamalKEM other = (ElgamalKEM) obj;
-        if (encryptionScheme == null) {
-            if (other.encryptionScheme != null)
-                return false;
-        } else if (!encryptionScheme.equals(other.encryptionScheme)) {
-            return false;
-        }
-        if (messageDigest == null) {
-            if (other.messageDigest != null)
-                return false;
-        } else if (!messageDigest.equals(other.messageDigest)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(encryptionScheme, other.encryptionScheme)
+                && Objects.equals(messageDigest, other.messageDigest);
     }
 
     @Override
     public Representation getRepresentation() {
-        ObjectRepresentation or = new ObjectRepresentation();
-        RepresentationUtil.putStandaloneRepresentable(this, or, "encryptionScheme");
-        or.put("md", new RepresentableRepresentation(messageDigest));
-        return or;
+        return ReprUtil.serialize(this);
     }
 
     @Override
     public KeyAndCiphertext<SymmetricKey> encaps(EncryptionKey pk) {
-
         KeyAndCiphertextAndNonce kcn = this.encaps_internal(pk);
         return kcn.keyAndCiphertext;
-
     }
 
     /**
@@ -276,10 +262,8 @@ public class ElgamalKEM implements AsymmetricKEM<SymmetricKey> {
         if (c_prime.getC2().equals(C.getElgamalCipherText().getC2())) {
             return k;
         } else {
-
             return new ByteArrayImplementation(new byte[0]);
         }
-
     }
 
     @Override
@@ -293,12 +277,7 @@ public class ElgamalKEM implements AsymmetricKEM<SymmetricKey> {
 
     @Override
     public ElgamalKEMCiphertext getEncapsulatedKey(Representation repr) {
-        ObjectRepresentation or = (ObjectRepresentation) repr;
-
-        ElgamalCipherText c = encryptionScheme.getCipherText(or.get("c"));
-        ByteArrayImplementation encaps = new ByteArrayImplementation(or.get("encaps"));
-        return new ElgamalKEMCiphertext(c, encaps);
-
+        return new ElgamalKEMCiphertext(repr, encryptionScheme);
     }
 
     @Override

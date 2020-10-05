@@ -20,6 +20,7 @@ import de.upb.crypto.craco.interfaces.pe.PredicateEncryptionScheme;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -73,13 +74,13 @@ public class AbstractABEKPGPSW06 {
             Zp.ZpElement lambda_i = share.getValue();
             GroupElement rho_i_element = (GroupElement) pp.getHashToG1().hashIntoStructure(rho_i);
             // R_i = g^r_i
-            GroupElement R_i = pp.getG1_generator().pow(r_i);
+            GroupElement R_i = pp.getG1Generator().pow(r_i);
             // D_i = g^temp * T (rho_i)^r_i (T is the hash into g1 specified in
             // the setup)
-            GroupElement D_i = pp.getG1_generator().pow(lambda_i).op(rho_i_element.pow(r_i));
+            GroupElement D_i = pp.getG1Generator().pow(lambda_i).op(rho_i_element.pow(r_i));
 
-            D.put(i, D_i);
-            R.put(i, R_i);
+            D.put(i, D_i.compute());
+            R.put(i, R_i.compute());
         }
 
         return new ABEKPGPSW06DecryptionKey(policy, D, R);
@@ -102,17 +103,14 @@ public class AbstractABEKPGPSW06 {
      * See {@link PredicateEncryptionScheme} for more information about predicates.
      */
     public Predicate getPredicate() {
-        return new Predicate() {
-            @Override
-            public boolean check(KeyIndex kind, CiphertextIndex cind) {
-                if (!(kind instanceof Policy))
-                    throw new IllegalArgumentException("Policy expected as KeyIndex");
-                if (!(cind instanceof SetOfAttributes))
-                    throw new IllegalArgumentException("SetOfAttributes expected as CiphertextIndex expected");
-                Policy policy = (Policy) kind;
-                SetOfAttributes soa = (SetOfAttributes) cind;
-                return policy.isFulfilled(soa);
-            }
+        return (kind, cind) -> {
+            if (!(kind instanceof Policy))
+                throw new IllegalArgumentException("Policy expected as KeyIndex");
+            if (!(cind instanceof SetOfAttributes))
+                throw new IllegalArgumentException("SetOfAttributes expected as CiphertextIndex expected");
+            Policy policy = (Policy) kind;
+            SetOfAttributes soa = (SetOfAttributes) cind;
+            return policy.isFulfilled(soa);
         };
     }
 
@@ -130,7 +128,9 @@ public class AbstractABEKPGPSW06 {
         Function<Attribute, GroupElement> hash = i -> (GroupElement) pp.getHashToG1().hashIntoStructure(i);
 
         // E_i = T(i)^s
-        return attributes.parallelStream().collect(Collectors.toConcurrentMap(i -> i, i -> hash.apply(i).pow(s)));
+        return attributes
+                .parallelStream()
+                .collect(Collectors.toConcurrentMap(i -> i, i -> hash.apply(i).pow(s).compute()));
     }
 
     /**
@@ -193,7 +193,7 @@ public class AbstractABEKPGPSW06 {
         // \prod_{i \in \omega} e(R_i^{-w_i}, E_{\rho(i)})
         GroupElement factor1 = nonZeroSVElements.get()
                 // map (i, w_i) -> e(R_i^{-w_i}, E_{\rho(i)})
-                .map(elem -> pp.getE()
+                .map(elem -> pp.getBilinearMap()
                         .apply(
                                 rMap.get(index.apply(elem))
                                         .pow(value.apply(elem)).inv(),
@@ -209,9 +209,9 @@ public class AbstractABEKPGPSW06 {
                 .reduce(pp.getGroupG1().getNeutralElement(), GroupElement::op);
 
         // e( \prod_{i \in \omega} D_i^{- w_i}, E'')
-        GroupElement factor2 = pp.getE().apply(dIProd, ct.getETwoPrime());
+        GroupElement factor2 = pp.getBilinearMap().apply(dIProd, ct.getETwoPrime());
 
-        return factor1.op(factor2);
+        return factor1.op(factor2).compute();
     }
 
     @Override
@@ -229,9 +229,7 @@ public class AbstractABEKPGPSW06 {
             return true;
         if (o == null || getClass() != o.getClass())
             return false;
-
-        AbstractABEKPGPSW06 that = (AbstractABEKPGPSW06) o;
-
-        return pp != null ? pp.equals(that.pp) : that.pp == null;
+        AbstractABEKPGPSW06 other = (AbstractABEKPGPSW06) o;
+        return Objects.equals(pp, other.pp);
     }
 }

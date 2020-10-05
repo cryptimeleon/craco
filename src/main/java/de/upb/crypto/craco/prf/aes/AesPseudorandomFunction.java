@@ -16,6 +16,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 
 /**
  * AES as a pseudorandom function (permutation) f_k : {0,1}^l -> {0,1}^l
@@ -95,9 +96,12 @@ public class AesPseudorandomFunction implements PseudorandomFunction {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return obj instanceof AesPseudorandomFunction
-                && ((AesPseudorandomFunction) obj).keylength.equals(keylength);
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        AesPseudorandomFunction other = (AesPseudorandomFunction) o;
+        return Objects.equals(keylength, other.keylength);
     }
-
 }

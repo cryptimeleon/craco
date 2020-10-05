@@ -8,6 +8,8 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
+import java.util.Objects;
+
 /**
  * The {@link EncryptionKey} for the {@link IBEFuzzySW05Small}.
  * <p>
@@ -55,13 +57,7 @@ public class IBEFuzzySW05SmallEncryptionKey implements EncryptionKey {
         if (getClass() != obj.getClass())
             return false;
         IBEFuzzySW05SmallEncryptionKey other = (IBEFuzzySW05SmallEncryptionKey) obj;
-        if (identity == null) {
-            if (other.identity != null)
-                return false;
-        } else if (!identity.containsAll(other.identity)
-                || !other.identity.containsAll(identity))
-            return false;
-        return true;
+        return Objects.equals(identity, other.identity);
     }
 
     @Override

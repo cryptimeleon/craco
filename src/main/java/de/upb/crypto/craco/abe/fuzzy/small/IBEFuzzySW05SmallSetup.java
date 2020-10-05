@@ -54,20 +54,17 @@ public class IBEFuzzySW05SmallSetup {
     public void doKeyGen(BilinearGroup group, Collection<? extends Attribute> universe, BigInteger universeThreshold) {
         // Public Parameter stuff
         pp = new IBEFuzzySW05SmallPublicParameters();
-
-        pp.setGroupG1(group.getG1());
-        pp.setGroupGT(group.getGT());
-        pp.setE(group.getBilinearMap());
+        pp.setBilinearGroup(group);
 
         Zp zp = new Zp(pp.getGroupG1().size());
 
         ZpElement y = zp.getUniformlyRandomUnit();
 
         // g in G_1
-        pp.setG(pp.getGroupG1().getUniformlyRandomNonNeutral());
+        pp.setG(pp.getGroupG1().getUniformlyRandomNonNeutral().compute());
 
         // Y = E (g, g)^y \in G_T
-        pp.setY(pp.getE().apply(pp.getG(), pp.getG()).pow(y));
+        pp.setY(pp.getE().apply(pp.getG(), pp.getG()).pow(y).compute());
 
         pp.setD(universeThreshold);
         Map<Attribute, GroupElement> t_map = new HashMap<>();
@@ -77,7 +74,7 @@ public class IBEFuzzySW05SmallSetup {
         // \for all x in univese T_x = g^t_x
         for (Attribute attribute : universe) {
             t.put(attribute, zp.getUniformlyRandomUnit());
-            t_map.put(attribute, pp.getG().pow(t.get(attribute)));
+            t_map.put(attribute, pp.getG().pow(t.get(attribute)).compute());
         }
         pp.setT(t_map);
         // msk =y , t_i

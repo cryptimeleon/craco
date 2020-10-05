@@ -2,6 +2,7 @@ package de.upb.crypto.craco.abe.fuzzy.small;
 
 import de.upb.crypto.craco.interfaces.PublicParameters;
 import de.upb.crypto.craco.interfaces.abe.Attribute;
+import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
@@ -12,6 +13,7 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * The public parameters for the {@link IBEFuzzySW05Small} generated in
@@ -24,23 +26,17 @@ public class IBEFuzzySW05SmallPublicParameters implements PublicParameters {
     @Represented
     private BigInteger d; // identity threshold
 
-    @Represented(restorer = "groupG1")
+    @Represented(restorer = "bilinearGroup::getG1")
     private GroupElement g; // in G_1
 
-    @Represented(restorer = "attr -> groupG1")
+    @Represented(restorer = "attr -> bilinearGroup::getG1")
     private Map<Attribute, GroupElement> T; // in G_1
 
-    @Represented(restorer = "groupGT")
+    @Represented(restorer = "bilinearGroup::getGT")
     private GroupElement y; // in G_T
 
     @Represented
-    private Group groupG1;
-
-    @Represented
-    private Group groupGT;
-
-    @Represented
-    private BilinearMap e;
+    private BilinearGroup bilinearGroup;
 
     public IBEFuzzySW05SmallPublicParameters(Representation repr) {
         new ReprUtil(this).deserialize(repr);
@@ -87,41 +83,24 @@ public class IBEFuzzySW05SmallPublicParameters implements PublicParameters {
     }
 
     public Group getGroupG1() {
-        return groupG1;
-    }
-
-    public void setGroupG1(Group groupG1) {
-        this.groupG1 = groupG1;
+        return bilinearGroup.getG1();
     }
 
     public Group getGroupGT() {
-        return groupGT;
-    }
-
-    public void setGroupGT(Group groupGT) {
-        this.groupGT = groupGT;
+        return bilinearGroup.getGT();
     }
 
     public BilinearMap getE() {
-        return e;
+        return bilinearGroup.getBilinearMap();
     }
 
-    public void setE(BilinearMap e) {
-        this.e = e;
+    public void setBilinearGroup(BilinearGroup bilGroup) {
+        this.bilinearGroup = bilGroup;
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((e == null) ? 0 : e.hashCode());
-        result = prime * result + ((T == null) ? 0 : T.hashCode());
-        result = prime * result + ((y == null) ? 0 : y.hashCode());
-        result = prime * result + ((d == null) ? 0 : d.hashCode());
-        result = prime * result + ((g == null) ? 0 : g.hashCode());
-        result = prime * result + ((groupG1 == null) ? 0 : groupG1.hashCode());
-        result = prime * result + ((groupGT == null) ? 0 : groupGT.hashCode());
-        return result;
+        return Objects.hash(d, g, T, y , bilinearGroup);
     }
 
     @Override
@@ -133,41 +112,10 @@ public class IBEFuzzySW05SmallPublicParameters implements PublicParameters {
         if (getClass() != obj.getClass())
             return false;
         IBEFuzzySW05SmallPublicParameters other = (IBEFuzzySW05SmallPublicParameters) obj;
-        if (e == null) {
-            if (other.e != null)
-                return false;
-        } else if (!e.equals(other.e))
-            return false;
-        if (T == null) {
-            if (other.T != null)
-                return false;
-        } else if (!T.keySet().containsAll(other.T.keySet()) || !other.T.keySet().containsAll(T.keySet()))
-            return false;
-        if (y == null) {
-            if (other.y != null)
-                return false;
-        } else if (!y.equals(other.y))
-            return false;
-        if (d == null) {
-            if (other.d != null)
-                return false;
-        } else if (!d.equals(other.d))
-            return false;
-        if (g == null) {
-            if (other.g != null)
-                return false;
-        } else if (!g.equals(other.g))
-            return false;
-        if (groupG1 == null) {
-            if (other.groupG1 != null)
-                return false;
-        } else if (!groupG1.equals(other.groupG1))
-            return false;
-        if (groupGT == null) {
-            if (other.groupGT != null)
-                return false;
-        } else if (!groupGT.equals(other.groupGT))
-            return false;
-        return true;
+        return Objects.equals(d, other.d)
+                && Objects.equals(g, other.g)
+                && Objects.equals(T, other.T)
+                && Objects.equals(y, other.y)
+                && Objects.equals(bilinearGroup, other.bilinearGroup);
     }
 }

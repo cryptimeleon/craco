@@ -7,6 +7,8 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
+import java.util.Objects;
+
 /**
  * The master secret for the {@link ABEKPGPSW06} generated on the
  * {@link ABEKPGPSW06Setup}.
@@ -50,12 +52,7 @@ public class ABEKPGPSW06MasterSecret implements MasterSecret {
         if (getClass() != obj.getClass())
             return false;
         ABEKPGPSW06MasterSecret other = (ABEKPGPSW06MasterSecret) obj;
-        if (y == null) {
-            if (other.y != null)
-                return false;
-        } else if (!y.equals(other.y))
-            return false;
-        return true;
+        return Objects.equals(y, other.y);
     }
 
     public ZpElement getY() {

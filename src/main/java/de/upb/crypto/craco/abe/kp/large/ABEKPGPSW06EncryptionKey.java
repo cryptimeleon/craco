@@ -10,6 +10,8 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
+import java.util.Objects;
+
 /**
  * An {@link EncryptionKey} for the {@link ABEKPGPSW06} that
  * stores a {@link SetOfAttributes} as {@link CiphertextIndex}.
@@ -55,15 +57,7 @@ public class ABEKPGPSW06EncryptionKey implements EncryptionKey {
         if (getClass() != obj.getClass())
             return false;
         ABEKPGPSW06EncryptionKey other = (ABEKPGPSW06EncryptionKey) obj;
-        if (attributes == null) {
-            if (other.attributes != null)
-                return false;
-        } else if (!(other.attributes.containsAll(attributes))) {
-            return false;
-        } else if (!(attributes.containsAll(other.attributes))) {
-            return false;
-        }
-        return true;
+        return Objects.equals(attributes, other.attributes);
     }
 
     public SetOfAttributes getAttributes() {

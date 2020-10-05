@@ -9,6 +9,7 @@ import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * The {@link CipherText} for the {@link IBEFuzzySW05Small}
@@ -76,21 +77,8 @@ public class IBEFuzzySW05SmallCipherText implements CipherText {
         if (getClass() != obj.getClass())
             return false;
         IBEFuzzySW05SmallCipherText other = (IBEFuzzySW05SmallCipherText) obj;
-        if (e == null) {
-            if (other.e != null)
-                return false;
-        } else if (!e.equals(other.e))
-            return false;
-        if (e_prime == null) {
-            if (other.e_prime != null)
-                return false;
-        } else if (!e_prime.equals(other.e_prime))
-            return false;
-        if (omega_prime == null) {
-            if (other.omega_prime != null)
-                return false;
-        } else if (!omega_prime.containsAll(other.omega_prime) || !other.omega_prime.containsAll(omega_prime))
-            return false;
-        return true;
+        return Objects.equals(e, other.e)
+                && Objects.equals(e_prime, other.e_prime)
+                && Objects.equals(omega_prime, other.omega_prime);
     }
 }

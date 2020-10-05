@@ -9,9 +9,12 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.util.RepresentationUtil;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 
 /**
@@ -25,11 +28,13 @@ public class LUDPublicParameters implements PublicParameters {
     /**
      * The public key KEM that is used to construct the ABE KEM.
      */
+    @Represented
     private ElgamalKEM baseKEM;
 
     /**
      * A set of pairing parameters used for implementing this KEM.
      */
+    @Represented
     private BilinearGroup pairingParameters;
 
     /**
@@ -37,13 +42,16 @@ public class LUDPublicParameters implements PublicParameters {
      * the MSK alpha.
      * This part is used for encapsulation of R in encaps.
      */
+    @Represented(restorer = "baseKEM::getEncryptionScheme")
     private ElgamalPublicKey elgamalEncryptionKey;
 
     /**
      * group elements wrt. g1 and g2
      */
-    public GroupElement g1, g2, u1, u2, h1, h2, v1, v2, w1, w2;
-    //public HashIntoZn hashIntoExponent;
+    @Represented(restorer = "pairingParameters::getG1")
+    public GroupElement g1, u1, h1, v1, w1;
+    @Represented(restorer = "pairingParameters::getG2")
+    public GroupElement g2, u2, h2, v2, w2;
 
     public GroupElement getG1() {
         return g1;
@@ -126,69 +134,22 @@ public class LUDPublicParameters implements PublicParameters {
     }
 
 
-    private static String[] standaloneRepresentables = {"baseKEM", "pairingParameters"};
-    private static String[] g1Elements = {"g1", "u1", "h1", "v1", "w1"};
-    private static String[] g2Elements = {"g2", "u2", "h2", "v2", "w2"};
-
-
     @Override
     public Representation getRepresentation() {
-        ObjectRepresentation toReturn = new ObjectRepresentation();
-        for (String standaloneRepresentable : standaloneRepresentables) {
-            RepresentationUtil.putStandaloneRepresentable(this, toReturn, standaloneRepresentable);
-        }
-        for (String elementRepresentable : g1Elements) {
-            RepresentationUtil.putElement(this, toReturn, elementRepresentable);
-        }
-        for (String elementRepresentable : g2Elements) {
-            RepresentationUtil.putElement(this, toReturn, elementRepresentable);
-        }
-
-        toReturn.put("elgamalEncryptionKey", elgamalEncryptionKey.getRepresentation());
-        return toReturn;
+        return ReprUtil.serialize(this);
     }
 
-    public LUDPublicParameters(Representation r) {
-        for (String standaloneRepresentable : standaloneRepresentables) {
-            RepresentationUtil.restoreStandaloneRepresentable(this, r, standaloneRepresentable);
-        }
-
-        Group g1 = this.getPairingParameters().getG1();
-        Group g2 = this.getPairingParameters().getG2();
-
-        for (String elementRepresentable : g1Elements) {
-            RepresentationUtil.restoreElement(this, r, elementRepresentable, g1);
-        }
-        for (String elementRepresentable : g2Elements) {
-            RepresentationUtil.restoreElement(this, r, elementRepresentable, g2);
-        }
-
-        ElgamalEncryption elgamal = new ElgamalEncryption(pairingParameters.getGT());
-
-
-        this.elgamalEncryptionKey = (ElgamalPublicKey) elgamal.getEncryptionKey(
-                ((ObjectRepresentation) r).get("elgamalEncryptionKey"));
-
+    public LUDPublicParameters(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
     }
 
-
-    public LUDPublicParameters(ElgamalKEM base, BilinearGroup pp,// HashIntoZn hashIntoExponent,
-                               ElgamalPublicKey egpk,
-                               GroupElement g1,
-                               GroupElement g2,
-                               GroupElement u1,
-                               GroupElement u2,
-                               GroupElement h1,
-                               GroupElement h2,
-                               GroupElement v1,
-                               GroupElement v2,
-                               GroupElement w1,
-                               GroupElement w2
-    ) {
+    public LUDPublicParameters(ElgamalKEM base, BilinearGroup pp, ElgamalPublicKey egpk,
+                               GroupElement g1, GroupElement g2, GroupElement u1, GroupElement u2,
+                               GroupElement h1, GroupElement h2, GroupElement v1, GroupElement v2,
+                               GroupElement w1, GroupElement w2) {
         baseKEM = base;
         this.elgamalEncryptionKey = egpk;
         this.pairingParameters = pp;
-//		this.hashIntoExponent = hashIntoExponent;
         this.g1 = g1;
         this.g2 = g2;
         this.u1 = u1;
@@ -263,75 +224,22 @@ public class LUDPublicParameters implements PublicParameters {
             return true;
         if (obj == null)
             return false;
-        if (!(obj instanceof LUDPublicParameters))
+        if (getClass() != obj.getClass())
             return false;
         LUDPublicParameters other = (LUDPublicParameters) obj;
-        if (baseKEM == null) {
-            if (other.baseKEM != null)
-                return false;
-        } else if (!baseKEM.equals(other.baseKEM))
-            return false;
-        if (elgamalEncryptionKey == null) {
-            if (other.elgamalEncryptionKey != null)
-                return false;
-        } else if (!elgamalEncryptionKey.equals(other.elgamalEncryptionKey))
-            return false;
-        if (g1 == null) {
-            if (other.g1 != null)
-                return false;
-        } else if (!g1.equals(other.g1))
-            return false;
-        if (g2 == null) {
-            if (other.g2 != null)
-                return false;
-        } else if (!g2.equals(other.g2))
-            return false;
-        if (h1 == null) {
-            if (other.h1 != null)
-                return false;
-        } else if (!h1.equals(other.h1))
-            return false;
-        if (h2 == null) {
-            if (other.h2 != null)
-                return false;
-        } else if (!h2.equals(other.h2))
-            return false;
-        if (pairingParameters == null) {
-            if (other.pairingParameters != null)
-                return false;
-        } else if (!pairingParameters.equals(other.pairingParameters))
-            return false;
-        if (u1 == null) {
-            if (other.u1 != null)
-                return false;
-        } else if (!u1.equals(other.u1))
-            return false;
-        if (u2 == null) {
-            if (other.u2 != null)
-                return false;
-        } else if (!u2.equals(other.u2))
-            return false;
-        if (v1 == null) {
-            if (other.v1 != null)
-                return false;
-        } else if (!v1.equals(other.v1))
-            return false;
-        if (v2 == null) {
-            if (other.v2 != null)
-                return false;
-        } else if (!v2.equals(other.v2))
-            return false;
-        if (w1 == null) {
-            if (other.w1 != null)
-                return false;
-        } else if (!w1.equals(other.w1))
-            return false;
-        if (w2 == null) {
-            if (other.w2 != null)
-                return false;
-        } else if (!w2.equals(other.w2))
-            return false;
-        return true;
+        return Objects.equals(baseKEM, other.baseKEM)
+                && Objects.equals(elgamalEncryptionKey, other.elgamalEncryptionKey)
+                && Objects.equals(g1, other.g1)
+                && Objects.equals(g2, other.g2)
+                && Objects.equals(h1, other.h1)
+                && Objects.equals(h2, other.h2)
+                && Objects.equals(pairingParameters, other.pairingParameters)
+                && Objects.equals(u1, other.u1)
+                && Objects.equals(u2, other.u2)
+                && Objects.equals(v1, other.v1)
+                && Objects.equals(v2, other.v2)
+                && Objects.equals(w1, other.w1)
+                && Objects.equals(w2, other.w2);
     }
 
 

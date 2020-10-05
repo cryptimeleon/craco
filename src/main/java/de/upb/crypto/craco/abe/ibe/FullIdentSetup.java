@@ -25,7 +25,7 @@ public class FullIdentSetup {
         // Generate bilinear group
         BilinearGroupFactory fac = new BilinearGroupFactory(securityParameter);
         fac.setDebugMode(debug);
-        fac.setRequirements(BilinearGroup.Type.TYPE_1);
+        fac.setRequirements(BilinearGroup.Type.TYPE_1, true, false, false);
         BilinearGroup group = fac.createBilinearGroup();
 
         doKeyGen(group, block_size);
@@ -43,19 +43,16 @@ public class FullIdentSetup {
 
         pp.setHashToG1(group.getHashIntoG1());
 
-        pp.setGroupG1(group.getG1());
-        pp.setGroupG2(group.getGT());
-
-        pp.setE(group.getBilinearMap());
+        pp.setBilinearGroup(group);
         Zp zp = new Zp(pp.getGroupG1().size());
 
         // Do the scheme setup stuff
         // s <- Zp*
         ZpElement s = zp.getUniformlyRandomUnit();
         // P is a generator in G1
-        pp.setP(pp.getGroupG1().getUniformlyRandomNonNeutral());
+        pp.setP(pp.getGroupG1().getUniformlyRandomNonNeutral().compute());
         // P_pub = P^s
-        pp.setP_pub(pp.getP().pow(s));
+        pp.setP_pub(pp.getP().pow(s).compute());
         msk = new FullIdentMasterSecret(s);
     }
 

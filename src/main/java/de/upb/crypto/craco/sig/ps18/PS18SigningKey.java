@@ -4,6 +4,7 @@ import de.upb.crypto.craco.interfaces.signature.SigningKey;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.structures.cartesian.RingElementVector;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
@@ -25,10 +26,10 @@ public class PS18SigningKey implements SigningKey {
     /**
      * y_1, ..., y_{r+1} in Z_p in paper.
      */
-    @Represented(restorer = "[zp]")
-    private ZpElement[] exponentsYi;
+    @Represented(restorer = "zp")
+    private RingElementVector exponentsYi;
 
-    public PS18SigningKey(ZpElement exponentX, ZpElement[] exponentsYi) {
+    public PS18SigningKey(ZpElement exponentX, RingElementVector exponentsYi) {
         this.exponentX = exponentX;
         this.exponentsYi = exponentsYi;
     }
@@ -57,17 +58,17 @@ public class PS18SigningKey implements SigningKey {
         this.exponentX = exponentX;
     }
 
-    public ZpElement[] getExponentsYi() {
+    public RingElementVector getExponentsYi() {
         return exponentsYi;
     }
 
-    public void setExponentsYi(ZpElement[] exponentsYi) {
+    public void setExponentsYi(RingElementVector exponentsYi) {
         this.exponentsYi = exponentsYi;
     }
 
     public int getNumberOfMessages() {
         // this scheme has one more y_i than the supported message length.
-        return exponentsYi.length - 1;
+        return exponentsYi.length() - 1;
     }
 
     @Override
@@ -76,13 +77,11 @@ public class PS18SigningKey implements SigningKey {
         if (o == null || getClass() != o.getClass()) return false;
         PS18SigningKey that = (PS18SigningKey) o;
         return Objects.equals(exponentX, that.exponentX)
-                && Arrays.equals(exponentsYi, that.exponentsYi);
+                && Objects.equals(exponentsYi, that.exponentsYi);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(exponentX);
-        result = 31 * result + Arrays.hashCode(exponentsYi);
-        return result;
+        return Objects.hash(exponentX, exponentsYi);
     }
 }

@@ -58,7 +58,7 @@ public class PS18ROMSignatureScheme extends PS18SignatureScheme {
 
         // h in G_1^*, second element of signature
         GroupElement group1ElementSigma1 = pp.getBilinearMap().getG1()
-                .getUniformlyRandomNonNeutral();
+                .getUniformlyRandomNonNeutral().compute();
 
         // m' in Z_p, computed as hash of messages
         ZpElement exponentPrimeM = romHashIntoZp(messageBlock, zp);
@@ -67,7 +67,7 @@ public class PS18ROMSignatureScheme extends PS18SignatureScheme {
         PS18SignatureScheme ps18SigScheme = new PS18SignatureScheme(pp);
         GroupElement group1ElementSigma2 = ps18SigScheme.computeSigma2(
                 messageBlock, sk, exponentPrimeM, group1ElementSigma1
-        );
+        ).compute();
         return new PS18ROMSignature(group1ElementSigma1, group1ElementSigma2);
     }
 

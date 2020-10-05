@@ -11,6 +11,7 @@ import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Signature scheme that was originally presentet in [1] by Boneh, Boyen and Shacham. The version implemented is the
@@ -49,13 +50,13 @@ public class BBSBSignatureScheme implements StandardMultiMessageSignatureScheme 
         Zp zp = pp.getZp();
         GroupElement g2 = pp.getG2();
         ZpElement exponentGamma = zp.getUniformlyRandomUnit(); // secret for sk
-        GroupElement w = g2.pow(exponentGamma); // g_2^{\gamma} for pk
+        GroupElement w = g2.pow(exponentGamma).compute(); // g_2^{\gamma} for pk
 
-        ZpElement ziExponents[] = new ZpElement[numberOfMessages + 1];
+        ZpElement[] ziExponents = new ZpElement[numberOfMessages + 1];
 
         ziExponents = Arrays.stream(ziExponents).map(a -> zp.getUniformlyRandomElement()).toArray(ZpElement[]::new);
 
-        GroupElement[] uiG2Elements = Arrays.stream(ziExponents).map(zi -> g2.pow(zi)).toArray(GroupElement[]::new);
+        GroupElement[] uiG2Elements = Arrays.stream(ziExponents).map(zi -> g2.pow(zi).compute()).toArray(GroupElement[]::new);
 
         // Set skO and pkO with results
         BBSBSigningKey sk = new BBSBSigningKey();
@@ -111,11 +112,9 @@ public class BBSBSignatureScheme implements StandardMultiMessageSignatureScheme 
 
         ZnElement exponent = exponentX.add(sk.getExponentGamma()).inv();// 1/(x+gamma)
 
-        GroupElement signatureElementA = c.pow(exponent); // A in the paper
+        GroupElement signatureElementA = c.pow(exponent).compute(); // A in the paper
 
-        BBSABSignature signature = new BBSABSignature(signatureElementA, exponentX, exponentSPrime); // sigma
-        // in
-        return signature;
+        return new BBSABSignature(signatureElementA, exponentX, exponentSPrime);
     }
 
     @Override
@@ -148,10 +147,7 @@ public class BBSBSignatureScheme implements StandardMultiMessageSignatureScheme 
         GroupElement rightHandSide = pp.getBilinearMap().apply(rebuildC, g2);
         GroupElement leftHandSide = pp.getBilinearMap().apply(sigma.getElementA(),
                 pk.getW().op(g2.pow(sigma.getExponentX())));
-        if (leftHandSide.equals(rightHandSide)) {
-            return true;
-        }
-        return false;
+        return leftHandSide.equals(rightHandSide);
     }
 
     @Override
@@ -171,7 +167,7 @@ public class BBSBSignatureScheme implements StandardMultiMessageSignatureScheme 
 
     @Override
     public BBSBVerificationKey getVerificationKey(Representation repr) {
-        return new BBSBVerificationKey(pp.getGroupG2(), repr);
+        return new BBSBVerificationKey(repr, pp.getGroupG2());
     }
 
     @Override
@@ -191,12 +187,7 @@ public class BBSBSignatureScheme implements StandardMultiMessageSignatureScheme 
         if (getClass() != obj.getClass())
             return false;
         BBSBSignatureScheme other = (BBSBSignatureScheme) obj;
-        if (pp == null) {
-            if (other.pp != null)
-                return false;
-        } else if (!pp.equals(other.pp))
-            return false;
-        return true;
+        return Objects.equals(pp, other.pp);
     }
 
     @Override

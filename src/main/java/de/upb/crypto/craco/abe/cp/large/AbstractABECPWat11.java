@@ -21,10 +21,7 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -59,7 +56,7 @@ public abstract class AbstractABECPWat11 {
     }
 
     /**
-     * Computes {@link ABECPWat11KEMCipherText#eElementMap}. It is part of {@link ABECPWat11CipherText} and
+     * Computes {@code eElementMap} for {@link ABECPWat11KEMCipherText}. It is part of {@link ABECPWat11CipherText} and
      * {@link ABECPWat11KEMCipherText}.
      *
      * @param s      random element used in the encryption
@@ -83,7 +80,7 @@ public abstract class AbstractABECPWat11 {
             Zp.ZpElement lambdai = entry.getValue();
 
             // element E_i = g^{a \cdot \lambda_i} \cdot T(\rho(i))^{-s}
-            return (pp.getG_a().pow(lambdai)).op(rhoiElement.pow(s).inv());
+            return pp.getgA().pow(lambdai).op(rhoiElement.pow(s).inv()).compute();
         };
 
         return shares.entrySet().parallelStream().collect(Collectors.toConcurrentMap(keyMapper, valueMapper));
@@ -98,9 +95,9 @@ public abstract class AbstractABECPWat11 {
      *
      * @param sk Decryption key
      * @param c  {@link ABECPWat11KEMCipherText} suffices at this point since the recovery of only requires
-     *           {@link ABECPWat11KEMCipherText#eTwoPrime} and {@link ABECPWat11KEMCipherText#eElementMap}. Therefore
-     *           this message also
-     *           can be used in {@link ABECPWat11KEM}.
+     *           {@code eTwoPrime} from {@link ABECPWat11KEMCipherText} and {@code eElementMap} from 
+     *           {@link ABECPWat11KEMCipherText}. 
+     *           Therefore this message also can be used in {@link ABECPWat11KEM}.
      * @return {@code Y^s = e(g,g)^{ys}}
      */
     protected GroupElement restoreYs(ABECPWat11DecryptionKey sk, ABECPWat11KEMCipherText c) {
@@ -141,15 +138,17 @@ public abstract class AbstractABECPWat11 {
 
         GroupElement map1 = pp.getE().apply(eiProd, dTwoPrime);
         GroupElement map2 = pp.getE().apply(c.getETwoPrime(), dRhoiProd.op(dPrime));
-        return map1.op(map2);
+        return map1.op(map2).compute();
     }
 
     /**
      * Checks if the number of shared attributes (the lines in the MSP) are valid and if the MSP is injective (all lines
      * are different attributes).
      *
-     * @param shares
-     * @return true if MSP is valid, else false.
+     * @param shares maps share indices to the shares
+     * @param msp the msp to check
+     * @param lMax the maximum number of shares allowed
+     * @return true if MSP is valid, else false
      */
     protected boolean isMonotoneSpanProgramValid(Map<Integer, Zp.ZpElement> shares, MonotoneSpanProgram msp, int lMax) {
         // check for line count
@@ -212,8 +211,8 @@ public abstract class AbstractABECPWat11 {
         GroupElement gy = ((ABECPWat11MasterSecret) msk).get();
 
         Zp.ZpElement u = zp.getUniformlyRandomUnit();
-        GroupElement dPrime = gy.op(pp.getG_a().pow(u));
-        GroupElement dPrime2 = pp.getG().pow(u);
+        GroupElement dPrime = gy.op(pp.getgA().pow(u)).compute();
+        GroupElement dPrime2 = pp.getG().pow(u).compute();
 
         Map<Attribute, GroupElement> d = new HashMap<>();
 
@@ -221,7 +220,7 @@ public abstract class AbstractABECPWat11 {
             // If hash function is WatersHash, then x_element corresponds to a h_i as
             // defined in the paper.
             GroupElement xElement = (GroupElement) pp.getHashToG1().hashIntoStructure(x);
-            GroupElement dx = xElement.pow(u);
+            GroupElement dx = xElement.pow(u).compute();
             d.put(x, dx);
         }
 
@@ -292,11 +291,11 @@ public abstract class AbstractABECPWat11 {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof AbstractABECPWat11) {
-            AbstractABECPWat11 other = (AbstractABECPWat11) o;
-            return pp.equals(other.pp);
-        } else {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
             return false;
-        }
+        AbstractABECPWat11 other = (AbstractABECPWat11) o;
+        return Objects.equals(pp, other.pp);
     }
 }

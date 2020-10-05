@@ -11,10 +11,7 @@ import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
 import de.upb.crypto.math.serialization.*;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * An identity is a collection of {@link BigIntegerAttribute}
@@ -55,9 +52,7 @@ public class Identity implements StandaloneRepresentable, KeyIndex, CiphertextIn
      */
     public Identity(BigIntegerAttribute... attributes) {
         this.attributes = new HashSet<>();
-        for (BigIntegerAttribute b : attributes) {
-            this.attributes.add(b);
-        }
+        Collections.addAll(this.attributes, attributes);
     }
 
     /**
@@ -80,12 +75,12 @@ public class Identity implements StandaloneRepresentable, KeyIndex, CiphertextIn
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Identity) {
-            Identity other = (Identity) obj;
-            return other.attributes.equals(attributes);
-        } else {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
             return false;
-        }
+        Identity other = (Identity) obj;
+        return Objects.equals(attributes, other.attributes);
     }
 
     @Override

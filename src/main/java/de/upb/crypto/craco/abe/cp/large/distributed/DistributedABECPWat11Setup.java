@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.abe.cp.large.distributed;
 
 import de.upb.crypto.craco.abe.cp.large.ABECPWat11MasterSecret;
-import de.upb.crypto.craco.common.utils.PrimeFieldPolynom;
+import de.upb.crypto.craco.common.utils.PrimeFieldPolynomial;
 import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.factory.BilinearGroupFactory;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
@@ -49,12 +49,10 @@ public class DistributedABECPWat11Setup {
     public void doKeyGen(BilinearGroup group, int n, int l_max, int t, int L) {
         pp = new DistributedABECPWat11PublicParameters();
         pp.setN(n);
-        pp.setL_max(l_max);
+        pp.setlMax(l_max);
 
-        pp.setGroupG1(group.getG1());
-        pp.setGroupGT(group.getGT());
         pp.setHashToG1(group.getHashIntoG1());
-        pp.setE(group.getBilinearMap());
+        pp.setBilinearGroup(group);
 
         Zp zp = new Zp(pp.getGroupG1().size());
 
@@ -62,21 +60,26 @@ public class DistributedABECPWat11Setup {
 
         ZpElement a = zp.getUniformlyRandomUnit();
         GroupElement g = pp.getGroupG1().getUniformlyRandomNonNeutral();
-        pp.setG(g);
+        pp.setG(g.compute());
         GroupElement g_a = g.pow(a);
-        pp.setG_a(g_a);
-        
+
+        pp.setgA(g_a.compute());
         Set<BigInteger> N = new HashSet<>();
 
         for (int i = 1; i <= n + 1; i++) {
             N.add(BigInteger.valueOf(i));
         }
         ZpElement y_0 = zp.getUniformlyRandomUnit();
-        PrimeFieldPolynom q_0 = new PrimeFieldPolynom(zp, t - 1);
+
+        PrimeFieldPolynomial q_0 = new PrimeFieldPolynomial(zp, t - 1);
+
         q_0.createRandom(RandomGeneratorSupplier.instance().get());
         q_0.setCoefficient(y_0, 0);
 
         GroupElement Y = pp.getE().apply(pp.getG(), pp.getG()).pow(y_0);
+
+        pp.setY(Y.compute());
+
         pp.setY(Y);
 
         Map<Integer, GroupElement> VK = new HashMap<>();
@@ -85,19 +88,19 @@ public class DistributedABECPWat11Setup {
         for (int xi = 1; xi <= L; xi++) {
             int serverID = xi;
             BigInteger tmp = q_0.evaluate(BigInteger.valueOf(serverID));
-            VK.put(xi, pp.getE().apply(pp.getG(), pp.getG()).pow(tmp));
+            VK.put(xi, pp.getE().apply(pp.getG(), pp.getG()).pow(tmp).compute());
             masterKeyShares.add(new DistributedABECPWat11MasterKeyShare(serverID, tmp));
         }
         pp.setVerificationKeys(VK);
         Map<BigInteger, GroupElement> T = new HashMap<>();
         for (BigInteger i : N) {
             ZpElement t_i = zp.getUniformlyRandomUnit();
-            T.put(i, pp.getG().pow(t_i));
+            T.put(i, pp.getG().pow(t_i).compute());
         }
         pp.setT(T);
         pp.setThreshold(t);
 
-        msk = new ABECPWat11MasterSecret(g.pow(y_0));
+        msk = new ABECPWat11MasterSecret(g.pow(y_0).compute());
     }
 
     public DistributedABECPWat11PublicParameters getPublicParameters() {

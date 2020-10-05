@@ -4,8 +4,11 @@ import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
 import de.upb.crypto.craco.interfaces.CipherText;
 import de.upb.crypto.craco.interfaces.policy.Policy;
 import de.upb.crypto.craco.kem.asym.elgamal.ElgamalKEMCiphertext;
+import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.*;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.util.RepresentationUtil;
 
 import java.math.BigInteger;
@@ -22,22 +25,26 @@ public class LUDCipherText implements CipherText {
     /**
      * The policy of this ciphertext.
      */
+    @Represented
     public Policy policy;
 
     /**
      * R e(g1,g2)^alpha s  in Gt
      * where H(R) is used to blind symmetric key, alpha is MSK and s is ElGamal nonce for encryption.
      */
+    @Represented(restorer = "GT")
     public GroupElement c;
 
     /**
      * g2^s in G2
      */
+    @Represented(restorer = "G2")
     public GroupElement c0;
 
     /**
      * k xor H(R) where k is symmetric key
      */
+    @Represented
     public ByteArrayImplementation encaps;
 
     /**
@@ -52,21 +59,8 @@ public class LUDCipherText implements CipherText {
      * <p>
      * C_i,3=g2^ti
      */
+    @Represented(restorer = "int -> [G2]")
     public Map<BigInteger, GroupElement[]> abeComponents;
-
-
-//	@Override
-//	public String toString() {
-//		String s = "";
-//		s += "Policy: " + policy.toString() + ", ";
-//		s += "C: " + c.toString() + ", ";
-//		s += "C0: " + c0.toString() + ", ";
-//		s += "encaps: " + encaps.toString() + ", ";
-//		
-//		for(Map.Entry<BigInteger, GroupElement[]> entry: abeComponents.entrySet()) {
-//			s+= "C_" + 
-//		}
-//	}
 
     public LUDCipherText() {
 
@@ -83,25 +77,13 @@ public class LUDCipherText implements CipherText {
         this.abeComponents = abeKomponents;
     }
 
+    public LUDCipherText(Representation repr, Group groupG2, Group groupGT) {
+        new ReprUtil(this).register(groupG2, "G2").register(groupGT, "GT").deserialize(repr);
+    }
+
     @Override
     public Representation getRepresentation() {
-        ObjectRepresentation or = new ObjectRepresentation();
-        RepresentationUtil.putStandaloneRepresentable(this, or, "policy");
-        RepresentationUtil.putStandaloneRepresentable(this, or, "encaps");
-        RepresentationUtil.putElement(this, or, "c");
-        RepresentationUtil.putElement(this, or, "c0");
-
-        MapRepresentation mr = new MapRepresentation();
-        for (Map.Entry<BigInteger, GroupElement[]> entry : this.abeComponents.entrySet()) {
-            ListRepresentation list = new ListRepresentation();
-            for (GroupElement e : entry.getValue()) {
-                list.put(e.getRepresentation());
-            }
-            mr.put(new BigIntegerRepresentation(entry.getKey()), list);
-        }
-
-        or.put("abeComponents", mr);
-        return or;
+        return ReprUtil.serialize(this);
     }
 
     public Policy getPolicy() {

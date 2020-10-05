@@ -2,6 +2,7 @@ package de.upb.crypto.craco.abe.cp.small.asymmetric;
 
 import de.upb.crypto.craco.interfaces.PublicParameters;
 import de.upb.crypto.craco.interfaces.abe.Attribute;
+import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
@@ -10,28 +11,26 @@ import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class ABECPWat11AsymSmallPublicParameters implements PublicParameters {
 
     @Represented
-    private Group groupG1, groupG2, groupGT;
+    private BilinearGroup bilinearGroup;
 
-    @Represented
-    private BilinearMap e;
-
-    @Represented(restorer = "groupG1")
+    @Represented(restorer = "bilinearGroup::getG1")
     private GroupElement g1; // Generator of G_1
 
-    @Represented(restorer = "groupG2")
+    @Represented(restorer = "bilinearGroup::getG2")
     private GroupElement g2; // Generator of G_2
 
-    @Represented(restorer = "groupGT")
+    @Represented(restorer = "bilinearGroup::getGT")
     private GroupElement eGgAlpha; // in G_T
 
-    @Represented(restorer = "groupG1")
+    @Represented(restorer = "bilinearGroup::getG1")
     private GroupElement gA; // in G_1
 
-    @Represented(restorer = "foo -> groupG1")
+    @Represented(restorer = "foo -> bilinearGroup::getG1")
     private Map<Attribute, GroupElement> attrs; // Attribute in Universe, Element in G_1
 
     public ABECPWat11AsymSmallPublicParameters() {
@@ -44,35 +43,23 @@ public class ABECPWat11AsymSmallPublicParameters implements PublicParameters {
     }
 
     public Group getGroupG1() {
-        return groupG1;
-    }
-
-    public void setGroupG1(Group groupG1) {
-        this.groupG1 = groupG1;
+        return bilinearGroup.getG1();
     }
 
     public Group getGroupG2() {
-        return groupG2;
-    }
-
-    public void setGroupG2(Group groupG2) {
-        this.groupG2 = groupG2;
+        return bilinearGroup.getG2();
     }
 
     public Group getGroupGT() {
-        return groupGT;
-    }
-
-    public void setGroupGT(Group groupGT) {
-        this.groupGT = groupGT;
+        return bilinearGroup.getGT();
     }
 
     public BilinearMap getE() {
-        return e;
+        return bilinearGroup.getBilinearMap();
     }
 
-    public void setE(BilinearMap e) {
-        this.e = e;
+    public void setBilinearGroup(BilinearGroup bilinearGroup) {
+        this.bilinearGroup = bilinearGroup;
     }
 
     public GroupElement getG1() {
@@ -122,17 +109,7 @@ public class ABECPWat11AsymSmallPublicParameters implements PublicParameters {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((e == null) ? 0 : e.hashCode());
-        result = prime * result + ((g1 == null) ? 0 : g1.hashCode());
-        result += prime * result + ((g2 == null) ? 0 : g2.hashCode());
-        result = prime * result + ((gA == null) ? 0 : gA.hashCode());
-        result = prime * result + ((groupG1 == null) ? 0 : groupG1.hashCode());
-        result = prime * result + ((groupGT == null) ? 0 : groupGT.hashCode());
-        result = prime * result + ((attrs == null) ? 0 : attrs.hashCode());
-        result = prime * result + ((eGgAlpha == null) ? 0 : eGgAlpha.hashCode());
-        return result;
+        return Objects.hash(bilinearGroup, g1, g2, eGgAlpha, gA, attrs);
     }
 
     @Override
@@ -144,44 +121,11 @@ public class ABECPWat11AsymSmallPublicParameters implements PublicParameters {
         if (getClass() != obj.getClass())
             return false;
         ABECPWat11AsymSmallPublicParameters other = (ABECPWat11AsymSmallPublicParameters) obj;
-        if (e == null) {
-            if (other.e != null)
-                return false;
-        } else if (!e.equals(other.e))
-            return false;
-        if (g1 == null) {
-            if (other.g1 != null)
-                return false;
-        } else if (!g1.equals(other.g1))
-            return false;
-        if (g2 == null) {
-            if (other.g2 != null)
-                return false;
-        } else if (!g2.equals(other.g2))
-            return false;
-        if (gA == null) {
-            if (other.gA != null)
-                return false;
-        } else if (!gA.equals(other.gA))
-            return false;
-        if (groupG1 == null) {
-            if (other.groupG1 != null)
-                return false;
-        } else if (!groupG1.equals(other.groupG1))
-            return false;
-        if (groupGT == null) {
-            if (other.groupGT != null)
-                return false;
-        } else if (!groupGT.equals(other.groupGT))
-            return false;
-        if (attrs == null) {
-            if (other.attrs != null)
-                return false;
-        } else if (!attrs.equals(other.attrs))
-            return false;
-        if (eGgAlpha == null) {
-            return other.eGgAlpha == null;
-        } else return eGgAlpha.equals(other.eGgAlpha);
+        return Objects.equals(bilinearGroup, other.bilinearGroup)
+                && Objects.equals(g1, other.g1)
+                && Objects.equals(g2, other.g2)
+                && Objects.equals(eGgAlpha, other.eGgAlpha)
+                && Objects.equals(gA, other.gA)
+                && Objects.equals(attrs, other.attrs);
     }
-
 }

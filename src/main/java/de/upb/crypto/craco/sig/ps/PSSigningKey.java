@@ -28,7 +28,7 @@ public class PSSigningKey implements SigningKey {
      * y_1, ... , y_n \in Z_p in paper.
      */
     @Represented(restorer = "[Zp]")
-    protected ZpElement exponentsYi[];
+    protected ZpElement[] exponentsYi;
 
     public PSSigningKey() {
         super();
@@ -74,7 +74,6 @@ public class PSSigningKey implements SigningKey {
 
     @Override
     public int hashCode() {
-
         int result = Objects.hash(exponentX);
         result = 31 * result + Arrays.hashCode(exponentsYi);
         return result;

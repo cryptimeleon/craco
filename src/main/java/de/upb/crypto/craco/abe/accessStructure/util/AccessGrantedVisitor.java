@@ -8,52 +8,53 @@ import java.util.Set;
 public class AccessGrantedVisitor implements Visitor<Boolean> {
 
     /**
-     * the set of shares for that it will be checked whether they fulfill the
-     * access structure or not
+     * The set of party share identifiers that are used to check fulfillment of the access structure.
+     * These are the shares that we have and want to compare against the shares required by the node visited by this
+     * visitor.
      */
     private Set<Integer> setOfShares;
 
     /**
-     * threshold of the node on that this instance is performed
+     * Fulfillment threshold of the current node.
      */
     private int threshold;
 
     /**
-     * number of children on that {@link TreeNode.performVisitor} was called an
-     * that are fulfilled.
+     * Number of fulfilled children nodes of the current node.
      */
     private int numberOfFulfilledChildren = 0;
 
     /**
-     * indicates if current node is fulfilled until now or not
+     * Whether the current node is fulfilled.
      */
     private boolean fulfilled;
 
     /**
-     * Creates a new Visitor with the <code>setOfParties</code>
-     *
-     * @param setOfParties
+     * @param setOfShareIdentifiers set of share identifiers used to check fulfillment of the node to visit
      */
-    public AccessGrantedVisitor(Set<Integer> setOfParties) {
-        this.setOfShares = setOfParties;
+    public AccessGrantedVisitor(Set<Integer> setOfShareIdentifiers) {
+        this.setOfShares = setOfShareIdentifiers;
         fulfilled = false;
     }
 
     /**
-     * Internal constructer with additional boolean parameter, that indicates if
-     * this node is need for the parent node to be fulfilled (save runtime)
+     * Internal constructor with additional boolean parameter, that indicates if
+     * this node is needed for the parent node to be fulfilled (save runtime)
      *
-     * @param setOfShareIdentifiers
-     * @param fulfilled
+     * @param setOfShareIdentifiers set of share identifiers used to check fulfillment of the node to visit
+     * @param fulfilled initial fulfillment status
      */
     private AccessGrantedVisitor(Set<Integer> setOfShareIdentifiers, boolean fulfilled) {
         this.setOfShares = setOfShareIdentifiers;
         this.fulfilled = fulfilled;
     }
 
+    /**
+     * @return whether this node is fulfilled
+     */
     @Override
     public Boolean getResultOfCurrentNode() {
-        return new Boolean(fulfilled);
+        return fulfilled;
     }
 
     @Override
@@ -61,17 +62,30 @@ public class AccessGrantedVisitor implements Visitor<Boolean> {
         return new AccessGrantedVisitor(setOfShares, fulfilled);
     }
 
+    /**
+     * Takes information about whether a child is fulfilled and updates fulfillment information of the current
+     * node accordingly.
+     * If enough children of the current node are fulfilled, {@code fulfilled} is set to {@code true}.
+     * @param isChildFulfilled whether child is fulfilled
+     */
     @Override
-    public void putResultOfChild(Boolean input) {
-        if (!fulfilled && input) {
+    public void putResultOfChild(Boolean isChildFulfilled) {
+        if (!fulfilled && isChildFulfilled) {
             numberOfFulfilledChildren++;
             fulfilled = (numberOfFulfilledChildren == threshold);
         }
     }
 
+    /**
+     * Visits given node and stores its threshold information.
+     * If the visited node is a leaf node, it checks whether its share is contained in the set of shares
+     * supplied to this visitor and updates {@code fulfilled} accordingly.
+     * @param currentNode node of the threshold tree to visit
+     */
     @Override
     public void visit(TreeNode currentNode) {
         this.threshold = currentNode.getThreshold();
+        // Check if visited node is a leaf node.
         if (threshold == 0)
             if (currentNode instanceof LeafNode)
                 fulfilled = setOfShares.contains(((LeafNode) currentNode).getShareIdentifier());

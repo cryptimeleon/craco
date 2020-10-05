@@ -3,6 +3,8 @@ package de.upb.crypto.craco.kem;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
 
+import java.util.Objects;
+
 /**
  * The most basic implementation of a {@link KeyMaterial}. It encapsulates an
  * element that implements the {@link UniqueByteRepresentable} interface and is
@@ -42,10 +44,8 @@ public class UniqueByteKeyMaterial implements KeyMaterial {
             return true;
         if (o == null || getClass() != o.getClass())
             return false;
-
-        UniqueByteKeyMaterial that = (UniqueByteKeyMaterial) o;
-
-        return minEntropy == that.minEntropy && e.equals(that.e);
+        UniqueByteKeyMaterial other = (UniqueByteKeyMaterial) o;
+        return minEntropy == other.minEntropy && Objects.equals(e, other.e);
     }
 
     @Override

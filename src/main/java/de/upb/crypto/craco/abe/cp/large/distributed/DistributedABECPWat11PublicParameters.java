@@ -9,13 +9,14 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
 import java.util.Map;
+import java.util.Objects;
 
 public class DistributedABECPWat11PublicParameters extends ABECPWat11PublicParameters implements PublicParameters {
 
-    @Represented(restorer = "foo -> groupG1")
+    @Represented(restorer = "foo -> bilinearGroup::getG1")
     private Map<BigInteger, GroupElement> t;
 
-    @Represented(restorer = "foo -> groupGT")
+    @Represented(restorer = "foo -> bilinearGroup::getGT")
     private Map<Integer, GroupElement> verificationKeys;
 
     @Represented
@@ -25,6 +26,7 @@ public class DistributedABECPWat11PublicParameters extends ABECPWat11PublicParam
     }
 
     public DistributedABECPWat11PublicParameters(Representation repr) {
+        super(repr);
         new ReprUtil(this).deserialize(repr);
     }
 
@@ -76,19 +78,9 @@ public class DistributedABECPWat11PublicParameters extends ABECPWat11PublicParam
         if (getClass() != obj.getClass())
             return false;
         DistributedABECPWat11PublicParameters other = (DistributedABECPWat11PublicParameters) obj;
-        if (t == null) {
-            if (other.t != null)
-                return false;
-        } else if (!t.equals(other.t))
-            return false;
-        if (threshold != other.threshold)
-            return false;
-        if (verificationKeys == null) {
-            if (other.verificationKeys != null)
-                return false;
-        } else if (!verificationKeys.equals(other.verificationKeys))
-            return false;
-        return true;
+        return Objects.equals(t, other.t)
+                && Objects.equals(threshold, other.threshold)
+                && Objects.equals(verificationKeys, other.verificationKeys);
     }
 
 }

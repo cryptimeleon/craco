@@ -44,8 +44,7 @@ public class StreamingEncryptionSchemeTest {
         try {
             System.out
                     .println("Testing the encrypt(InputStream plainIn, OutputStream cipherOut, EncryptionKey pk) for "
-                            + encryptionScheme
-                            .getRepresentedTypeName());
+                            + encryptionScheme.getClass().getName());
             // Generate new random bytes to be decrypted
             byte[] randomBytes = new byte[LENGTH];
             RANDOM.nextBytes(randomBytes);
@@ -60,8 +59,7 @@ public class StreamingEncryptionSchemeTest {
             cipherOut.close();
             System.out
                     .println("Testing the decrypt(InputStream cipherIn, OutputStream plainOut, DecryptionKey sk) for "
-                            + encryptionScheme
-                            .getRepresentedTypeName());
+                            + encryptionScheme.getClass().getName());
 
             // create a input stream from the file
             InputStream cipherIn = new BufferedInputStream(new FileInputStream(new File(CIPHERTEXT_PATH)));
@@ -86,8 +84,8 @@ public class StreamingEncryptionSchemeTest {
     @Test
     public void testEncryptInputStreamAndDecryptInputStream() {
         try {
-            System.out.println("Testing the encrypt(InputStream plainIn, EncryptionKey pk) for " + encryptionScheme
-                    .getRepresentedTypeName());
+            System.out.println("Testing the encrypt(InputStream plainIn, EncryptionKey pk) for "
+                    + encryptionScheme.getClass().getName());
 
             // Generate new random bytes to be decrypted
             byte[] randomBytes = new byte[LENGTH];
@@ -102,8 +100,8 @@ public class StreamingEncryptionSchemeTest {
             fos.close();
             FileInputStream fis = new FileInputStream(new File(CIPHERTEXT_PATH));
             ByteArrayOutputStream plainBytesOut = new ByteArrayOutputStream(LENGTH);
-            System.out.println("Testing the decrypt(InputStream cipherIn, DecryptionKey sk) for " + encryptionScheme
-                    .getRepresentedTypeName());
+            System.out.println("Testing the decrypt(InputStream cipherIn, DecryptionKey sk) for "
+                    + encryptionScheme.getClass().getName());
 
             InputStream decryptedCiphertext = encryptionScheme.decrypt(fis, keyPair.getSk());
 
@@ -123,8 +121,8 @@ public class StreamingEncryptionSchemeTest {
     @Test
     public void testEncryptOutputStreamAndDecryptOutputStream() {
         try {
-            System.out.println("Testing the encrypt(OutputStream cipherOut, EncryptionKey pk) for " + encryptionScheme
-                    .getRepresentedTypeName());
+            System.out.println("Testing the encrypt(OutputStream cipherOut, EncryptionKey pk) for "
+                    + encryptionScheme.getClass().getName());
             // Generate new random bytes to be decrypted
             byte[] randomBytes = new byte[LENGTH];
             RANDOM.nextBytes(randomBytes);
@@ -140,8 +138,8 @@ public class StreamingEncryptionSchemeTest {
 
             plainIn.close();
             encryptedOutputStream.close();
-            System.out.println("Testing the decrypt(OutputStream plainOut, DecryptionKey sk) for " + encryptionScheme
-                    .getRepresentedTypeName());
+            System.out.println("Testing the decrypt(OutputStream plainOut, DecryptionKey sk) for "
+                    + encryptionScheme.getClass().getName());
 
             // -----------------Decryption-----------------
 

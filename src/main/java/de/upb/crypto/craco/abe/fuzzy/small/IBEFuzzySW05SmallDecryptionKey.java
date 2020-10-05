@@ -9,6 +9,7 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * The {@link DecryptionKey} for the {@link IBEFuzzySW05Small}.
@@ -68,17 +69,8 @@ public class IBEFuzzySW05SmallDecryptionKey implements DecryptionKey {
         if (getClass() != obj.getClass())
             return false;
         IBEFuzzySW05SmallDecryptionKey other = (IBEFuzzySW05SmallDecryptionKey) obj;
-        if (d == null) {
-            if (other.d != null)
-                return false;
-        } else if (!d.equals(other.d))
-            return false;
-        if (identity == null) {
-            if (other.identity != null)
-                return false;
-        } else if (!identity.equals(other.identity))
-            return false;
-        return true;
+        return Objects.equals(d, other.d)
+                && Objects.equals(identity, other.identity);
     }
 
 }

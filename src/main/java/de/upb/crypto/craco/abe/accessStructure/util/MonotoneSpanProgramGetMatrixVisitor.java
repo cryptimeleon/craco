@@ -7,51 +7,51 @@ import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 import java.util.ArrayList;
 
 /**
- * This Visitor calculates the matrix for the tree it is performed on
+ * This Visitor calculates the matrix for the tree it is performed on.
  *
  * @author pschleiter, Fabian Eidens (refactor)
  */
 public class MonotoneSpanProgramGetMatrixVisitor implements Visitor<Integer> {
 
     /**
-     * Field over that the matrix is calculated
+     * Field over which the matrix is calculated.
      */
     private Zp field;
 
     /**
-     * Contain the values for the columns belong to higher hierarchies
+     * Contain the values for the columns belong to higher hierarchies.
      */
     private ArrayList<ZpElement> prefix;
 
     /**
-     * matrix containing all rows calculated so far
+     * Matrix containing all rows calculated so far.
      */
     private ArrayList<ArrayList<ZpElement>> matrix;
 
     /**
-     * the threshold of the node the visitor is performed on
+     * The threshold of the node the visitor is performed on.
      */
     private int threshold;
 
     /**
-     * internal counter, that count how many visitors for children were
+     * Internal counter, that count how many visitors for children were.
      * requested so far
      */
     private ZpElement counterN;
 
     /**
-     * the number of columns this subtree with the current node as root node
-     * need in the monotone span program
+     * The number of columns this subtree with the current node as root node
+     * need in the monotone span program.
      */
     private int ownOffset = 0;
 
     /**
-     * the current node
+     * The current node.
      */
     private TreeNode node;
 
     /**
-     * @param field  field over that the monotone span program is calculated
+     * @param field  field over which the monotone span program is calculated
      * @param prefix the values for the columns belong to higher hierarchies
      * @param matrix matrix containing all rows calculated so far and the new rows
      *               will be stored in this instance

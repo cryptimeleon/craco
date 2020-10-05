@@ -9,6 +9,7 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A {@link CipherText} for the {@link ABECPWat11Small}.
@@ -93,31 +94,10 @@ public class ABECPWat11SmallCipherText implements CipherText {
         if (getClass() != obj.getClass())
             return false;
         ABECPWat11SmallCipherText other = (ABECPWat11SmallCipherText) obj;
-        if (mapC == null) {
-            if (other.mapC != null)
-                return false;
-        } else if (!mapC.equals(other.mapC))
-            return false;
-        if (mapD == null) {
-            if (other.mapD != null)
-                return false;
-        } else if (!mapD.equals(other.mapD))
-            return false;
-        if (c == null) {
-            if (other.c != null)
-                return false;
-        } else if (!c.equals(other.c))
-            return false;
-        if (cPrime == null) {
-            if (other.cPrime != null)
-                return false;
-        } else if (!cPrime.equals(other.cPrime))
-            return false;
-        if (policy == null) {
-            if (other.policy != null)
-                return false;
-        } else if (!policy.equals(other.policy))
-            return false;
-        return true;
+        return Objects.equals(mapC, other.mapC)
+                && Objects.equals(mapD, other.mapD)
+                && Objects.equals(c, other.c)
+                && Objects.equals(cPrime, other.cPrime)
+                && Objects.equals(policy, other.policy);
     }
 }

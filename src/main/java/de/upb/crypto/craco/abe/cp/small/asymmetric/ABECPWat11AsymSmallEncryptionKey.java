@@ -8,6 +8,8 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
+import java.util.Objects;
+
 public class ABECPWat11AsymSmallEncryptionKey implements EncryptionKey {
 
     @Represented
@@ -52,8 +54,6 @@ public class ABECPWat11AsymSmallEncryptionKey implements EncryptionKey {
         if (getClass() != obj.getClass())
             return false;
         ABECPWat11AsymSmallEncryptionKey other = (ABECPWat11AsymSmallEncryptionKey) obj;
-        if (policy == null) {
-            return other.policy == null;
-        } else return policy.equals(other.policy);
+        return Objects.equals(other.policy, policy);
     }
 }

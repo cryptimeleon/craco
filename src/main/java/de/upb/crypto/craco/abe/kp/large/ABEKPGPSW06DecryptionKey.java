@@ -10,6 +10,7 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A {@link DecryptionKey} for the {@link ABEKPGPSW06} that stores a {@link Policy} as {@link KeyIndex}.
@@ -76,22 +77,9 @@ public class ABEKPGPSW06DecryptionKey implements DecryptionKey {
         if (getClass() != obj.getClass())
             return false;
         ABEKPGPSW06DecryptionKey other = (ABEKPGPSW06DecryptionKey) obj;
-        if (dElementMap == null) {
-            if (other.dElementMap != null)
-                return false;
-        } else if (!dElementMap.equals(other.dElementMap))
-            return false;
-        if (rElementMap == null) {
-            if (other.rElementMap != null)
-                return false;
-        } else if (!rElementMap.equals(other.rElementMap))
-            return false;
-        if (policy == null) {
-            if (other.policy != null)
-                return false;
-        } else if (!policy.equals(other.policy))
-            return false;
-        return true;
+        return Objects.equals(dElementMap, other.dElementMap)
+                && Objects.equals(rElementMap, other.rElementMap)
+                && Objects.equals(policy, other.policy);
     }
 
 }

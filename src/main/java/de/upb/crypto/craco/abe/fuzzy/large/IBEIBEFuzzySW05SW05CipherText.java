@@ -8,6 +8,7 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Ciphertext for {@link IBEFuzzySW05}.
@@ -40,19 +41,20 @@ public class IBEIBEFuzzySW05SW05CipherText extends IBEFuzzySW05KEMCipherText {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof IBEIBEFuzzySW05SW05CipherText)) {
-            return false;
-        }
-        IBEIBEFuzzySW05SW05CipherText other = (IBEIBEFuzzySW05SW05CipherText) o;
-        return super.equals(other) && ePrime.equals(other.ePrime);
-    }
-
-    @Override
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + ((ePrime == null) ? 0 : ePrime.hashCode());
         return result;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass()) 
+            return false;
+        IBEIBEFuzzySW05SW05CipherText other = (IBEIBEFuzzySW05SW05CipherText) o;
+        return super.equals(other) && Objects.equals(ePrime, other.ePrime);
     }
 }

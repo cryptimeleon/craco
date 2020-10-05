@@ -10,6 +10,8 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
+import java.util.Objects;
+
 /**
  * An {@link EncryptionKey} for the {@link ABECPWat11} that stores a
  * {@link Policy} as {@link CiphertextIndex}.
@@ -59,12 +61,7 @@ public class ABECPWat11EncryptionKey implements EncryptionKey {
         if (getClass() != obj.getClass())
             return false;
         ABECPWat11EncryptionKey other = (ABECPWat11EncryptionKey) obj;
-        if (policy == null) {
-            if (other.policy != null)
-                return false;
-        } else if (!policy.equals(other.policy))
-            return false;
-        return true;
+        return Objects.equals(policy, other.policy);
     }
 
     @Override

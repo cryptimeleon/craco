@@ -8,7 +8,12 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.serialization.StandaloneRepresentable;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.util.RepresentationUtil;
+
+import java.util.Objects;
 
 /**
  * An elgamal public key.
@@ -17,36 +22,25 @@ import de.upb.crypto.math.serialization.util.RepresentationUtil;
  */
 public class ElgamalPublicKey implements EncryptionKey {
 
-    /**The public paramter groupG, which specifies the group of g */
-    //private final static String[] standaloneRepresentables = {"groupG"};
-
-    /**
-     * The public parameters in groupG (h := g^a, a is the private key)
-     */
-    private final static String[] elementRepresentablesG = {"g", "h"};
-
     /**
      * The group of this Elgamal-Algorithm
      */
+    @Represented
     private Group groupG;
 
     /**
      * The public parameter g \in groupG
      */
     @UniqueByteRepresented
+    @Represented(restorer = "groupG")
     private GroupElement g;
 
     /**
      * The public parameter h:=g^a, (where a is the private key) \in groupG
      */
     @UniqueByteRepresented
+    @Represented(restorer = "groupG")
     private GroupElement h;
-
-//	public ElgamalPublicKey (Representation representation){
-//		RepresentationUtil.restoreStandaloneRepresentable(this, representation, "groupG");
-//		g = groupG.getElement(representation.obj().get("g"));
-//		h = groupG.getElement(representation.obj().get("h"));
-//	}
 
     /**
      * Creates a new ElgamalPublic Key
@@ -59,6 +53,10 @@ public class ElgamalPublicKey implements EncryptionKey {
         this.groupG = groupG;
         this.g = g;
         this.h = h;
+    }
+
+    public ElgamalPublicKey(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
     }
 
     public void setGroupG(Group groupG) {
@@ -79,14 +77,7 @@ public class ElgamalPublicKey implements EncryptionKey {
 
     @Override
     public Representation getRepresentation() {
-        ObjectRepresentation toReturn = new ObjectRepresentation();
-//		for (String standaloneRepresentable : standaloneRepresentables){
-//			RepresentationUtil.putElement(this, toReturn, standaloneRepresentable);
-//		}
-        for (String elementRepresentable : elementRepresentablesG) {
-            RepresentationUtil.putElement(this, toReturn, elementRepresentable);
-        }
-        return toReturn;
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -108,28 +99,13 @@ public class ElgamalPublicKey implements EncryptionKey {
         if (getClass() != obj.getClass())
             return false;
         ElgamalPublicKey other = (ElgamalPublicKey) obj;
-        if (g == null) {
-            if (other.g != null)
-                return false;
-        } else if (!g.equals(other.g))
-            return false;
-        if (groupG == null) {
-            if (other.groupG != null)
-                return false;
-        } else if (!groupG.equals(other.groupG))
-            return false;
-        if (h == null) {
-            if (other.h != null)
-                return false;
-        } else if (!h.equals(other.h))
-            return false;
-        return true;
+        return Objects.equals(g, other.g)
+                && Objects.equals(groupG, other.groupG)
+                && Objects.equals(h, other.h);
     }
 
     @Override
     public ByteAccumulator updateAccumulator(ByteAccumulator accumulator) {
         return AnnotatedUbrUtil.autoAccumulate(accumulator, this);
     }
-
-
 }

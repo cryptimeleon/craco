@@ -7,38 +7,38 @@ import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 import java.math.BigInteger;
 
 /**
- * Polynom over a prime field.
+ * Polynomial over a prime field.
  *
  * @author Marius Dransfeld, refactoring: Fabian Eidens
  */
-public final class PrimeFieldPolynom implements Cloneable {
+public final class PrimeFieldPolynomial implements Cloneable {
     private ZpElement[] coefficients;
     private Zp field;
 
     /**
-     * creates a new polynom over the given prime field.
+     * Creates a new polynomial over the given prime field.
      *
      * @param field  prime field
-     * @param degree degree of the polynom
+     * @param degree degree of the polynomial
      */
-    public PrimeFieldPolynom(Zp field, int degree) {
+    public PrimeFieldPolynomial(Zp field, int degree) {
         coefficients = new ZpElement[degree + 1];
         this.field = field;
     }
 
     /**
-     * Degree of this polynom, i.e. number of coefficients -1.
+     * Degree of this polynomial, i.e. number of coefficients -1.
      *
-     * @return degree of polynom
+     * @return degree of polynomial
      */
     public int getDegree() {
         return coefficients.length - 1;
     }
 
     /**
-     * set coefficient at index i.
+     * Set {@link ZpElement} coefficient at index i.
      *
-     * @param coefficient
+     * @param coefficient new coefficient
      * @param i           index
      */
     public void setCoefficient(ZpElement coefficient, int i) {
@@ -46,9 +46,9 @@ public final class PrimeFieldPolynom implements Cloneable {
     }
 
     /**
-     * set coefficient at index i.
+     * Set {@link BigInteger} coefficient at index i.
      *
-     * @param coefficient
+     * @param coefficient new coefficient
      * @param i           index
      */
     public void setCoefficient(BigInteger coefficient, int i) {
@@ -56,20 +56,20 @@ public final class PrimeFieldPolynom implements Cloneable {
     }
 
     /**
-     * get coefficient at index i.
+     * Get coefficient at index i.
      *
      * @param i index
-     * @return
+     * @return corresponding coefficient
      */
     public ZpElement getCoefficient(int i) {
         return coefficients[i];
     }
 
     /**
-     * Evaluates the polynom at point x.
+     * Evaluates the polynomial at value x, returning a {@link ZpElement}.
      *
-     * @param x
-     * @return
+     * @param x value to evaluate the polynomial at
+     * @return result of evaluation as a {@link ZpElement}.
      */
     public ZpElement evaluate(ZpElement x) {
         ZpElement result = field.getZeroElement();
@@ -82,17 +82,17 @@ public final class PrimeFieldPolynom implements Cloneable {
     }
 
     /**
-     * Evaluates the polynom at point x.
+     * Evaluates the polynomial at value x, returning a {@link BigInteger}.
      *
-     * @param x
-     * @return
+     * @param x value to evaluate the polynomial at
+     * @return result of evaluation as a {@link BigInteger}.
      */
     public BigInteger evaluate(BigInteger x) {
         return evaluate(field.createZnElement(x)).getInteger();
     }
 
     /**
-     * assigns random non-zero values to all coefficients.
+     * Assigns random non-zero values to all coefficients.
      *
      * @param rng random number generator
      */
@@ -112,7 +112,7 @@ public final class PrimeFieldPolynom implements Cloneable {
             return false;
         }
         if (obj instanceof ZpElement) {
-            PrimeFieldPolynom p = (PrimeFieldPolynom) obj;
+            PrimeFieldPolynomial p = (PrimeFieldPolynomial) obj;
             if (!p.field.equals(field)) {
                 return false;
             }
@@ -156,8 +156,8 @@ public final class PrimeFieldPolynom implements Cloneable {
     }
 
     @Override
-    public PrimeFieldPolynom clone() throws CloneNotSupportedException {
-        PrimeFieldPolynom clone = new PrimeFieldPolynom(field, getDegree());
+    public PrimeFieldPolynomial clone() throws CloneNotSupportedException {
+        PrimeFieldPolynomial clone = new PrimeFieldPolynomial(field, getDegree());
         for (int i = 0; i < coefficients.length; i++) {
             clone.setCoefficient(coefficients[i], i);
         }

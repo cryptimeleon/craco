@@ -7,6 +7,7 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.polynomial.Seed;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * A standard implementation of a Key-Derivation function using the Leftover-Hash-Lemma and 2-universal HashFunctions.
@@ -92,18 +93,11 @@ public class LHLFamily implements StandaloneRepresentable {
         if (getClass() != obj.getClass())
             return false;
         LHLFamily other = (LHLFamily) obj;
-        if (family == null) {
-            if (other.family != null)
-                return false;
-        } else if (!family.equals(other.family))
-            return false;
-        if (!inputLength.equals(other.inputLength))
-            return false;
-        if (!minEntropy.equals(other.minEntropy))
-            return false;
-        if (!outputLength.equals(other.outputLength))
-            return false;
-        return securityParameter.equals(other.securityParameter);
+        return Objects.equals(family, other.family)
+                && Objects.equals(inputLength, other.inputLength)
+                && Objects.equals(minEntropy, other.minEntropy)
+                && Objects.equals(outputLength, other.outputLength)
+                && Objects.equals(securityParameter, other.securityParameter);
     }
 
     public LHLKeyDerivationFunction seed() {

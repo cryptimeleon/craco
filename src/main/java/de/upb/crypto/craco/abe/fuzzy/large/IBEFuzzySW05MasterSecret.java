@@ -7,6 +7,8 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
+import java.util.Objects;
+
 /**
  * The {@link MasterSecret} of the {@link IBEFuzzySW05} generated
  * in the {@link IBEFuzzySW05Setup}.
@@ -33,6 +35,14 @@ public class IBEFuzzySW05MasterSecret implements MasterSecret {
     }
 
     @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((y == null) ? 0 : y.hashCode());
+        return result;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -41,24 +51,10 @@ public class IBEFuzzySW05MasterSecret implements MasterSecret {
         if (getClass() != obj.getClass())
             return false;
         IBEFuzzySW05MasterSecret other = (IBEFuzzySW05MasterSecret) obj;
-        if (y == null) {
-            if (other.y != null)
-                return false;
-        } else if (!y.equals(other.y))
-            return false;
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((y == null) ? 0 : y.hashCode());
-        return result;
+        return Objects.equals(y, other.y);
     }
 
     public ZpElement getY() {
         return y;
     }
-
 }

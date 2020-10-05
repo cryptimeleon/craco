@@ -12,6 +12,10 @@ import de.upb.crypto.math.interfaces.hash.HashFunction;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
+
+import java.util.Objects;
 
 /**
  * Simple implementation of the hash-then-sign paradigm, where the hashFunction will be used to hash the plaintext
@@ -21,8 +25,10 @@ import de.upb.crypto.math.serialization.Representation;
  */
 public class HashThenSign implements SignatureScheme {
 
+    @Represented
     private SignatureScheme encapsulatedScheme;
 
+    @Represented
     private HashFunction hashFunction;
 
     public HashThenSign(HashFunction hashFunction, SignatureScheme signatureScheme) {
@@ -47,16 +53,12 @@ public class HashThenSign implements SignatureScheme {
     }
 
     public HashThenSign(Representation repr) {
-        hashFunction = (HashFunction) repr.obj().get("hashFunction").repr().recreateRepresentable();
-        encapsulatedScheme = (SignatureScheme) repr.obj().get("signatureScheme").repr().recreateRepresentable();
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
     public Representation getRepresentation() {
-        ObjectRepresentation representation = new ObjectRepresentation();
-        representation.put("signatureScheme", new RepresentableRepresentation(encapsulatedScheme));
-        representation.put("hashFunction", new RepresentableRepresentation(hashFunction));
-        return representation;
+        return ReprUtil.serialize(this);
     }
 
     public Signature sign(ByteAccumulator plaintextBytes, SigningKey secretKey) {
@@ -146,17 +148,7 @@ public class HashThenSign implements SignatureScheme {
         if (getClass() != obj.getClass())
             return false;
         HashThenSign other = (HashThenSign) obj;
-        if (encapsulatedScheme == null) {
-            if (other.encapsulatedScheme != null)
-                return false;
-        } else if (!encapsulatedScheme.equals(other.encapsulatedScheme))
-            return false;
-        if (hashFunction == null) {
-            if (other.hashFunction != null)
-                return false;
-        } else if (!hashFunction.equals(other.hashFunction))
-            return false;
-        return true;
+        return Objects.equals(encapsulatedScheme, other.encapsulatedScheme)
+                && Objects.equals(hashFunction, other.hashFunction);
     }
-
 }

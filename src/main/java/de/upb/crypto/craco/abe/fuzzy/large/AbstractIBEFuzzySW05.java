@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.abe.fuzzy.large;
 
 import de.upb.crypto.craco.common.utils.LagrangeUtil;
-import de.upb.crypto.craco.common.utils.PrimeFieldPolynom;
+import de.upb.crypto.craco.common.utils.PrimeFieldPolynomial;
 import de.upb.crypto.craco.common.utils.SecureRandomGenerator;
 import de.upb.crypto.craco.interfaces.DecryptionKey;
 import de.upb.crypto.craco.interfaces.EncryptionKey;
@@ -96,7 +96,7 @@ public class AbstractIBEFuzzySW05 {
                             GroupElement hashedi = (GroupElement) pp.getHashToG1()
                                     .hashIntoStructure((i.subtract(BigInteger.ONE))
                                             .toString(10));
-                            return hashedi.pow(s);
+                            return hashedi.pow(s).compute();
                         }
                 ));
     }
@@ -162,7 +162,7 @@ public class AbstractIBEFuzzySW05 {
         GroupElement denominator = pp.getE().apply(dProduct, ct.getETwoPrime());
 
         // compute (numerator / denominator)^{-1} to be consistent with the other KEM's
-        return denominator.op(numerator.inv());
+        return denominator.op(numerator.inv()).compute();
     }
 
     /*
@@ -206,7 +206,7 @@ public class AbstractIBEFuzzySW05 {
         IBEFuzzySW05MasterSecret masterSecret = (IBEFuzzySW05MasterSecret) msk;
 
         // new polynomial q of degree d-1 where q(0) = y
-        final PrimeFieldPolynom q = new PrimeFieldPolynom(zp, pp.getIdentityThresholdD().intValue() - 1);
+        final PrimeFieldPolynomial q = new PrimeFieldPolynomial(zp, pp.getIdentityThresholdD().intValue() - 1);
         // assign non zero values to all coefficients
         q.createRandom(new SecureRandomGenerator());
         q.setCoefficient(masterSecret.getY(), 0);
@@ -226,8 +226,8 @@ public class AbstractIBEFuzzySW05 {
             // D_i = g_2^q(i) * T(i-1)^r
             GroupElement dElement = pp.getG2().pow(q.evaluate(i.getAttribute())).op(temp.pow(r));
 
-            rMap.put(i.getAttribute(), rElement);
-            dMap.put(i.getAttribute(), dElement);
+            rMap.put(i.getAttribute(), rElement.compute());
+            dMap.put(i.getAttribute(), dElement.compute());
         }
         return new IBEFuzzySW05DecryptionKey(dMap, rMap, omega);
     }

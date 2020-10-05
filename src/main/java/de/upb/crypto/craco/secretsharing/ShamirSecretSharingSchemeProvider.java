@@ -34,7 +34,9 @@ public class ShamirSecretSharingSchemeProvider implements SecretSharingSchemePro
 
     @Override
     public boolean equals(Object o) {
-        return this == o || o != null && getClass() == o.getClass();
+        if (this == o)
+            return true;
+        return o != null && getClass() == o.getClass();
     }
 
     @Override

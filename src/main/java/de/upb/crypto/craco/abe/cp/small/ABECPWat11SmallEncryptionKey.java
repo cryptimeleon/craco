@@ -10,7 +10,7 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
-;
+;import java.util.Objects;
 
 /**
  * An {@link EncryptionKey} for the {@link ABECPWat11Small} that stores a
@@ -61,12 +61,7 @@ public class ABECPWat11SmallEncryptionKey implements EncryptionKey {
         if (getClass() != obj.getClass())
             return false;
         ABECPWat11SmallEncryptionKey other = (ABECPWat11SmallEncryptionKey) obj;
-        if (policy == null) {
-            if (other.policy != null)
-                return false;
-        } else if (!policy.equals(other.policy))
-            return false;
-        return true;
+        return Objects.equals(policy, other.policy);
     }
 
     @Override

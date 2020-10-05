@@ -9,6 +9,7 @@ import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class ABECPWat11AsymSmallDecryptionKey implements DecryptionKey {
 
@@ -79,21 +80,8 @@ public class ABECPWat11AsymSmallDecryptionKey implements DecryptionKey {
         if (getClass() != obj.getClass())
             return false;
         ABECPWat11AsymSmallDecryptionKey other = (ABECPWat11AsymSmallDecryptionKey) obj;
-        if (mapKx == null) {
-            if (other.mapKx != null)
-                return false;
-        } else if (!mapKx.equals(other.mapKx))
-            return false;
-        if (k == null) {
-            if (other.k != null)
-                return false;
-        } else if (!k.equals(other.k))
-            return false;
-        if (l == null) {
-            if (other.l != null)
-                return false;
-        } else if (!l.equals(other.l))
-            return false;
-        return true;
+        return Objects.equals(k, other.k)
+                && Objects.equals(l, other.l)
+                && Objects.equals(mapKx, other.mapKx);
     }
 }

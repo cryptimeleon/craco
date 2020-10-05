@@ -66,9 +66,9 @@ public class ABEKPGPSW06 extends AbstractABEKPGPSW06 implements PredicateEncrypt
         // s <- Z_p
         ZpElement s = zp.getUniformlyRandomUnit();
         // E' = m * Y^s \in GT
-        GroupElement ePrime = pt.get().op(pp.getY().pow(s));
+        GroupElement ePrime = pt.get().op(pp.getY().pow(s)).compute();
         // E'' = g^s \in G1
-        GroupElement eTwoPrime = pp.getG1_generator().pow(s);
+        GroupElement eTwoPrime = pp.getG1Generator().pow(s).compute();
         // E_i = T(i)^s i \in omega
         Map<Attribute, GroupElement> eElementMap = restoreE(attributes, s);
 
@@ -88,7 +88,7 @@ public class ABEKPGPSW06 extends AbstractABEKPGPSW06 implements PredicateEncrypt
         // restore Z = Y^{-s}
         GroupElement zInv = restoreYs(sk, ct);
 
-        return new GroupElementPlainText(ct.getEPrime().op(zInv.inv()));
+        return new GroupElementPlainText(ct.getEPrime().op(zInv.inv()).compute());
     }
 
     @Override
@@ -103,6 +103,11 @@ public class ABEKPGPSW06 extends AbstractABEKPGPSW06 implements PredicateEncrypt
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof ABEKPGPSW06 && super.equals(o);
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        ABEKPGPSW06 other = (ABEKPGPSW06) o;
+        return super.equals(other);
     }
 }

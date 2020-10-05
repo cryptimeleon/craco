@@ -2,12 +2,8 @@ package de.upb.crypto.craco.sig.sps.eq;
 
 import de.upb.crypto.craco.common.GroupElementPlainText;
 import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.common.RingElementPlainText;
 import de.upb.crypto.craco.interfaces.signature.SignatureKeyPair;
 import de.upb.crypto.craco.sig.SignatureSchemeParams;
-import de.upb.crypto.craco.sig.ps.*;
-import de.upb.crypto.math.pairings.debug.DebugBilinearMap;
-import de.upb.crypto.math.pairings.debug.DebugGroupLogger;
 
 /**
  * Generates an instance of the {@link SignatureSchemeParams} for the {@link SPSEQSignatureScheme}.
@@ -55,7 +51,6 @@ public class SPSEQSignatureSchemeTestParamGenerator {
 
     protected static void measureTime(String str) {
         if (timerStart == 0) {
-            DebugGroupLogger.reset();
             timerStart = System.currentTimeMillis();
         } else {
             long end = System.currentTimeMillis();

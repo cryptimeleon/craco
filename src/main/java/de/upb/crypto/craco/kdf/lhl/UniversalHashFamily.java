@@ -8,6 +8,7 @@ import de.upb.crypto.math.structures.polynomial.Seed;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Objects;
 
 /**
  * The basic approach of a 2-universal hash family. This family is defined as
@@ -130,17 +131,9 @@ public class UniversalHashFamily implements HashFamily {
         if (getClass() != obj.getClass())
             return false;
         UniversalHashFamily other = (UniversalHashFamily) obj;
-        if (!inputLength.equals(other.inputLength))
-            return false;
-        if (m == null) {
-            if (other.m != null)
-                return false;
-        } else if (!m.equals(other.m))
-            return false;
-        if (!outputLength.equals(other.outputLength))
-            return false;
-        if (p == null) {
-            return other.p == null;
-        } else return p.equals(other.p);
+        return Objects.equals(inputLength, other.inputLength)
+                && Objects.equals(m, other.m)
+                && Objects.equals(outputLength, other.outputLength)
+                && Objects.equals(p, other.p);
     }
 }

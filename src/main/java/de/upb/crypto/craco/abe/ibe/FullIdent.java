@@ -14,6 +14,7 @@ import de.upb.crypto.math.serialization.Representation;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Implementation of FullIdent scheme from "Identity-Based Encryption from the
@@ -86,9 +87,7 @@ public class FullIdent implements PredicateEncryptionScheme {
      * @return
      */
     private byte[] H4(byte[] s) {
-
         return Arrays.copyOfRange(hashFunction2.hash(s), 0, pp.getN().intValue());
-
     }
 
     @Override
@@ -108,7 +107,7 @@ public class FullIdent implements PredicateEncryptionScheme {
         // in G1
         GroupElement Q_id = H1(pk.getData());
         // in G2
-        GroupElement g_id = pp.getE().apply(Q_id, pp.getP_pub());
+        GroupElement g_id = pp.getBilinearMap().apply(Q_id, pp.getP_pub());
         // sigma is random
         byte[] sigma = new byte[pp.getN().intValue()];
 
@@ -123,7 +122,7 @@ public class FullIdent implements PredicateEncryptionScheme {
         // W = m \oplus H_4(sigma)
 
         byte[] W = ByteUtil.xor(pt.getData(), H4(sigma));
-        return new FullIdentCipherText(U, V, W);
+        return new FullIdentCipherText(U.compute(), V, W);
     }
 
     @Override
@@ -147,7 +146,7 @@ public class FullIdent implements PredicateEncryptionScheme {
         byte[] V = ct.getV();
         byte[] W = ct.getW();
         // V \oplus H2(e(d_id, U))
-        byte[] sigma = ByteUtil.xor(V, H2(pp.getE().apply(sk.getD_id(), U)));
+        byte[] sigma = ByteUtil.xor(V, H2(pp.getBilinearMap().apply(sk.getD_id(), U)));
         // W = M \oplus H_4(sigma)
         byte[] message = ByteUtil.xor(W, H4(sigma));
 
@@ -195,12 +194,12 @@ public class FullIdent implements PredicateEncryptionScheme {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof FullIdent) {
-            FullIdent other = (FullIdent) o;
-            return pp.equals(other.pp);
-        } else {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
             return false;
-        }
+        FullIdent other = (FullIdent) o;
+        return Objects.equals(pp, other.pp);
     }
 
     @Override
@@ -228,7 +227,7 @@ public class FullIdent implements PredicateEncryptionScheme {
         FullIdentMasterSecret masterSecret = (FullIdentMasterSecret) msk;
         GroupElement Q_id = H1(identity.getData());
         GroupElement d_id = Q_id.pow(masterSecret.getS());
-        return new FullIdentDecryptionKey(d_id);
+        return new FullIdentDecryptionKey(d_id.compute());
     }
 
     /**
@@ -256,18 +255,14 @@ public class FullIdent implements PredicateEncryptionScheme {
      */
     @Override
     public Predicate getPredicate() {
-        return new Predicate() {
-
-            @Override
-            public boolean check(KeyIndex kind, CiphertextIndex cind) {
-                if (!(kind instanceof ByteArrayImplementation))
-                    throw new IllegalArgumentException("ByteArrayImplementation expected as KeyIndex");
-                if (!(cind instanceof ByteArrayImplementation))
-                    throw new IllegalArgumentException("ByteArrayImplementation expected as CipherTextIndex");
-                ByteArrayImplementation bKind = (ByteArrayImplementation) kind;
-                ByteArrayImplementation bCind = (ByteArrayImplementation) cind;
-                return bKind.equals(bCind);
-            }
+        return (kind, cind) -> {
+            if (!(kind instanceof ByteArrayImplementation))
+                throw new IllegalArgumentException("ByteArrayImplementation expected as KeyIndex");
+            if (!(cind instanceof ByteArrayImplementation))
+                throw new IllegalArgumentException("ByteArrayImplementation expected as CipherTextIndex");
+            ByteArrayImplementation bKind = (ByteArrayImplementation) kind;
+            ByteArrayImplementation bCind = (ByteArrayImplementation) cind;
+            return bKind.equals(bCind);
         };
     }
 

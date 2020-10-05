@@ -8,6 +8,8 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
+import java.util.Objects;
+
 /**
  * A KEM that is implemented by the composition of a {@link KeyEncapsulationMechanism} providing {@link KeyMaterial} and
  * a {@link KeyDerivationFunction} that derives a {@link SymmetricKey} from the {@link KeyMaterial} produced by the KEM.
@@ -107,12 +109,9 @@ public abstract class SymmetricKeyKEM implements KeyEncapsulationMechanism<Symme
             return true;
         if (o == null || getClass() != o.getClass())
             return false;
-
-        SymmetricKeyKEM that = (SymmetricKeyKEM) o;
-
-        if (kem != null ? !kem.equals(that.kem) : that.kem != null)
-            return false;
-        return kdf != null ? kdf.equals(that.kdf) : that.kdf == null;
+        SymmetricKeyKEM other = (SymmetricKeyKEM) o;
+        return Objects.equals(kem, other.kem)
+                && Objects.equals(kdf, other.kdf);
     }
 
     @Override
@@ -126,5 +125,4 @@ public abstract class SymmetricKeyKEM implements KeyEncapsulationMechanism<Symme
     public Representation getRepresentation() {
         return ReprUtil.serialize(this);
     }
-
 }

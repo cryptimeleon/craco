@@ -60,12 +60,12 @@ public class ABEKPGPSW06KEM extends AbstractABEKPGPSW06 implements PredicateKEM<
         // s <- Z_p
         Zp.ZpElement s = zp.getUniformlyRandomUnit();
         // E'' = g^s \in G1
-        GroupElement eTwoPrime = pp.getG1_generator().pow(s);
+        GroupElement eTwoPrime = pp.getG1Generator().pow(s).compute();
         // E_i = T(i)^s i \in omega
         Map<Attribute, GroupElement> eElementMap = restoreE(attributes, s);
 
         KeyAndCiphertext<KeyMaterial> output = new KeyAndCiphertext<>();
-        output.key = new UniqueByteKeyMaterial(pp.getY().pow(s), pp.getGroupGT().size().intValue());
+        output.key = new UniqueByteKeyMaterial(pp.getY().pow(s).compute(), pp.getGroupGT().size().intValue());
         output.encapsulatedKey = new ABEKPGPSW06KEMCipherText(attributes, eTwoPrime, eElementMap);
 
         return output;
@@ -103,7 +103,13 @@ public class ABEKPGPSW06KEM extends AbstractABEKPGPSW06 implements PredicateKEM<
     }
 
     @Override
-    public boolean equals(Object o) {
-        return o instanceof ABEKPGPSW06KEM && super.equals(o);
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        return super.equals(obj);
     }
 }

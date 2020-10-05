@@ -8,6 +8,7 @@ import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * The {@link CiphertextIndex} for {@link FullIdent}.
@@ -71,18 +72,8 @@ public class FullIdentCipherText implements CipherText {
         if (getClass() != obj.getClass())
             return false;
         FullIdentCipherText other = (FullIdentCipherText) obj;
-        if (u == null) {
-            if (other.u != null)
-                return false;
-        } else if (!u.equals(other.u))
-            return false;
-        if (!Arrays.equals(v, other.v)) {
-            return false;
-        }
-        if (!Arrays.equals(w, other.w)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(u, other.u)
+                && Arrays.equals(v, other.v)
+                && Arrays.equals(w, other.w);
     }
-
 }

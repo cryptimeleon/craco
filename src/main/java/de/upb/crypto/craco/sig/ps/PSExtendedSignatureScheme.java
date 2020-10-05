@@ -72,7 +72,7 @@ public class PSExtendedSignatureScheme extends PSSignatureScheme{
         GroupElement group1ElementG = getPp().getBilinearMap().getG1().getGenerator();
         // Y_i enabling optional blinding/unblinding
         GroupElement[] group1ElementsYi = Arrays.stream(shortKey.getSigningKey().getExponentsYi())
-                .map(group1ElementG::pow).toArray(GroupElement[]::new);
+                .map(y -> group1ElementG.pow(y).compute()).toArray(GroupElement[]::new);
 
         // Set the extended verification key for a Pointcheval Sanders signature scheme
         final PSVerificationKey shortVerificationKey = shortKey.getVerificationKey();
@@ -114,8 +114,8 @@ public class PSExtendedSignatureScheme extends PSSignatureScheme{
         GroupElement sigma2 = signature.getGroup1ElementSigma2();
 
         // Calculate the randomized signature (o_1', o_2') = ((o_1)^u,(o_2 (o_1)^r)^u)
-        GroupElement sigma1prime = sigma1.pow(u);
-        GroupElement sigma2prime = sigma2.op(sigma1.pow(random)).pow(u);
+        GroupElement sigma1prime = sigma1.pow(u).compute();
+        GroupElement sigma2prime = sigma2.op(sigma1.pow(random)).pow(u).compute();
 
         return new PSSignature(sigma1prime, sigma2prime);
     }
@@ -145,7 +145,7 @@ public class PSExtendedSignatureScheme extends PSSignatureScheme{
 
         // Calculating the signature
         final GroupElement g1 = verificationKey.getGroup1ElementG();
-        GroupElement sigma1 = g1.pow(u);
+        GroupElement sigma1 = g1.pow(u).compute();
         final Zp.ZpElement signingKeyX = signingKey.getExponentX();
         GroupElement sigma2 = g1.pow(signingKeyX).op(blindingElement);
         for (int i = 0; i < messageBlock.size(); ++i) {
@@ -155,7 +155,7 @@ public class PSExtendedSignatureScheme extends PSSignatureScheme{
             sigma2 = sigma2.op(group1YiElement.pow(zpMessageElement));
         }
         sigma2 = sigma2.pow(u);
-        return new PSSignature(sigma1, sigma2);
+        return new PSSignature(sigma1, sigma2.compute());
     }
 
     /**
@@ -172,6 +172,6 @@ public class PSExtendedSignatureScheme extends PSSignatureScheme{
         final GroupElement sigma1 = signature.getGroup1ElementSigma1();
         final GroupElement sigma2 = signature.getGroup1ElementSigma2();
         final GroupElement unblindedSigma2 = sigma2.op(sigma1.pow(blindingRandomness).inv());
-        return new PSSignature(sigma1, unblindedSigma2);
+        return new PSSignature(sigma1, unblindedSigma2.compute());
     }
 }

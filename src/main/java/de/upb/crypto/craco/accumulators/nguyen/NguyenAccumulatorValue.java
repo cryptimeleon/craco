@@ -7,6 +7,8 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
+import java.util.Objects;
+
 /**
  * An accumulator value for the Nguyen accumulator scheme, i.e. a short representation of a set.
  * the value is g^(\prod (x_i + secret))
@@ -34,12 +36,10 @@ public class NguyenAccumulatorValue implements AccumulatorValue {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof NguyenAccumulatorValue)) return false;
-
-        NguyenAccumulatorValue that = (NguyenAccumulatorValue) o;
-
-        if (!getValue().equals(that.getValue())) return false;
-        return group.equals(that.group);
+        if (o == null || getClass() != o.getClass()) return false;
+        NguyenAccumulatorValue other = (NguyenAccumulatorValue) o;
+        return Objects.equals(value, other.value)
+                && Objects.equals(group, other.group);
     }
 
     @Override

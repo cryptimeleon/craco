@@ -125,9 +125,9 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        HashThenCommitCommitmentScheme that = (HashThenCommitCommitmentScheme) o;
-        return Objects.equals(encapsulatedScheme, that.encapsulatedScheme) &&
-                Objects.equals(hashFunction, that.hashFunction);
+        HashThenCommitCommitmentScheme other = (HashThenCommitCommitmentScheme) o;
+        return Objects.equals(encapsulatedScheme, other.encapsulatedScheme) &&
+                Objects.equals(hashFunction, other.hashFunction);
     }
 
     @Override

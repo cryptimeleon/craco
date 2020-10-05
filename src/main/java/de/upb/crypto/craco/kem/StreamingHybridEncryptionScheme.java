@@ -5,22 +5,33 @@ import de.upb.crypto.craco.kem.KeyEncapsulationMechanism.KeyAndCiphertext;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.serialization.converter.JSONConverter;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /**
  * Class that supports streaming encryption using a KEM to encapsulate a
  * symmetric key.
  */
 public class StreamingHybridEncryptionScheme implements StreamingEncryptionScheme {
+
+    @Represented
     private StreamingEncryptionScheme symmetricScheme;
+
+    @Represented
     private KeyEncapsulationMechanism<SymmetricKey> kem;
 
     public class HybridCipherText implements CipherText {
+
+        @Represented(restorer = "Scheme")
         private CipherText ciphertext;
+
+        @Represented(restorer = "Kem")
         private CipherText encapsulatedKey;
 
         public HybridCipherText(CipherText ciphertext, CipherText encapsulatedKey) {
@@ -28,12 +39,14 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
             this.encapsulatedKey = encapsulatedKey;
         }
 
+        public HybridCipherText(Representation repr, StreamingEncryptionScheme scheme,
+                                KeyEncapsulationMechanism<SymmetricKey> kem) {
+            new ReprUtil(this).register(scheme, "Scheme").register(kem, "Kem").deserialize(repr);
+        }
+
         @Override
         public Representation getRepresentation() {
-            ObjectRepresentation repr = new ObjectRepresentation();
-            repr.put("ciphertext", ciphertext.getRepresentation());
-            repr.put("encapsulatedKey", encapsulatedKey.getRepresentation());
-            return repr;
+            return ReprUtil.serialize(this);
         }
 
     }
@@ -44,10 +57,8 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
         this.kem = kem2;
     }
 
-    @SuppressWarnings("unchecked")
     public StreamingHybridEncryptionScheme(Representation repr) {
-        kem = (KeyEncapsulationMechanism<SymmetricKey>) repr.obj().get("kem").repr().recreateRepresentable();
-        symmetricScheme = (StreamingEncryptionScheme) repr.obj().get("symmetricScheme").repr().recreateRepresentable();
+        new ReprUtil(this).deserialize(repr);
     }
 
     @Override
@@ -70,9 +81,7 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
 
     @Override
     public CipherText getCipherText(Representation repr) {
-        return new HybridCipherText(
-                symmetricScheme.getCipherText(repr.obj().get("ciphertext")),
-                kem.getEncapsulatedKey(repr.obj().get("encapsulatedKey")));
+        return new HybridCipherText(repr, symmetricScheme, kem);
     }
 
     @Override
@@ -87,10 +96,7 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
 
     @Override
     public Representation getRepresentation() {
-        ObjectRepresentation repr = new ObjectRepresentation();
-        repr.put("symmetricScheme", new RepresentableRepresentation(symmetricScheme));
-        repr.put("kem", new RepresentableRepresentation(kem));
-        return repr;
+        return ReprUtil.serialize(this);
     }
 
     @Override
@@ -254,17 +260,8 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
         if (getClass() != obj.getClass())
             return false;
         StreamingHybridEncryptionScheme other = (StreamingHybridEncryptionScheme) obj;
-        if (kem == null) {
-            if (other.kem != null)
-                return false;
-        } else if (!kem.equals(other.kem))
-            return false;
-        if (symmetricScheme == null) {
-            if (other.symmetricScheme != null)
-                return false;
-        } else if (!symmetricScheme.equals(other.symmetricScheme))
-            return false;
-        return true;
+        return Objects.equals(symmetricScheme, other.symmetricScheme)
+                && Objects.equals(kem, other.kem);
     }
 
 }

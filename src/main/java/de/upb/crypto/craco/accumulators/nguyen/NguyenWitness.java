@@ -7,6 +7,8 @@ import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
+import java.util.Objects;
+
 public class NguyenWitness implements AccumulatorWitness {
     @Represented(restorer = "group")
     private GroupElement value;
@@ -34,12 +36,10 @@ public class NguyenWitness implements AccumulatorWitness {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof NguyenWitness)) return false;
-
-        NguyenWitness that = (NguyenWitness) o;
-
-        if (!value.equals(that.value)) return false;
-        return group.equals(that.group);
+        if (o == null || getClass() != o.getClass()) return false;
+        NguyenWitness other = (NguyenWitness) o;
+        return Objects.equals(value, other.value)
+                && Objects.equals(group, other.group);
     }
 
     @Override
