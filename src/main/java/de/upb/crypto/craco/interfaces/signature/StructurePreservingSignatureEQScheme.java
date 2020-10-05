@@ -1,7 +1,10 @@
 package de.upb.crypto.craco.interfaces.signature;
 
 
-import de.upb.crypto.craco.interfaces.PlainText;
+import de.upb.crypto.craco.common.interfaces.PlainText;
+import de.upb.crypto.craco.sig.interfaces.Signature;
+import de.upb.crypto.craco.sig.interfaces.StandardMultiMessageSignatureScheme;
+import de.upb.crypto.craco.sig.interfaces.VerificationKey;
 import de.upb.crypto.math.structures.zn.Zn;
 
 /**
@@ -38,7 +41,7 @@ public interface StructurePreservingSignatureEQScheme extends StandardMultiMessa
      * @param signature
      * @param mu
      * @param publicKey
-     * @return null of the signature given is not valid on plainText under publicKey, else it returns a valid signature
+     * @return null if the signature given is not valid on plainText under publicKey, else a valid signature
      * on mu*plainText
      */
     Signature chgRepWithVerify(PlainText plainText, Signature signature, Zn.ZnElement mu, VerificationKey publicKey);

@@ -1,15 +1,14 @@
 package de.upb.crypto.craco.abe.kp.small;
 
-import de.upb.crypto.craco.interfaces.DecryptionKey;
-import de.upb.crypto.craco.interfaces.pe.KeyIndex;
-import de.upb.crypto.craco.interfaces.policy.Policy;
+import de.upb.crypto.craco.common.interfaces.DecryptionKey;
+import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
+import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
-import de.upb.crypto.math.serialization.*;
+import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
 import java.math.BigInteger;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -18,7 +17,7 @@ import java.util.Objects;
  * stores a {@link Policy} as {@link KeyIndex}.
  * <p>
  * This key should be created by
- * {@link ABEKPGPSW06Small#generateDecryptionKey(de.upb.crypto.craco.interfaces.pe.MasterSecret, KeyIndex)}
+ * {@link ABEKPGPSW06Small#generateDecryptionKey(de.upb.crypto.craco.common.interfaces.pe.MasterSecret, KeyIndex)}
  *
  * @author Mirko Jürgens
  */

@@ -3,7 +3,6 @@ package de.upb.crypto.craco.sig.bbs;
 import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.factory.BilinearGroupFactory;
 import de.upb.crypto.math.structures.zn.HashIntoZn;
-import de.upb.crypto.math.structures.zn.HashIntoZp;
 
 /**
  * Does the key generation for the BBS-B signature scheme respectively organization in the anonymous credential system

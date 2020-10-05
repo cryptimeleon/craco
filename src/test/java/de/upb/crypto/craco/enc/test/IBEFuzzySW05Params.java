@@ -3,10 +3,10 @@ package de.upb.crypto.craco.enc.test;
 import de.upb.crypto.craco.abe.fuzzy.large.*;
 import de.upb.crypto.craco.abe.util.IBEFuzzySW05TestParamGenerator;
 import de.upb.crypto.craco.common.GroupElementPlainText;
-import de.upb.crypto.craco.interfaces.DecryptionKey;
-import de.upb.crypto.craco.interfaces.EncryptionKey;
-import de.upb.crypto.craco.interfaces.KeyPair;
-import de.upb.crypto.craco.interfaces.PlainText;
+import de.upb.crypto.craco.common.interfaces.DecryptionKey;
+import de.upb.crypto.craco.common.interfaces.EncryptionKey;
+import de.upb.crypto.craco.common.interfaces.KeyPair;
+import de.upb.crypto.craco.common.interfaces.PlainText;
 
 import java.math.BigInteger;
 import java.util.function.Supplier;

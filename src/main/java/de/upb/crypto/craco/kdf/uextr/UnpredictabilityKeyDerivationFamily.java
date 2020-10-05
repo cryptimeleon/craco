@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.kdf.uextr;
 
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
-import de.upb.crypto.craco.interfaces.kdf.HashFamily;
+import de.upb.crypto.craco.kdf.interfaces.HashFamily;
 import de.upb.crypto.craco.kem.KeyDerivationFunction;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;

@@ -1,16 +1,16 @@
 package de.upb.crypto.craco.abe.util;
 
+import de.upb.crypto.craco.abe.interfaces.Attribute;
+import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
 import de.upb.crypto.craco.abe.kp.large.ABEKPGPSW06DecryptionKey;
 import de.upb.crypto.craco.abe.kp.large.ABEKPGPSW06EncryptionKey;
 import de.upb.crypto.craco.abe.kp.large.ABEKPGPSW06MasterSecret;
 import de.upb.crypto.craco.abe.kp.large.AbstractABEKPGPSW06;
-import de.upb.crypto.craco.interfaces.DecryptionKey;
-import de.upb.crypto.craco.interfaces.EncryptionKey;
-import de.upb.crypto.craco.interfaces.KeyPair;
-import de.upb.crypto.craco.interfaces.abe.Attribute;
-import de.upb.crypto.craco.interfaces.abe.SetOfAttributes;
-import de.upb.crypto.craco.interfaces.policy.Policy;
-import de.upb.crypto.craco.interfaces.policy.ThresholdPolicy;
+import de.upb.crypto.craco.common.interfaces.DecryptionKey;
+import de.upb.crypto.craco.common.interfaces.EncryptionKey;
+import de.upb.crypto.craco.common.interfaces.KeyPair;
+import de.upb.crypto.craco.common.interfaces.policy.Policy;
+import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
 
 import java.util.Arrays;
 import java.util.List;

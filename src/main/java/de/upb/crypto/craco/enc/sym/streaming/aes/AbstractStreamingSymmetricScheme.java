@@ -1,11 +1,11 @@
 package de.upb.crypto.craco.enc.sym.streaming.aes;
 
+import de.upb.crypto.craco.common.interfaces.*;
 import de.upb.crypto.craco.common.utils.StreamUtil;
 import de.upb.crypto.craco.enc.exceptions.BadIVException;
 import de.upb.crypto.craco.enc.exceptions.DecryptionFailedException;
 import de.upb.crypto.craco.enc.exceptions.EncryptionFailedException;
 import de.upb.crypto.craco.enc.exceptions.IllegalKeyException;
-import de.upb.crypto.craco.interfaces.*;
 import de.upb.crypto.math.random.interfaces.RandomGenerator;
 import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
 import de.upb.crypto.math.serialization.BigIntegerRepresentation;

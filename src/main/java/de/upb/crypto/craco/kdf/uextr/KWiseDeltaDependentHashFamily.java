@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.kdf.uextr;
 
-import de.upb.crypto.craco.interfaces.kdf.HashFamily;
+import de.upb.crypto.craco.kdf.interfaces.HashFamily;
 import de.upb.crypto.math.serialization.BigIntegerRepresentation;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;

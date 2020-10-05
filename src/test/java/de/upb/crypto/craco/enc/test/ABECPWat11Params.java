@@ -6,8 +6,8 @@ import de.upb.crypto.craco.abe.cp.large.ABECPWat11PublicParameters;
 import de.upb.crypto.craco.abe.cp.large.ABECPWat11Setup;
 import de.upb.crypto.craco.abe.util.ABECPWat11TestParamGenerator;
 import de.upb.crypto.craco.common.GroupElementPlainText;
-import de.upb.crypto.craco.interfaces.KeyPair;
-import de.upb.crypto.craco.interfaces.PlainText;
+import de.upb.crypto.craco.common.interfaces.KeyPair;
+import de.upb.crypto.craco.common.interfaces.PlainText;
 
 import java.util.ArrayList;
 import java.util.List;

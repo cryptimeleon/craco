@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.kdf.test;
 
-import de.upb.crypto.craco.interfaces.kdf.source.MouseSourceOfRandomness;
+import de.upb.crypto.craco.kdf.interfaces.source.MouseSourceOfRandomness;
 import org.junit.Test;
 
 public class MouseSourceOfRandomnessTest {

@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.enc.sym.streaming.aes;
 
-import de.upb.crypto.craco.interfaces.*;
+import de.upb.crypto.craco.common.interfaces.*;
 import de.upb.crypto.math.random.interfaces.RandomGenerator;
 import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
 import de.upb.crypto.math.serialization.BigIntegerRepresentation;

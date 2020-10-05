@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.enc.sym.streaming.aes;
 
-import de.upb.crypto.craco.interfaces.*;
-import de.upb.crypto.craco.interfaces.pe.CiphertextIndex;
-import de.upb.crypto.craco.interfaces.pe.KeyIndex;
+import de.upb.crypto.craco.common.interfaces.*;
+import de.upb.crypto.craco.common.interfaces.pe.CiphertextIndex;
+import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
 import de.upb.crypto.craco.prf.PrfImage;
 import de.upb.crypto.craco.prf.PrfKey;
 import de.upb.crypto.craco.prf.PrfPreimage;
@@ -10,8 +10,6 @@ import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
 import de.upb.crypto.math.random.interfaces.RandomGenerator;
 import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
-import de.upb.crypto.math.serialization.ByteArrayRepresentation;
-import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;

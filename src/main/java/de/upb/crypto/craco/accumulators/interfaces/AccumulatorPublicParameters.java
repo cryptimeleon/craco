@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.accumulators.interfaces;
 
-import de.upb.crypto.craco.interfaces.PublicParameters;
+import de.upb.crypto.craco.common.interfaces.PublicParameters;
 
 import java.math.BigInteger;
 import java.util.List;

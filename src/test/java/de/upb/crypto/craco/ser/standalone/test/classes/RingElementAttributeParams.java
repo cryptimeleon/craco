@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.ser.standalone.test.classes;
 
-import de.upb.crypto.craco.interfaces.abe.RingElementAttribute;
+import de.upb.crypto.craco.abe.interfaces.RingElementAttribute;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
 import de.upb.crypto.math.interfaces.structures.RingElement;
 import de.upb.crypto.math.structures.zn.Zp;

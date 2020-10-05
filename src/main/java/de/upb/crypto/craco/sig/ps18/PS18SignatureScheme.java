@@ -2,8 +2,8 @@ package de.upb.crypto.craco.sig.ps18;
 
 import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.RingElementPlainText;
-import de.upb.crypto.craco.interfaces.PlainText;
-import de.upb.crypto.craco.interfaces.signature.*;
+import de.upb.crypto.craco.common.interfaces.PlainText;
+import de.upb.crypto.craco.sig.interfaces.*;
 import de.upb.crypto.craco.sig.ps.PSPublicParameters;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
@@ -14,7 +14,6 @@ import de.upb.crypto.math.structures.cartesian.GroupElementVector;
 import de.upb.crypto.math.structures.cartesian.RingElementVector;
 import de.upb.crypto.math.structures.zn.Zp;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.IntStream;
 

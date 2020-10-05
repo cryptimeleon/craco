@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.kem.test;
 
-import de.upb.crypto.craco.interfaces.KeyPair;
+import de.upb.crypto.craco.common.interfaces.KeyPair;
 import de.upb.crypto.craco.kem.KeyEncapsulationMechanism;
 
 /**

@@ -2,9 +2,9 @@ package de.upb.crypto.craco.abe.accessStructure;
 
 import de.upb.crypto.craco.abe.accessStructure.exception.WrongAccessStructureException;
 import de.upb.crypto.craco.abe.accessStructure.util.*;
-import de.upb.crypto.craco.interfaces.abe.LinearSecretSharing;
-import de.upb.crypto.craco.interfaces.policy.Policy;
-import de.upb.crypto.craco.interfaces.policy.PolicyFact;
+import de.upb.crypto.craco.abe.interfaces.LinearSecretSharing;
+import de.upb.crypto.craco.common.interfaces.policy.Policy;
+import de.upb.crypto.craco.common.interfaces.policy.PolicyFact;
 import de.upb.crypto.math.structures.zn.Zp;
 
 import java.util.HashMap;

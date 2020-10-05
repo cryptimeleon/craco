@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.abe.fuzzy.large;
 
-import de.upb.crypto.craco.interfaces.EncryptionKey;
-import de.upb.crypto.craco.interfaces.pe.CiphertextIndex;
+import de.upb.crypto.craco.common.interfaces.EncryptionKey;
+import de.upb.crypto.craco.common.interfaces.pe.CiphertextIndex;
 import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;

@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.abe.cp.small.asymmetric;
 
-import de.upb.crypto.craco.interfaces.abe.Attribute;
+import de.upb.crypto.craco.abe.interfaces.Attribute;
 import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.factory.BilinearGroupFactory;
 import de.upb.crypto.math.interfaces.structures.GroupElement;

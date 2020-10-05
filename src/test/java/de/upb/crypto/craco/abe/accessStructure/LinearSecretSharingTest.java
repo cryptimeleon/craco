@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.abe.accessStructure;
 
-import de.upb.crypto.craco.interfaces.abe.LinearSecretSharing;
-import de.upb.crypto.craco.interfaces.abe.StringAttribute;
-import de.upb.crypto.craco.interfaces.policy.ThresholdPolicy;
+import de.upb.crypto.craco.abe.interfaces.LinearSecretSharing;
+import de.upb.crypto.craco.abe.interfaces.StringAttribute;
+import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
 import de.upb.crypto.craco.secretsharing.SecretSharingSchemeProvider;
 import de.upb.crypto.craco.secretsharing.ShamirSecretSharing;
 import de.upb.crypto.craco.secretsharing.ShamirSecretSharingSchemeProvider;

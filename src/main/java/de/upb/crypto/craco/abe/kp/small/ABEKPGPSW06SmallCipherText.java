@@ -1,16 +1,12 @@
 package de.upb.crypto.craco.abe.kp.small;
 
-import de.upb.crypto.craco.interfaces.CipherText;
-import de.upb.crypto.craco.interfaces.abe.Attribute;
+import de.upb.crypto.craco.abe.interfaces.Attribute;
+import de.upb.crypto.craco.common.interfaces.CipherText;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
-import de.upb.crypto.math.serialization.MapRepresentation;
-import de.upb.crypto.math.serialization.ObjectRepresentation;
-import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 

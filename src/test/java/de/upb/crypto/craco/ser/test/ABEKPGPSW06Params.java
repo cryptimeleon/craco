@@ -1,15 +1,15 @@
 package de.upb.crypto.craco.ser.test;
 
+import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
+import de.upb.crypto.craco.abe.interfaces.StringAttribute;
 import de.upb.crypto.craco.abe.kp.large.*;
 import de.upb.crypto.craco.common.GroupElementPlainText;
-import de.upb.crypto.craco.interfaces.CipherText;
-import de.upb.crypto.craco.interfaces.DecryptionKey;
-import de.upb.crypto.craco.interfaces.EncryptionKey;
-import de.upb.crypto.craco.interfaces.PlainText;
-import de.upb.crypto.craco.interfaces.abe.SetOfAttributes;
-import de.upb.crypto.craco.interfaces.abe.StringAttribute;
-import de.upb.crypto.craco.interfaces.policy.Policy;
-import de.upb.crypto.craco.interfaces.policy.ThresholdPolicy;
+import de.upb.crypto.craco.common.interfaces.CipherText;
+import de.upb.crypto.craco.common.interfaces.DecryptionKey;
+import de.upb.crypto.craco.common.interfaces.EncryptionKey;
+import de.upb.crypto.craco.common.interfaces.PlainText;
+import de.upb.crypto.craco.common.interfaces.policy.Policy;
+import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
 
 public class ABEKPGPSW06Params {
     public static RepresentationTestParams getParams() {

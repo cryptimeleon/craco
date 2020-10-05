@@ -1,26 +1,22 @@
 package de.upb.crypto.craco.kem.asym.elgamal;
 
+import de.upb.crypto.craco.common.interfaces.*;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalCipherText;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalEncryption;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPlainText;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPrivateKey;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
-import de.upb.crypto.craco.interfaces.*;
 import de.upb.crypto.craco.kem.AsymmetricKEM;
 import de.upb.crypto.math.hash.impl.ByteArrayAccumulator;
 import de.upb.crypto.math.interfaces.hash.HashFunction;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
-import de.upb.crypto.math.serialization.ObjectRepresentation;
-import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
-import de.upb.crypto.math.serialization.util.RepresentationUtil;
 
 import java.math.BigInteger;
-import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 /**

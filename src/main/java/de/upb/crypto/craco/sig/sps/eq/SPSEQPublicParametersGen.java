@@ -2,7 +2,6 @@ package de.upb.crypto.craco.sig.sps.eq;
 
 import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.factory.BilinearGroupFactory;
-import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.pairings.bn.BarretoNaehrigProvider;
 
 import java.util.Arrays;

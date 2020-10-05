@@ -4,8 +4,6 @@ import de.upb.crypto.craco.kem.asym.elgamal.ElgamalKEM;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
 import de.upb.crypto.math.hash.impl.SHA256HashFunction;
 import de.upb.crypto.math.interfaces.hash.HashFunction;
-import de.upb.crypto.math.interfaces.structures.Group;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.interfaces.structures.RingGroup;
 import de.upb.crypto.math.structures.zn.Zp;
 

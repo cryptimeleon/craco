@@ -4,7 +4,6 @@ import de.upb.crypto.craco.commitment.HashThenCommitCommitmentScheme;
 import de.upb.crypto.craco.commitment.pedersen.PedersenCommitmentScheme;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
 import de.upb.crypto.math.hash.impl.SHA256HashFunction;
-import de.upb.crypto.math.structures.zn.HashIntoZnAdditiveGroup;
 import de.upb.crypto.math.structures.zn.Zn;
 
 import java.math.BigInteger;

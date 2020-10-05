@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.ser.test;
 
-import de.upb.crypto.craco.interfaces.*;
-import de.upb.crypto.craco.interfaces.pe.MasterSecret;
-import de.upb.crypto.craco.interfaces.pe.PredicateEncryptionScheme;
+import de.upb.crypto.craco.common.interfaces.*;
+import de.upb.crypto.craco.common.interfaces.pe.MasterSecret;
+import de.upb.crypto.craco.common.interfaces.pe.PredicateEncryptionScheme;
 import de.upb.crypto.math.serialization.Representation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(value = Parameterized.class)
 public class RepresentationTest {

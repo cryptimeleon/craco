@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.commitment.interfaces;
 
-import de.upb.crypto.craco.interfaces.PlainText;
+import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
 import de.upb.crypto.math.serialization.annotations.v2.RepresentationRestorer;
@@ -9,8 +9,7 @@ import java.lang.reflect.Type;
 
 /**
  * Interface reflecting the theoretical properties of 'Commitment Schemes' in combination with these interfaces:
- * {@link CommitmentSchemePublicParameters}, {@link CommitmentSchemePublicParametersGen}, {@link CommitmentPair},
- * {@link Commitment} and {@link OpenValue}.
+ * {@link CommitmentPair}, {@link Commitment} and {@link OpenValue}.
  */
 public interface CommitmentScheme extends StandaloneRepresentable, RepresentationRestorer {
 

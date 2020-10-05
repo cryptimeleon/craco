@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.kem;
 
+import de.upb.crypto.craco.common.interfaces.SymmetricKey;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
-import de.upb.crypto.craco.interfaces.SymmetricKey;
 import de.upb.crypto.math.hash.impl.SHA256HashFunction;
 import de.upb.crypto.math.interfaces.hash.HashFunction;
 import de.upb.crypto.math.serialization.Representation;

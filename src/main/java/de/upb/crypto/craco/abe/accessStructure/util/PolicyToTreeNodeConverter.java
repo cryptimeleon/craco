@@ -1,11 +1,11 @@
 package de.upb.crypto.craco.abe.accessStructure.util;
 
-import de.upb.crypto.craco.interfaces.abe.Attribute;
-import de.upb.crypto.craco.interfaces.policy.BooleanPolicy;
-import de.upb.crypto.craco.interfaces.policy.BooleanPolicy.BooleanOperator;
-import de.upb.crypto.craco.interfaces.policy.Policy;
-import de.upb.crypto.craco.interfaces.policy.PolicyFact;
-import de.upb.crypto.craco.interfaces.policy.ThresholdPolicy;
+import de.upb.crypto.craco.abe.interfaces.Attribute;
+import de.upb.crypto.craco.common.interfaces.policy.BooleanPolicy;
+import de.upb.crypto.craco.common.interfaces.policy.BooleanPolicy.BooleanOperator;
+import de.upb.crypto.craco.common.interfaces.policy.Policy;
+import de.upb.crypto.craco.common.interfaces.policy.PolicyFact;
+import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
 
 import java.util.ArrayList;
 import java.util.HashMap;

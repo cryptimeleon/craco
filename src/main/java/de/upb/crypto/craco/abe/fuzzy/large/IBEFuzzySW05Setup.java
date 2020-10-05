@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.abe.fuzzy.large;
 
 import de.upb.crypto.craco.common.WatersHash;
-import de.upb.crypto.craco.interfaces.PlainText;
+import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.factory.BilinearGroupFactory;
 import de.upb.crypto.math.interfaces.hash.HashIntoStructure;

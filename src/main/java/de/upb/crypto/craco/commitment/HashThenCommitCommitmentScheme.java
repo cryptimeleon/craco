@@ -1,11 +1,11 @@
 package de.upb.crypto.craco.commitment;
 
+import de.upb.crypto.craco.commitment.interfaces.Commitment;
 import de.upb.crypto.craco.commitment.interfaces.CommitmentPair;
 import de.upb.crypto.craco.commitment.interfaces.CommitmentScheme;
-import de.upb.crypto.craco.commitment.interfaces.Commitment;
 import de.upb.crypto.craco.commitment.interfaces.OpenValue;
+import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
-import de.upb.crypto.craco.interfaces.PlainText;
 import de.upb.crypto.math.interfaces.hash.HashFunction;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;

@@ -1,12 +1,12 @@
 package de.upb.crypto.craco.kem.fuzzy.large;
 
 import de.upb.crypto.craco.abe.fuzzy.large.*;
-import de.upb.crypto.craco.interfaces.*;
-import de.upb.crypto.craco.interfaces.abe.BigIntegerAttribute;
-import de.upb.crypto.craco.interfaces.pe.CiphertextIndex;
-import de.upb.crypto.craco.interfaces.pe.KeyIndex;
-import de.upb.crypto.craco.interfaces.pe.MasterSecret;
-import de.upb.crypto.craco.interfaces.pe.PredicateKEM;
+import de.upb.crypto.craco.abe.interfaces.BigIntegerAttribute;
+import de.upb.crypto.craco.common.interfaces.*;
+import de.upb.crypto.craco.common.interfaces.pe.CiphertextIndex;
+import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
+import de.upb.crypto.craco.common.interfaces.pe.MasterSecret;
+import de.upb.crypto.craco.common.interfaces.pe.PredicateKEM;
 import de.upb.crypto.craco.kem.KeyMaterial;
 import de.upb.crypto.craco.kem.SymmetricKeyPredicateKEM;
 import de.upb.crypto.craco.kem.UniqueByteKeyMaterial;

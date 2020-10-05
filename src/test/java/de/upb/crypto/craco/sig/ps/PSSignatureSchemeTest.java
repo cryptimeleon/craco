@@ -1,11 +1,11 @@
 package de.upb.crypto.craco.sig.ps;
 
 import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.interfaces.signature.SignatureKeyPair;
-import de.upb.crypto.craco.interfaces.signature.SigningKey;
-import de.upb.crypto.craco.interfaces.signature.VerificationKey;
 import de.upb.crypto.craco.sig.SignatureSchemeParams;
 import de.upb.crypto.craco.sig.SignatureSchemeTester;
+import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
+import de.upb.crypto.craco.sig.interfaces.SigningKey;
+import de.upb.crypto.craco.sig.interfaces.VerificationKey;
 import org.junit.Before;
 import org.junit.Test;
 

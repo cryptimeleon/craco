@@ -2,8 +2,8 @@ package de.upb.crypto.craco.sig.bbs;
 
 import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.RingElementPlainText;
-import de.upb.crypto.craco.interfaces.PlainText;
-import de.upb.crypto.craco.interfaces.signature.*;
+import de.upb.crypto.craco.common.interfaces.PlainText;
+import de.upb.crypto.craco.sig.interfaces.*;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.zn.Zn.ZnElement;

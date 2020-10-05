@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.sig;
 
-import de.upb.crypto.craco.interfaces.PlainText;
-import de.upb.crypto.craco.interfaces.signature.*;
+import de.upb.crypto.craco.common.interfaces.PlainText;
+import de.upb.crypto.craco.sig.interfaces.*;
 import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
 import de.upb.crypto.math.serialization.Representation;
 
@@ -91,7 +91,7 @@ public class SignatureSchemeTester {
     }
 
     /**
-     * Test using two different {@link de.upb.crypto.craco.interfaces.signature.SignatureKeyPair}. The
+     * Test using two different {@link SignatureKeyPair}. The
      * {@link PlainText} is
      * signed with each {@link SigningKey}, thus creating to {@link Signature}s.
      * Then it is checked that {@link SignatureScheme#verify} returns false for invalid combinations of

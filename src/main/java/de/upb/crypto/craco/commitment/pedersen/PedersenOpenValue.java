@@ -9,7 +9,6 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import de.upb.crypto.math.structures.zn.Zp;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class PedersenOpenValue implements OpenValue {

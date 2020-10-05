@@ -2,7 +2,6 @@ package de.upb.crypto.craco.sig.ps;
 
 import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.factory.BilinearGroupFactory;
-import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 
 public class PSPublicParametersGen {
     /**

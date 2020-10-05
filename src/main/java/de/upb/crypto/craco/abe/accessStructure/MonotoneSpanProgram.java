@@ -6,8 +6,8 @@ import de.upb.crypto.craco.abe.accessStructure.util.MinimalFulfillingSubsetVisit
 import de.upb.crypto.craco.abe.accessStructure.util.MonotoneSpanProgramGetMatrixVisitor;
 import de.upb.crypto.craco.abe.accessStructure.util.Pair;
 import de.upb.crypto.craco.abe.accessStructure.util.TreeNode;
-import de.upb.crypto.craco.interfaces.policy.Policy;
-import de.upb.crypto.craco.interfaces.policy.PolicyFact;
+import de.upb.crypto.craco.common.interfaces.policy.Policy;
+import de.upb.crypto.craco.common.interfaces.policy.PolicyFact;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 

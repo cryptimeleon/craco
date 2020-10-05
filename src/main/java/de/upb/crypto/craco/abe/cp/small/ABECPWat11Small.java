@@ -1,12 +1,12 @@
 package de.upb.crypto.craco.abe.cp.small;
 
 import de.upb.crypto.craco.abe.accessStructure.MonotoneSpanProgram;
+import de.upb.crypto.craco.abe.interfaces.Attribute;
+import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
 import de.upb.crypto.craco.common.GroupElementPlainText;
-import de.upb.crypto.craco.interfaces.*;
-import de.upb.crypto.craco.interfaces.abe.Attribute;
-import de.upb.crypto.craco.interfaces.abe.SetOfAttributes;
-import de.upb.crypto.craco.interfaces.pe.*;
-import de.upb.crypto.craco.interfaces.policy.Policy;
+import de.upb.crypto.craco.common.interfaces.*;
+import de.upb.crypto.craco.common.interfaces.pe.*;
+import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.zn.Zp;

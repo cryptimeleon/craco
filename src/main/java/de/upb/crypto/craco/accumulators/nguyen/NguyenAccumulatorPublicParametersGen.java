@@ -3,7 +3,6 @@ package de.upb.crypto.craco.accumulators.nguyen;
 import de.upb.crypto.craco.accumulators.interfaces.AccumulatorPublicParametersGen;
 import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.factory.BilinearGroupFactory;
-import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.structures.zn.Zp;

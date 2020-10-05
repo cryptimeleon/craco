@@ -1,9 +1,6 @@
 package de.upb.crypto.craco.ser.standalone.test.classes;
 
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
-import de.upb.crypto.craco.sig.ps.PSExtendedSignatureScheme;
-import de.upb.crypto.craco.sig.ps.PSPublicParameters;
-import de.upb.crypto.craco.sig.ps.PSPublicParametersGen;
 import de.upb.crypto.craco.sig.sps.eq.SPSEQPublicParameters;
 import de.upb.crypto.craco.sig.sps.eq.SPSEQPublicParametersGen;
 import de.upb.crypto.craco.sig.sps.eq.SPSEQSignatureScheme;

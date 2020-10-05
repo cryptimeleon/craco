@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.enc.streaming.test;
 
-import de.upb.crypto.craco.interfaces.KeyPair;
-import de.upb.crypto.craco.interfaces.StreamingEncryptionScheme;
+import de.upb.crypto.craco.common.interfaces.KeyPair;
+import de.upb.crypto.craco.common.interfaces.StreamingEncryptionScheme;
 
 public class StreamingEncryptionSchemeParams {
 

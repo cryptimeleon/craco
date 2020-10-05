@@ -1,9 +1,9 @@
 package de.upb.crypto.craco.kem.test;
 
-import de.upb.crypto.craco.interfaces.DecryptionKey;
-import de.upb.crypto.craco.interfaces.EncryptionKey;
-import de.upb.crypto.craco.interfaces.KeyPair;
-import de.upb.crypto.craco.interfaces.UnqualifiedKeyException;
+import de.upb.crypto.craco.common.interfaces.DecryptionKey;
+import de.upb.crypto.craco.common.interfaces.EncryptionKey;
+import de.upb.crypto.craco.common.interfaces.KeyPair;
+import de.upb.crypto.craco.common.interfaces.UnqualifiedKeyException;
 import de.upb.crypto.craco.kem.KeyEncapsulationMechanism;
 import org.junit.Test;
 import org.junit.runner.RunWith;

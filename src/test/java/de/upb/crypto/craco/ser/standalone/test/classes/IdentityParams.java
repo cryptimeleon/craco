@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.ser.standalone.test.classes;
 
 import de.upb.crypto.craco.abe.fuzzy.large.Identity;
-import de.upb.crypto.craco.interfaces.abe.BigIntegerAttribute;
+import de.upb.crypto.craco.abe.interfaces.BigIntegerAttribute;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
 
 public class IdentityParams {

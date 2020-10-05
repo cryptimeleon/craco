@@ -1,12 +1,12 @@
 package de.upb.crypto.craco.commitment.pedersen;
 
+import de.upb.crypto.craco.commitment.interfaces.Commitment;
 import de.upb.crypto.craco.commitment.interfaces.CommitmentPair;
 import de.upb.crypto.craco.commitment.interfaces.CommitmentScheme;
-import de.upb.crypto.craco.commitment.interfaces.Commitment;
 import de.upb.crypto.craco.commitment.interfaces.OpenValue;
 import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.RingElementPlainText;
-import de.upb.crypto.craco.interfaces.PlainText;
+import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
