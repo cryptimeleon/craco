@@ -2,7 +2,7 @@
 ## upb.crypto.craco
 **WARNING: this library is meant to be used for prototyping and as a research tool *only*. It has not been sufficiently vetted to use in production.**
 
-upb.crypto.craco is a library providing cryptographic construction mainly focused on attribute-based schemes.
+CRACO (CRyptogrAphic COnstructions) is a library providing cryptographic construction mainly focused on attribute-based schemes.
 The library is build upon the math library [upb.crypto.math](https://github.com/upbcuk/upb.crypto.math).
 
 The constructions provided are:
