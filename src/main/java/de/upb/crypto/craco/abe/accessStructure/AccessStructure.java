@@ -12,17 +12,17 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * This is an abstract implementation of LinearSecretSharing to
+ * This is an abstract implementation of {@link LinearSecretSharing}
  * for schemes that are based on special threshold trees,
- * where leaf nodes correspond to shares. They are numbered 0,...,n-1.
- * An additional map associates a shareReceiver to each number/leaf.
+ * where leaf nodes correspond to shares.
+ * An additional map associates a share receiver to each number/leaf.
  *
  * @author pschleiter, Fabian Eidens (refactor)
  */
 public abstract class AccessStructure implements LinearSecretSharing<PolicyFact> {
 
     /**
-     * The access policy as a tree.
+     * The root node of the threshold tree underlying this access structure.
      */
     protected TreeNode thresholdTree;
 
@@ -33,7 +33,7 @@ public abstract class AccessStructure implements LinearSecretSharing<PolicyFact>
     protected Zp field;
 
     /**
-     * Maps share indices .
+     * Maps share indices to the share receivers they belong to.
      */
     protected HashMap<Integer, PolicyFact> shareReceivers;
 

@@ -17,9 +17,8 @@ import java.util.HashMap;
  * @author Jan
  */
 public class PolicyToTreeNodeConverter {
-    private HashMap<Integer, PolicyFact> shareReceivers;
-    private TreeNode tree;
-    private HashMap<Integer, Attribute> attributes;
+    private final HashMap<Integer, PolicyFact> shareReceivers;
+    private final TreeNode tree;
 
     public PolicyToTreeNodeConverter(Policy policy) {
         shareReceivers = new HashMap<>();
@@ -37,8 +36,6 @@ public class PolicyToTreeNodeConverter {
     /**
      * Computes a threshold tree (TreeNode) from the policy. Populating
      * shareReceivers with the shareIdentifier -> shareReceiver map.
-     *
-     * @param policy
      */
     private TreeNode policyToThresholdTree(Policy policy) {
         if (policy == null)

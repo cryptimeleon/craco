@@ -7,7 +7,7 @@ import de.upb.crypto.craco.abe.accessStructure.exception.WrongAccessStructureExc
  */
 public class ToStringVisitor implements Visitor<String> {
 
-    String output = new String();
+    String output = "";
 
     TreeNode currentNode;
 

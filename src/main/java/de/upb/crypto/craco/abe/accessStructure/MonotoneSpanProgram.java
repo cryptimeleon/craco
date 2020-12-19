@@ -14,7 +14,7 @@ import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 import java.util.*;
 
 /**
- * Access structure realized by using the monotone span programs.
+ * Access structure realized by using monotone span programs.
  *
  * @author pschleiter, Fabian Eidens (refactor)
  */
