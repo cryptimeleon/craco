@@ -13,13 +13,23 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * A Boolean policy consists of a Boolean operator and a set of policies.
+ * <p>
+ * To fulfill a Boolean policy,
+ * <ul>
+ *     <li> all the contained policies must be fulfilled in case of an AND operator,
+ *     <li> one of the contained policies must be fulfilled in case of an OR operator.
+ * </ul>
+ */
 public class BooleanPolicy implements Policy {
 
+    /**
+     * A Boolean operator, either AND or OR.
+     */
     public enum BooleanOperator {
         AND, OR
     }
-
-    ;
 
     @UniqueByteRepresented
     @Represented

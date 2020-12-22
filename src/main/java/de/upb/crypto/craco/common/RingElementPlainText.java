@@ -10,6 +10,9 @@ import de.upb.crypto.math.serialization.Representation;
 
 import java.util.Objects;
 
+/**
+ * A plaintext consisting of a single ring element.
+ */
 public class RingElementPlainText implements PlainText {
     private RingElement element;
 

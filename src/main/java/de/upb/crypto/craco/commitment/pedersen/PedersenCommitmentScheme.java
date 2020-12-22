@@ -21,8 +21,8 @@ import java.util.Objects;
 
 
 /**
- * This class provides a java implementation for Pedersen Commitment Scheme. It realizes the general
- * {@link CommitmentScheme} interface and provides a concrete Pedersen Commitment Scheme implementation
+ * This class provides a java implementation for the Pedersen commitment scheme. It realizes the general
+ * {@link CommitmentScheme} interface and provides a concrete Pedersen commitment scheme implementation
  * for (commit, open) methods.
  */
 public class PedersenCommitmentScheme implements CommitmentScheme {

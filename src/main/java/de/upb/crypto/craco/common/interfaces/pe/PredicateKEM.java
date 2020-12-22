@@ -6,11 +6,18 @@ import de.upb.crypto.craco.kem.KeyEncapsulationMechanism;
 import de.upb.crypto.math.serialization.Representation;
 
 /**
- * See PredicateEncryptionScheme. The only difference between
- * the EncryptionScheme and the KeyEncapsulationMechanism (KEM) is
+ * Interface for implementing predicate encryption based KEMs.
+ * <p>
+ * The only difference between
+ * the encryption scheme and the key encapsulation mechanism (KEM) is
  * that the KEM will not encrypt arbitrary user-defined messages
  * but will instead be able to generate random message-ciphertext
- * pairs (m, c). See KeyEncapsulationMechanism for details.
+ * pairs (m, c). See {@link KeyEncapsulationMechanism} for details.
+ *
+ * @see PredicateEncryptionScheme
+ * @see KeyEncapsulationMechanism
+ *
+ * @param <T> type of the encapsulated key
  *
  * @author Jan
  */
@@ -22,38 +29,40 @@ public interface PredicateKEM<T> extends KeyEncapsulationMechanism<T> {
 
     /**
      * Generates a decryption key that will be able to
-     * decrypt ciphertexts where getPredicate().check(kind, cind) = 1.
+     * decrypt ciphertexts where {@code getPredicate().check(kind, cind) == true}.
      *
-     * @param msk  the master secret obtained during setup.
-     * @param kind the key index specifying which ciphertexts are readable.
-     * @return a key used for decrypt().
+     * @param msk the master secret obtained during setup
+     * @param kind the key index specifying which ciphertexts are decryptable
+     * @return the decryption key
      */
     DecryptionKey generateDecryptionKey(MasterSecret msk, KeyIndex kind);
 
     /**
      * Generates an encryption key such that ciphertexts created using
-     * that key are decryptable using keys where getPredicate().check(kind, cind) = 1.
+     * that key are decryptable using keys where {@code getPredicate().check(kind, cind) == true}.
      *
-     * @param cind the ciphertext index specifying who should be able to read the ciphertext.
-     * @return a key used for encrypt().
+     * @param cind the ciphertext index specifying who should be able to decrypt the ciphertext
+     * @return the encryption key
      */
     EncryptionKey generateEncryptionKey(CiphertextIndex cind);
 
     /**
-     * The predicate of this PredicateEncryptionScheme (see that interface's Javadoc).
+     * The predicate of this {@code PredicateEncryptionScheme}.
+     *
+     * @see Predicate
      */
     Predicate getPredicate();
 
     /**
-     * Shorthand for encaps(generateEncryptionKey(cind));
+     * Shorthand for {@code encaps(generateEncryptionKey(cind))}.
      */
     default KeyAndCiphertext<T> encaps(CiphertextIndex cind) {
         return encaps(generateEncryptionKey(cind));
     }
 
     /**
-     * Checks whether a holder of a key from kind should be able to
-     * decrypt ciphertexts encrypted using cind.
+     * Checks whether a holder of a key from {@code kind} should be able to
+     * decrypt ciphertexts encrypted using {@code cind}.
      */
     default boolean checkPredicate(KeyIndex kind, CiphertextIndex cind) {
         return getPredicate().check(kind, cind);

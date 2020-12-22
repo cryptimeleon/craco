@@ -8,6 +8,9 @@ import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
+/**
+ * Contains methods for generating public parameters and master secret for the scheme.
+ */
 public class ABECPWat11Setup {
     private ABECPWat11PublicParameters pp;
     private ABECPWat11MasterSecret msk;

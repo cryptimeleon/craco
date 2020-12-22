@@ -71,12 +71,22 @@ test {
 }
 
 
+task javadocLatex(type: Javadoc) {
+    source = sourceSets.main.allJava
+    classpath = sourceSets.main.runtimeClasspath
+    options.addStringOption("charset", "UTF-8")
+    options.addBooleanOption("-allow-script-in-comments", true)
+    options.header = "<script type\"text/javascript&\" src=\"" +
+            "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?" +
+            "config=TeX-MML-AM_CHTML\"></script>"
+}
+
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
         }
-
     }
 
     repositories {

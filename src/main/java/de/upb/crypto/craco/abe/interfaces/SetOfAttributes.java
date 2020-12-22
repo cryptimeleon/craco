@@ -15,6 +15,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * A set of {@link Attribute}s.
+ */
 public class SetOfAttributes implements KeyIndex, CiphertextIndex, Set<Attribute>, UniqueByteRepresentable {
     @UniqueByteRepresented
     private Set<Attribute> attributes = new HashSet<>();

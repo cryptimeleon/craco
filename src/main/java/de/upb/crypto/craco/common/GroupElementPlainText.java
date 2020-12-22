@@ -11,6 +11,9 @@ import de.upb.crypto.math.serialization.Representation;
 
 import java.util.Objects;
 
+/**
+ * A plaintext consisting of a single group element.
+ */
 public class GroupElementPlainText implements PlainText, UniqueByteRepresentable {
 
     @UniqueByteRepresented

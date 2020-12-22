@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.common.interfaces;
 
 /**
- * A container for a pair of EncryptionKey and DecryptionKey.
+ * A container for a pair of {@link EncryptionKey} and {@link DecryptionKey}.
  *
  * @author Jan
  */

@@ -18,6 +18,9 @@ import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 import java.math.BigInteger;
 import java.util.*;
 
+/**
+ * A hash function allowing hashing into a specific group.
+ */
 public class WatersHash implements HashIntoStructure {
     @Represented
     private Group g;

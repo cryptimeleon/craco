@@ -14,7 +14,7 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import java.util.Objects;
 
 /**
- * Wrapper for a {@link CommitmentScheme} to be used with hashing of original message.
+ * Wrapper class that allows committing to the hash of a message.
  */
 public class HashThenCommitCommitmentScheme implements CommitmentScheme {
 

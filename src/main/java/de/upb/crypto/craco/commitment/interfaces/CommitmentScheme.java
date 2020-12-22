@@ -8,8 +8,7 @@ import de.upb.crypto.math.serialization.annotations.v2.RepresentationRestorer;
 import java.lang.reflect.Type;
 
 /**
- * Interface reflecting the theoretical properties of 'Commitment Schemes' in combination with these interfaces:
- * {@link CommitmentPair}, {@link Commitment} and {@link OpenValue}.
+ * Interface used to implement commitment schemes.
  */
 public interface CommitmentScheme extends StandaloneRepresentable, RepresentationRestorer {
 

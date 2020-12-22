@@ -20,7 +20,7 @@ import java.math.BigInteger;
 import java.util.*;
 
 /**
- * Distributed Ciphertext-Policy ABE scheme Described in the CrACo Document
+ * Distributed Ciphertext-Policy ABE scheme described in the CrACo document
  * <p>
  * The DistributedABECPWat11 can be seen as an extension to the normal
  * {@link ABECPWat11}, where the {@link MasterSecret} is shared

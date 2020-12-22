@@ -12,6 +12,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ * A threshold policy consists of a threshold and a set of policies, and it is fulfilled if threshold many of the
+ * children policies are fulfilled.
+ */
 public class ThresholdPolicy implements Policy {
     @UniqueByteRepresented
     @Represented
