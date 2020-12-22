@@ -2,7 +2,7 @@ package de.upb.crypto.craco.common.utils;
 
 
 /**
- * Various byte[] helper methods.
+ * Various {@code byte[]} helper methods.
  *
  * @author Marius Dransfeld
  */

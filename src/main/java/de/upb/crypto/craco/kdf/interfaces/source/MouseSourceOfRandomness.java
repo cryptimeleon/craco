@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 /**
- * We implement a source of randomness based on mouse movements on a panel. We
+ * Implements a source of randomness based on mouse movements on a panel. We
  * assume that there are 2 bits of randomness in every mouse position. However,
  * we may need some statistical tests to assert this.
  *

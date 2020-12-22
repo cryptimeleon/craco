@@ -6,9 +6,9 @@ import de.upb.crypto.math.serialization.StandaloneRepresentable;
 import de.upb.crypto.math.structures.polynomial.Seed;
 
 /**
- * A family of hash functions {H_k: {0,1}^n -> {0,1}^m}_{k \in {0,1}^d}.
+ * A family of hash functions \(H_k: {0,1}^n -> {0,1}^m}_{k \in {0,1}^d}\).
  * <p>
- * We define the size in bits as d, the input-length as n and the output-length
+ * We define the size in bits as d, the input length as n and the output length
  * as m.
  *
  * @author Mirko Jürgens
@@ -16,21 +16,17 @@ import de.upb.crypto.math.structures.polynomial.Seed;
 public interface HashFamily extends StandaloneRepresentable {
 
     /**
-     * The input length in bits!
-     *
-     * @return
+     * Returns the input length in number of bits.
      */
     public int getInputLength();
 
     /**
-     * The output length in bits!
+     * Returns the output length in number of bits.
      */
     public int getOutputLength();
 
     /**
-     * The seed length in bits!
-     *
-     * @return
+     * Returns the seed (key) length in number of bits.
      */
     public int seedLength();
 
@@ -38,7 +34,7 @@ public interface HashFamily extends StandaloneRepresentable {
      * Returns a function specified by the key.
      *
      * @param seed the key of the function
-     * @return the function h_seed
+     * @return the hash function corresponding to the key {@code seed}
      */
     public HashFunction seedFunction(Seed seed);
 

@@ -37,7 +37,7 @@ public class ByteArrayImplementation implements PlainText, CipherText, Decryptio
     }
 
     /**
-     * Creates a ByteArrayImplementation filled with [length] bytes of randomness
+     * Creates a new {@code ByteArrayImplementation} instance filled with {@code numberBytes} bytes of randomness
      *
      * @param numberBytes number of random bytes / length of resulting ByteArrayImplementation
      */

@@ -8,6 +8,11 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 
+/**
+ * An implementation of AES with GCM as the mode of operation.
+ * <p>
+ * For difference between this and {@link StreamingGCMAESPacketMode}, see the latter's documentation.
+ */
 public class StreamingGCMAES extends AbstractStreamingSymmetricScheme {
 
     private static final int initialVectorLength = 96; // in bit
