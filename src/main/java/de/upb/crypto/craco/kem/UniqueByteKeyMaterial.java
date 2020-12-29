@@ -6,10 +6,8 @@ import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
 import java.util.Objects;
 
 /**
- * The most basic implementation of a {@link KeyMaterial}. It encapsulates an
- * element that implements the {@link UniqueByteRepresentable} interface and is
- * extracted from a source of randomness with a well defined amount of
- * min-entropy.
+ * The most basic implementation of a {@link KeyMaterial} based on a {@link UniqueByteRepresentable}.
+ * It is extracted from a source of randomness with a well defined amount of min-entropy.
  *
  * @author Jan, refactoring: Mirko Jürgens
  */

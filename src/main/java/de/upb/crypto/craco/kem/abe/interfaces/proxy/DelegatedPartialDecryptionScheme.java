@@ -14,11 +14,14 @@ import de.upb.crypto.math.serialization.Representation;
  * <p>
  * The usual process of "partially-proxy-decrypting" a ciphertext c of this encryption scheme
  * is:
- * - make sure you have a decryption key dk that could directly decrypt the ciphertext (i.e. decrypt() works)
- * - get transformation key tf and decryption key dk' from generateTransformationKey(dk)
- * - anyone can now, given tf, transform the ciphertext c to a ciphertext c' using transform(c, tf)
- * - c' can be decrypted using getSchemeForTransformedCiphertexts().decrypt(c', dk')
- *
+ * <ol>
+ * <li> make sure you have a decryption key {@code dk} that could directly decrypt the ciphertext
+ * (i.e. {@code decrypt()} works)
+ * <li> get transformation key {@code tf} and decryption key {@code dk'} from {@code generateTransformationKey(dk)}
+ * <li> anyone can now, given {@code tf}, transform the ciphertext {@code c} to a ciphertext {@code c'} using
+ * {@code transform(c, tf)}
+ * <li> {@code c'} can be decrypted using {@code this.getSchemeForTransformedCiphertexts().decrypt(c', dk')}
+ * </ol>
  * @author Jan
  */
 public interface DelegatedPartialDecryptionScheme extends EncryptionScheme {
@@ -32,7 +35,7 @@ public interface DelegatedPartialDecryptionScheme extends EncryptionScheme {
      * another scheme.
      *
      * @param original     the original ciphertext
-     * @param transformKey
+     * @param transformKey key to use for transformation
      * @return a transformed ciphertext for the scheme returned by getSchemeForTransformedCiphertexts()
      */
     public CipherText transform(CipherText original, TransformationKey transformKey);

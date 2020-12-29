@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /**
  * This {@link SecretSharingSchemeProvider} will create instances of {@link ShamirSecretSharing}
- * with each call to {@link SecretSharingSchemeProvider#createLSSSInstance}
+ * with each call to {@link SecretSharingSchemeProvider#createLSSSInstance}.
  */
 public class ShamirSecretSharingSchemeProvider implements SecretSharingSchemeProvider {
 

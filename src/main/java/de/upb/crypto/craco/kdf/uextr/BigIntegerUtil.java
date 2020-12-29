@@ -4,7 +4,7 @@ import java.math.BigInteger;
 
 public class BigIntegerUtil {
 
-    public static BigInteger getUnsingendBigInteger(byte[] bytes) {
+    public static BigInteger getUnsignedBigInteger(byte[] bytes) {
         BigInteger result = BigInteger.valueOf(0);
 
         for (int i = 0; i < bytes.length; i++) {

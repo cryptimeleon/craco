@@ -1,11 +1,12 @@
 package de.upb.crypto.craco.kem;
 
+import de.upb.crypto.craco.common.interfaces.EncryptionKey;
 import de.upb.crypto.craco.common.interfaces.EncryptionScheme;
 import de.upb.crypto.craco.common.interfaces.SymmetricKey;
 import de.upb.crypto.craco.common.interfaces.pe.PredicateKEM;
 
 /**
- * A KEM that implements the standard hybrid construction, i.e. encaps()
+ * A KEM that implements the standard hybrid construction, meaning {@link #encaps(EncryptionKey)}
  * generates a random key and encrypts it afterwards with some encryption
  * scheme.
  * <p>

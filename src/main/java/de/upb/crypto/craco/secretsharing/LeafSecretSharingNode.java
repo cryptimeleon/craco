@@ -1,9 +1,13 @@
 package de.upb.crypto.craco.secretsharing;
 
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
+import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
 
 import java.util.Objects;
 
+/**
+ * An leaf node in a tree of {@link ThresholdPolicy}s used by {@link ThresholdTreeSecretSharing}.
+ */
 public class LeafSecretSharingNode implements SecretSharingTreeNode {
 
     private Policy policy;

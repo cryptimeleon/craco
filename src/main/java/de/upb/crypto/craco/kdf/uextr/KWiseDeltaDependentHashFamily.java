@@ -9,9 +9,8 @@ import de.upb.crypto.math.structures.polynomial.Seed;
 
 /**
  * An implementation of a q-wise d-independent hash family described in [1].
- * This implementation implements a random variable on an \epsilon -biased
+ * This implementation implements a random variable on an epsilon-biased
  * source that was described in [2].
- * <p>
  * <p>
  * [1] Corollary 2.1 in Celis et. al., 2011, Balls and Bins: Smaller Hash
  * Families and Faster Evaluation
@@ -26,22 +25,22 @@ import de.upb.crypto.math.structures.polynomial.Seed;
  */
 public class KWiseDeltaDependentHashFamily implements HashFamily {
 
-    private int inputLength;
+    private final int inputLength;
 
-    private int outputLength;
+    private final int outputLength;
 
-    private double k;
+    private final double k;
 
-    private double delta;
+    private final double delta;
 
-    private int seedLength;
+    private final int seedLength;
 
     /**
      * Sets up a K-Wise Delta-Dependent Hash-Family. This family can yield a
      * seeded {@link KWiseDeltaDependentHashFunction}.
      *
-     * @param k
-     * @param logDelta
+     * @param k the k parameter used for k-wise part
+     * @param logDelta the log of the delta parameter used for the delta-dependent part
      * @param inputLength  the input-length of a hash function
      * @param outputLength the input-length of a hash function
      */
@@ -97,6 +96,11 @@ public class KWiseDeltaDependentHashFamily implements HashFamily {
         return seedLength;
     }
 
+    /**
+     * Creates a function of this family using the given seed.
+     * @param seed the seed used for the resulting hash function
+     * @return the initialized hash function
+     */
     @Override
     public KWiseDeltaDependentHashFunction seedFunction(Seed seed) {
         return new KWiseDeltaDependentHashFunction(this, seed);
@@ -156,5 +160,4 @@ public class KWiseDeltaDependentHashFamily implements HashFamily {
     public KWiseDeltaDependentHashFunction getHashFunction(Representation repr) {
         return new KWiseDeltaDependentHashFunction(repr);
     }
-
 }

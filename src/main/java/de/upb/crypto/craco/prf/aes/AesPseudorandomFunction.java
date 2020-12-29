@@ -19,19 +19,19 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 /**
- * AES as a pseudorandom function (permutation) f_k : {0,1}^l -> {0,1}^l
- * for k in {0,1}^l. Here, l is any valid AES keylength (e.g., 128, 256).
+ * AES as a pseudorandom function (permutation) \(f_k : \{0,1\}^l \rightarrow \{0,1\}^l\)
+ * for \(k \in \{0,1\}^l\). Here, l is any valid AES keylength (e.g., 128, 256).
  * <p>
- * PrfKey, PrfPreimage, and PrfImage are of type ByteArrayImplementation.
+ * {@link PrfKey}, {@link PrfPreimage}, and  {@link PrfImage} are of type {@link ByteArrayImplementation}.
  */
 public class AesPseudorandomFunction implements PseudorandomFunction {
     @Represented
     protected Integer keylength; //length of keys in bit
 
     /**
-     * Instantiates the PRP
+     * Instantiates the PRF with a given AES key length.
      *
-     * @param keylength a valid AES keylength in bit (e.g., 128 or 256)
+     * @param keylength a valid AES key length in bit (e.g., 128 or 256)
      */
     public AesPseudorandomFunction(int keylength) {
         this.keylength = keylength;

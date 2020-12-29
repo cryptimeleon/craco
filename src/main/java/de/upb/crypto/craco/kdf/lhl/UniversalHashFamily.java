@@ -15,8 +15,8 @@ import java.util.Objects;
  * \(H := \{ h_{a,b} : a \in [p-1], b \in [p-1] \cup \{0\} \}\) with \(h_{a,b}(x) := [(ax+b) \mod p] \mod n\),
  * where \(n\) is the output length and \(p\) is a prime in \([n, 2n]\).
  * <p>
- * Theorem 2 of:
- * https://courses.cs.washington.edu/courses/cse525/13sp/scribe/lec5.pdf
+ * For definition of a 2-universal hash family and the specific construction, refer to
+ * <a href="https://courses.cs.washington.edu/courses/cse525/13sp/scribe/lec5.pdf">this lecture</a>.
  *
  * @author Mirko Jürgens
  */
