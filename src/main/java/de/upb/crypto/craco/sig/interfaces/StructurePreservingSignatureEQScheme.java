@@ -8,7 +8,7 @@ import de.upb.crypto.craco.sig.interfaces.VerificationKey;
 import de.upb.crypto.math.structures.zn.Zn;
 
 /**
- * A structure-preserving signature scheme on equivalence classes
+ * A structure-preserving signature scheme on equivalence classes (SPS-EQ).
  * <p>
  * This is a special case of a multi-message signature scheme
  * because SPS-EQ additionally supports a change of the representative of the equivalence class that is signed.
@@ -26,9 +26,6 @@ public interface StructurePreservingSignatureEQScheme extends StandardMultiMessa
      * Verify(M^{mu},sigma') = 1.
      * See paper [1] for details.
      *
-     * @param signature
-     * @param mu
-     * @param publicKey
      * @return null of the signature given is not valid on plainText under publicKey, else it returns a valid signature
      * on mu*plainText
      */
@@ -38,9 +35,6 @@ public interface StructurePreservingSignatureEQScheme extends StandardMultiMessa
      * Same as {@link #chgRep(Signature, Zn.ZnElement, VerificationKey)} with one addition.
      * The given siganture is verifed on the plaintext under the public key.
      *
-     * @param signature
-     * @param mu
-     * @param publicKey
      * @return null if the signature given is not valid on plainText under publicKey, else a valid signature
      * on mu*plainText
      */
@@ -52,10 +46,6 @@ public interface StructurePreservingSignatureEQScheme extends StandardMultiMessa
      * Corresponds to {@link #chgRepWithVerify(PlainText, Signature, Zn.ZnElement, VerificationKey)}, but handles the
      * change of representative of the message equivalence class [M]_R.
      *
-     *
-     * @param plainText
-     * @param mu
-     * @return
      */
     PlainText chgRepMessage(PlainText plainText, Zn.ZnElement mu);
 }

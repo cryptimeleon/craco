@@ -1,11 +1,13 @@
 package de.upb.crypto.craco.sig.interfaces;
 
+import de.upb.crypto.craco.common.MessageBlock;
+
 /**
- * A MultiMessageSignatureScheme is one where Sign() and Verify() take lists
- * of messages as input.
+ * A {@code MultiMessageSignatureScheme} is one where the sign and verify algorithms take a list of messages as input
+ * instead of a single message.
  * <p>
- * This is implemented as the special case of a single message scheme
- * where the signed message is of Type MessageBlock.
+ * This is implemented as the special case of a single-message scheme
+ * where the signed message is of Type {@link MessageBlock}.
  * <p>
  * This interface introduces some helper methods for this case.
  *

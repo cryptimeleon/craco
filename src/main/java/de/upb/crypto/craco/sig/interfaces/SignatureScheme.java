@@ -8,18 +8,18 @@ import de.upb.crypto.math.serialization.annotations.v2.RepresentationRestorer;
 import java.lang.reflect.Type;
 
 /**
- * An SignatureScheme has the ability to sign plaintexts
- * and verify the resulting signature (using SigningKeys and VerificationKeys).
+ * A {@code SignatureScheme} has the ability to sign plaintexts
+ * and verify the resulting signature (using {@link SigningKey}s and {@link VerificationKey}s).
  * <p>
  * The functional contract is that verify(sign(m, sk), pk) = 1 for sk, pk that
  * "fit" together (depending on the concrete type of signature scheme).
  * <p>
  * Sub-Interfaces define how you obtain signing and verification keys.
  * <p>
- * SignatureScheme are stand-alone representable. So once set up,
+ * {@code SignatureScheme} instances are stand-alone representable. So once set up,
  * you can restore the same scheme with the same public parameters
- * using the Representation mechanism (i.e. call the class's constructor
- * with a Representation argument).
+ * using the {@code Representation} mechanism (i.e. call the class's constructor
+ * with a {@code Representation} argument).
  * <p>
  * We note that we see all signature schemes as single-message schemes.
  * However, some signature schemes may be able to sign {@link de.upb.crypto.craco.common.MessageBlock}s

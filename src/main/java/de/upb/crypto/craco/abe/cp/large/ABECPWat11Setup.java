@@ -115,7 +115,7 @@ public class ABECPWat11Setup {
      * The master secret of this scheme. This is needed for generating a {@link ABECPWat11DecryptionKey} in the
      * {@link ABECPWat11}
      *
-     * @return
+     * @return the master secret
      */
     public ABECPWat11MasterSecret getMasterSecret() {
         return msk;

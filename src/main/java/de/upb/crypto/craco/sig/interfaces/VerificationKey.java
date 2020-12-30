@@ -6,9 +6,9 @@ import de.upb.crypto.math.serialization.Representable;
 /**
  * A key that is used to verify signatures.
  * <p>
- * VerificationKeys are Representable and can be
- * restored from Representation using the appropriate method of
- * the SignatureScheme interface.
+ * {@code VerificationKeys} are {@code Representable} and can be
+ * restored from {@code Representation} using the appropriate method of
+ * the {@code SignatureScheme} interface.
  *
  * @author feidens
  */

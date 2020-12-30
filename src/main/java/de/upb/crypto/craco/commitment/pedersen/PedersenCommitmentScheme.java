@@ -131,8 +131,8 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
      *
      * @param bytes byte[] representation of the message to commit
      * @return A {@link MessageBlock} containing the corresponding {@link RingElementPlainText} containing a
-     * {@link Zn.ZnElement} in its first element and further padded {@link RingElementPlainText} containing
-     * {@link Zn.ZnElement} of value 0.
+     * {@link de.upb.crypto.math.structures.zn.Zn.ZnElement} in its first element and further padded
+     * {@link RingElementPlainText} containing {@link de.upb.crypto.math.structures.zn.Zn.ZnElement} of value 0.
      */
     @Override
     public MessageBlock mapToPlainText(byte[] bytes) throws IllegalArgumentException {

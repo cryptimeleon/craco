@@ -143,10 +143,10 @@ public class ElgamalKEM implements AsymmetricKEM<SymmetricKey> {
     }
 
     /**
-     * Encapsulate for given public key and return nonce and encapsulation.
+     * Generates a random symmetric key, encapsulates it, and returns it together with the nonce used and ciphertext.
      *
-     * @param pk - the public key
-     * @return
+     * @param pk the public key to use for encapsulation
+     * @return the resulting key, ciphertext, and nonce
      */
     public KeyAndCiphertextAndNonce encaps_internal(EncryptionKey pk) {
         HashFunction md = messageDigest;

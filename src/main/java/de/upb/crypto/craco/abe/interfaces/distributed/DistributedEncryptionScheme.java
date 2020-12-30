@@ -33,8 +33,8 @@ public interface DistributedEncryptionScheme extends EncryptionScheme {
      * specific amount of {@link KeyShare} in order to successfully create a
      * {@link DecryptionKey}.
      *
-     * @param keyShares
-     * @return
+     * @param keyShares the key shares to use to construct the decryption key
+     * @return the resulting decryption key
      */
     public DecryptionKey combineKeyShares(List<KeyShare> keyShares);
 

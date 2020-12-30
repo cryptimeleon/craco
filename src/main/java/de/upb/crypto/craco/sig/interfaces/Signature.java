@@ -5,9 +5,9 @@ import de.upb.crypto.math.serialization.Representable;
 /**
  * A signature.
  * <p>
- * Signature are Representable and can be
- * restored from Representation using the appropriate method of
- * the SignatureScheme interface.
+ * Signature are {@code Representable} and can be
+ * restored from {@code Representation} using the appropriate method of
+ * the {@link SignatureScheme} interface.
  *
  * @author feidens
  */

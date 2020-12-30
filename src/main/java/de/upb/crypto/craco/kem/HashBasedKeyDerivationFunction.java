@@ -55,9 +55,9 @@ public class HashBasedKeyDerivationFunction implements KeyDerivationFunction<Sym
 
 
     /**
-     * Returns the output-length in bytes
+     * Returns the output length in number of bytes
      *
-     * @return
+     * @return the output length in number of bytes
      */
     public int bitSize() {
         return hashFunction.getOutputLength();
