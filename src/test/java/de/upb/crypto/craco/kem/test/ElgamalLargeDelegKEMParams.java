@@ -6,9 +6,9 @@ import de.upb.crypto.craco.kem.abe.cp.os.ElgamalLargeUniverseDelegationKEM;
 import de.upb.crypto.craco.kem.abe.cp.os.LUDDecryptionKey;
 import de.upb.crypto.craco.kem.abe.cp.os.LUDEncryptionKey;
 import de.upb.crypto.craco.kem.abe.cp.os.LUDSetup;
-import de.upb.crypto.math.factory.BilinearGroup;
-import de.upb.crypto.math.factory.BilinearGroupFactory;
 import de.upb.crypto.math.hash.impl.SHA256HashFunction;
+import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
+import de.upb.crypto.math.pairings.generic.BilinearGroup;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,10 +18,7 @@ import static de.upb.crypto.craco.kem.test.ElgamalLargeUniverseDelegationKEMTest
 
 public class ElgamalLargeDelegKEMParams {
 	public static List<KeyEncapsulationMechanismTestParams> getParams() {
-		BilinearGroupFactory fac = new BilinearGroupFactory(80);
-		fac.setDebugMode(true); // enable debug
-		fac.setRequirements(BilinearGroup.Type.TYPE_3);
-		BilinearGroup bilinearGroup = fac.createBilinearGroup();
+		BilinearGroup bilinearGroup = new CountingBilinearGroup(80, BilinearGroup.Type.TYPE_3);
 
 		LUDSetup schemeFactory;
 		schemeFactory = new LUDSetup();

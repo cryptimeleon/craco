@@ -1,7 +1,9 @@
 package de.upb.crypto.craco.sig.bbs;
 
-import de.upb.crypto.math.factory.BilinearGroup;
-import de.upb.crypto.math.factory.BilinearGroupFactory;
+import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
+import de.upb.crypto.math.pairings.generic.BilinearGroup;
+import de.upb.crypto.math.pairings.type1.supersingular.SupersingularTateGroupImpl;
+import de.upb.crypto.math.structures.groups.lazy.LazyBilinearGroup;
 import de.upb.crypto.math.structures.zn.HashIntoZn;
 
 /**
@@ -25,11 +27,11 @@ public class BBSBKeyGen {
      * @return
      */
     public BBSBPublicParameter doKeyGen(int securityParameter, boolean debugMode) {
-        // First, get bilinear group from the factory
-        BilinearGroupFactory fac = new BilinearGroupFactory(securityParameter);
-        fac.setDebugMode(debugMode);
-        fac.setRequirements(BilinearGroup.Type.TYPE_1);
-        group = fac.createBilinearGroup();
+        if (debugMode) {
+            group = new CountingBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_1);
+        } else {
+            group = new LazyBilinearGroup(new SupersingularTateGroupImpl(securityParameter));
+        }
 
         return doKeyGen(group);
     }

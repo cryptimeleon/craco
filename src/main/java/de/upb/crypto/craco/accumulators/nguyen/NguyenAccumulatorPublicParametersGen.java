@@ -1,10 +1,12 @@
 package de.upb.crypto.craco.accumulators.nguyen;
 
 import de.upb.crypto.craco.accumulators.interfaces.AccumulatorPublicParametersGen;
-import de.upb.crypto.math.factory.BilinearGroup;
-import de.upb.crypto.math.factory.BilinearGroupFactory;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
+import de.upb.crypto.math.pairings.generic.BilinearGroup;
+import de.upb.crypto.math.pairings.type3.bn.BarretoNaehrigBilinearGroupImpl;
+import de.upb.crypto.math.structures.groups.lazy.LazyBilinearGroup;
 import de.upb.crypto.math.structures.zn.Zp;
 
 import java.math.BigInteger;
@@ -80,10 +82,12 @@ public class NguyenAccumulatorPublicParametersGen implements AccumulatorPublicPa
      * @return {@link BilinearGroup}
      */
     private BilinearGroup generateBilinearGroup(int securityParameter, boolean debugMode) {
-        // Get bilinear group from the factory
-        BilinearGroupFactory facfac = new BilinearGroupFactory(securityParameter);
-        facfac.setRequirements(BilinearGroup.Type.TYPE_3);
-        facfac.setDebugMode(debugMode);
-        return facfac.createBilinearGroup();
+        BilinearGroup group;
+        if (debugMode) {
+            group = new CountingBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_3);
+        } else {
+            group = new LazyBilinearGroup(new BarretoNaehrigBilinearGroupImpl(securityParameter));
+        }
+        return group;
     }
 }

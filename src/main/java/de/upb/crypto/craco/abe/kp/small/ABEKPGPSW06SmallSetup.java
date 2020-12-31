@@ -1,9 +1,12 @@
 package de.upb.crypto.craco.abe.kp.small;
 
 import de.upb.crypto.craco.abe.interfaces.Attribute;
-import de.upb.crypto.math.factory.BilinearGroup;
-import de.upb.crypto.math.factory.BilinearGroupFactory;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
+import de.upb.crypto.math.pairings.generic.BilinearGroup;
+import de.upb.crypto.math.pairings.type1.supersingular.SupersingularTateGroupImpl;
+import de.upb.crypto.math.pairings.type3.bn.BarretoNaehrigBilinearGroupImpl;
+import de.upb.crypto.math.structures.groups.lazy.LazyBilinearGroup;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
@@ -32,10 +35,12 @@ public class ABEKPGPSW06SmallSetup {
      * @param debug             - enable debugging.
      */
     public void doKeyGen(int securityParameter, Collection<? extends Attribute> universe, boolean debug) {
-        BilinearGroupFactory fac = new BilinearGroupFactory(securityParameter);
-        fac.setDebugMode(debug);
-        fac.setRequirements(BilinearGroup.Type.TYPE_1, true, false, false);
-        BilinearGroup group = fac.createBilinearGroup();
+        BilinearGroup group;
+        if (debug) {
+            group = new CountingBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_1);
+        } else {
+            group = new LazyBilinearGroup(new SupersingularTateGroupImpl(securityParameter));
+        }
 
         doKeyGen(group, universe);
     }

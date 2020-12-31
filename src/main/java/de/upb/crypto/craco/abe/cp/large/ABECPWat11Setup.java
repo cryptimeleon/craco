@@ -1,10 +1,12 @@
 package de.upb.crypto.craco.abe.cp.large;
 
 import de.upb.crypto.craco.common.WatersHash;
-import de.upb.crypto.math.factory.BilinearGroup;
-import de.upb.crypto.math.factory.BilinearGroupFactory;
 import de.upb.crypto.math.interfaces.hash.HashIntoStructure;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
+import de.upb.crypto.math.pairings.generic.BilinearGroup;
+import de.upb.crypto.math.pairings.type1.supersingular.SupersingularTateGroupImpl;
+import de.upb.crypto.math.structures.groups.lazy.LazyBilinearGroup;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
@@ -36,10 +38,12 @@ public class ABECPWat11Setup {
      */
     public void doKeyGen(int securityParameter, int n, int l_max, boolean watersHash, boolean debug) {
         // Generate bilinear group
-        BilinearGroupFactory fac = new BilinearGroupFactory(securityParameter);
-        fac.setDebugMode(debug);
-        fac.setRequirements(BilinearGroup.Type.TYPE_1, !watersHash, false, false);
-        BilinearGroup group = fac.createBilinearGroup();
+        BilinearGroup group;
+        if (debug) {
+            group = new CountingBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_1);
+        } else {
+            group = new LazyBilinearGroup(new SupersingularTateGroupImpl(securityParameter));
+        }
 
         doKeyGen(group, n, l_max, watersHash);
     }

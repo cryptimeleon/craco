@@ -2,9 +2,12 @@ package de.upb.crypto.craco.abe.fuzzy.large;
 
 import de.upb.crypto.craco.common.WatersHash;
 import de.upb.crypto.craco.common.interfaces.PlainText;
-import de.upb.crypto.math.factory.BilinearGroup;
-import de.upb.crypto.math.factory.BilinearGroupFactory;
 import de.upb.crypto.math.interfaces.hash.HashIntoStructure;
+import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
+import de.upb.crypto.math.pairings.generic.BilinearGroup;
+import de.upb.crypto.math.pairings.type1.supersingular.SupersingularTateGroupImpl;
+import de.upb.crypto.math.pairings.type3.bn.BarretoNaehrigBilinearGroupImpl;
+import de.upb.crypto.math.structures.groups.lazy.LazyBilinearGroup;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
@@ -38,11 +41,12 @@ public class IBEFuzzySW05Setup {
      */
     public void doKeyGen(int securityParameter, BigInteger n, BigInteger universeThreshold, boolean watersHash,
                          boolean debug) {
-        // Public Parameter stuff
-        BilinearGroupFactory fac = new BilinearGroupFactory(securityParameter);
-        fac.setDebugMode(debug);
-        fac.setRequirements(BilinearGroup.Type.TYPE_1, true, false, false);
-        BilinearGroup group = fac.createBilinearGroup();
+        BilinearGroup group;
+        if (debug) {
+            group = new CountingBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_1);
+        } else {
+            group = new LazyBilinearGroup(new SupersingularTateGroupImpl(securityParameter));
+        }
 
         doKeyGen(group, n, universeThreshold, watersHash);
     }

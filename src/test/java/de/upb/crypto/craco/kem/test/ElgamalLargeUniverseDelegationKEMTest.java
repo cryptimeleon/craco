@@ -16,13 +16,13 @@ import de.upb.crypto.craco.kem.KeyEncapsulationMechanism.KeyAndCiphertext;
 import de.upb.crypto.craco.kem.abe.cp.os.*;
 import de.upb.crypto.craco.kem.abe.interfaces.proxy.DelegatedPartialDecapsulationScheme.TransformationAndDecryptionKey;
 import de.upb.crypto.craco.kem.asym.elgamal.ElgamalKEMCiphertext;
-import de.upb.crypto.math.factory.BilinearGroup;
 import de.upb.crypto.math.hash.impl.SHA256HashFunction;
 import de.upb.crypto.math.interfaces.hash.HashIntoStructure;
-import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
-import de.upb.crypto.math.pairings.bn.BarretoNaehrigProvider;
-import de.upb.crypto.math.pairings.debug.DebugBilinearGroupProvider;
+import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
+import de.upb.crypto.math.pairings.generic.BilinearGroup;
+import de.upb.crypto.math.pairings.generic.BilinearMap;
+import de.upb.crypto.math.pairings.type3.bn.BarretoNaehrigBilinearGroupImpl;
 import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
@@ -71,13 +71,10 @@ public class ElgamalLargeUniverseDelegationKEMTest {
     public static void setup() throws NoSuchAlgorithmException {
         BilinearGroup bilinearGroup;
         if (debugPairing) {
-            bilinearGroup = new BasicBilinearGroup(new DebugBilinearGroupProvider().provideBilinearGroup(n, BilinearGroup.Type.TYPE_3, 1, false));
+            bilinearGroup = new CountingBilinearGroup(100, BilinearGroup.Type.TYPE_3);
         } else {
-            BarretoNaehrigProvider fac = new BarretoNaehrigProvider();
-
-            bilinearGroup = new BasicBilinearGroup(fac.provideBilinearGroupFromSpec(BarretoNaehrigProvider.ParamSpecs.SFC256));
+            bilinearGroup = new BasicBilinearGroup(new BarretoNaehrigBilinearGroupImpl("SFC-256"));
         }
-
 
         LUDSetup schemeFactory;
 
