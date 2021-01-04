@@ -2,8 +2,7 @@ package de.upb.crypto.craco.sig.bbs;
 
 import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
 import de.upb.crypto.math.pairings.generic.BilinearGroup;
-import de.upb.crypto.math.pairings.type1.supersingular.SupersingularTateGroupImpl;
-import de.upb.crypto.math.structures.groups.lazy.LazyBilinearGroup;
+import de.upb.crypto.math.pairings.type1.supersingular.SupersingularBilinearGroup;
 import de.upb.crypto.math.structures.zn.HashIntoZn;
 
 /**
@@ -30,7 +29,7 @@ public class BBSBKeyGen {
         if (debugMode) {
             group = new CountingBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_1);
         } else {
-            group = new LazyBilinearGroup(new SupersingularTateGroupImpl(securityParameter));
+            group = new SupersingularBilinearGroup(securityParameter);
         }
 
         return doKeyGen(group);

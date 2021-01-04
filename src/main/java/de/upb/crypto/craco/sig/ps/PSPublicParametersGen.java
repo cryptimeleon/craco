@@ -2,8 +2,7 @@ package de.upb.crypto.craco.sig.ps;
 
 import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
 import de.upb.crypto.math.pairings.generic.BilinearGroup;
-import de.upb.crypto.math.pairings.type3.bn.BarretoNaehrigBilinearGroupImpl;
-import de.upb.crypto.math.structures.groups.lazy.LazyBilinearGroup;
+import de.upb.crypto.math.pairings.type3.bn.BarretoNaehrigBilinearGroup;
 
 public class PSPublicParametersGen {
     /**
@@ -16,7 +15,7 @@ public class PSPublicParametersGen {
         if (debugMode) {
             group = new CountingBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_3);
         } else {
-            group = new LazyBilinearGroup(new BarretoNaehrigBilinearGroupImpl(securityParameter));
+            group = new BarretoNaehrigBilinearGroup(securityParameter);
         }
         return new PSPublicParameters(group);
     }

@@ -4,8 +4,7 @@ import de.upb.crypto.craco.abe.interfaces.Attribute;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
 import de.upb.crypto.math.pairings.generic.BilinearGroup;
-import de.upb.crypto.math.pairings.type3.bn.BarretoNaehrigBilinearGroupImpl;
-import de.upb.crypto.math.structures.groups.lazy.LazyBilinearGroup;
+import de.upb.crypto.math.pairings.type3.bn.BarretoNaehrigBilinearGroup;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
@@ -37,7 +36,7 @@ public class ABECPWat11AsymSmallSetup {
         if (debug) {
             group = new CountingBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_3);
         } else {
-            group = new LazyBilinearGroup(new BarretoNaehrigBilinearGroupImpl(securityParameter));
+            group = new BarretoNaehrigBilinearGroup(securityParameter);
         }
 
         doKeyGen(group, universe);

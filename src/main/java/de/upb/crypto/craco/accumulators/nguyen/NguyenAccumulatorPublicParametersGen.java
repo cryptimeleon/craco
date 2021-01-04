@@ -5,8 +5,7 @@ import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
 import de.upb.crypto.math.pairings.generic.BilinearGroup;
-import de.upb.crypto.math.pairings.type3.bn.BarretoNaehrigBilinearGroupImpl;
-import de.upb.crypto.math.structures.groups.lazy.LazyBilinearGroup;
+import de.upb.crypto.math.pairings.type3.bn.BarretoNaehrigBilinearGroup;
 import de.upb.crypto.math.structures.zn.Zp;
 
 import java.math.BigInteger;
@@ -86,7 +85,7 @@ public class NguyenAccumulatorPublicParametersGen implements AccumulatorPublicPa
         if (debugMode) {
             group = new CountingBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_3);
         } else {
-            group = new LazyBilinearGroup(new BarretoNaehrigBilinearGroupImpl(securityParameter));
+            group = new BarretoNaehrigBilinearGroup(securityParameter);
         }
         return group;
     }
