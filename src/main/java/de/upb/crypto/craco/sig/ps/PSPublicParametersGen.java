@@ -1,7 +1,8 @@
 package de.upb.crypto.craco.sig.ps;
 
-import de.upb.crypto.math.factory.BilinearGroup;
-import de.upb.crypto.math.factory.BilinearGroupFactory;
+import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
+import de.upb.crypto.math.pairings.generic.BilinearGroup;
+import de.upb.crypto.math.pairings.type3.bn.BarretoNaehrigBilinearGroup;
 
 public class PSPublicParametersGen {
     /**
@@ -10,11 +11,12 @@ public class PSPublicParametersGen {
      * @return The public parameters for the Pointcheval Sanders signature scheme
      */
     public PSPublicParameters generatePublicParameter(int securityParameter, boolean debugMode) {
-        // Get bilinear group from the factory
-        BilinearGroupFactory fac = new BilinearGroupFactory(securityParameter);
-        fac.setDebugMode(debugMode);
-        fac.setRequirements(BilinearGroup.Type.TYPE_3);
-        BilinearGroup group = fac.createBilinearGroup();
+        BilinearGroup group;
+        if (debugMode) {
+            group = new CountingBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_3);
+        } else {
+            group = new BarretoNaehrigBilinearGroup(securityParameter);
+        }
         return new PSPublicParameters(group);
     }
 }

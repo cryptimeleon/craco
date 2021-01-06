@@ -1,10 +1,11 @@
 package de.upb.crypto.craco.abe.cp.large;
 
 import de.upb.crypto.craco.common.WatersHash;
-import de.upb.crypto.math.factory.BilinearGroup;
-import de.upb.crypto.math.factory.BilinearGroupFactory;
 import de.upb.crypto.math.interfaces.hash.HashIntoStructure;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
+import de.upb.crypto.math.pairings.generic.BilinearGroup;
+import de.upb.crypto.math.pairings.type1.supersingular.SupersingularBilinearGroup;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
@@ -32,17 +33,19 @@ public class ABECPWat11Setup {
      * insecure instantiation of the underlying groups.
      *
      * @param securityParameter
-     * @param n                 - maximum number of attributes per key.
-     * @param l_max             - maxium number of rows per MSP
-     * @param watersHash        - the hash function
-     * @param debug             - enable debugging.
+     * @param n                 maximum number of attributes per key.
+     * @param l_max             maximum number of rows per MSP
+     * @param watersHash        the hash function
+     * @param debug             enable debugging.
      */
     public void doKeyGen(int securityParameter, int n, int l_max, boolean watersHash, boolean debug) {
         // Generate bilinear group
-        BilinearGroupFactory fac = new BilinearGroupFactory(securityParameter);
-        fac.setDebugMode(debug);
-        fac.setRequirements(BilinearGroup.Type.TYPE_1, !watersHash, false, false);
-        BilinearGroup group = fac.createBilinearGroup();
+        BilinearGroup group;
+        if (debug) {
+            group = new CountingBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_1);
+        } else {
+            group = new SupersingularBilinearGroup(securityParameter);
+        }
 
         doKeyGen(group, n, l_max, watersHash);
     }
@@ -51,8 +54,8 @@ public class ABECPWat11Setup {
      * Setup with Waters Hash function. Secure in standard model.
      *
      * @param securityParameter
-     * @param n                 - maximum number of attributes per key
-     * @param l_max             - maximum size of MSP
+     * @param n                 maximum number of attributes per key
+     * @param l_max             maximum size of MSP
      */
     public void doKeyGenWatersHash(int securityParameter, int n, int l_max) {
         doKeyGen(securityParameter, n, l_max, true, false);

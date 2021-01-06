@@ -1,9 +1,10 @@
 package de.upb.crypto.craco.abe.cp.small.asymmetric;
 
 import de.upb.crypto.craco.abe.interfaces.Attribute;
-import de.upb.crypto.math.factory.BilinearGroup;
-import de.upb.crypto.math.factory.BilinearGroupFactory;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
+import de.upb.crypto.math.pairings.generic.BilinearGroup;
+import de.upb.crypto.math.pairings.type3.bn.BarretoNaehrigBilinearGroup;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
@@ -31,11 +32,12 @@ public class ABECPWat11AsymSmallSetup {
      * @param debug             - enable debugging.
      */
     public void doKeyGen(int securityParameter, Collection<? extends Attribute> universe, boolean debug) {
-        // Public Parameter stuff
-        BilinearGroupFactory fac = new BilinearGroupFactory(securityParameter);
-        fac.setDebugMode(debug);
-        fac.setRequirements(BilinearGroup.Type.TYPE_3, false, false, false);
-        BilinearGroup group = fac.createBilinearGroup();
+        BilinearGroup group;
+        if (debug) {
+            group = new CountingBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_3);
+        } else {
+            group = new BarretoNaehrigBilinearGroup(securityParameter);
+        }
 
         doKeyGen(group, universe);
     }

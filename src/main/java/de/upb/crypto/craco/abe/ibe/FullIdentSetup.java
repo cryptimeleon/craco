@@ -1,7 +1,8 @@
 package de.upb.crypto.craco.abe.ibe;
 
-import de.upb.crypto.math.factory.BilinearGroup;
-import de.upb.crypto.math.factory.BilinearGroupFactory;
+import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
+import de.upb.crypto.math.pairings.generic.BilinearGroup;
+import de.upb.crypto.math.pairings.type1.supersingular.SupersingularBilinearGroup;
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
@@ -23,10 +24,12 @@ public class FullIdentSetup {
      */
     public void doKeyGen(int securityParameter, BigInteger block_size, boolean debug) {
         // Generate bilinear group
-        BilinearGroupFactory fac = new BilinearGroupFactory(securityParameter);
-        fac.setDebugMode(debug);
-        fac.setRequirements(BilinearGroup.Type.TYPE_1, true, false, false);
-        BilinearGroup group = fac.createBilinearGroup();
+        BilinearGroup group;
+        if (debug) {
+            group = new CountingBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_1);
+        } else {
+            group = new SupersingularBilinearGroup(securityParameter);
+        }
 
         doKeyGen(group, block_size);
     }
