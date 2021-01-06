@@ -5,8 +5,8 @@ import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.RingElementPlainText;
 import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
-import de.upb.crypto.math.interfaces.mappings.BilinearMap;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.pairings.generic.BilinearMap;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.zn.Zp;
 

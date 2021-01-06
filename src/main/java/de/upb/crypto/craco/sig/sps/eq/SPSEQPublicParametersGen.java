@@ -1,10 +1,8 @@
 package de.upb.crypto.craco.sig.sps.eq;
 
-import de.upb.crypto.math.factory.BilinearGroup;
-import de.upb.crypto.math.factory.BilinearGroupFactory;
-import de.upb.crypto.math.pairings.bn.BarretoNaehrigProvider;
-
-import java.util.Arrays;
+import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
+import de.upb.crypto.math.pairings.generic.BilinearGroup;
+import de.upb.crypto.math.pairings.type3.bn.BarretoNaehrigBilinearGroup;
 
 public class SPSEQPublicParametersGen {
     /**
@@ -13,15 +11,12 @@ public class SPSEQPublicParametersGen {
      * @return The public parameters for the Pointcheval Sanders signature scheme
      */
     public SPSEQPublicParameters generatePublicParameter(int securityParameter, boolean debugMode) {
-        // Get bilinear group from the factory
-        BilinearGroupFactory fac = new BilinearGroupFactory(securityParameter);
-        fac.setDebugMode(debugMode);
-        fac.setRequirements(BilinearGroup.Type.TYPE_3);
-        fac.registerProvider(Arrays.asList(
-                // new ECCelerateBilinearGroupProvider(), //not yet publicly available
-                // new BarretoNaehrigNativeProvider(), //not yet publicly available
-                new BarretoNaehrigProvider()));
-        BilinearGroup group = fac.createBilinearGroup();
+        BilinearGroup group;
+        if (debugMode) {
+            group = new CountingBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_3);
+        } else {
+            group = new BarretoNaehrigBilinearGroup(securityParameter);
+        }
 
         return new SPSEQPublicParameters(group);
     }
