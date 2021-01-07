@@ -73,10 +73,7 @@ public class WatersHash implements HashIntoStructure {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((T == null) ? 0 : T.hashCode());
-        return result;
+        return Objects.hashCode(T);
     }
 
     @Override

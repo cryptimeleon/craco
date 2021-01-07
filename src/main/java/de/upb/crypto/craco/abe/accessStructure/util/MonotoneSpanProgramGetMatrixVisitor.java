@@ -7,7 +7,7 @@ import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 import java.util.ArrayList;
 
 /**
- * This Visitor calculates the matrix for the tree it is performed on.
+ * This visitor calculates the monotone span program matrix for the tree it visits.
  *
  * @author pschleiter, Fabian Eidens (refactor)
  */

@@ -1,9 +1,11 @@
 package de.upb.crypto.craco.abe.accessStructure.util;
 
+import de.upb.crypto.craco.abe.accessStructure.AccessStructure;
+
 import java.util.Set;
 
 /**
- * A visitor that checks whether a given access structure threshold tree fulfills the threshold requirement needed
+ * A visitor that checks whether a given {@link AccessStructure} fulfills the threshold requirement needed
  * to allow access.
  *
  * @author pschleiter

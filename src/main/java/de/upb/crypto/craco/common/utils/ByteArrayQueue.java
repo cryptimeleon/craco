@@ -31,9 +31,9 @@ public final class ByteArrayQueue {
     }
 
     /**
-     * Creates a queue with content.
+     * Creates a queue from the given byte array.
      *
-     * @param content Data which will be stored in the queue.
+     * @param content data which will be stored in the queue
      */
     public ByteArrayQueue(final byte[] content) {
         data = new byte[content.length];
@@ -43,9 +43,9 @@ public final class ByteArrayQueue {
     }
 
     /**
-     * Creates an empty queue with preallocated space.
+     * Creates an empty queue with pre-allocated space.
      *
-     * @param initialSize size of preallocated space
+     * @param initialSize size of pre-allocated space
      */
     public ByteArrayQueue(final int initialSize) {
         data = new byte[initialSize];
@@ -54,6 +54,9 @@ public final class ByteArrayQueue {
     }
 
     /**
+     * Returns the number of entries in this queue.
+     * Does not take into account empty pre-allocated space.
+     *
      * @return number of bytes in this queue
      */
     public int size() {
@@ -61,7 +64,7 @@ public final class ByteArrayQueue {
     }
 
     /**
-     * Discards all saved bytes.
+     * Reinitializes this queue to be empty.
      */
     public void reset() {
         data = new byte[0];
@@ -70,10 +73,10 @@ public final class ByteArrayQueue {
     }
 
     /**
-     * Removes bytes from the head of the queue.
+     * Removes the given amount of bytes from the head of the queue.
      *
      * @param count number of bytes to remove
-     * @return bytes from head of queue
+     * @return removed bytes
      */
     public byte[] remove(final int count) {
         byte[] result = new byte[count];
@@ -84,7 +87,7 @@ public final class ByteArrayQueue {
     /**
      * Removes all stored bytes.
      *
-     * @return All stored bytes.
+     * @return all stored bytes
      */
     public byte[] remove() {
         return remove(size());
@@ -94,8 +97,8 @@ public final class ByteArrayQueue {
      * Removes and returns the bytes from the head of the queue until a
      * separation symbol is found. The symbol is also removed, but not returned.
      *
-     * @param separationSymbol separation symbol
-     * @return bytes until separationSymbol, or null if symbol not found
+     * @param separationSymbol the separation symbol
+     * @return the removed bytes until the separation symbol (exclusive), or null if symbol not found
      */
     public byte[] removeUntil(final byte separationSymbol) {
         int counter = start;
@@ -117,8 +120,8 @@ public final class ByteArrayQueue {
      * Removes and returns the bytes from the tail of the queue until a
      * separation symbol is found. The symbol is also removed, but not returned.
      *
-     * @param separationSymbol separation symbol
-     * @return bytes until separationSymbol, or null if symbol not found
+     * @param separationSymbol the separation symbol
+     * @return the removed bytes until the separation symbol (exclusive), or null if symbol not found
      */
     public byte[] removeFromTailUntil(final byte separationSymbol) {
         int counter = length - 1;
@@ -140,7 +143,7 @@ public final class ByteArrayQueue {
     /**
      * Removes a single byte from the head of the queue.
      *
-     * @return byte at head of queue
+     * @return the removed byte
      */
     public byte removeByte() {
         byte result = data[start];
@@ -152,7 +155,7 @@ public final class ByteArrayQueue {
     /**
      * Removes a single byte from the tail of the queue.
      *
-     * @return byte at head of queue
+     * @return the removed byte
      */
     public byte removeByteFromTail() {
         byte result = data[length];
@@ -164,7 +167,7 @@ public final class ByteArrayQueue {
      * Removes bytes from the tails of the queue.
      *
      * @param count number of bytes to remove
-     * @return bytes from head of queue
+     * @return the removed bytes
      */
     public byte[] removeFromTail(final int count) {
         byte[] result = new byte[count];
@@ -173,11 +176,11 @@ public final class ByteArrayQueue {
     }
 
     /**
-     * Removes bytes from the head of the queue and stores them in supplied
-     * array.
+     * Removes bytes from the head of the queue and stores them in the given array.
      *
-     * @param target removed bytes are inserted here
-     * @param count  number ob bytes to remove
+     * @param target the array where the removed bytes should be stored
+     * @param count  the number of bytes to remove
+     * @throws IllegalArgumentException if this queue does not contain at least {@code count} entries
      */
     public void remove(final byte[] target, final int count) {
         if (start > count) {
@@ -189,12 +192,12 @@ public final class ByteArrayQueue {
     }
 
     /**
-     * Removes bytes from the head of the queue and stores them in supplied
-     * array.
+     * Removes bytes from the head of the queue and stores them in the given array.
      *
-     * @param target removed bytes are inserted here
-     * @param offset start writing at offset in target
+     * @param target the array where the removed bytes should be stored
+     * @param offset the offset that species where to start writing into {@code target}
      * @param count  number ob bytes to remove
+     * @throws IllegalArgumentException if this queue does not contain at least {@code count} entries
      */
     public void remove(final byte[] target, final int offset, final int count) {
         if (length < count) {
@@ -207,17 +210,17 @@ public final class ByteArrayQueue {
     }
 
     /**
-     * Removes bytes from the head of the queue and stores them in supplied
-     * array.
+     * Removes bytes from the head of the queue and stores them in the given array (as many bytes as fit).
      *
      * @param target removed bytes are inserted here
+     * @throws IllegalArgumentException if this queue does not contain at least {@code target.length} entries
      */
     public void remove(final byte[] target) {
         remove(target, 0, target.length);
     }
 
     /**
-     * Compacts the underlying storage array.
+     * Compacts the underlying storage array by de-allocating any empty space at the end of the underlying array.
      */
     public void compact() {
         if (start == 0 && data.length == length) {
@@ -230,9 +233,9 @@ public final class ByteArrayQueue {
     }
 
     /**
-     * Resize the underlying storage array.
+     * Resize the underlying storage array to the given new length.
      *
-     * @param newLength new size of array
+     * @param newLength the new size of the underlying array
      */
     private void resize(final int newLength) {
         if (newLength == length) {
@@ -245,11 +248,11 @@ public final class ByteArrayQueue {
     }
 
     /**
-     * Append bytes to end of queue.
+     * Appends {@code inputLen} bytes from {@code array} starting at offset {@code inputOffset} to this queue.
      *
-     * @param array       bytes to add
-     * @param inputOffset start reading at offset
-     * @param inputLen    number of bytes to append
+     * @param array       the bytes to add
+     * @param inputOffset the offset in {@code array} to start appending bytes from
+     * @param inputLen    the number of bytes to append
      */
     public void append(final byte[] array, final int inputOffset, final int inputLen) {
         if (length + inputLen + start > data.length) {
@@ -260,18 +263,18 @@ public final class ByteArrayQueue {
     }
 
     /**
-     * Append bytes to end of queue.
+     * Append all bytes from {@code array} to this queue.
      *
-     * @param array bytes to add
+     * @param array the bytes to add
      */
     public void append(final byte[] array) {
         append(array, 0, array.length);
     }
 
     /**
-     * Append byte to end of queue.
+     * Appends the given byte to this queue.
      *
-     * @param data byte to add
+     * @param data the byte to add
      */
     public void append(final byte data) {
         append(new byte[]{data});

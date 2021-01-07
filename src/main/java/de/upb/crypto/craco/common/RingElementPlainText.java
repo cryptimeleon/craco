@@ -14,7 +14,7 @@ import java.util.Objects;
  * A plaintext consisting of a single ring element.
  */
 public class RingElementPlainText implements PlainText {
-    private RingElement element;
+    private final RingElement element;
 
     public RingElementPlainText(RingElement element) {
         this.element = element;
@@ -26,9 +26,7 @@ public class RingElementPlainText implements PlainText {
     }
 
     /**
-     * Returns the ring element
-     *
-     * @return this ring element
+     * Returns the ring element represented by this plain text.
      */
     public RingElement getRingElement() {
         return element;
@@ -44,7 +42,7 @@ public class RingElementPlainText implements PlainText {
 
     @Override
     public int hashCode() {
-        return element.hashCode();
+        return Objects.hashCode(element);
     }
 
     @Override

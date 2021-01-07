@@ -74,7 +74,9 @@ test {
 task javadocLatex(type: Javadoc) {
     source = sourceSets.main.allJava
     classpath = sourceSets.main.runtimeClasspath
+    // enable rendering of umlauts
     options.addStringOption("charset", "UTF-8")
+    // enable latex rendering via mathjax
     options.addBooleanOption("-allow-script-in-comments", true)
     options.header = "<script type\"text/javascript&\" src=\"" +
             "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?" +

@@ -67,8 +67,8 @@ public class PSExtendedVerificationKey extends PSVerificationKey
     /**
      * Extended constructor for the extended verification key in the ACS (from representation).
      *
-     * @param groupG1 {@link Group} group 1 from {@link de.upb.crypto.math.interfaces.mappings.BilinearMap}
-     * @param groupG2 {@link Group} group 2 from {@link de.upb.crypto.math.interfaces.mappings.BilinearMap}
+     * @param groupG1 {@link Group} group 1 from {@link de.upb.crypto.math.pairings.generic.BilinearMap}
+     * @param groupG2 {@link Group} group 2 from {@link de.upb.crypto.math.pairings.generic.BilinearMap}
      * @param repr    {@link Representation} of {@link PSExtendedVerificationKey}
      */
     public PSExtendedVerificationKey(Group groupG1, Group groupG2, Representation repr) {

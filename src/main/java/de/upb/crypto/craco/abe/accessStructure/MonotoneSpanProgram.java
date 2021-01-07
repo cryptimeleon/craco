@@ -119,7 +119,7 @@ public class MonotoneSpanProgram extends AccessStructure {
     }
 
     /**
-     * This method returns a String that contains a representation of the
+     * This method returns a string that contains a representation of the
      * monotone span program given by this instance. The layout of the string
      * is designed for access structures that contain only threshold nodes with at
      * most 999 leaves.

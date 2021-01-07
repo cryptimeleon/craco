@@ -24,7 +24,7 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
     private HashFunction hashFunction;
 
     /**
-     * Constructor for {@link HashThenCommitCommitmentScheme}
+     * Constructor for {@link HashThenCommitCommitmentScheme}.
      *
      * @param encapsulatedScheme single-message-{@link CommitmentScheme} which shall be used in combination with a
      *                           {@link HashFunction}
@@ -36,19 +36,19 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
     }
 
     /**
-     * Constructor for a {@link HashThenCommitCommitmentScheme}-instance from a {@link Representation}
+     * Constructor for a {@link HashThenCommitCommitmentScheme}-instance from a {@link Representation}.
      *
-     * @param repr {@link Representation} of a {@link HashThenCommitCommitmentScheme} instance.
+     * @param repr {@link Representation} of a {@link HashThenCommitCommitmentScheme} instance
      */
     public HashThenCommitCommitmentScheme(Representation repr) {
         new ReprUtil(this).deserialize(repr);
     }
 
     /**
-     * Commit with hashing, using the {@link HashFunction}
+     * Returns a commitment to the hash of the given message, computed via the previously defined hash function.
      *
      * @param plainText {@link ByteArrayImplementation} of the message to be hashed.
-     * @return Commitment of the hashed input.
+     * @return commitment to the hashed input
      */
     @Override
     public CommitmentPair commit(PlainText plainText) {
@@ -66,14 +66,13 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
     }
 
     /**
-     * Verification that the 'announced' {@link PlainText} ( message) equals the result (original message) of opening
-     * the {@link Commitment} with the {@link OpenValue} for hashing of the original message.
+     * Verifies that the hash of the given announced {@link PlainText} equals the result of opening
+     * the {@link Commitment} with the {@link OpenValue}.
      *
-     * @param commitment {@link Commitment} of the encapsulated {@link CommitmentScheme}.
-     * @param openValue       {@link OpenValue} of the encapsulated {@link CommitmentScheme}.
-     * @param plainText       {@link PlainText} (original message) of the encapsulated {@link CommitmentScheme}.
-     * @return Boolean value whether the opened message equals the announced message is successful
-     * (true) or not (false).
+     * @param commitment commitment to verify
+     * @param openValue used to open the commitment and reveal the content
+     * @param plainText the hash of this will be compared with the opened commitment message
+     * @return true if verification succeeds, else false
      */
     @Override
     public boolean verify(Commitment commitment, OpenValue openValue, PlainText plainText) {
@@ -89,12 +88,6 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
         return encapsulatedScheme.verify(commitment, openValue, hashedPlainText);
     }
 
-    /**
-     * Casting method to generate a {@link PlainText} conforming a {@link ByteArrayImplementation}.
-     *
-     * @param bytes byte representation of the message to commit
-     * @return {@link PlainText} conforming a {@link ByteArrayImplementation}
-     */
     @Override
     public PlainText mapToPlainText(byte[] bytes) throws IllegalArgumentException {
         return new ByteArrayImplementation(bytes);
@@ -110,12 +103,6 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
         return encapsulatedScheme.getOpenValue(repr);
     }
 
-    /**
-     * The representation of this object. Used for serialization.
-     *
-     * @return a Representation or null if the representedTypeName suffices to instantiate an equal object again
-     * @see Representation
-     */
     @Override
     public Representation getRepresentation() {
         return ReprUtil.serialize(this);

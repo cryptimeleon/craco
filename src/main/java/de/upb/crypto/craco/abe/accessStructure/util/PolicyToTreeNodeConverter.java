@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.abe.accessStructure.util;
 
-import de.upb.crypto.craco.abe.interfaces.Attribute;
+import de.upb.crypto.craco.abe.accessStructure.AccessStructure;
 import de.upb.crypto.craco.common.interfaces.policy.BooleanPolicy;
 import de.upb.crypto.craco.common.interfaces.policy.BooleanPolicy.BooleanOperator;
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Takes a Policy and computes the internal tree used by the AccessStructure
+ * Takes a {@link Policy} and computes the internal tree used by the {@link AccessStructure}.
  * class.
  *
  * @author Jan
