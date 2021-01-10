@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 public class ElgamalParams {
     public static TestParams getParams() {
         Zp zp = new Zp(BigInteger.valueOf(72973));
-        Group zpGroup = zp.asUnitGroup();
+        Group zpGroup = zp.asAdditiveGroup();
 
         EncryptionScheme elgamalScheme = new ElgamalEncryption(zpGroup);
 
