@@ -1,13 +1,13 @@
 package de.upb.crypto.craco.sig.interfaces;
 
 import de.upb.crypto.math.serialization.Representable;
+import de.upb.crypto.math.serialization.Representation;
 
 /**
  * A signature.
  * <p>
- * Signature are {@code Representable} and can be
- * restored from {@code Representation} using the appropriate method of
- * the {@link SignatureScheme} interface.
+ * {@code Signature}s are {@link Representable} and can be
+ * restored from their {@link Representation} using {@link SignatureScheme#getSignature(Representation)}.
  *
  * @author feidens
  */

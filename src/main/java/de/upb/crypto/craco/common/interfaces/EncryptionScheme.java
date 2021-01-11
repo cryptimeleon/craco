@@ -10,7 +10,7 @@ import java.lang.reflect.Type;
  * An {@code EncryptionScheme} has the ability to encrypt plaintexts
  * and decrypt the resulting ciphertext (using {@link EncryptionKey}s and {@link DecryptionKey}s).
  * <p>
- * The functional contract is that decrypt(encrypt(m, pk), sk) = m for pk, sk that
+ * The functional contract is that {@code decrypt(encrypt(m, pk), sk).equals(m)} for pk, sk that
  * "fit" together (depending on the concrete type of encryption scheme).
  * <p>
  * Sub-Interfaces define how you obtain encryption and decryption keys.

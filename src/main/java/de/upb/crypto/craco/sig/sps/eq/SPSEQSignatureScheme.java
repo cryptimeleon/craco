@@ -28,7 +28,8 @@ import java.util.stream.IntStream;
  * <p>
  * Bilinear map type: 3
  * <p>
- * [1] Georg Fuchsbauer and Christian Hanser and Daniel Slamanig, "Structure-Preserving Signatures on Equivalence Classes and Constant-Size Anonymous Credentials", in Cryptology ePrint Archive, Report
+ * [1] Georg Fuchsbauer and Christian Hanser and Daniel Slamanig, "Structure-Preserving Signatures on Equivalence Classes
+ * and Constant-Size Anonymous Credentials", in Cryptology ePrint Archive, Report
  * 2014/944, 2014.
  *
  * @author Fabian Eidens

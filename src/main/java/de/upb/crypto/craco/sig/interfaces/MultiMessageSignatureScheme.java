@@ -7,7 +7,7 @@ import de.upb.crypto.craco.common.MessageBlock;
  * instead of a single message.
  * <p>
  * This is implemented as the special case of a single-message scheme
- * where the signed message is of Type {@link MessageBlock}.
+ * where the signed message is of type {@link MessageBlock}.
  * <p>
  * This interface introduces some helper methods for this case.
  *

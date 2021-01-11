@@ -9,7 +9,7 @@ public interface StandardMultiMessageSignatureScheme extends StandardSignatureSc
      * Generates a key pair for signing a block of {@code numberOfMessages} messages
      * with each signature.
      *
-     * @param numberOfMessages number of messages as input to sign supported by this key pair.
+     * @param numberOfMessages the number of messages as input to sign supported by this key pair
      */
     SignatureKeyPair<? extends VerificationKey, ? extends SigningKey> generateKeyPair(int numberOfMessages);
 
