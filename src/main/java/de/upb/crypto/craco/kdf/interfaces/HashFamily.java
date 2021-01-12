@@ -6,10 +6,8 @@ import de.upb.crypto.math.serialization.StandaloneRepresentable;
 import de.upb.crypto.math.structures.polynomial.Seed;
 
 /**
- * A family of hash functions \(H_k: {0,1}^n -> {0,1}^m}_{k \in {0,1}^d}\).
- * <p>
- * We define the size in bits as d, the input length as n and the output length
- * as m.
+ * A family of hash functions \(\{H_k: \{0,1\}^n \rightarrow \{0,1\}^m\}_{k \in \{0,1\}^d}\)
+ * where \(d\) denotes the key length, \(n\) the input length and \(m\) the output length.
  *
  * @author Mirko Jürgens
  */
