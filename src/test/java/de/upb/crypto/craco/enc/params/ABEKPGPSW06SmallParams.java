@@ -1,4 +1,4 @@
-package de.upb.crypto.craco.enc.test;
+package de.upb.crypto.craco.enc.params;
 
 import de.upb.crypto.craco.abe.interfaces.Attribute;
 import de.upb.crypto.craco.abe.interfaces.BigIntegerAttribute;
@@ -9,35 +9,41 @@ import de.upb.crypto.craco.abe.kp.small.ABEKPGPSW06SmallMasterSecret;
 import de.upb.crypto.craco.abe.kp.small.ABEKPGPSW06SmallPublicParameters;
 import de.upb.crypto.craco.abe.kp.small.ABEKPGPSW06SmallSetup;
 import de.upb.crypto.craco.common.GroupElementPlainText;
+import de.upb.crypto.craco.common.TestParameterProvider;
 import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.common.interfaces.EncryptionKey;
 import de.upb.crypto.craco.common.interfaces.KeyPair;
 import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
+import de.upb.crypto.craco.enc.EncryptionSchemeTestParam;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.function.Supplier;
 
-public class ABEKPGPSW06SmallParams {
+public class ABEKPGPSW06SmallParams implements TestParameterProvider {
 
-    public static ArrayList<TestParams> getParams() {
-        Attribute[] stringAttributes = {new StringAttribute("A"), new StringAttribute("B"), new StringAttribute("C"),
-                new StringAttribute("D"), new StringAttribute("E")};
-        TestParams stringAttrParams = createGenericParams(stringAttributes);
-        Attribute[] integerAttribute =
-                {new BigIntegerAttribute(0), new BigIntegerAttribute(1), new BigIntegerAttribute(2),
-                        new BigIntegerAttribute(3), new BigIntegerAttribute(4)};
-        TestParams integerAttrParams = createGenericParams(integerAttribute);
+    @Override
+    public Object get() {
+        Attribute[] stringAttributes = {
+                new StringAttribute("A"), new StringAttribute("B"), new StringAttribute("C"),
+                new StringAttribute("D"), new StringAttribute("E")
+        };
+        EncryptionSchemeTestParam stringAttrParams = createGenericParams(stringAttributes);
+        Attribute[] integerAttribute = {
+                new BigIntegerAttribute(0), new BigIntegerAttribute(1),
+                new BigIntegerAttribute(2), new BigIntegerAttribute(3),
+                new BigIntegerAttribute(4)
+        };
+        EncryptionSchemeTestParam integerAttrParams = createGenericParams(integerAttribute);
 
-        ArrayList<TestParams> toReturn = new ArrayList<>();
+        ArrayList<EncryptionSchemeTestParam> toReturn = new ArrayList<>();
         toReturn.add(stringAttrParams);
         toReturn.add(integerAttrParams);
         return toReturn;
     }
 
-    private static TestParams createGenericParams(Attribute[] attributes) {
+    private static EncryptionSchemeTestParam createGenericParams(Attribute[] attributes) {
 
         ABEKPGPSW06SmallSetup setup = new ABEKPGPSW06SmallSetup();
         setup.doKeyGen(80, Arrays.asList(attributes), true);
@@ -68,8 +74,9 @@ public class ABEKPGPSW06SmallParams {
         KeyPair validKeyPair = new KeyPair(validPK, validSK);
         KeyPair invalidKeyPair = new KeyPair(validPK, invalidSK);
 
-        Supplier<PlainText> supplier = () -> ((PlainText) new GroupElementPlainText(
-                publicParams.getGroupGT().getUniformlyRandomElement()));
-        return new TestParams(scheme, supplier, validKeyPair, invalidKeyPair);
+        PlainText plainText = new GroupElementPlainText(
+                publicParams.getGroupGT().getUniformlyRandomElement()
+        );
+        return new EncryptionSchemeTestParam(scheme, plainText, validKeyPair, invalidKeyPair);
     }
 }

@@ -1,4 +1,4 @@
-package de.upb.crypto.craco.interfaces.signature;
+package de.upb.crypto.craco.sig.interfaces;
 
 
 import de.upb.crypto.craco.common.interfaces.PlainText;

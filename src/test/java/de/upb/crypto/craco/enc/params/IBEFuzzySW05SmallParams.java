@@ -1,4 +1,4 @@
-package de.upb.crypto.craco.enc.test;
+package de.upb.crypto.craco.enc.params;
 
 import de.upb.crypto.craco.abe.fuzzy.small.IBEFuzzySW05Small;
 import de.upb.crypto.craco.abe.fuzzy.small.IBEFuzzySW05SmallMasterSecret;
@@ -7,17 +7,18 @@ import de.upb.crypto.craco.abe.fuzzy.small.IBEFuzzySW05SmallSetup;
 import de.upb.crypto.craco.abe.interfaces.BigIntegerAttribute;
 import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
 import de.upb.crypto.craco.common.GroupElementPlainText;
+import de.upb.crypto.craco.common.TestParameterProvider;
 import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.common.interfaces.EncryptionKey;
 import de.upb.crypto.craco.common.interfaces.KeyPair;
 import de.upb.crypto.craco.common.interfaces.PlainText;
+import de.upb.crypto.craco.enc.EncryptionSchemeTestParam;
 
 import java.math.BigInteger;
-import java.util.function.Supplier;
 
-public class IBEFuzzySW05SmallParams {
-
-    public static TestParams getParams() {
+public class IBEFuzzySW05SmallParams implements TestParameterProvider {
+    @Override
+    public Object get() {
 
         IBEFuzzySW05SmallSetup setup = new IBEFuzzySW05SmallSetup();
 
@@ -64,11 +65,10 @@ public class IBEFuzzySW05SmallParams {
         EncryptionKey publicKey = fuzzy.generateEncryptionKey(omega0);
         DecryptionKey validSecretKey = fuzzy.generateDecryptionKey(msk, omega1);
         DecryptionKey corruptedSecretKey = fuzzy.generateDecryptionKey(msk, omega2);
-        Supplier<PlainText> supplier =
-                () -> ((PlainText) new GroupElementPlainText(pp.getGroupGT().getUniformlyRandomElement()));
+        PlainText plainText = new GroupElementPlainText(pp.getGroupGT().getUniformlyRandomElement());
 
         KeyPair validKeyPair = new KeyPair(publicKey, validSecretKey);
         KeyPair corruptedKeyPair = new KeyPair(publicKey, corruptedSecretKey);
-        return new TestParams(fuzzy, supplier, validKeyPair, corruptedKeyPair);
+        return new EncryptionSchemeTestParam(fuzzy, plainText, validKeyPair, corruptedKeyPair);
     }
 }

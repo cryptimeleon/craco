@@ -1,4 +1,4 @@
-package de.upb.crypto.craco.enc.test;
+package de.upb.crypto.craco.enc.params;
 
 import de.upb.crypto.craco.abe.interfaces.Attribute;
 import de.upb.crypto.craco.abe.kp.large.ABEKPGPSW06;
@@ -7,21 +7,18 @@ import de.upb.crypto.craco.abe.kp.large.ABEKPGPSW06PublicParameters;
 import de.upb.crypto.craco.abe.kp.large.ABEKPGPSW06Setup;
 import de.upb.crypto.craco.abe.util.ABEKPGPSW06TestParamsGenerator;
 import de.upb.crypto.craco.common.GroupElementPlainText;
+import de.upb.crypto.craco.common.TestParameterProvider;
 import de.upb.crypto.craco.common.interfaces.KeyPair;
 import de.upb.crypto.craco.common.interfaces.PlainText;
+import de.upb.crypto.craco.enc.EncryptionSchemeTestParam;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
-/**
- * Params for the {@link ABEKPGPSW06} used in
- * {@link de.upb.crypto.craco.enc.test.EncryptionSchemeTest}.
- */
-public class ABEKPGPSW06Params {
-
-    public static ArrayList<TestParams> getParams() {
-        ArrayList<TestParams> toReturn = new ArrayList<>();
+public class ABEKPGPSW06Params implements TestParameterProvider {
+    @Override
+    public Object get() {
+        ArrayList<EncryptionSchemeTestParam> toReturn = new ArrayList<>();
 
         // setup KP environment with security parameter = 80, maximal number of attributes = 10
         ABEKPGPSW06Setup setup = new ABEKPGPSW06Setup();
@@ -31,20 +28,20 @@ public class ABEKPGPSW06Params {
         ABEKPGPSW06PublicParameters publicParams = setup.getPublicParameters();
         ABEKPGPSW06 scheme = new ABEKPGPSW06(publicParams);
 
-        Supplier<PlainText> supplier = () -> ((PlainText) new GroupElementPlainText(
-                publicParams.getGroupGT().getUniformlyRandomElement()));
+        PlainText plainText = new GroupElementPlainText(
+                publicParams.getGroupGT().getUniformlyRandomElement()
+        );
 
         // test string attributes, test with 5 attributes
         Attribute[] stringAttr = ABEKPGPSW06TestParamsGenerator.generateStringAttributes();
         List<KeyPair> strKeyPairs = ABEKPGPSW06TestParamsGenerator.generateKeyPairs(scheme, msk, stringAttr);
-        toReturn.add(new TestParams(scheme, supplier, strKeyPairs.get(0), strKeyPairs.get(1)));
+        toReturn.add(new EncryptionSchemeTestParam(scheme, plainText, strKeyPairs.get(0), strKeyPairs.get(1)));
 
         // test integer attributes, test with 5 attributes
         Attribute[] intAttr = ABEKPGPSW06TestParamsGenerator.generateIntegerAttributes();
         List<KeyPair> intKeyPairs = ABEKPGPSW06TestParamsGenerator.generateKeyPairs(scheme, msk, intAttr);
-        toReturn.add(new TestParams(scheme, supplier, intKeyPairs.get(0), intKeyPairs.get(1)));
+        toReturn.add(new EncryptionSchemeTestParam(scheme, plainText, intKeyPairs.get(0), intKeyPairs.get(1)));
 
         return toReturn;
     }
-
 }

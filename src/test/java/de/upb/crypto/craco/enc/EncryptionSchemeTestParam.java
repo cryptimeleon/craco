@@ -4,25 +4,23 @@ import de.upb.crypto.craco.common.interfaces.EncryptionScheme;
 import de.upb.crypto.craco.common.interfaces.KeyPair;
 import de.upb.crypto.craco.common.interfaces.PlainText;
 
-import java.util.function.Supplier;
-
 public class EncryptionSchemeTestParam {
 
     protected Class<? extends EncryptionScheme> clazz;
 
     protected EncryptionScheme scheme;
 
-    protected Supplier<PlainText> plainTextSupplier;
+    protected PlainText plainText;
 
     protected KeyPair validKeyPair;
 
     protected KeyPair invalidKeyPair;
 
-    public EncryptionSchemeTestParam(EncryptionScheme scheme, Supplier<PlainText> plainTextSupplier,
+    public EncryptionSchemeTestParam(EncryptionScheme scheme, PlainText plainText,
                                      KeyPair validKeyPair, KeyPair invalidKeyPair) {
         this.scheme = scheme;
         this.clazz = scheme.getClass();
-        this.plainTextSupplier = plainTextSupplier;
+        this.plainText = plainText;
         this.validKeyPair = validKeyPair;
         this.invalidKeyPair = invalidKeyPair;
     }
@@ -39,8 +37,8 @@ public class EncryptionSchemeTestParam {
         return scheme;
     }
 
-    public Supplier<PlainText> getPlainTextSupplier() {
-        return plainTextSupplier;
+    public PlainText getPlainText() {
+        return plainText;
     }
 
     public KeyPair getValidKeyPair() {

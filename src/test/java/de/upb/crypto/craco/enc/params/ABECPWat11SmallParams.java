@@ -1,4 +1,4 @@
-package de.upb.crypto.craco.enc.test;
+package de.upb.crypto.craco.enc.params;
 
 import de.upb.crypto.craco.abe.cp.small.ABECPWat11Small;
 import de.upb.crypto.craco.abe.cp.small.ABECPWat11SmallMasterSecret;
@@ -9,34 +9,38 @@ import de.upb.crypto.craco.abe.interfaces.BigIntegerAttribute;
 import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
 import de.upb.crypto.craco.abe.interfaces.StringAttribute;
 import de.upb.crypto.craco.common.GroupElementPlainText;
-import de.upb.crypto.craco.common.interfaces.*;
+import de.upb.crypto.craco.common.TestParameterProvider;
+import de.upb.crypto.craco.common.interfaces.DecryptionKey;
+import de.upb.crypto.craco.common.interfaces.EncryptionKey;
+import de.upb.crypto.craco.common.interfaces.KeyPair;
+import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
 import de.upb.crypto.craco.common.interfaces.policy.BooleanPolicy;
-import de.upb.crypto.craco.common.interfaces.policy.BooleanPolicy.BooleanOperator;
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
+import de.upb.crypto.craco.enc.EncryptionSchemeTestParam;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.function.Supplier;
 
-public class ABECPWat11SmallParams {
-    public static ArrayList<TestParams> getParams() {
+public class ABECPWat11SmallParams implements TestParameterProvider {
+    @Override
+    public Object get() {
         Attribute[] stringAttributes = {new StringAttribute("A"), new StringAttribute("B"), new StringAttribute("C"),
                 new StringAttribute("D"), new StringAttribute("E")};
-        TestParams stringAttrParams = createGenericParams(stringAttributes);
+        EncryptionSchemeTestParam stringAttrParams = createGenericParams(stringAttributes);
         Attribute[] integerAttribute =
                 {new BigIntegerAttribute(0), new BigIntegerAttribute(1), new BigIntegerAttribute(2),
                         new BigIntegerAttribute(3), new BigIntegerAttribute(4)};
-        TestParams integerAttrParams = createGenericParams(integerAttribute);
+        EncryptionSchemeTestParam integerAttrParams = createGenericParams(integerAttribute);
 
-        ArrayList<TestParams> toReturn = new ArrayList<>();
+        ArrayList<EncryptionSchemeTestParam> toReturn = new ArrayList<>();
         toReturn.add(stringAttrParams);
         toReturn.add(integerAttrParams);
         return toReturn;
     }
 
-    private static TestParams createGenericParams(Attribute[] attributes) {
+    private static EncryptionSchemeTestParam createGenericParams(Attribute[] attributes) {
 
         ABECPWat11SmallSetup setup = new ABECPWat11SmallSetup();
 
@@ -48,14 +52,14 @@ public class ABECPWat11SmallParams {
 
         ThresholdPolicy leftNode = new ThresholdPolicy(1, attributes[0], attributes[1]);
 
-        BooleanPolicy bleftNode = new BooleanPolicy(BooleanOperator.OR, attributes[0], attributes[1]);
+        BooleanPolicy bleftNode = new BooleanPolicy(BooleanPolicy.BooleanOperator.OR, attributes[0], attributes[1]);
 
-        BooleanPolicy bright2 = new BooleanPolicy(BooleanOperator.AND, attributes[3], attributes[4]);
+        BooleanPolicy bright2 = new BooleanPolicy(BooleanPolicy.BooleanOperator.AND, attributes[3], attributes[4]);
 
 
         ThresholdPolicy rightNode = new ThresholdPolicy(2, attributes[2], attributes[3], attributes[4]);
 
-        Policy bPolicy = new BooleanPolicy(BooleanOperator.AND, bleftNode, bright2);
+        Policy bPolicy = new BooleanPolicy(BooleanPolicy.BooleanOperator.AND, bleftNode, bright2);
         Policy policy = new ThresholdPolicy(2, leftNode, rightNode);
 
         EncryptionKey validPK = smallScheme.generateEncryptionKey(bPolicy);
@@ -75,11 +79,11 @@ public class ABECPWat11SmallParams {
         KeyPair validKeyPair = new KeyPair(validPK, validSK);
         KeyPair invalidKeyPair = new KeyPair(validPK, invalidSK);
 
-        Supplier<PlainText> abeCPSmallSupplier = () -> ((PlainText) new GroupElementPlainText(
-                publicParams.getGroupGT().getUniformlyRandomElement()));
+        PlainText plainText = new GroupElementPlainText(
+                publicParams.getGroupGT().getUniformlyRandomElement()
+        );
 
-        return new TestParams(((EncryptionScheme) smallScheme), abeCPSmallSupplier, validKeyPair, invalidKeyPair);
+        return new EncryptionSchemeTestParam(smallScheme, plainText, validKeyPair, invalidKeyPair);
 
     }
-
 }

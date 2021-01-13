@@ -3,7 +3,7 @@ package de.upb.crypto.craco.sig.sps.eq;
 import de.upb.crypto.craco.common.GroupElementPlainText;
 import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.interfaces.PlainText;
-import de.upb.crypto.craco.interfaces.signature.StructurePreservingSignatureEQScheme;
+import de.upb.crypto.craco.sig.interfaces.StructurePreservingSignatureEQScheme;
 import de.upb.crypto.craco.sig.interfaces.Signature;
 import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
 import de.upb.crypto.craco.sig.interfaces.SigningKey;

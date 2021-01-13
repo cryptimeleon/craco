@@ -1,4 +1,4 @@
-package de.upb.crypto.craco.enc.test;
+package de.upb.crypto.craco.enc.params;
 
 import de.upb.crypto.craco.abe.cp.large.distributed.DistributedABECPWat11;
 import de.upb.crypto.craco.abe.cp.large.distributed.DistributedABECPWat11MasterKeyShare;
@@ -10,6 +10,7 @@ import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
 import de.upb.crypto.craco.abe.interfaces.StringAttribute;
 import de.upb.crypto.craco.abe.interfaces.distributed.KeyShare;
 import de.upb.crypto.craco.common.GroupElementPlainText;
+import de.upb.crypto.craco.common.TestParameterProvider;
 import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.common.interfaces.EncryptionKey;
 import de.upb.crypto.craco.common.interfaces.KeyPair;
@@ -17,30 +18,34 @@ import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.craco.common.interfaces.pe.CiphertextIndex;
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
+import de.upb.crypto.craco.enc.EncryptionSchemeTestParam;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Supplier;
 
-public class DistributedABECPWat11Params {
+public class DistributedABECPWat11Params implements TestParameterProvider {
 
-    public static ArrayList<TestParams> getParams() {
-        Attribute[] stringAttributes = {new StringAttribute("A"), new StringAttribute("B"), new StringAttribute("C"),
-                new StringAttribute("D"), new StringAttribute("E")};
-        TestParams stringAttrParams = createGenericParams(stringAttributes);
-        Attribute[] integerAttribute =
-                {new BigIntegerAttribute(0), new BigIntegerAttribute(1), new BigIntegerAttribute(2),
-                        new BigIntegerAttribute(3), new BigIntegerAttribute(4)};
-        TestParams integerAttrParams = createGenericParams(integerAttribute);
+    @Override
+    public Object get() {
+        Attribute[] stringAttributes = {
+                new StringAttribute("A"), new StringAttribute("B"), new StringAttribute("C"),
+                new StringAttribute("D"), new StringAttribute("E")
+        };
+        EncryptionSchemeTestParam stringAttrParams = createGenericParams(stringAttributes);
+        Attribute[] integerAttribute = {
+                new BigIntegerAttribute(0), new BigIntegerAttribute(1),
+                new BigIntegerAttribute(2), new BigIntegerAttribute(3),
+                new BigIntegerAttribute(4)
+        };
+        EncryptionSchemeTestParam integerAttrParams = createGenericParams(integerAttribute);
 
-        ArrayList<TestParams> toReturn = new ArrayList<>();
+        ArrayList<EncryptionSchemeTestParam> toReturn = new ArrayList<>();
         toReturn.add(stringAttrParams);
         toReturn.add(integerAttrParams);
         return toReturn;
     }
-
 
     static int SERVER_COUNT = 5;
     static int SHARES_NEEDED = 3;
@@ -50,7 +55,7 @@ public class DistributedABECPWat11Params {
 
     static int MAX_MSP_COUNT = 10;
 
-    public static TestParams createGenericParams(Attribute[] attributes) {
+    public static EncryptionSchemeTestParam createGenericParams(Attribute[] attributes) {
 
         DistributedABECPWat11Setup setup = new DistributedABECPWat11Setup();
         setup.doKeyGen(SECURITY_PARAMETER, MAX_NUMBER_ATTR, MAX_MSP_COUNT, SHARES_NEEDED, SERVER_COUNT, true);
@@ -93,18 +98,16 @@ public class DistributedABECPWat11Params {
             invalidKeyShares.add(scheme.generateKeyShare(share, invalidAttributes));
         }
 
-
         DecryptionKey validSK = scheme.generateDecryptionKey(setup.getMasterSecret(), validAttributes);
-//		DecryptionKey validSK = scheme.combineKeyShares(validKeyShares);
         DecryptionKey invalidSK = scheme.combineKeyShares(invalidKeyShares);
 
         KeyPair validKeyPair = new KeyPair(pk, validSK);
         KeyPair invalidKeyPair = new KeyPair(pk, invalidSK);
 
-        Supplier<PlainText> supplier = () -> ((PlainText) new GroupElementPlainText(
-                pp.getGroupGT().getUniformlyRandomElement()));
+        PlainText plainText = new GroupElementPlainText(
+                pp.getGroupGT().getUniformlyRandomElement()
+        );
 
-        return new TestParams(scheme, supplier, validKeyPair, invalidKeyPair);
+        return new EncryptionSchemeTestParam(scheme, plainText, validKeyPair, invalidKeyPair);
     }
-
 }

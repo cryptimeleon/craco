@@ -47,6 +47,23 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
             return ReprUtil.serialize(this);
         }
 
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            HybridCipherText other = (HybridCipherText) obj;
+            return Objects.equals(ciphertext, other.ciphertext)
+                    && Objects.equals(encapsulatedKey, other.encapsulatedKey);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(ciphertext, encapsulatedKey);
+        }
     }
 
     public StreamingHybridEncryptionScheme(StreamingEncryptionScheme symmetricScheme,
