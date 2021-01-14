@@ -5,7 +5,6 @@ import de.upb.crypto.craco.common.interfaces.*;
 import de.upb.crypto.math.serialization.converter.JSONConverter;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.api.Nested;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Modifier;
@@ -14,10 +13,24 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+/**
+ * Class for testing {@link EncryptionScheme} implementations. That includes classes that implement a subtype of
+ * {@code EncryptionScheme} such as {@link StreamingEncryptionScheme}.
+ * <p>
+ * To use this class, implement a {@link TestParameterProvider} in the {@code params} folder in the same folder
+ * as this class file.
+ * The {@code TestParameterProvider}'s {@code get()} method should return a (or a list or array of)
+ * {@link EncryptionSchemeTestParam}.
+ * These testing parameters will be collected automatically by this tester via {@link #getParams()}
+ * and used to test your {@code EncryptionScheme}.
+ *
+ * @author Raphael Heitjohann
+ */
 public class EncryptionSchemeTester {
 
     @ParameterizedTest
-    @MethodSource("getEncryptionSchemeTestParams")
+    @MethodSource("getParams")
     public void testEncryptDecrypt(EncryptionSchemeTestParam param) {
         System.out.println("Testing valid encrypt/decrypt for " + param.getClazz().getName());
         if (param.getScheme() == null) {
@@ -42,7 +55,7 @@ public class EncryptionSchemeTester {
     }
 
     @ParameterizedTest
-    @MethodSource("getEncryptionSchemeTestParams")
+    @MethodSource("getParams")
     public void testFailEncryptDecrypt(EncryptionSchemeTestParam param) {
         System.out.println("Testing invalid encrypt/decrypt for " + param.getClazz().getName());
         if (param.getScheme() == null) {
@@ -71,100 +84,97 @@ public class EncryptionSchemeTester {
         }
     }
 
-    @Nested
-    public class RepresentationTests {
-
-        @ParameterizedTest
-        @MethodSource("de.upb.crypto.craco.enc.EncryptionSchemeTester#getEncryptionSchemeTestParams")
-        public void testGetPlainText(EncryptionSchemeTestParam param) {
-            System.out.println("Testing getPlainText() method for " + param.getClazz().getName());
-            if (param.getScheme() == null) {
-                fail("Scheme " + param.getClazz().getName() + " has no respective test parameters. Please implement" +
-                        " a corresponding TestParameterProvider under test/de.upb.crypto.craco.enc.params" +
-                        " or add it to the list in EncryptionSchemeTester#getEncryptionSchemeTestParams()");
-            }
-
-            PlainText plainText = param.getPlainText();
-            // For randomized plaintexts its important to be able to reproduce the test using this representation
-            System.out.println("Using plaintext " + new JSONConverter().serialize(plainText.getRepresentation()));
-            PlainText reconstructedPlainText = param.getScheme().getPlainText(plainText.getRepresentation());
-            assertEquals(
-                    plainText, reconstructedPlainText,
-                    "Reconstructed plaintext does not match actual plaintext"
-            );
+    @ParameterizedTest
+    @MethodSource("de.upb.crypto.craco.enc.EncryptionSchemeTester#getParams")
+    public void testGetPlainText(EncryptionSchemeTestParam param) {
+        System.out.println("Testing getPlainText() method for " + param.getClazz().getName());
+        if (param.getScheme() == null) {
+            fail("Scheme " + param.getClazz().getName() + " has no respective test parameters. Please implement" +
+                    " a corresponding TestParameterProvider under test/de.upb.crypto.craco.enc.params" +
+                    " or add it to the list in EncryptionSchemeTester#getEncryptionSchemeTestParams()");
         }
 
-        @ParameterizedTest
-        @MethodSource("de.upb.crypto.craco.enc.EncryptionSchemeTester#getEncryptionSchemeTestParams")
-        public void testGetCipherText(EncryptionSchemeTestParam param) {
-            System.out.println("Testing getCipherText() method for " + param.getClazz().getName());
-            if (param.getScheme() == null) {
-                fail("Scheme " + param.getClazz().getName() + " has no respective test parameters. Please implement" +
-                        " a corresponding TestParameterProvider under test/de.upb.crypto.craco.enc.params" +
-                        " or add it to the list in EncryptionSchemeTester#getEncryptionSchemeTestParams()");
-            }
-
-            PlainText plainText = param.getPlainText();
-            // For randomized plaintexts its important to be able to reproduce the test using this representation
-            System.out.println("Using plaintext " + new JSONConverter().serialize(plainText.getRepresentation()));
-
-            EncryptionKey pk = param.getValidKeyPair().getPk();
-            System.out.println("Using encryption key " + new JSONConverter().serialize(pk.getRepresentation()));
-
-            CipherText cipherText = param.getScheme().encrypt(plainText, pk);
-
-            CipherText reconstructedCipherText = param.getScheme().getCipherText(cipherText.getRepresentation());
-
-            assertEquals(
-                    cipherText, reconstructedCipherText,
-                    "Reconstructed ciphertext does not match actual ciphertext"
-            );
-        }
-
-        @ParameterizedTest
-        @MethodSource("de.upb.crypto.craco.enc.EncryptionSchemeTester#getEncryptionSchemeTestParams")
-        public void testGetEncryptionKey(EncryptionSchemeTestParam param) {
-            System.out.println("Testing getEncryptionKey() method for " + param.getClazz().getName());
-            if (param.getScheme() == null) {
-                fail("Scheme " + param.getClazz().getName() + " has no respective test parameters. Please implement" +
-                        " a corresponding TestParameterProvider under test/de.upb.crypto.craco.enc.params" +
-                        " or add it to the list in EncryptionSchemeTester#getEncryptionSchemeTestParams()");
-            }
-
-            EncryptionKey pk = param.getValidKeyPair().getPk();
-            System.out.println("Using encryption key " + new JSONConverter().serialize(pk.getRepresentation()));
-
-            EncryptionKey reconstructedPk = param.getScheme().getEncryptionKey(pk.getRepresentation());
-
-            assertEquals(
-                    pk, reconstructedPk,
-                    "Reconstructed encryption key does not match actual encryption key"
-            );
-        }
-
-        @ParameterizedTest
-        @MethodSource("de.upb.crypto.craco.enc.EncryptionSchemeTester#getEncryptionSchemeTestParams")
-        public void testGetDecryptionKey(EncryptionSchemeTestParam param) {
-            System.out.println("Testing getDecryptionKey() method for " + param.getClazz().getName());
-            if (param.getScheme() == null) {
-                fail("Scheme " + param.getClazz().getName() + " has no respective test parameters. Please implement" +
-                        " a corresponding TestParameterProvider under test/de.upb.crypto.craco.enc.params" +
-                        " or add it to the list in EncryptionSchemeTester#getEncryptionSchemeTestParams()");
-            }
-
-            DecryptionKey sk = param.getValidKeyPair().getSk();
-            System.out.println("Using decryption key " + new JSONConverter().serialize(sk.getRepresentation()));
-
-            DecryptionKey reconstructedSk = param.getScheme().getDecryptionKey(sk.getRepresentation());
-
-            assertEquals(
-                    sk, reconstructedSk,
-                    "Reconstructed decryption key does not match actual decryption key"
-            );
-        }
+        PlainText plainText = param.getPlainText();
+        // For randomized plaintexts its important to be able to reproduce the test using this representation
+        System.out.println("Using plaintext " + new JSONConverter().serialize(plainText.getRepresentation()));
+        PlainText reconstructedPlainText = param.getScheme().getPlainText(plainText.getRepresentation());
+        assertEquals(
+                plainText, reconstructedPlainText,
+                "Reconstructed plaintext does not match actual plaintext"
+        );
     }
 
-    public static Stream<EncryptionSchemeTestParam> getEncryptionSchemeTestParams() {
+    @ParameterizedTest
+    @MethodSource("de.upb.crypto.craco.enc.EncryptionSchemeTester#getParams")
+    public void testGetCipherText(EncryptionSchemeTestParam param) {
+        System.out.println("Testing getCipherText() method for " + param.getClazz().getName());
+        if (param.getScheme() == null) {
+            fail("Scheme " + param.getClazz().getName() + " has no respective test parameters. Please implement" +
+                    " a corresponding TestParameterProvider under test/de.upb.crypto.craco.enc.params" +
+                    " or add it to the list in EncryptionSchemeTester#getEncryptionSchemeTestParams()");
+        }
+
+        PlainText plainText = param.getPlainText();
+        // For randomized plaintexts its important to be able to reproduce the test using this representation
+        System.out.println("Using plaintext " + new JSONConverter().serialize(plainText.getRepresentation()));
+
+        EncryptionKey pk = param.getValidKeyPair().getPk();
+        System.out.println("Using encryption key " + new JSONConverter().serialize(pk.getRepresentation()));
+
+        CipherText cipherText = param.getScheme().encrypt(plainText, pk);
+
+        CipherText reconstructedCipherText = param.getScheme().getCipherText(cipherText.getRepresentation());
+
+        assertEquals(
+                cipherText, reconstructedCipherText,
+                "Reconstructed ciphertext does not match actual ciphertext"
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("de.upb.crypto.craco.enc.EncryptionSchemeTester#getParams")
+    public void testGetEncryptionKey(EncryptionSchemeTestParam param) {
+        System.out.println("Testing getEncryptionKey() method for " + param.getClazz().getName());
+        if (param.getScheme() == null) {
+            fail("Scheme " + param.getClazz().getName() + " has no respective test parameters. Please implement" +
+                    " a corresponding TestParameterProvider under test/de.upb.crypto.craco.enc.params" +
+                    " or add it to the list in EncryptionSchemeTester#getEncryptionSchemeTestParams()");
+        }
+
+        EncryptionKey pk = param.getValidKeyPair().getPk();
+        System.out.println("Using encryption key " + new JSONConverter().serialize(pk.getRepresentation()));
+
+        EncryptionKey reconstructedPk = param.getScheme().getEncryptionKey(pk.getRepresentation());
+
+        assertEquals(
+                pk, reconstructedPk,
+                "Reconstructed encryption key does not match actual encryption key"
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("de.upb.crypto.craco.enc.EncryptionSchemeTester#getParams")
+    public void testGetDecryptionKey(EncryptionSchemeTestParam param) {
+        System.out.println("Testing getDecryptionKey() method for " + param.getClazz().getName());
+        if (param.getScheme() == null) {
+            fail("Scheme " + param.getClazz().getName() + " has no respective test parameters. Please implement" +
+                    " a corresponding TestParameterProvider under test/de.upb.crypto.craco.enc.params" +
+                    " or add it to the list in EncryptionSchemeTester#getEncryptionSchemeTestParams()");
+        }
+
+        DecryptionKey sk = param.getValidKeyPair().getSk();
+        System.out.println("Using decryption key " + new JSONConverter().serialize(sk.getRepresentation()));
+
+        DecryptionKey reconstructedSk = param.getScheme().getDecryptionKey(sk.getRepresentation());
+
+        assertEquals(
+                sk, reconstructedSk,
+                "Reconstructed decryption key does not match actual decryption key"
+        );
+
+    }
+
+    public static Stream<EncryptionSchemeTestParam> getParams() {
         // Get all classes that implement EncryptionScheme in Craco
         Reflections reflectionCraco = new Reflections("de.upb.crypto.craco");
         Set<Class<? extends EncryptionScheme>> schemeClasses =
