@@ -16,8 +16,8 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import java.util.Objects;
 
 /**
- * Simple implementation of the hash-then-sign paradigm, where the hashFunction will be used to hash the plaintext
- * before verifying it with the signature scheme.
+ * Simple implementation of the hash-then-sign paradigm, where the given hash function will be used
+ * to hash the plaintext before verifying it with the signature scheme.
  *
  * @author Mirko Jürgens
  */

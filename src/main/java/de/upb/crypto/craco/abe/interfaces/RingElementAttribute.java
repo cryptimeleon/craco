@@ -12,6 +12,9 @@ import de.upb.crypto.math.serialization.Representation;
 
 import java.util.Collection;
 
+/**
+ * An attribute in form of a {@link RingElement}.
+ */
 public class RingElementAttribute implements Attribute {
     @UniqueByteRepresented
     private RingElement element;

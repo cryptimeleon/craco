@@ -10,11 +10,17 @@ import de.upb.crypto.math.structures.zn.Zp;
 import java.util.Objects;
 
 /**
- * This {@link SecretSharingSchemeProvider} will create instances of {@link ShamirSecretSharing}
- * with each call to {@link SecretSharingSchemeProvider#createLSSSInstance}
+ * A {@link SecretSharingSchemeProvider} that can create instances of {@link ShamirSecretSharing}.
  */
 public class ShamirSecretSharingSchemeProvider implements SecretSharingSchemeProvider {
 
+    /**
+     * Creates a new {@code ShamirSecretSharing} instance for the given {@link ThresholdPolicy} and {@code Zp}.
+     *
+     * @param policy {@link ThresholdPolicy} to create a LSSS for
+     * @param field  {@link Zp} to define the shares and secret of the resulting scheme
+     * @return a {@code ShamirSecretSharing} instance for the given policy based on the given field
+     */
     @Override
     public LinearSecretSharing<Policy> createLSSSInstance(ThresholdPolicy policy, Zp field) {
         return new ShamirSecretSharing(policy, field);

@@ -9,6 +9,9 @@ import de.upb.crypto.math.pairings.type1.supersingular.SupersingularBilinearGrou
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
+/**
+ * Contains methods for generating public parameters and master secret for the scheme.
+ */
 public class ABECPWat11Setup {
     private ABECPWat11PublicParameters pp;
     private ABECPWat11MasterSecret msk;
@@ -115,7 +118,7 @@ public class ABECPWat11Setup {
      * The master secret of this scheme. This is needed for generating a {@link ABECPWat11DecryptionKey} in the
      * {@link ABECPWat11}
      *
-     * @return
+     * @return the master secret
      */
     public ABECPWat11MasterSecret getMasterSecret() {
         return msk;

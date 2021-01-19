@@ -7,6 +7,9 @@ import de.upb.crypto.math.serialization.StandaloneRepresentable;
 
 import java.util.Collection;
 
+/**
+ * A {@code Policy} is an object that can be fulfilled by a set of {@link PolicyFact}s.
+ */
 public interface Policy extends StandaloneRepresentable, CiphertextIndex, KeyIndex, UniqueByteRepresentable {
     public boolean isFulfilled(Collection<? extends PolicyFact> facts);
 }

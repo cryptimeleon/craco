@@ -8,7 +8,7 @@ import de.upb.crypto.math.serialization.Representation;
 import java.util.List;
 
 /**
- * Interface for distributed crypto schemes.
+ * Interface for distributed encryption schemes.
  * <p>
  * The idea is that the {@link de.upb.crypto.craco.common.interfaces.pe.MasterSecret} is divided into L
  * {@link MasterKeyShare}. These Shares are distributed over L servers.
@@ -33,8 +33,8 @@ public interface DistributedEncryptionScheme extends EncryptionScheme {
      * specific amount of {@link KeyShare} in order to successfully create a
      * {@link DecryptionKey}.
      *
-     * @param keyShares
-     * @return
+     * @param keyShares the key shares to use to construct the decryption key
+     * @return the resulting decryption key
      */
     public DecryptionKey combineKeyShares(List<KeyShare> keyShares);
 

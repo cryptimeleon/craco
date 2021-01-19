@@ -70,10 +70,10 @@ public class ElgamalEncryption implements AsymmetricEncryptionScheme {
      * But, e.g. for Fujisaki-Okamoto transform, the randomness is the result of mangling the message
      * with additional randomness.
      *
-     * @param plainText
-     * @param publicKey
-     * @param random
-     * @return
+     * @param plainText the message to encrypt
+     * @param publicKey the key to use for encryption
+     * @param random the randomness to use for encryption
+     * @return the encrypted message as a cipher text
      */
     public CipherText encrypt(PlainText plainText, EncryptionKey publicKey, BigInteger random) {
         if (publicKey == null || plainText == null)

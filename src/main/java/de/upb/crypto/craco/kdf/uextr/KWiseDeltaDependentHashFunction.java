@@ -13,10 +13,10 @@ import java.math.BigInteger;
 
 /**
  * A seeded {@link HashFunction} of a {@link KWiseDeltaDependentHashFamily}.
- * This {@link HashFunction} uses an {@link EpsilonDistribution} to generate
+ * This {@link HashFunction} uses an {@link EpsilonDistributionSample} to generate
  * its hash values.
  * <p>
- * Such a function can be seeded with
+ * Such a function can be seeded based on existing parameters using
  * {@link KWiseDeltaDependentHashFamily#seedFunction(Seed)}.
  *
  * @author Mirko Jürgens, refactoring: Denis Diemert
@@ -26,8 +26,16 @@ public class KWiseDeltaDependentHashFunction implements HashFunction {
     @Represented
     private KWiseDeltaDependentHashFamily kWiseDeltaDependentHashFamily;
     @Represented
-    private EpsilonDistribution underlyingDistribution;
+    private EpsilonDistributionSample underlyingDistributionSample;
 
+    /**
+     * Initializes the hash function using the parameters specified by the given hash family
+     * and epsilon distribution sample seed.
+     *
+     * @param kWiseDeltaDependentHashFamily specifies parameters for the k-wise delta-dependent hash family
+     * @param seed seed to calculate the two field extension elements used to initialize the epsilon-distribution
+     *             sample
+     */
     public KWiseDeltaDependentHashFunction(KWiseDeltaDependentHashFamily kWiseDeltaDependentHashFamily, Seed seed) {
         this.kWiseDeltaDependentHashFamily = kWiseDeltaDependentHashFamily;
         setupEpsilonDistribution(kWiseDeltaDependentHashFamily.getK(), kWiseDeltaDependentHashFamily.getDelta(), seed);
@@ -42,7 +50,7 @@ public class KWiseDeltaDependentHashFunction implements HashFunction {
 
         double logEpsilon = logDelta + logTemp;
 
-        underlyingDistribution = new EpsilonDistribution(sampleLength, logEpsilon, seed);
+        underlyingDistributionSample = new EpsilonDistributionSample(sampleLength, logEpsilon, seed);
     }
 
     public KWiseDeltaDependentHashFunction(Representation repr) {
@@ -73,9 +81,9 @@ public class KWiseDeltaDependentHashFunction implements HashFunction {
             throw new IllegalArgumentException("Invalid input length:  expected " + kWiseDeltaDependentHashFamily
                     .getInputLength() + " bits!");
         // count the element number
-        BigInteger unsigned = BigIntegerUtil.getUnsingendBigInteger(bytes);
+        BigInteger unsigned = BigIntegerUtil.getUnsignedBigInteger(bytes);
         BigInteger start = unsigned.multiply(BigInteger.valueOf(kWiseDeltaDependentHashFamily.getInputLength()));
-        return underlyingDistribution.calculateSample(start, kWiseDeltaDependentHashFamily.getOutputLength());
+        return underlyingDistributionSample.calculateSample(start, kWiseDeltaDependentHashFamily.getOutputLength());
     }
 
     private boolean validateInputLength(byte[] bytes) {
@@ -103,7 +111,7 @@ public class KWiseDeltaDependentHashFunction implements HashFunction {
         final int prime = 31;
         int result = 1;
         result = prime * result + getOuterType().hashCode();
-        result = prime * result + ((underlyingDistribution == null) ? 0 : underlyingDistribution.hashCode());
+        result = prime * result + ((underlyingDistributionSample == null) ? 0 : underlyingDistributionSample.hashCode());
         return result;
     }
 
@@ -118,10 +126,10 @@ public class KWiseDeltaDependentHashFunction implements HashFunction {
         KWiseDeltaDependentHashFunction other = (KWiseDeltaDependentHashFunction) obj;
         if (!getOuterType().equals(other.getOuterType()))
             return false;
-        if (underlyingDistribution == null) {
-            if (other.underlyingDistribution != null)
+        if (underlyingDistributionSample == null) {
+            if (other.underlyingDistributionSample != null)
                 return false;
-        } else if (!underlyingDistribution.equals(other.underlyingDistribution))
+        } else if (!underlyingDistributionSample.equals(other.underlyingDistributionSample))
             return false;
         return true;
     }

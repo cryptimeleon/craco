@@ -21,9 +21,9 @@ public class BBSBKeyGen {
     /**
      * Generates public parameters for BBSB
      *
-     * @param securityParameter
+     * @param securityParameter the number of bits of security
      * @param debugMode         if set to true, uses insecure but fast groups.
-     * @return
+     * @return the generated public parameters
      */
     public BBSBPublicParameter doKeyGen(int securityParameter, boolean debugMode) {
         if (debugMode) {

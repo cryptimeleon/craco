@@ -18,10 +18,11 @@ import java.util.stream.IntStream;
  * Shamir's secret sharing scheme is a linear secret sharing scheme based on polynomial interpolation.
  * <p>
  * Assume s is the secret to be shared. Based on the threshold t of the given {@link ThresholdPolicy} a
- * {@link PolynomialRing.Polynomial} P(x) of degree t-1 is computed, such that P(0)=s.
+ * {@link de.upb.crypto.math.structures.polynomial.PolynomialRing.Polynomial} P(x) of degree t-1 is computed,
+ * such that \(P(0)=s\).
  * <p>
- * The shares (i, s_i = P(i)) correspond to data points on the polynomial therefore any set S of shares
- * with |S| >= t can be used to uniquely determine the original polynomial using interpolation and therefore
+ * The shares \((i, s_i = P(i))\) correspond to data points on the polynomial therefore any set \(S\) of shares
+ * with \(|S| >= t\) can be used to uniquely determine the original polynomial using interpolation and therefore
  * reconstruct
  * the secret.
  * <p>

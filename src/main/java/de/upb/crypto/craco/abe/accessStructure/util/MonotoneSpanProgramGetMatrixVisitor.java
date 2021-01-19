@@ -7,7 +7,7 @@ import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 import java.util.ArrayList;
 
 /**
- * This Visitor calculates the matrix for the tree it is performed on.
+ * This visitor calculates the monotone span program matrix for the tree it visits.
  *
  * @author pschleiter, Fabian Eidens (refactor)
  */
@@ -16,17 +16,17 @@ public class MonotoneSpanProgramGetMatrixVisitor implements Visitor<Integer> {
     /**
      * Field over which the matrix is calculated.
      */
-    private Zp field;
+    private final Zp field;
 
     /**
      * Contain the values for the columns belong to higher hierarchies.
      */
-    private ArrayList<ZpElement> prefix;
+    private final ArrayList<ZpElement> prefix;
 
     /**
      * Matrix containing all rows calculated so far.
      */
-    private ArrayList<ArrayList<ZpElement>> matrix;
+    private final ArrayList<ArrayList<ZpElement>> matrix;
 
     /**
      * The threshold of the node the visitor is performed on.

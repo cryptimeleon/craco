@@ -9,7 +9,9 @@ import java.math.BigInteger;
 import java.util.Objects;
 
 /**
- * An instance of a {@link UniversalHashFamily}. For more information see the javdoc there.
+ * An instance of a {@link UniversalHashFamily}.
+ *
+ * @see UniversalHashFamily
  *
  * @author Mirko Jürgens, refactoring & javadoc: Denis Diemert
  */

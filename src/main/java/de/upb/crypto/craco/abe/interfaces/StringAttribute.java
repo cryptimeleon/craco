@@ -7,6 +7,9 @@ import de.upb.crypto.math.serialization.StringRepresentation;
 
 import java.util.Collection;
 
+/**
+ * An attribute in form of a {@link String}.
+ */
 public class StringAttribute implements Attribute {
     private String attribute;
 

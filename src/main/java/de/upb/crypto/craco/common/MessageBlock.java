@@ -17,7 +17,7 @@ import java.util.function.Function;
 public class MessageBlock implements PlainText, List<PlainText> {
 
     @UniqueByteRepresented
-    private List<PlainText> messages = new ArrayList<>();
+    private final List<PlainText> messages = new ArrayList<>();
 
     public MessageBlock() {
 
@@ -32,12 +32,14 @@ public class MessageBlock implements PlainText, List<PlainText> {
     }
 
     /**
-     * Reconstructs the message block from representation.
+     * Reconstructs the message block from its representation.
+     * <p>
      * Caller needs to supply a function messageRestorer that is used to
-     * restore each message in this block (e.g., repr -> new RingElementPlainText(myRing.getElement(repr))
+     * restore each message in this block (e.g., {@code repr -> new RingElementPlainText(myRing.getElement(repr)}).
      *
-     * @param repr
-     * @param messageRestorer
+     * @param repr the representation to restore the message block from
+     * @param messageRestorer a function that can restore the message representations contained in the message
+     *                        block representation
      */
     public MessageBlock(Representation repr, Function<Representation, ? extends PlainText> messageRestorer) {
         repr.list().forEach(r -> messages.add(messageRestorer.apply(r)));
@@ -172,10 +174,7 @@ public class MessageBlock implements PlainText, List<PlainText> {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((messages == null) ? 0 : messages.hashCode());
-        return result;
+        return messages.hashCode();
     }
 
     @Override

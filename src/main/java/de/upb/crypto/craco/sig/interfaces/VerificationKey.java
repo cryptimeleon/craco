@@ -1,14 +1,14 @@
 package de.upb.crypto.craco.sig.interfaces;
 
 import de.upb.crypto.math.serialization.Representable;
+import de.upb.crypto.math.serialization.Representation;
 
 
 /**
  * A key that is used to verify signatures.
  * <p>
- * VerificationKeys are Representable and can be
- * restored from Representation using the appropriate method of
- * the SignatureScheme interface.
+ * {@code VerificationKeys} are {@link Representable} and can be
+ * restored from {@link Representation} using {@link SignatureScheme#getVerificationKey(Representation)}.
  *
  * @author feidens
  */

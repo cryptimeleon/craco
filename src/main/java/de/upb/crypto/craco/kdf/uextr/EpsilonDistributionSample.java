@@ -13,11 +13,9 @@ import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 import java.math.BigInteger;
 
 /**
- * Implementation of an \epsilon -biased distribution using polynomials in the
- * galois field. These distributions can be used to specify k-wise \delta
+ * Implementation of a sample point in an epsilon-biased distribution using polynomials in the
+ * galois field. These distributions can be used to specify k-wise delta
  * -dependent families of hash functions.
- * <p>
- * <p>
  * <p>
  * Construction 3 in: Alon et al., 2002, Simple Constructions of Almost k-wise
  * Independent Random Variables
@@ -25,40 +23,43 @@ import java.math.BigInteger;
  *
  * @author Mirko Jürgens
  */
-public class EpsilonDistribution implements StandaloneRepresentable {
+public class EpsilonDistributionSample implements StandaloneRepresentable {
 
     /**
-     * n in the paper
+     * Length of the sampled string. n in the paper.
      */
-    private int sampleLength;
+    private final int sampleLength;
 
     /**
-     * epsilon in the paper
+     * The allowed bias. epsilon in the paper.
      */
-    private double epsilon;
-
-    private double m;
+    private final double epsilon;
 
     /**
-     * GF(2^m)
+     * The degree of the field extension {@code baseField}.
      */
-    private F2FiniteFieldExtension baseField;
+    private final double m;
 
     /**
-     * Specified by the seed!
+     * Galois field of size 2 to some power m.
      */
-    private F2FiniteFieldElement x;
-    /**
-     * Specified by the seed!
-     */
-    private F2FiniteFieldElement y;
+    private final F2FiniteFieldExtension baseField;
 
     /**
-     * @param sampleLength
-     * @param logEpsilon
-     * @param seed
+     * First field element used to calculate the sample space string. x in the paper.
      */
-    public EpsilonDistribution(int sampleLength, double logEpsilon, Seed seed) {
+    private final F2FiniteFieldElement x;
+    /**
+     * Second field element used to calculate the sample space string. y in the paper.
+     */
+    private final F2FiniteFieldElement y;
+
+    /**
+     * @param sampleLength length of the sampled string. n in the paper
+     * @param logEpsilon log to base 2 of the allowed bias epsilon
+     * @param seed the seed used to initialize the two field elements underlying this sample point
+     */
+    public EpsilonDistributionSample(int sampleLength, double logEpsilon, Seed seed) {
 
         this.sampleLength = sampleLength;
         this.epsilon = Math.pow(2, logEpsilon);
@@ -93,7 +94,7 @@ public class EpsilonDistribution implements StandaloneRepresentable {
                 polyRing.new Polynomial(new Seed(seed.getInternalSeed(), (int) m, (int) m)));
     }
 
-    public EpsilonDistribution(Representation repr) {
+    public EpsilonDistributionSample(Representation repr) {
         ObjectRepresentation obj = (ObjectRepresentation) repr;
         epsilon = new Double(obj.get("epsilon").str().get());
         m = new Double(obj.get("m").str().get());
@@ -103,6 +104,12 @@ public class EpsilonDistribution implements StandaloneRepresentable {
         y = baseField.getElement(obj.get("y"));
     }
 
+    /**
+     * Calculates the actual sample space string starting at bit {@code start} with length {@code length}.
+     * @param start the start bit for the calculated sample string
+     * @param length the length of the sample string in bits
+     * @return the sample string
+     */
     public byte[] calculateSample(BigInteger start, int length) {
         F2FiniteFieldElement temp = baseField.new F2FiniteFieldElement((FiniteFieldElement) x.pow(start));
         ZpElement scalar = temp.getRepresentative().scalarProduct(y.getRepresentative());
@@ -170,7 +177,7 @@ public class EpsilonDistribution implements StandaloneRepresentable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        EpsilonDistribution other = (EpsilonDistribution) obj;
+        EpsilonDistributionSample other = (EpsilonDistributionSample) obj;
         if (baseField == null) {
             if (other.baseField != null)
                 return false;

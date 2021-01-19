@@ -47,7 +47,7 @@ public final class LagrangeUtil {
      * @param S set of x coordinates
      * @param x x coordinate to evaluate the lagrange basis polynomial at
      * @param field the field to do the computation over
-     * @returnthe lagrange basis polynomial evaluated at coordinate {@code x} in the given field
+     * @return the lagrange basis polynomial evaluated at coordinate {@code x} in the given field
      */
     public static BigInteger computeCoefficient(BigInteger i, Set<BigInteger> S, BigInteger x,
                                                 Zp field) {

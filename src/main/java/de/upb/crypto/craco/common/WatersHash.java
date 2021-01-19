@@ -18,6 +18,9 @@ import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 import java.math.BigInteger;
 import java.util.*;
 
+/**
+ * A hash function allowing hashing into a specific group.
+ */
 public class WatersHash implements HashIntoStructure {
     @Represented
     private Group g;
@@ -70,10 +73,7 @@ public class WatersHash implements HashIntoStructure {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((T == null) ? 0 : T.hashCode());
-        return result;
+        return Objects.hashCode(T);
     }
 
     @Override

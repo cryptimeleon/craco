@@ -10,18 +10,20 @@ import java.io.OutputStream;
  * An encryption scheme with the added ability to encrypt data from streams.
  * Natural examples are stream- and block ciphers (e.g., AES).
  * <p>
- * Example use: (decrypts a file that is being read)
+ * Example use (decrypts a file that is being read):
+ * <pre>
  * scheme.decrypt(new BufferedInputStream(new FileInputStream(...)), decryptionKey)
- * returns an InputStream where reading supplies exactly the plaintext corresponding
+ * </pre>
+ * returns an {@link InputStream} where reading supplies exactly the plaintext corresponding
  * to the ciphertext stored in the file.
  * <p>
  * The idea is that encryption/decryption can be used as part of a chain of streams.
- * In the example above: FileInputStream -> BufferedInputStream -> DecryptionInputStream.
- * Similarly, you can chain OutputStreams such that any bytes written to it are encrypted/decrypted
- * and then passed to another OutputStream.
+ * In the example above: {@code FileInputStream -> BufferedInputStream -> DecryptionInputStream}.
+ * Similarly, you can chain {@code OutputStream}s such that any bytes written to it are encrypted/decrypted
+ * and then passed to another {@code OutputStream}.
  * <p>
  * Note that the plaintext size and ciphertext size are often NOT the same, hence you cannot
- * expect the chained streams obtained from a StreamingEncryptionScheme to read/write
+ * expect the chained streams obtained from a {@code StreamingEncryptionScheme} to read/write
  * exactly the number of bytes from the chained stream that you read from/write to it.
  * <p>
  * Implementations of this interface should normally be able to do

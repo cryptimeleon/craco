@@ -5,9 +5,9 @@ import de.upb.crypto.math.serialization.Representable;
 /**
  * A ciphertext.
  * <p>
- * Ciphertexts are Representable and can be
- * restored from Representation using the appropriate method of
- * the EncryptionScheme interface.
+ * Ciphertexts are representable and can be
+ * restored from their representation using the appropriate method of
+ * the corresponding {@link EncryptionScheme} implementation.
  *
  * @author Jan
  */

@@ -10,15 +10,15 @@ import java.math.BigInteger;
 import java.util.Objects;
 
 /**
- * A standard implementation of a Key-Derivation function using the Leftover-Hash-Lemma and 2-universal HashFunctions.
- * This approach yields secure Key-Derivation-Functions as long as the source has enough entropy.
+ * A standard implementation of a key derivation function using the Leftover-Hash-Lemma and 2-universal hash functionss.
+ * This approach yields secure key derivation functions as long as the source has enough entropy.
  *
  * @author Mirko Jürgens
  */
 public class LHLFamily implements StandaloneRepresentable {
 
     private static final String insufficient_entropy =
-            "The given source of randomness has an insufficent amount of entropy for this key derivation process.";
+            "The given source of randomness has an insufficient amount of entropy for this key derivation process.";
 
     @Represented
     protected Integer securityParameter, inputLength, outputLength, minEntropy;
@@ -27,15 +27,15 @@ public class LHLFamily implements StandaloneRepresentable {
     protected UniversalHashFamily family;
 
     /**
-     * Checks whether the given parameters have sufficient entropy and generates a UniversalHashFamily for the given
-     * parameters. A KeyDerivation-Function can then be extracted by calling {@link LHLFamily#seed(Seed)}.
+     * Checks whether the given parameters have sufficient entropy and then generates a {@link UniversalHashFamily}
+     * for the given parameters.
+     * A key derivation function can then be extracted by calling {@link LHLFamily#seed(Seed)}.
      *
-     * @param securityParameter the security parameter denoted as the - base 2 logarithm. e.g. for the security 2^-80
-     *                          this shuld be 80
+     * @param securityParameter the security parameter in number of bits
      * @param inputLength       the input length of the hash function
      * @param outputlength      the output length of the hash function
      * @param minEntropy        the min entropy of the source of randomness
-     * @throws InsufficientEntropyException if the given parameters do not have enoguh entropy for the given key length
+     * @throws InsufficientEntropyException if the given parameters do not have enough entropy for the given key length
      */
     public LHLFamily(int securityParameter, int inputLength, int outputlength, int minEntropy)
             throws InsufficientEntropyException {

@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.sig.interfaces;
 
 /**
- * A container for a pair of VerificationKey and SigningKey.
+ * A container for a pair of {@link VerificationKey} and {@link SigningKey}.
  */
 public class SignatureKeyPair<VerificationKeyType extends VerificationKey, SigningKeyType extends SigningKey> {
 

@@ -1,23 +1,21 @@
 package de.upb.crypto.craco.sig.interfaces;
 
 /**
- * A standard signature scheme (where anyone can produce valid pk,sk pairs)
- * where the message space is a set of vectors of messages.
- * <p>
- * This is implemented as the special case of a single message scheme
- * where the signed message is of type MessageBlock.
- * <p>
- * generateKeyPair() without the numberOfMessages parameter defaults to a single message.
+ * A combination of {@link MultiMessageSignatureScheme} and {@link StandardSignatureScheme} resulting in
+ * a multi-message scheme with key generation functions.
  */
 public interface StandardMultiMessageSignatureScheme extends StandardSignatureScheme, MultiMessageSignatureScheme {
     /**
-     * Generates a key pair for signing a vector of numberOfMessages messages
+     * Generates a key pair for signing a block of {@code numberOfMessages} messages
      * with each signature.
      *
-     * @param numberOfMessages number of messages as input to sign supported by this key pair.
+     * @param numberOfMessages the number of messages as input to sign supported by this key pair
      */
     SignatureKeyPair<? extends VerificationKey, ? extends SigningKey> generateKeyPair(int numberOfMessages);
 
+    /**
+     * Generates a key pair for signing a single message.
+     */
     @Override
     default SignatureKeyPair<? extends VerificationKey, ? extends SigningKey> generateKeyPair() {
         return generateKeyPair(1);

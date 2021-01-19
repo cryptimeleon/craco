@@ -1,10 +1,15 @@
 package de.upb.crypto.craco.common.interfaces.pe;
 
+import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
 
 /**
- * Some object that defines which keys will be able to decrypt
- * a ciphertext generated for CiphertextIndex in a PredicateEncryptionScheme.
+ * A {@code CiphertextIndex} is an object associated to an encryption key such that
+ * only a decryption key with a {@link KeyIndex} that satisfies {@link PredicateEncryptionScheme#getPredicate()}}
+ * can decrypt its ciphertexts.
+ *
+ * @see PredicateEncryptionScheme#generateEncryptionKey(CiphertextIndex)
+ * @see PredicateEncryptionScheme#encrypt(PlainText, CiphertextIndex) 
  *
  * @author Jan
  */

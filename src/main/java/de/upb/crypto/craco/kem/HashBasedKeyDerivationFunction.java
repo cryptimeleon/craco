@@ -12,9 +12,12 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * A basic approach of a {@link KeyDerivationFunction} using a hash function. This class can be used to generate key
- * derivation functions that are not provably secure (e.g. using {@link SHA256HashFunction} as a hash function), or
- * it can be used to generate provably secure key derivation functions. For this, you have to setup a
+ * A basic implementation of a {@link KeyDerivationFunction} using a hash function.
+ * This class can be used to generate key derivation functions that are not provably secure
+ * (e.g. using {@link SHA256HashFunction} as a hash function),
+ * or it can be used to generate provably secure key derivation functions.
+ * For this, you have to setup a
+ * TODO: Missing sentence
  *
  * @author Jan
  */
@@ -28,7 +31,8 @@ public class HashBasedKeyDerivationFunction implements KeyDerivationFunction<Sym
     }
 
     /**
-     * This doesn't yield provable security.
+     * Initializes this key derivation function based on the SHA256 hash function.
+     * Does not yield a provably secure key derivation function.
      */
     public HashBasedKeyDerivationFunction() {
         this(new SHA256HashFunction());
@@ -51,9 +55,9 @@ public class HashBasedKeyDerivationFunction implements KeyDerivationFunction<Sym
 
 
     /**
-     * Returns the output-length in bytes
+     * Returns the output length in number of bytes
      *
-     * @return
+     * @return the output length in number of bytes
      */
     public int bitSize() {
         return hashFunction.getOutputLength();

@@ -2,7 +2,7 @@ package de.upb.crypto.craco.common.utils;
 
 
 /**
- * Various byte[] helper methods.
+ * Various {@code byte[]} helper methods.
  *
  * @author Marius Dransfeld
  */
@@ -15,7 +15,7 @@ public final class ByteUtil {
     }
 
     /**
-     * Computes bytewise XOR of two arrays.
+     * Computes byte-wise XOR of two arrays.
      *
      * @param a first byte array
      * @param b second byte array

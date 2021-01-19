@@ -6,33 +6,35 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 /**
+ * An inner node of a threshold tree.
+ *
  * @author pschleiter, Fabian Eidens (refactoring)
  */
 public class InnerNode implements TreeNode {
 
     /**
-     * children of this inner node
+     * The children of this inner node.
      */
-    private ArrayList<TreeNode> children;
+    private final ArrayList<TreeNode> children;
 
     /**
-     * the threshold value of this node
+     * The threshold value of this node.
      */
     private int t;
 
     /**
-     * creates a new inner node
+     * Creates a new inner node with no children and threshold set to 0.
      */
     public InnerNode() {
-        children = new ArrayList<TreeNode>();
+        children = new ArrayList<>();
         t = 0;
     }
 
     /**
-     * creates a new inner node
+     * Creates a new inner node with the given children and trreshold.
      *
-     * @param children
-     * @param threshold
+     * @param children the children of this inner node
+     * @param threshold the threshold of this node
      */
     public InnerNode(ArrayList<TreeNode> children, Integer threshold) {
         this.children = children;
@@ -40,9 +42,9 @@ public class InnerNode implements TreeNode {
     }
 
     /**
-     * appends a child to the children of this tree
+     * Appends a child to the children of this node.
      *
-     * @param child
+     * @param child the child to add
      */
     public void addChild(TreeNode child) {
         children.add(child);
@@ -62,6 +64,18 @@ public class InnerNode implements TreeNode {
         return t;
     }
 
+    /**
+     * Visits the threshold tree represented by this inner node in pre-order.
+     * <p>
+     * For each child, a new visitor is created via {@link Visitor#getVisitorForNextChild()} which is
+     * used to visit the child.
+     * The result of those visits are then used to calculate the result of the visitor vising this node.
+     *
+     * @param visitor the visitor to use
+     * @param <F> the return result of the visitor
+     * @return the result returned by the visitor visiting this node
+     * @throws WrongAccessStructureException if something is wrong with the access structure being traversed
+     */
     @Override
     public <F> F performVisitor(Visitor<F> visitor) throws WrongAccessStructureException {
 
