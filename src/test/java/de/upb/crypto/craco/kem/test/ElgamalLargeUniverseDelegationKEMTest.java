@@ -43,7 +43,7 @@ import static org.junit.Assert.*;
 /**
  * Test case for Elgamal KEM with outsourcing.
  *
- * @author peter.guenther
+ *
  */
 public class ElgamalLargeUniverseDelegationKEMTest {
 

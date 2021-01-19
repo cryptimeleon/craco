@@ -18,7 +18,7 @@ import java.util.Map;
  * {@link IBEFuzzySW05}, but leaving out the component {@link IBEIBEFuzzySW05SW05CipherText#getEPrime()}.
  * This is because the component {@code ePrime} is output as the key.
  *
- * @author Denis Diemert (based on {@link IBEIBEFuzzySW05SW05CipherText})
+ *
  */
 public class IBEFuzzySW05KEMCipherText implements CipherText {
     /**

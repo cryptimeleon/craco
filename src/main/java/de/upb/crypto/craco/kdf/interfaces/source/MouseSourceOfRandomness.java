@@ -14,7 +14,7 @@ import java.util.concurrent.Semaphore;
  * assume that there are 2 bits of randomness in every mouse position. However,
  * we may need some statistical tests to assert this.
  *
- * @author Mirko Jürgens
+ *
  */
 public class MouseSourceOfRandomness implements SourceOfRandomness {
 

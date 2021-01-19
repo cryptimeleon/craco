@@ -21,7 +21,7 @@ import de.upb.crypto.math.structures.polynomial.Seed;
  * k-wise Independent Random Variables
  * (http://www.math.tau.ac.il/~nogaa/PDFS/aghp4.pdf)
  *
- * @author Mirko Jürgens, refactoring: Denis Diemert
+ *
  */
 public class KWiseDeltaDependentHashFamily implements HashFamily {
 

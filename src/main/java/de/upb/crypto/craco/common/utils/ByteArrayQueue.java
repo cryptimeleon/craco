@@ -3,7 +3,7 @@ package de.upb.crypto.craco.common.utils;
 /**
  * Byte array queue. Can add bytes to end of queue and remove bytes at front.
  *
- * @author Marius Dransfeld
+ *
  */
 public final class ByteArrayQueue {
     /**

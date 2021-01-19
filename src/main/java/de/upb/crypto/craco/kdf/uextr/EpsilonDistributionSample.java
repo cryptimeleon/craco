@@ -21,7 +21,7 @@ import java.math.BigInteger;
  * Independent Random Variables
  * (http://www.math.tau.ac.il/~nogaa/PDFS/aghp4.pdf)
  *
- * @author Mirko Jürgens
+ *
  */
 public class EpsilonDistributionSample implements StandaloneRepresentable {
 

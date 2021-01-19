@@ -28,7 +28,7 @@ import de.upb.crypto.math.serialization.Representation;
  * One special case of predicate encryption is attribute-based encryption.
  * See {@link AbePredicate} for more details on how the predicate works there.
  *
- * @author Jan
+ *
  */
 public interface PredicateEncryptionScheme extends EncryptionScheme {
     /**

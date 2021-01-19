@@ -15,8 +15,6 @@ import java.util.Objects;
 /**
  * The public parameters for the {@link ABECPWat11}, generated in
  * the {@link ABECPWat11Setup}.
- *
- * @author Mirko Jürgens, Jan Bobolz
  */
 public class ABECPWat11PublicParameters implements PublicParameters {
 

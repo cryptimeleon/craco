@@ -18,7 +18,7 @@ import java.util.Set;
  * Fuzzy IBE, Large Universe Construction from "Fuzzy Identity-Based Encryption"
  * by Sahai,Waters.
  *
- * @author Marius Dransfeld, refactoring: Fabian Eidens, Mirko Jürgens, Denis Diemert
+ *
  */
 public class IBEFuzzySW05 extends AbstractIBEFuzzySW05 implements PredicateEncryptionScheme {
 

@@ -6,7 +6,7 @@ package de.upb.crypto.craco.common.interfaces;
  * <p>
  * Encryption can be done via the public key and decryption via the secret key.
  *
- * @author Jan
+ *
  */
 public interface AsymmetricEncryptionScheme extends EncryptionScheme {
 

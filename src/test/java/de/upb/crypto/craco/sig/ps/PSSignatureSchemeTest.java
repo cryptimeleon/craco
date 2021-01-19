@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * JUnit test for the Pointcheval Sanders signature scheme.
  *
- * @author Fynn Dallmeier
+ *
  */
 
 public class PSSignatureSchemeTest {

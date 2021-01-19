@@ -24,7 +24,7 @@ import java.util.Objects;
  * <p>
  * [2] F. Eidens, Anonymous Credential System based on the q-Strong Diffie-Hellman Assumption 2015.
  *
- * @author Fabian Eidens
+ *
  */
 public class BBSBSignatureScheme implements StandardMultiMessageSignatureScheme {
 

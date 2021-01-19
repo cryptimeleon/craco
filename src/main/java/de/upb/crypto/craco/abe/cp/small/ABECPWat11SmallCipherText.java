@@ -13,8 +13,6 @@ import java.util.Objects;
 
 /**
  * A {@link CipherText} for the {@link ABECPWat11Small}.
- *
- * @author Marius Dransfeld, refactoring: Fabian Eidens, Mirko Jürgens, Raphael Heitjohann
  */
 public class ABECPWat11SmallCipherText implements CipherText {
 

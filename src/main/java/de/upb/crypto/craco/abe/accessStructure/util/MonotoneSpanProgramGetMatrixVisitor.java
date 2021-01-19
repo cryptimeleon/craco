@@ -8,8 +8,6 @@ import java.util.ArrayList;
 
 /**
  * This visitor calculates the monotone span program matrix for the tree it visits.
- *
- * @author pschleiter, Fabian Eidens (refactor)
  */
 public class MonotoneSpanProgramGetMatrixVisitor implements Visitor<Integer> {
 

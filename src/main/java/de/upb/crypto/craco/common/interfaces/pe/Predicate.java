@@ -5,7 +5,7 @@ package de.upb.crypto.craco.common.interfaces.pe;
  *
  * @see PredicateEncryptionScheme#getPredicate()
  *
- * @author Jan
+ *
  */
 public interface Predicate {
     /**

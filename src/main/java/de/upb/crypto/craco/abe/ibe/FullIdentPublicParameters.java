@@ -17,7 +17,7 @@ import java.util.Objects;
  * The public parameters for the {@link FullIdent} generated in the
  * {@link FullIdentSetup}.
  *
- * @author Mirko Jürgens
+ *
  */
 public class FullIdentPublicParameters implements PublicParameters {
 

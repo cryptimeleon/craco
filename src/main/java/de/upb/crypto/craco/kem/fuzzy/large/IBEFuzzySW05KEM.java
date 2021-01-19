@@ -34,7 +34,7 @@ import java.util.Set;
  * This scheme only supplies {@link KeyMaterial}. It needs to be used in combination with a KDF to obtain a symmetric
  * key. For this, see {@link SymmetricKeyPredicateKEM}.
  *
- * @author Denis Diemert (based on {@link IBEFuzzySW05})
+ *
  */
 public class IBEFuzzySW05KEM extends AbstractIBEFuzzySW05 implements PredicateKEM<KeyMaterial> {
 

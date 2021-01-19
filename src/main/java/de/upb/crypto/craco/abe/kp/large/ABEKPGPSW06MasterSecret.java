@@ -13,7 +13,7 @@ import java.util.Objects;
  * The master secret for the {@link ABEKPGPSW06} generated on the
  * {@link ABEKPGPSW06Setup}.
  *
- * @author Mirko Jürgens
+ *
  */
 public class ABEKPGPSW06MasterSecret implements MasterSecret {
 

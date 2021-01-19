@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * Class for a signature of the Pointcheval Sanders 2018 (Section 4.2) signature scheme.
  *
- * @author Raphael Heitjohann
+ *
  */
 public class PS18Signature implements Signature {
 

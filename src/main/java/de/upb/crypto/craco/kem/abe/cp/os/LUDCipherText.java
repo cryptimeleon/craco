@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Ciphertexts for encapsulation of symmetric keys with ElgamalLargeUniverseDelegationKEM.
  *
- * @author peter.guenther
+ *
  */
 public class LUDCipherText implements CipherText {
 

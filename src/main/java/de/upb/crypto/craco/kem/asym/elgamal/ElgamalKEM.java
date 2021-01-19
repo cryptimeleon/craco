@@ -61,7 +61,7 @@ import java.util.Objects;
  * This implementation uses de.upb.crypto.craco.enc.asym.elgamal for Elgamal
  * Encryption
  *
- * @author peter.guenther
+ *
  */
 
 

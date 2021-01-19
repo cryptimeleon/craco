@@ -19,7 +19,7 @@ import java.util.Objects;
  * The public parameters for the {@link IBEFuzzySW05Small} generated in
  * the {@link IBEFuzzySW05SmallSetup}.
  *
- * @author Mirko Jürgens
+ *
  */
 public class IBEFuzzySW05SmallPublicParameters implements PublicParameters {
 

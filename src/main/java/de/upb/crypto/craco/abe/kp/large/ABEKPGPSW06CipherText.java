@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * A {@link CipherText} for the {@link ABEKPGPSW06}.
  *
- * @author Marius Dransfeld, refactoring: Fabian Eidens, Mirko Jürgens, Denis Diemert
+ *
  */
 public class ABEKPGPSW06CipherText extends ABEKPGPSW06KEMCipherText {
     /**

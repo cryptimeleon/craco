@@ -18,8 +18,6 @@ import java.util.Objects;
  * <p>
  * This key should be created by
  * {@link ABECPWat11#generateEncryptionKey(de.upb.crypto.craco.common.interfaces.pe.CiphertextIndex)}
- *
- * @author Mirko Jürgens, Jan
  */
 public class ABECPWat11EncryptionKey implements EncryptionKey {
 

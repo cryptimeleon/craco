@@ -16,7 +16,7 @@ import java.util.*;
 /**
  * An identity is a collection of {@link BigIntegerAttribute}
  *
- * @author Marius Dransfeld
+ *
  */
 public class Identity implements StandaloneRepresentable, KeyIndex, CiphertextIndex, UniqueByteRepresentable {
     @UniqueByteRepresented

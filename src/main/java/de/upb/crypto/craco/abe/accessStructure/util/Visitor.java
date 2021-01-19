@@ -10,7 +10,6 @@ import de.upb.crypto.craco.abe.accessStructure.exception.WrongAccessStructureExc
  *
  * @param <F> type of the return value of the function
  *            {@link Visitor#getResultOfCurrentNode()}
- * @author pschleiter
  */
 public interface Visitor<F> {
 

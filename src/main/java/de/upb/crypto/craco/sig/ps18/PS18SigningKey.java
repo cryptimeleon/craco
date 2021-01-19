@@ -12,7 +12,7 @@ import java.util.Objects;
 
 /**
  * Secret (signing) key for the Pointcheval Sanders 2018 (Section 4.2) signature scheme.
- * @author Raphael Heitjohann
+ *
  */
 public class PS18SigningKey implements SigningKey {
 

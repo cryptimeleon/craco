@@ -13,7 +13,7 @@ import java.util.Objects;
  *
  * @see UniversalHashFamily
  *
- * @author Mirko Jürgens, refactoring & javadoc: Denis Diemert
+ *
  */
 public class UniversalHashFunction implements HashFunction {
 

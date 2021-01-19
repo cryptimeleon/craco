@@ -12,7 +12,7 @@ import java.util.Objects;
 /**
  * Class for a signature of the Pointcheval Sanders signature scheme.
  *
- * @author Fynn Dallmeier
+ *
  */
 
 public class PSSignature implements Signature {

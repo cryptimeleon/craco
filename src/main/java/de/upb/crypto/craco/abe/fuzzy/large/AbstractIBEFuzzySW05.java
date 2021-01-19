@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 /**
  * Combines shared functionality of {@link IBEFuzzySW05} and {@link IBEFuzzySW05KEM}.
  *
- * @author Denis Diemert (based on {@link IBEFuzzySW05})
+ *
  */
 public class AbstractIBEFuzzySW05 {
     /**

@@ -22,7 +22,7 @@ import de.upb.crypto.math.structures.zn.Zp.ZpElement;
  * expressive, efficient, and provably secure realization. In Public Key
  * Cryptography, pages 53–70. Springer, 2011
  *
- * @author feidens
+ *
  */
 public class ABEWat11Benchmark {
 

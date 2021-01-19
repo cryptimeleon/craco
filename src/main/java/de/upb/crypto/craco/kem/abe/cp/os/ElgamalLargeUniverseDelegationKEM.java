@@ -40,7 +40,7 @@ import java.util.Set;
  * in Large-Scale Organizations. In: Foundations and Practice of Security. FPS 2017. Lecture Notes in Computer Science,
  * vol 10723. Springer, Cham.
  *
- * @author peter.guenther
+ *
  */
 
 public class ElgamalLargeUniverseDelegationKEM

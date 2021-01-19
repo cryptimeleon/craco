@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * Utility class for computing Lagrange coefficient/evaluating Lagrange basis polynomials.
  *
- * @author Marius Dransfeld
+ *
  */
 public final class LagrangeUtil {
     private LagrangeUtil() {

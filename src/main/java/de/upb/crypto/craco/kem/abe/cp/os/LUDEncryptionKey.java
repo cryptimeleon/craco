@@ -15,7 +15,7 @@ import java.util.Objects;
  * <p>
  * This class is a wrapper around the policy of this encryption key.
  *
- * @author peter.guenther
+ *
  */
 public class LUDEncryptionKey implements EncryptionKey, StandaloneRepresentable {
 

@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * An elgamal private key.
  *
- * @author Mirko Jürgens
+ *
  */
 public class ElgamalPrivateKey implements DecryptionKey {
 

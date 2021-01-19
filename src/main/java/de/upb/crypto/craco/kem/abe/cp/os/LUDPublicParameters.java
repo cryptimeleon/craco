@@ -16,7 +16,7 @@ import java.util.Objects;
 /**
  * Container for public parameters of ElgmalLargeUniverseDelegationKEM.
  *
- * @author peter.guenther
+ *
  */
 public class LUDPublicParameters implements PublicParameters {
 

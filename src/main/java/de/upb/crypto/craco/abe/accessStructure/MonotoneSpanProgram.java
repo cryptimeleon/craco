@@ -15,8 +15,6 @@ import java.util.*;
 
 /**
  * Access structure realized by using monotone span programs.
- *
- * @author pschleiter, Fabian Eidens (refactor)
  */
 public class MonotoneSpanProgram extends AccessStructure {
 

@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * A KEM that produces AES keys encapsulated via ABE
  *
- * @author Jan
+ *
  */
 public class FullIdentKEM extends AbstractHybridConstructionKEM {
 

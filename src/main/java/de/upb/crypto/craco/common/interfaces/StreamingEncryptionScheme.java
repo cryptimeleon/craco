@@ -29,7 +29,7 @@ import java.io.OutputStream;
  * Implementations of this interface should normally be able to do
  * encryption and decryption without loading the whole plaintext/ciphertext into memory.
  *
- * @author Jan
+ *
  */
 public interface StreamingEncryptionScheme extends EncryptionScheme {
 

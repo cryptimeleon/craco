@@ -13,7 +13,7 @@ import java.util.Objects;
  * The {@link MasterSecret} of the {@link IBEFuzzySW05} generated
  * in the {@link IBEFuzzySW05Setup}.
  *
- * @author Mirko Jürgens
+ *
  */
 public class IBEFuzzySW05MasterSecret implements MasterSecret {
 

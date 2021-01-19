@@ -3,7 +3,7 @@ package de.upb.crypto.craco.common.interfaces;
 /**
  * A container for a pair of {@link EncryptionKey} and {@link DecryptionKey}.
  *
- * @author Jan
+ *
  */
 public class KeyPair {
 

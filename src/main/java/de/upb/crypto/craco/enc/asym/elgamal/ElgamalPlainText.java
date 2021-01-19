@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * An elgamal plaintext, which is an element of the specified group.
  *
- * @author Mirko Jürgens
+ *
  */
 public class ElgamalPlainText implements PlainText, UniqueByteRepresentable {
     /**

@@ -17,7 +17,7 @@ import java.util.Objects;
  * This should be used in combination with an symmetric encryption scheme to implement the standard hybrid encryption
  * technique.
  *
- * @author Denis Diemert
+ *
  */
 public abstract class SymmetricKeyKEM implements KeyEncapsulationMechanism<SymmetricKey> {
 

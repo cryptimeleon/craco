@@ -19,7 +19,7 @@ import java.math.BigInteger;
  * Such a function can be seeded based on existing parameters using
  * {@link KWiseDeltaDependentHashFamily#seedFunction(Seed)}.
  *
- * @author Mirko Jürgens, refactoring: Denis Diemert
+ *
  */
 public class KWiseDeltaDependentHashFunction implements HashFunction {
 

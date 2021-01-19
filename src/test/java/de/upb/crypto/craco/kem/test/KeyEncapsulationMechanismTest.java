@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
  * secret key that satisfies the public keys policy, and a invalid key pair. Scheme and keys to test are defined by a
  * parameter class, e.g. {@link ABECPWat11KEMParams}.
  *
- * @author Denis Diemert (based on {@link de.upb.crypto.craco.enc.test.EncryptionSchemeTest})
+ *
  */
 @RunWith(value = Parameterized.class)
 public class KeyEncapsulationMechanismTest {

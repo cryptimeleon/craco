@@ -7,7 +7,7 @@ import java.io.OutputStream;
 /**
  * Util methods for I/O streams.
  *
- * @author Marius Dransfeld
+ *
  */
 public final class StreamUtil {
     /**

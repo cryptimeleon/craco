@@ -18,7 +18,7 @@ import java.util.Objects;
  * This key should be created by
  * {@link ABEKPGPSW06#generateDecryptionKey(de.upb.crypto.craco.common.interfaces.pe.MasterSecret, KeyIndex)}
  *
- * @author Mirko Jürgens, refactoring: Denis Diemert
+ *
  */
 public class ABEKPGPSW06DecryptionKey implements DecryptionKey {
     @Represented

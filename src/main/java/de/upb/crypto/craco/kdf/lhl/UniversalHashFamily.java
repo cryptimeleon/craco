@@ -18,7 +18,7 @@ import java.util.Objects;
  * For definition of a 2-universal hash family and the specific construction, refer to
  * <a href="https://courses.cs.washington.edu/courses/cse525/13sp/scribe/lec5.pdf">this lecture</a>.
  *
- * @author Mirko Jürgens
+ *
  */
 public class UniversalHashFamily implements HashFamily {
 

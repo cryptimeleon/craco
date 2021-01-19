@@ -20,7 +20,7 @@ import java.util.Objects;
  * {@link IBEFuzzySW05Small#generateDecryptionKey(MasterSecret, KeyIndex)}
  * .
  *
- * @author Mirko Jürgens
+ *
  */
 public class IBEFuzzySW05SmallDecryptionKey implements DecryptionKey {
 

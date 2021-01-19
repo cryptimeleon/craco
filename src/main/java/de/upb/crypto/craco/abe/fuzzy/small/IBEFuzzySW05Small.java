@@ -55,7 +55,7 @@ import java.util.Objects;
  * Computer and communications security, CCS ’06, pages 99–112, New York, NY,
  * USA, 2006. ACM.
  *
- * @author Marius Dransfeld, Fabian Eidens, Refactoring: Mirko Jürgens
+ *
  */
 public class IBEFuzzySW05Small implements PredicateEncryptionScheme {
 

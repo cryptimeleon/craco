@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * Class for the public (verification) key of the Pointcheval Sanders signature scheme.
  *
- * @author Fynn Dallmeier
+ *
  */
 
 public class PSVerificationKey implements VerificationKey {

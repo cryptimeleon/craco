@@ -19,7 +19,7 @@ import java.util.Objects;
  * For this, you have to setup a
  * TODO: Missing sentence
  *
- * @author Jan
+ *
  */
 public class HashBasedKeyDerivationFunction implements KeyDerivationFunction<SymmetricKey> {
 

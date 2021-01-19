@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * The {@link CipherText} for the {@link IBEFuzzySW05Small}
  *
- * @author Marius Dransfeld, refactoring: Fabian Eidens, Mirko Jürgens
+ *
  */
 public class IBEFuzzySW05SmallCipherText implements CipherText {
 

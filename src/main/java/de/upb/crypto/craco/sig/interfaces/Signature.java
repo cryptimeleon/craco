@@ -9,7 +9,7 @@ import de.upb.crypto.math.serialization.Representation;
  * {@code Signature}s are {@link Representable} and can be
  * restored from their {@link Representation} using {@link SignatureScheme#getSignature(Representation)}.
  *
- * @author feidens
+ *
  */
 public interface Signature extends Representable {
     public static final String RECOVERY_METHOD = "getSignature";

@@ -15,7 +15,7 @@ import java.util.Objects;
  * The master secret for the {@link ABEKPGPSW06Small} generated in the
  * {@link ABEKPGPSW06SmallSetup}.
  *
- * @author Mirko Jürgens
+ *
  */
 public class ABEKPGPSW06SmallMasterSecret implements MasterSecret {
 

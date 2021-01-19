@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 /**
  * An inner node of a threshold tree.
  *
- * @author pschleiter, Fabian Eidens (refactoring)
+ *
  */
 public class InnerNode implements TreeNode {
 

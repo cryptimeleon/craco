@@ -9,7 +9,7 @@ import java.math.BigInteger;
 /**
  * Polynomial over a prime field.
  *
- * @author Marius Dransfeld, refactoring: Fabian Eidens
+ *
  */
 public final class PrimeFieldPolynomial implements Cloneable {
     private ZpElement[] coefficients;

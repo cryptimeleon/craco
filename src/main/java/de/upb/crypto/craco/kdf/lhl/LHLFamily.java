@@ -13,7 +13,7 @@ import java.util.Objects;
  * A standard implementation of a key derivation function using the Leftover-Hash-Lemma and 2-universal hash functionss.
  * This approach yields secure key derivation functions as long as the source has enough entropy.
  *
- * @author Mirko Jürgens
+ *
  */
 public class LHLFamily implements StandaloneRepresentable {
 

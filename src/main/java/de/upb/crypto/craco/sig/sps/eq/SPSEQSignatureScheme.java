@@ -32,7 +32,7 @@ import java.util.stream.IntStream;
  * and Constant-Size Anonymous Credentials", in Cryptology ePrint Archive, Report
  * 2014/944, 2014.
  *
- * @author Fabian Eidens
+ *
  */
 
 public class SPSEQSignatureScheme implements StructurePreservingSignatureEQScheme {

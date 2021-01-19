@@ -7,7 +7,7 @@ import de.upb.crypto.math.serialization.Representable;
  * possibly belonging to another scheme and possibly hiding a different
  * plaintext.
  *
- * @author Jan
+ *
  */
 public interface TransformationKey extends Representable {
 

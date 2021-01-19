@@ -26,7 +26,7 @@ import java.util.Map;
  * This scheme only supplies {@link KeyMaterial}. It needs to be used in combination with a KDF to obtain a symmetric
  * key.
  *
- * @author Denis Diemert (based on {@link ABECPWat11})
+ *
  */
 public class ABECPWat11KEM extends AbstractABECPWat11 implements PredicateKEM<KeyMaterial> {
 

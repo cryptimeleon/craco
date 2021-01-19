@@ -18,7 +18,7 @@ import java.util.List;
  * T out of L KeyShares are needed in order to successfully recreate a
  * DecryptionKey that can be used in an Encryption Scheme.
  *
- * @author Marius Dransfeld, refactoring: Mirko Jürgens
+ *
  */
 public interface DistributedEncryptionScheme extends EncryptionScheme {
 

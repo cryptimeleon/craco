@@ -5,7 +5,7 @@ package de.upb.crypto.craco.enc.exceptions;
  * runtime processing of the encryption or decryption. This is often caused by
  * invalid keys or internal errors such as bad nonces.
  *
- * @author Mirko Jürgens
+ *
  */
 abstract class GeneralFailedException extends RuntimeException {
 

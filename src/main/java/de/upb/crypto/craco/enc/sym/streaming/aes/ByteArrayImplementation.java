@@ -20,7 +20,7 @@ import java.util.Arrays;
  * A simple implementation of an representable byte array. This byte array can
  * be a plain text or a cipher text or an encryption key and/or a decryption key
  *
- * @author Mirko Jürgens
+ *
  */
 public class ByteArrayImplementation implements PlainText, CipherText, DecryptionKey, EncryptionKey, SymmetricKey,
         KeyIndex, CiphertextIndex, PrfKey, PrfPreimage, PrfImage, UniqueByteRepresentable {

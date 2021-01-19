@@ -42,8 +42,6 @@ import java.util.*;
  * {@link ABECPWat11#generateDecryptionKey(MasterSecret, KeyIndex)}
  * with the {@link MasterSecret} of
  * {@link DistributedABECPWat11Setup#getMasterSecret()}.
- *
- * @author Christian Stroh, refactoring: Fabian Eidens, Mirko Jürgens
  */
 public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncryptionScheme {
     

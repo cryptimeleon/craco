@@ -19,7 +19,7 @@ import java.util.Objects;
  * This key should be created by
  * {@link ABEKPGPSW06Small#generateEncryptionKey(CiphertextIndex)}
  *
- * @author Mirko Jürgens
+ *
  */
 public class ABEKPGPSW06SmallEncryptionKey implements EncryptionKey {
     @UniqueByteRepresented

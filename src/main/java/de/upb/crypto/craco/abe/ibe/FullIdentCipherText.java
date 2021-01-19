@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * The {@link CiphertextIndex} for {@link FullIdent}.
  *
- * @author Marius Dransfeld, Refactoring: Mirko Jürgens
+ *
  */
 public class FullIdentCipherText implements CipherText {
 

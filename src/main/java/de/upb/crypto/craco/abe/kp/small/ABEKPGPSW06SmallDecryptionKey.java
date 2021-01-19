@@ -19,7 +19,7 @@ import java.util.Objects;
  * This key should be created by
  * {@link ABEKPGPSW06Small#generateDecryptionKey(de.upb.crypto.craco.common.interfaces.pe.MasterSecret, KeyIndex)}
  *
- * @author Mirko Jürgens
+ *
  */
 public class ABEKPGPSW06SmallDecryptionKey implements DecryptionKey {
 

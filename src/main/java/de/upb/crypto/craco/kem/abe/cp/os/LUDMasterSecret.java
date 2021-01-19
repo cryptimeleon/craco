@@ -8,7 +8,7 @@ import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 /**
  * Class for master secret key alpha in Zp.
  *
- * @author peter.guenther
+ *
  */
 public class LUDMasterSecret implements MasterSecret {
 

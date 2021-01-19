@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * @author Fabian Eidens
+ *
  */
 public class BBSBSigningKey implements SigningKey {
     @Represented(restorer = "Zp")

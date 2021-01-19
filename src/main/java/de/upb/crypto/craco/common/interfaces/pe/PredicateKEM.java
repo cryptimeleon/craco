@@ -19,7 +19,7 @@ import de.upb.crypto.math.serialization.Representation;
  *
  * @param <T> type of the encapsulated key
  *
- * @author Jan
+ *
  */
 public interface PredicateKEM<T> extends KeyEncapsulationMechanism<T> {
     /**

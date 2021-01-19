@@ -27,7 +27,7 @@ import java.util.Set;
  * K_ai,2 = g1^r_ai
  * K_ai,3 = (u1^H(ai) h1)^r_ai v^-r
  *
- * @author peter.guenther
+ *
  */
 public class LUDDecryptionKey implements DecryptionKey, TransformationKey {
 

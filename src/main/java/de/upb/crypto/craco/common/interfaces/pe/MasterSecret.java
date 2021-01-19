@@ -11,7 +11,7 @@ import de.upb.crypto.math.serialization.Representation;
  * {@code MasterSecret}s are {@link Representable} and can be
  * restored from their {@link Representation} using {@link PredicateEncryptionScheme#getMasterSecret(Representation)}.
  *
- * @author Jan
+ *
  */
 public interface MasterSecret extends Representable {
     public final static String RECOVERY_METHOD = "getMasterSecret";

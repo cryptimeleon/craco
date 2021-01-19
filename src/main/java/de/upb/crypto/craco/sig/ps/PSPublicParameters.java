@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * Class for the public parameters of the Pointcheval Sanders signature scheme.
  *
- * @author Fynn Dallmeier
+ *
  */
 
 public class PSPublicParameters implements PublicParameters {

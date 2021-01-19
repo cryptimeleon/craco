@@ -16,7 +16,7 @@ import java.security.SecureRandom;
 /**
  * Provides truly random bits via an API-call to {@code random.org}.
  *
- * @author Mirko Jürgens
+ *
  */
 public class TrueRandomnessProvider {
 

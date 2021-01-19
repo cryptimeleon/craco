@@ -13,7 +13,7 @@ import java.util.Objects;
  * Class for a signature of the Pointcheval Sanders 2018 (Section 4.3) signature scheme
  * extended in the Random Oracle Model to reduce signature size.
  *
- * @author Raphael Heitjohann
+ *
  */
 public class PS18ROMSignature implements Signature {
     /**

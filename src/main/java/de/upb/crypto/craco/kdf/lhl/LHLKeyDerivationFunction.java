@@ -14,7 +14,7 @@ import java.util.Objects;
  *
  * @see LHLFamily
  *
- * @author Mirko Jürgens, javadoc & refactoring: Denis Diemert
+ *
  */
 public class LHLKeyDerivationFunction implements KeyDerivationFunction<ByteArrayImplementation> {
 

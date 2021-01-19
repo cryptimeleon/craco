@@ -13,7 +13,7 @@ import de.upb.crypto.math.serialization.Representation;
  * This should be used in combination with an symmetric encryption scheme to implement the standard hybrid encryption
  * technique.
  *
- * @author Denis Diemert
+ *
  */
 public class SymmetricKeyPredicateKEM extends SymmetricKeyKEM implements PredicateKEM<SymmetricKey> {
 

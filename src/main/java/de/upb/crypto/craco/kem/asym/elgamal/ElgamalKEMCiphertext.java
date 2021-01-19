@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * This class represents ciphertexts for the ElgamalKEM ElGamal based KEM.
  *
- * @author peter.guenther
+ *
  */
 public class ElgamalKEMCiphertext implements CipherText {
 

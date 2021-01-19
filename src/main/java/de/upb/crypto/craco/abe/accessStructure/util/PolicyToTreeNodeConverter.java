@@ -13,8 +13,6 @@ import java.util.HashMap;
 /**
  * Takes a {@link Policy} and computes the internal tree used by the {@link AccessStructure}.
  * class.
- *
- * @author Jan
  */
 public class PolicyToTreeNodeConverter {
     private final HashMap<Integer, PolicyFact> shareReceivers;

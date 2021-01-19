@@ -18,7 +18,7 @@ import java.util.Objects;
  * The public parameters for the {@link ABEKPGPSW06}, generated in
  * the {@link ABEKPGPSW06Setup}.
  *
- * @author Mirko Jürgens
+ *
  */
 public class ABEKPGPSW06PublicParameters implements PublicParameters {
 

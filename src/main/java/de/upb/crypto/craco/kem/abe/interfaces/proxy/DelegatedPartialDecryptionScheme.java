@@ -22,7 +22,7 @@ import de.upb.crypto.math.serialization.Representation;
  * {@code transform(c, tf)}
  * <li> {@code c'} can be decrypted using {@code this.getSchemeForTransformedCiphertexts().decrypt(c', dk')}
  * </ol>
- * @author Jan
+ *
  */
 public interface DelegatedPartialDecryptionScheme extends EncryptionScheme {
     public static class TransformationAndDecryptionKey {

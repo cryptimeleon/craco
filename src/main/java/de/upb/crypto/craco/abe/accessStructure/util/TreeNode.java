@@ -4,8 +4,6 @@ import de.upb.crypto.craco.abe.accessStructure.exception.WrongAccessStructureExc
 
 /**
  * A node in a threshold tree.
- *
- * @author pschleiter, Fabian Eidens (refactor)
  */
 public interface TreeNode {
 

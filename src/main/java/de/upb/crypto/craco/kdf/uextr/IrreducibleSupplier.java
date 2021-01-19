@@ -19,7 +19,7 @@ import java.util.Scanner;
  * Pentanomials) via a table lookup.
  * ({@literal http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.365.1806&rep=rep1&type=pdf})
  *
- * @author Mirko Juergens
+ *
  */
 public class IrreducibleSupplier {
 

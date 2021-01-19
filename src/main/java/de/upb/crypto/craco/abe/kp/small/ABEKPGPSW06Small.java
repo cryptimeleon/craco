@@ -40,7 +40,7 @@ import java.util.Map.Entry;
  * In ACM Conference on Computer and Communications Security, pages 89–98. ACM,
  * 2006.
  *
- * @author Marius Dransfeld, refactoring: Fabian Eidens, Mirko Jürgens
+ *
  */
 public class ABEKPGPSW06Small implements PredicateEncryptionScheme {
 

@@ -20,7 +20,7 @@ import java.util.Objects;
  * Implementation of FullIdent scheme from "Identity-Based Encryption from the
  * Weil Pairing" by Boneh and Franklin.
  *
- * @author Marius Dransfeld, refactoring: Fabian Eidens
+ *
  */
 public class FullIdent implements PredicateEncryptionScheme {
 

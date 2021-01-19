@@ -12,7 +12,7 @@ import java.util.Objects;
 /**
  * The cipher text representation of an elgamal-encrypted plaintext.
  *
- * @author Mirko Jürgens
+ *
  */
 public class ElgamalCipherText implements CipherText {
     /**

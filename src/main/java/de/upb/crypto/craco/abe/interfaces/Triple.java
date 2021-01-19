@@ -8,7 +8,7 @@ import de.upb.crypto.math.structures.zn.Zp.ZpElement;
  * the second identifier gives additional information about the row (MSP) or leaf (threshold tree) the share belong to.
  *
  * @param <E> Type of the party
- * @author pschleiter
+ *
  */
 @Deprecated
 public class Triple<E> {

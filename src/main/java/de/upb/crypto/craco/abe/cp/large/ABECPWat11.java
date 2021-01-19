@@ -38,9 +38,6 @@ import java.util.Map;
  * [Wat11] Brent Waters. Ciphertext-policy attribute-based encryption: An
  * expressive, efficient, and provably secure realization. In Public Key
  * Cryptography, pages 53–70. Springer, 2011
- *
- * @author Marius Dransfeld (refactored by Jan Bobolz, generalized by Denis
- * Diemert)
  */
 public class ABECPWat11 extends AbstractABECPWat11 implements PredicateEncryptionScheme {
 

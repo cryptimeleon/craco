@@ -21,7 +21,7 @@ import java.lang.reflect.Type;
  * using the {@code Representation} mechanism (i.e. call the class's constructor
  * with a {@code Representation} argument).
  *
- * @author Jan
+ *
  */
 public interface EncryptionScheme extends StandaloneRepresentable, RepresentationRestorer {
 

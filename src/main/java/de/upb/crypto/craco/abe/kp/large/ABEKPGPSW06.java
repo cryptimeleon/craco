@@ -33,7 +33,7 @@ import java.util.Map;
  * [SW05] Amit Sahai and Brent Waters. Fuzzy identity-based encryption. In Ronald Cramer, editor, Advances in Cryptology
  * – EUROCRYPT 2005, volume 3494 of Lecture Notes in Computer Science, pages 457–473. Springer Berlin Heidelberg, 2005.
  *
- * @author Marius Dransfeld, refactoring: Fabian Eidens
+ *
  */
 public class ABEKPGPSW06 extends AbstractABEKPGPSW06 implements PredicateEncryptionScheme {
 

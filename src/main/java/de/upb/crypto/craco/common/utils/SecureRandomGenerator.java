@@ -10,7 +10,7 @@ import java.util.Random;
 /**
  * {@code RandomGenerator} which uses {@link SecureRandom}.
  *
- * @author Marius Dransfeld
+ *
  */
 public final class SecureRandomGenerator implements RandomGenerator {
     private Random rng = new SecureRandom();

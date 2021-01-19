@@ -11,7 +11,7 @@ import de.upb.crypto.math.serialization.StandaloneRepresentable;
  * @see PredicateEncryptionScheme#generateEncryptionKey(CiphertextIndex)
  * @see PredicateEncryptionScheme#encrypt(PlainText, CiphertextIndex) 
  *
- * @author Jan
+ *
  */
 public interface CiphertextIndex extends StandaloneRepresentable {
 

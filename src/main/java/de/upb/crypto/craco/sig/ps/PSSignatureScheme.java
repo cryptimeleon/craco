@@ -26,7 +26,7 @@ import java.util.stream.IntStream;
  * [1] David Pointcheval and Olivier Sanders, "Short Randomizable Signatures", in Cryptology ePrint Archive, Report
  * 2015/525, 2015.
  *
- * @author Fynn Dallmeier
+ *
  */
 
 public class PSSignatureScheme implements StandardMultiMessageSignatureScheme {

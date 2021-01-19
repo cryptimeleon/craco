@@ -20,7 +20,7 @@ import de.upb.crypto.math.structures.zn.Zp.ZpElement;
  * However, the reduction adversary has to also guess in which random oracle
  * query the right message is, so the reduction loses a poly factor in success probability.
  *
- * @author Raphael Heitjohann
+ *
  */
 public class PS18ROMSignatureScheme extends PS18SignatureScheme {
 

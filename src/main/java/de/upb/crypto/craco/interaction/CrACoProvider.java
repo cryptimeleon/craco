@@ -5,7 +5,7 @@ import java.security.Provider;
 /**
  * {@link Provider} for all Craco schemes.
  *
- * @author Marius Dransfeld, Fabian Eidens
+ *
  */
 @SuppressWarnings("serial")
 public class CrACoProvider extends Provider {

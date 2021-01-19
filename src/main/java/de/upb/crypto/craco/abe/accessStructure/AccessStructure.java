@@ -18,8 +18,6 @@ import java.util.Set;
  * An additional map associates a share receiver to each number/leaf.
  *
  * @see LinearSecretSharing
- *
- * @author pschleiter, Fabian Eidens (refactor)
  */
 public abstract class AccessStructure implements LinearSecretSharing<PolicyFact> {
 

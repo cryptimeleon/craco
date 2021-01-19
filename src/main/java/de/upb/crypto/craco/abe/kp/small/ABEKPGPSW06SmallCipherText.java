@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * A {@link CipherText} for the {@link ABEKPGPSW06Small}.
  *
- * @author Marius Dransfeld, refactoring: Fabian Eidens, Mirko Jürgens
+ *
  */
 public class ABEKPGPSW06SmallCipherText implements CipherText {
 

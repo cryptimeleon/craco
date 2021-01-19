@@ -8,7 +8,7 @@ import de.upb.crypto.math.serialization.StandaloneRepresentable;
  * generated with an encryption key with a {@link CiphertextIndex} that satisfies
  * {@link PredicateEncryptionScheme#getPredicate()} can be decrypted by it.
  *
- * @author Jan
+ *
  */
 public interface KeyIndex extends StandaloneRepresentable {
 

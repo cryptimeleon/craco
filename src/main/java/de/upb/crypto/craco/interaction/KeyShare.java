@@ -3,7 +3,7 @@ package de.upb.crypto.craco.interaction;
 import java.math.BigInteger;
 
 /**
- * @author bjoernf
+ *
  */
 public abstract class KeyShare {
     /**

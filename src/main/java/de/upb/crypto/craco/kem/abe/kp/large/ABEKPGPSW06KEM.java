@@ -31,7 +31,7 @@ import java.util.Map;
  * This scheme only supplies {@link KeyMaterial}. It needs to be used in combination with a KDF to obtain a symmetric
  * key. For this, see {@link SymmetricKeyPredicateKEM}.
  *
- * @author Denis Diemert (based on {@link ABEKPGPSW06})
+ *
  */
 public class ABEKPGPSW06KEM extends AbstractABEKPGPSW06 implements PredicateKEM<KeyMaterial> {
     public ABEKPGPSW06KEM(ABEKPGPSW06PublicParameters pp) {

@@ -12,8 +12,6 @@ import java.util.Objects;
 /**
  * The master secret for the {@link ABECPWat11Small} generated in the
  * {@link ABECPWat11SmallSetup}.
- *
- * @author Mirko Jürgens
  */
 public class ABECPWat11SmallMasterSecret implements MasterSecret {
 
