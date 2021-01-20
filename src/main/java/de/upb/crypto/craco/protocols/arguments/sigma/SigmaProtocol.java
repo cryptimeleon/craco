@@ -1,5 +1,6 @@
 package de.upb.crypto.craco.protocols.arguments.sigma;
 
+import com.sun.java.swing.ui.CommonMenuBar;
 import de.upb.crypto.craco.protocols.CommonInput;
 import de.upb.crypto.craco.protocols.SecretInput;
 import de.upb.crypto.craco.protocols.arguments.InteractiveArgument;
@@ -7,6 +8,7 @@ import de.upb.crypto.craco.protocols.arguments.InteractiveArgumentInstance;
 import de.upb.crypto.craco.protocols.arguments.sigma.instance.SigmaProtocolInstance;
 import de.upb.crypto.craco.protocols.arguments.sigma.instance.SigmaProtocolProverInstance;
 import de.upb.crypto.craco.protocols.arguments.sigma.instance.SigmaProtocolVerifierInstance;
+import de.upb.crypto.math.serialization.Representable;
 import de.upb.crypto.math.serialization.Representation;
 
 import java.math.BigInteger;
@@ -71,6 +73,26 @@ public interface SigmaProtocol extends InteractiveArgument {
     }
 
     /**
+     * Returns a compressed (shorter) version of the given transcript.
+     * Useful for {@link de.upb.crypto.craco.protocols.arguments.fiatshamir.FiatShamirProofSystem}.
+     */
+    default Representation compressTranscript(CommonInput commonInput, SigmaProtocolTranscript transcript) {
+        return transcript.getRepresentation();
+    }
+
+    /**
+     * Decompressed a transcript compressed with {@link SigmaProtocol#compressTranscript(CommonInput, SigmaProtocolTranscript)}
+     * 
+     * The guarantee is that if a transcript is valid, then compressing and decompressing yields the same transcript.
+     * Additionally, any transcript output by this method is valid (i.e. {@link SigmaProtocol#checkTranscript(CommonInput, SigmaProtocolTranscript)} returns true).
+     *
+     * @throws IllegalArgumentException is the given compressedTranscript cannot be decompressed into a valid transcript.
+     */
+    default SigmaProtocolTranscript decompressTranscript(CommonInput commonInput, Representation compressedTranscript) throws IllegalArgumentException {
+        return recreateTranscript(compressedTranscript, commonInput);
+    }
+
+    /**
      * Generates a random transcript with the same distribution as an honestly generated one that contains the given {@link Challenge}.
      */
     SigmaProtocolTranscript generateSimulatedTranscript(CommonInput commonInput, Challenge challenge);
@@ -92,7 +114,7 @@ public interface SigmaProtocol extends InteractiveArgument {
     /**
      * Returns the number of possible values returned by generateChallenge(commonInput).
      */
-    BigInteger getChallengeSpaceSize(CommonInput commonInput);
+    BigInteger getChallengeSpaceSize();
 
     @Override
     default String getFirstMessageRole() {

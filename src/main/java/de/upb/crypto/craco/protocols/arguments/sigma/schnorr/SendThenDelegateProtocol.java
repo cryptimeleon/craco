@@ -5,6 +5,7 @@ import de.upb.crypto.craco.protocols.SecretInput;
 import de.upb.crypto.craco.protocols.arguments.sigma.*;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrVariableAssignment;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
+import de.upb.crypto.math.serialization.ListRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 
 import java.math.BigInteger;
@@ -48,7 +49,7 @@ public abstract class SendThenDelegateProtocol implements SigmaProtocol {
     protected abstract boolean provideAdditionalCheck(CommonInput commonInput, SendThenDelegateFragment.SendFirstValue sendFirstValue);
 
     @Override
-    public abstract BigInteger getChallengeSpaceSize(CommonInput commonInput);
+    public abstract BigInteger getChallengeSpaceSize();
 
     @Override
     public AnnouncementSecret generateAnnouncementSecret(CommonInput commonInput, SecretInput secretInput) {
@@ -66,7 +67,7 @@ public abstract class SendThenDelegateProtocol implements SigmaProtocol {
 
     @Override
     public SchnorrChallenge generateChallenge(CommonInput commonInput) {
-        return SchnorrChallenge.random(getChallengeSpaceSize(commonInput));
+        return SchnorrChallenge.random(getChallengeSpaceSize());
     }
 
     @Override
@@ -174,5 +175,24 @@ public abstract class SendThenDelegateProtocol implements SigmaProtocol {
         protected boolean provideAdditionalCheck(SendFirstValue sendFirstValue) {
             return SendThenDelegateProtocol.this.provideAdditionalCheck(commonInput, sendFirstValue);
         }
+    }
+
+    @Override
+    public Representation compressTranscript(CommonInput commonInput, SigmaProtocolTranscript transcript) {
+        SchnorrAnnouncement announcement = (SchnorrAnnouncement) transcript.getAnnouncement();
+        Representation fragmentRepr = announcement.fragment.compressTranscript(announcement.fragmentAnnouncement, (SchnorrChallenge) transcript.getChallenge(), transcript.getResponse(), SchnorrVariableAssignment.EMPTY);
+        ListRepresentation result = new ListRepresentation();
+        result.add(transcript.getChallenge().getRepresentation());
+        result.add(fragmentRepr);
+
+        return result;
+    }
+
+    @Override
+    public SigmaProtocolTranscript decompressTranscript(CommonInput commonInput, Representation compressedTranscript) throws IllegalArgumentException {
+        TopLevelSchnorrFragment fragment = new TopLevelSchnorrFragment(commonInput);
+        SchnorrChallenge challenge = new SchnorrChallenge(compressedTranscript.list().get(0));
+        SigmaProtocolTranscript fragmentTranscript = fragment.decompressTranscript(compressedTranscript.list().get(1), challenge, SchnorrVariableAssignment.EMPTY);
+        return new SigmaProtocolTranscript(new SchnorrAnnouncement(fragment, fragmentTranscript.getAnnouncement()), challenge, fragmentTranscript.getResponse());
     }
 }

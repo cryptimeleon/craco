@@ -116,8 +116,8 @@ public class DamgardTechnique implements SigmaProtocol {
     }
 
     @Override
-    public BigInteger getChallengeSpaceSize(CommonInput commonInput) {
-        return innerProtocol.getChallengeSpaceSize(commonInput);
+    public BigInteger getChallengeSpaceSize() {
+        return innerProtocol.getChallengeSpaceSize();
     }
 
     protected PlainText announcementToCommitmentPlaintext(Announcement innerAnnouncement) {

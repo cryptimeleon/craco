@@ -1,6 +1,8 @@
 package de.upb.crypto.craco.protocols.arguments.sigma;
 
 import de.upb.crypto.craco.protocols.CommonInput;
+import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.SchnorrChallenge;
+import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.SchnorrFragment;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representable;
 import de.upb.crypto.math.serialization.Representation;
@@ -10,7 +12,7 @@ import de.upb.crypto.math.serialization.Representation;
  * These are announcement, challenge and response. Announcement and Response are send by the Prover to the Verifier, the
  * challenge from the Verifier to the Prover.
  */
-public class SigmaProtocolTranscript implements Representable {
+public class SigmaProtocolTranscript implements Representable, CompressedSigmaProtocolTranscript {
     protected Announcement announcement;
     protected Challenge challenge;
     protected Response response;
@@ -25,6 +27,12 @@ public class SigmaProtocolTranscript implements Representable {
         announcement = protocol.recreateAnnouncement(commonInput, repr.obj().get("a"));
         challenge = protocol.recreateChallenge(commonInput, repr.obj().get("c"));
         response = protocol.recreateResponse(commonInput, announcement, challenge, repr.obj().get("r"));
+    }
+
+    public SigmaProtocolTranscript(SchnorrFragment fragment, Representation repr) {
+        announcement = fragment.recreateAnnouncement(repr.obj().get("a"));
+        challenge = new SchnorrChallenge(repr.obj().get("c"));
+        response = fragment.recreateResponse(announcement, repr.obj().get("r"));
     }
 
     public Announcement getAnnouncement() {

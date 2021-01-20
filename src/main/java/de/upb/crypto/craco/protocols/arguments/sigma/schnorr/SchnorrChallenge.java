@@ -7,6 +7,7 @@ import de.upb.crypto.math.serialization.BigIntegerRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 public class SchnorrChallenge implements Challenge {
     protected BigInteger challenge;
@@ -36,5 +37,18 @@ public class SchnorrChallenge implements Challenge {
 
     public static SchnorrChallenge random(BigInteger challengeSpaceSize) {
         return new SchnorrChallenge(RandomGeneratorSupplier.getRnd().getRandomElement(challengeSpaceSize));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SchnorrChallenge that = (SchnorrChallenge) o;
+        return challenge.equals(that.challenge);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(challenge);
     }
 }

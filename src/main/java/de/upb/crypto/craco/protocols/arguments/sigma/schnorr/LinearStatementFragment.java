@@ -9,17 +9,24 @@ import de.upb.crypto.math.expressions.group.GroupElementExpression;
 import de.upb.crypto.math.expressions.group.GroupOpExpr;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.serialization.ListRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 
+/**
+ * Ensures that a group element equation (that can be written as) {@code homomorphicExpression(variables) = publicConstant}
+ * holds.
+ *
+ * Use {@link LinearExponentStatementFragment} for linear equations over exponents.
+ */
 public class LinearStatementFragment implements SchnorrFragment {
     private GroupElementExpression homomorphicPart;
     private GroupElement target;
 
     /**
-     * Instantiates this fragment to prove knowledge a witness (consisting of values for all BasicNamedExponentVariableExpr in homomorphicPart) such that
+     * Instantiates this fragment to prove that
      * homomorphicPart(witness) = target;
      *
-     * @param homomorphicPart an expression which is linear in its variables.
+     * @param homomorphicPart an expression which is linear in its {@link SchnorrVariable}s.
      * @param target the desired (public) image of homomorphicPart.
      */
     public LinearStatementFragment(GroupElementExpression homomorphicPart, GroupElement target) {
@@ -27,10 +34,10 @@ public class LinearStatementFragment implements SchnorrFragment {
     }
 
     /**
-     * Instantiates this fragment to prove knowledge a witness (consisting of all variables in the given equation) such that
-     * the equation is fulfilled.
+     * Instantiates this fragment to prove that
+     * the given equation is fulfilled.
      *
-     * @throws IllegalArgumentException if equation is not supported (i.e. framework is unable to write it as linear(witnesses) = constant)
+     * @throws IllegalArgumentException if equation is not supported (i.e. framework is unable to write it as linear(variables) = constant)
      */
     public LinearStatementFragment(GroupEqualityExpr equation) throws IllegalArgumentException {
         GroupOpExpr linearized = equation.getLhs().op(equation.getRhs().inv()).linearize();
@@ -76,7 +83,7 @@ public class LinearStatementFragment implements SchnorrFragment {
     @Override
     public SigmaProtocolTranscript generateSimulatedTranscript(SchnorrChallenge challenge, SchnorrVariableAssignment externalRandomResponse) {
         //Take externalRandomResponse, set annoncement to the unique value that makes the transcript valid.
-        GroupElement announcement = homomorphicPart.evaluate(externalRandomResponse).op(target.pow(challenge.getChallenge()).inv());
+        GroupElement announcement = homomorphicPart.evaluate(externalRandomResponse).op(target.pow(challenge.getChallenge().negate()));
 
         return new SigmaProtocolTranscript(new LinearStatementAnnouncement(announcement), challenge, Response.EMPTY);
     }
@@ -108,5 +115,15 @@ public class LinearStatementFragment implements SchnorrFragment {
         public Representation getRepresentation() {
             return announcement.getRepresentation();
         }
+    }
+
+    @Override
+    public Representation compressTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
+        return response.getRepresentation(); //don't need announcement, can recompute from externalResponse later.
+    }
+
+    @Override
+    public SigmaProtocolTranscript decompressTranscript(Representation compressedTranscript, SchnorrChallenge challenge, SchnorrVariableAssignment externalResponse) throws IllegalArgumentException {
+        return generateSimulatedTranscript(challenge, externalResponse); //provides unique acceptable value for announcement.
     }
 }

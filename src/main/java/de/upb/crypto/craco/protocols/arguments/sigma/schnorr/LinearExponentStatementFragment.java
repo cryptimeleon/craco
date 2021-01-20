@@ -1,6 +1,9 @@
 package de.upb.crypto.craco.protocols.arguments.sigma.schnorr;
 
-import de.upb.crypto.craco.protocols.arguments.sigma.*;
+import de.upb.crypto.craco.protocols.arguments.sigma.Announcement;
+import de.upb.crypto.craco.protocols.arguments.sigma.AnnouncementSecret;
+import de.upb.crypto.craco.protocols.arguments.sigma.Response;
+import de.upb.crypto.craco.protocols.arguments.sigma.SigmaProtocolTranscript;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrVariable;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrVariableAssignment;
 import de.upb.crypto.math.expressions.VariableExpression;
@@ -8,16 +11,23 @@ import de.upb.crypto.math.expressions.bool.ExponentEqualityExpr;
 import de.upb.crypto.math.expressions.exponent.ExponentExpr;
 import de.upb.crypto.math.expressions.exponent.ExponentSumExpr;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
+import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.zn.Zn;
 
+/**
+ * Ensures that a equation on exponents (that can be written as) {@code linearExpression(variables) = publicConstant}
+ * holds.
+ *
+ * Use {@link LinearExponentStatementFragment} for linear equations over group elements (which is much more common).
+ */
 public class LinearExponentStatementFragment implements SchnorrFragment {
     private ExponentExpr homomorphicPart;
     private Zn.ZnElement target;
     private Zn zn;
 
     /**
-     * Instantiates this fragment to prove knowledge a witness (consisting of values for all BasicNamedExponentVariableExpr in homomorphicPart) such that
+     * Instantiates this fragment to prove that
      * homomorphicPart(witness) = target;
      *
      * @param homomorphicPart an expression which is linear in its variables.
@@ -28,7 +38,7 @@ public class LinearExponentStatementFragment implements SchnorrFragment {
     }
 
     /**
-     * Instantiates this fragment to prove knowledge a witness (consisting of all variables in the given equation) such that
+     * Instantiates this fragment to prove that
      * the equation is fulfilled.
      *
      * @throws IllegalArgumentException if equation is not supported (i.e. framework is unable to write it as linear(witnesses) = constant)
@@ -110,5 +120,15 @@ public class LinearExponentStatementFragment implements SchnorrFragment {
         public Representation getRepresentation() {
             return announcement.getRepresentation();
         }
+    }
+
+    @Override
+    public Representation compressTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
+        return response.getRepresentation(); //don't need announcement, can recompute from externalResponse later.
+    }
+
+    @Override
+    public SigmaProtocolTranscript decompressTranscript(Representation compressedTranscript, SchnorrChallenge challenge, SchnorrVariableAssignment externalResponse) throws IllegalArgumentException {
+        return generateSimulatedTranscript(challenge, externalResponse); //provides unique acceptable value for announcement.
     }
 }

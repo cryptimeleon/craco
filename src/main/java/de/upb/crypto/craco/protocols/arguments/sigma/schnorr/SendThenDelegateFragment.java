@@ -439,6 +439,10 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
             subprotocols.forEach(consumer);
         }
 
+        public void forEachProtocolOrdered(BiConsumer<String, SchnorrFragment> consumer) {
+            getOrderedListOfSubprotocolsAndNames().forEach(entry -> consumer.accept(entry.getKey(), entry.getValue()));
+        }
+
         public List<Map.Entry<String, SchnorrFragment>> getOrderedListOfSubprotocolsAndNames() {
             return subprotocols.entrySet().stream().sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
         }
@@ -633,5 +637,52 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
                 throw new IllegalStateException("sendFirstValue is not set or subprotocolSpec is null");
             return new ProverSpec(sendFirstValue, subprotocolSpec, buildWitnessValues());
         }
+    }
+
+    @Override
+    public Representation compressTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
+        ListRepresentation result = new ListRepresentation(); //format: [sendFirstValue, variableResponses, [subprotocolTranscript1, subprotocolTranscript2, ...]]
+
+        SendThenDelegateAnnouncement announcement1 = (SendThenDelegateAnnouncement) announcement;
+        SendThenDelegateResponse response1 = (SendThenDelegateResponse) response;
+
+        result.add(announcement1.sendFirstValue.getRepresentation());
+        result.add(response1.variableResponses.getRepresentation());
+
+        announcement1.subprotocolSpec.forEachProtocolOrdered((name, fragment) -> {
+            result.add(fragment.compressTranscript(
+                    announcement1.subprotocolAnnouncements.get(name),
+                    challenge,
+                    response1.subprotocolResponses.get(name),
+                    response1.variableResponses.fallbackTo(externalResponse)
+            ));
+        });
+
+        return result;
+    }
+
+    @Override
+    public SigmaProtocolTranscript decompressTranscript(Representation compressedTranscript, SchnorrChallenge challenge, SchnorrVariableAssignment externalResponse) throws IllegalArgumentException {
+        SendFirstValue sendFirstValue = recreateSendFirstValue(compressedTranscript.list().get(0));
+        SubprotocolSpec spec = provideSubprotocolSpec(sendFirstValue, new SubprotocolSpecBuilder());
+
+        SchnorrVariableValueList variableResponses = new SchnorrVariableValueList(spec.getOrderedListOfVariables(), compressedTranscript.list().get(1));
+
+        HashMap<String, Announcement> subprotocolAnnouncements = new HashMap<>();
+        HashMap<String, Response> subprotocolResponses = new HashMap<>();
+
+        List<Map.Entry<String, SchnorrFragment>> orderedListOfSubprotocolsAndNames = spec.getOrderedListOfSubprotocolsAndNames();
+        for (int i=0; i<orderedListOfSubprotocolsAndNames.size(); i++) {
+            String subprotocolName = orderedListOfSubprotocolsAndNames.get(i).getKey();
+            SigmaProtocolTranscript subtranscript = orderedListOfSubprotocolsAndNames.get(i).getValue().decompressTranscript(compressedTranscript.list().get(i+2), challenge, variableResponses.fallbackTo(externalResponse));
+            subprotocolAnnouncements.put(subprotocolName, subtranscript.getAnnouncement());
+            subprotocolResponses.put(subprotocolName, subtranscript.getResponse());
+        }
+
+        return new SigmaProtocolTranscript(
+                new SendThenDelegateAnnouncement(spec, subprotocolAnnouncements, sendFirstValue),
+                challenge,
+                new SendThenDelegateResponse(subprotocolResponses, variableResponses)
+                );
     }
 }

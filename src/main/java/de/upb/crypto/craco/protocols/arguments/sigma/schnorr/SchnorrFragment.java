@@ -1,7 +1,9 @@
 package de.upb.crypto.craco.protocols.arguments.sigma.schnorr;
 
+import de.upb.crypto.craco.protocols.CommonInput;
 import de.upb.crypto.craco.protocols.arguments.sigma.*;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrVariableAssignment;
+import de.upb.crypto.math.serialization.ListRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 
 /**
@@ -103,6 +105,32 @@ public interface SchnorrFragment {
      * @return a transcript with the same distribution as honest executions of this fragment that contain challenge and externalRandomResponse.
      */
     SigmaProtocolTranscript generateSimulatedTranscript(SchnorrChallenge challenge, SchnorrVariableAssignment externalRandomResponse);
+
+    /**
+     * Returns a compressed (shorter) version of the given transcript.
+     * Useful for {@link de.upb.crypto.craco.protocols.arguments.fiatshamir.FiatShamirProofSystem}.
+     */
+    default Representation compressTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
+        ListRepresentation repr = new ListRepresentation();
+        repr.add(announcement.getRepresentation());
+        repr.add(response.getRepresentation());
+
+        return repr;
+    }
+
+    /**
+     * Decompressed a transcript compressed with {@link SchnorrFragment#compressTranscript}
+     *
+     * The guarantee is that if a transcript is valid, then compressing and decompressing yields the same transcript.
+     * Additionally, any transcript output by this method is valid (i.e. {@link SigmaProtocol#checkTranscript} returns true).
+     *
+     * @throws IllegalArgumentException is the given compressedTranscript cannot be decompressed into a valid transcript.
+     */
+    default SigmaProtocolTranscript decompressTranscript(Representation compressedTranscript, SchnorrChallenge challenge, SchnorrVariableAssignment externalResponse) throws IllegalArgumentException {
+        Announcement announcement = recreateAnnouncement(compressedTranscript.list().get(0));
+        Response response = recreateResponse(announcement, compressedTranscript.list().get(1));
+        return new SigmaProtocolTranscript(announcement, challenge, response);
+    }
 
     Announcement recreateAnnouncement(Representation repr);
     Response recreateResponse(Announcement announcement, Representation repr);

@@ -62,7 +62,7 @@ public class SchnorrTest {
             }
 
             @Override
-            public BigInteger getChallengeSpaceSize(CommonInput commonInput) {
+            public BigInteger getChallengeSpaceSize() {
                 return group.size();
             }
 
@@ -82,7 +82,7 @@ public class SchnorrTest {
 
         runProtocol(new DelegateProtocol() {
             @Override
-            public BigInteger getChallengeSpaceSize(CommonInput commonInput) {
+            public BigInteger getChallengeSpaceSize() {
                 return bilGroup.getG1().size();
             }
 
