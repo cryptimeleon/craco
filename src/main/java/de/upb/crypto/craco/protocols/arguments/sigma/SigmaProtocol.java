@@ -1,6 +1,5 @@
 package de.upb.crypto.craco.protocols.arguments.sigma;
 
-import com.sun.java.swing.ui.CommonMenuBar;
 import de.upb.crypto.craco.protocols.CommonInput;
 import de.upb.crypto.craco.protocols.SecretInput;
 import de.upb.crypto.craco.protocols.arguments.InteractiveArgument;
@@ -8,7 +7,6 @@ import de.upb.crypto.craco.protocols.arguments.InteractiveArgumentInstance;
 import de.upb.crypto.craco.protocols.arguments.sigma.instance.SigmaProtocolInstance;
 import de.upb.crypto.craco.protocols.arguments.sigma.instance.SigmaProtocolProverInstance;
 import de.upb.crypto.craco.protocols.arguments.sigma.instance.SigmaProtocolVerifierInstance;
-import de.upb.crypto.math.serialization.Representable;
 import de.upb.crypto.math.serialization.Representation;
 
 import java.math.BigInteger;
