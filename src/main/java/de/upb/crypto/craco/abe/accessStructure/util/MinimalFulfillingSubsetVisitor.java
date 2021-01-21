@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * Given a set of shares (with identifiers 0,...,n-1),
+ * Given a set of shares (with identifiers between 0 and n-1 (inclusive)),
  * this visitor computes a minimal subset that can be used to reconstruct
  * a shared secret.
  */
@@ -18,7 +18,7 @@ public class MinimalFulfillingSubsetVisitor implements
      * The set of party share identifiers that are used to check fulfillment of the access structure.
      * These are the shares that we have and want to compare against the shares required by the visited node.
      */
-    private Set<Integer> setOfShares;
+    private final Set<Integer> setOfShares;
 
     /**
      * Threshold of the node visited by this visitor.
@@ -36,10 +36,10 @@ public class MinimalFulfillingSubsetVisitor implements
      * (at most its threshold).
      * Second element contains identifiers of the fulfilled shares.
      */
-    private ArrayList<Pair<Integer, ArrayList<Integer>>> fulfilledChildrenInfo;
+    private final ArrayList<Pair<Integer, ArrayList<Integer>>> fulfilledChildrenInfo;
 
     /**
-     * Whether the threshold of the current node is reached, i.e. it is fulfilled.
+     * Whether the threshold of the current node is reached (it is fulfilled).
      */
     private boolean fulfilled = false;
 
@@ -62,7 +62,7 @@ public class MinimalFulfillingSubsetVisitor implements
      * If the threshold of the visited node is fulfilled, this method computes
      * a pair containing the number of fulfilled leaf nodes reachable from the visited node
      * (at most the node's threshold), as well a {@link ArrayList} containing
-     * the share identifiers of the fulfilled leafs.
+     * the share identifiers of the fulfilled leaves.
      * This identifies a minimal subset of shares necessary to fulfill this node.
      */
     @Override
@@ -126,6 +126,7 @@ public class MinimalFulfillingSubsetVisitor implements
      * fulfills the share requirement of the given leaf node.
      *
      * @param currentNode The tree node to visit.
+     * @throws WrongAccessStructureException if an inner node in the tree has threshold 0
      */
     @Override
     public void visit(TreeNode currentNode)

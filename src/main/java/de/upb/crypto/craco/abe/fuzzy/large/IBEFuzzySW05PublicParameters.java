@@ -1,6 +1,7 @@
 package de.upb.crypto.craco.abe.fuzzy.large;
 
 import de.upb.crypto.craco.common.interfaces.PublicParameters;
+import de.upb.crypto.math.interfaces.hash.HashIntoGroup;
 import de.upb.crypto.math.interfaces.hash.HashIntoStructure;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
@@ -52,7 +53,7 @@ public class IBEFuzzySW05PublicParameters implements PublicParameters {
     private GroupElement g2;
 
     @Represented
-    private HashIntoStructure hashToG1;
+    private HashIntoGroup hashToG1;
 
     @Represented
     private BilinearGroup bilinearGroup;
@@ -147,11 +148,11 @@ public class IBEFuzzySW05PublicParameters implements PublicParameters {
         this.g2 = g2;
     }
 
-    public HashIntoStructure getHashToG1() {
+    public HashIntoGroup getHashToG1() {
         return hashToG1;
     }
 
-    public void setHashToG1(HashIntoStructure hashToG1) {
+    public void setHashToG1(HashIntoGroup hashToG1) {
         this.hashToG1 = hashToG1;
     }
 }

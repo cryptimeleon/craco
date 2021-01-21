@@ -10,6 +10,7 @@ import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPublicKey;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.structures.zn.Zn.ZnElement;
 import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.math.structures.zn.Zn;
 
 import java.math.BigInteger;
 import java.util.function.Supplier;
@@ -28,8 +29,9 @@ public class ElgamalParams {
         ElgamalPublicKey validPK = (ElgamalPublicKey) validKeyPair.getPk();
         ElgamalPrivateKey validSK = (ElgamalPrivateKey) validKeyPair.getSk();
 
-        ZnElement pow = validSK.getA().isOne() ? (ZnElement) zp.createZnElement(BigInteger.valueOf(5))
-                : (ZnElement) zp.createZnElement(BigInteger.valueOf(1));
+        Zn expZn = new Zn(BigInteger.valueOf(72972));
+        ZnElement pow = validSK.getA().isOne() ? expZn.createZnElement(BigInteger.valueOf(5)) :
+                expZn.createZnElement(BigInteger.valueOf(1));
         ElgamalPrivateKey invalidSK = new ElgamalPrivateKey(zpGroup, validSK.getG(), pow);
         KeyPair invalidKeyPair = new KeyPair(validPK, invalidSK);
 

@@ -3,26 +3,28 @@ package de.upb.crypto.craco.abe.accessStructure.util;
 import de.upb.crypto.craco.abe.accessStructure.exception.WrongAccessStructureException;
 
 /**
+ * A leaf node in a threshold tree, a node without children and threshold set to 0.
+ *
  * @author pschleiter, Fabian Eidens (refactoring)
  */
 public class LeafNode implements TreeNode {
 
     /**
-     * The leaf nodes in this tree are numbered 0,...,n-1.
+     * The integer identifying this leaf node whose value lies between 0 and n-1 (inclusive).
      */
-    private int identifier;
+    private final int identifier;
 
     /**
-     * create a new leaf
+     * Creates a new leaf.
      *
-     * @param value     additional information to the attribute
+     * @param value the identifier of the new leaf between 0 and n-1 (inclusive)
      */
     public LeafNode(Integer value) {
         this.identifier = value;
     }
 
     /**
-     * The leaf nodes in this tree correspond to shares, which are numbered 0,...,n-1.
+     * The leaf nodes in this tree correspond to shares.
      */
     public int getShareIdentifier() {
         return identifier;

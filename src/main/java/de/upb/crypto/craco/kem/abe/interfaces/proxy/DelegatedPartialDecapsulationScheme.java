@@ -6,7 +6,7 @@ import de.upb.crypto.craco.kem.KeyEncapsulationMechanism;
 import de.upb.crypto.math.serialization.Representation;
 
 /**
- * See DelegatedPartialDecryptionScheme
+ * @see DelegatedPartialDecryptionScheme
  */
 public interface DelegatedPartialDecapsulationScheme<T> extends KeyEncapsulationMechanism<T> {
     public static class TransformationAndDecryptionKey {
@@ -19,8 +19,8 @@ public interface DelegatedPartialDecapsulationScheme<T> extends KeyEncapsulation
      * another scheme.
      *
      * @param original     the original ciphertext
-     * @param transformKey
-     * @return a transformed ciphertext for the scheme returned by getSchemeForTransformedCiphertexts()
+     * @param transformKey key to use for transformation
+     * @return a transformed ciphertext for the scheme returned by {@link #getSchemeForTransformedCiphertexts()}
      */
     public CipherText transform(CipherText original, TransformationKey transformKey);
 
@@ -31,7 +31,8 @@ public interface DelegatedPartialDecapsulationScheme<T> extends KeyEncapsulation
      * that are the result of transformation with the transformation key.
      *
      * @param original the original decryption key
-     * @return a transformation key and a decryption key for the getSchemeForTransformedCiphertexts() scheme
+     * @return a transformation key and a decryption key for the scheme returned by
+     *         {@link #getSchemeForTransformedCiphertexts()}
      */
     public TransformationAndDecryptionKey generateTransformationKey(DecryptionKey original);
 
@@ -41,7 +42,7 @@ public interface DelegatedPartialDecapsulationScheme<T> extends KeyEncapsulation
     public KeyEncapsulationMechanism<T> getSchemeForTransformedCiphertexts();
 
     /**
-     * Recreates a transformation key from representation
+     * Recreates a transformation key from representation.
      */
     public TransformationKey recreateTransformationKey(Representation repr);
 }

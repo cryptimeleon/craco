@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 /**
  * A {@link ThresholdTreeSecretSharing} is a {@link LinearSecretSharing} which shares a secret not only among a single
- * {@link ThresholdPolicy}'s children, but among a whole tree of {@link ThresholdPolicy}.
+ * {@link ThresholdPolicy}'s children, but among a whole tree of {@link ThresholdPolicy}s.
  * That way a secret can be shared among complex expression represented by a hierarchy of {@link ThresholdPolicy}.
  * <p>
  * It is assumed that each inner node of the hierarchy is a {@link ThresholdPolicy} and each leaf implements

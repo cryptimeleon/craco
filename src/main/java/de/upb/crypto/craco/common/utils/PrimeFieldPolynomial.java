@@ -27,7 +27,7 @@ public final class PrimeFieldPolynomial implements Cloneable {
     }
 
     /**
-     * Degree of this polynomial, i.e. number of coefficients -1.
+     * Degree of this polynomial, i.e. number of coefficients - 1.
      *
      * @return degree of polynomial
      */
@@ -69,7 +69,7 @@ public final class PrimeFieldPolynomial implements Cloneable {
      * Evaluates the polynomial at value x, returning a {@link ZpElement}.
      *
      * @param x value to evaluate the polynomial at
-     * @return result of evaluation as a {@link ZpElement}.
+     * @return result of evaluation as a {@link ZpElement}
      */
     public ZpElement evaluate(ZpElement x) {
         ZpElement result = field.getZeroElement();
@@ -85,7 +85,7 @@ public final class PrimeFieldPolynomial implements Cloneable {
      * Evaluates the polynomial at value x, returning a {@link BigInteger}.
      *
      * @param x value to evaluate the polynomial at
-     * @return result of evaluation as a {@link BigInteger}.
+     * @return result of evaluation as a {@link BigInteger}
      */
     public BigInteger evaluate(BigInteger x) {
         return evaluate(field.createZnElement(x)).getInteger();

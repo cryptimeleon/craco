@@ -6,7 +6,11 @@ import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representable;
 import de.upb.crypto.math.serialization.Representation;
 
-
+/**
+ * Result of committing to some value.
+ * <p>
+ * Contains the commitment itself as well as the value necessary to open the commitment.
+ */
 public class CommitmentPair implements Representable, UniqueByteRepresentable {
 
     private final Commitment commitment;

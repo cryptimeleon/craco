@@ -1,14 +1,14 @@
 package de.upb.crypto.craco.ser.standalone.test.classes;
 
-import de.upb.crypto.craco.kdf.uextr.EpsilonDistribution;
+import de.upb.crypto.craco.kdf.uextr.EpsilonDistributionSample;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
 import de.upb.crypto.math.structures.polynomial.Seed;
 
 public class EpsilonDistributionTestParams {
 
     public static StandaloneTestParams get() {
-        return new StandaloneTestParams(EpsilonDistribution.class,
-                new EpsilonDistribution(46080, -4705.5, new Seed(new byte[]{121, -71, 31, 104, -22, -123, -117, 79,
+        return new StandaloneTestParams(EpsilonDistributionSample.class,
+                new EpsilonDistributionSample(46080, -4705.5, new Seed(new byte[]{121, -71, 31, 104, -22, -123, -117, 79,
                         -33, 77, -110, 81, 103, 45, 51, 26, -109, -75, -121, -35, -26, -61, 45, 80, 100, 21, 37, -96, 2,
                         61, 106, 30, -103, 21, 31, 28, 51, 77, -90, 124, -118, 108, -9, 127, 100, -39, 116, 8, 76, -62,
                         32, 94, -61, -104, 9, -126, 84, -58, 119, -89, -100, -77, -68, 17, 64, 126, 1, 0, 63, 91, -57,

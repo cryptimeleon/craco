@@ -11,6 +11,9 @@ import de.upb.crypto.math.serialization.Representation;
 import java.math.BigInteger;
 import java.util.Collection;
 
+/**
+ * An attribute in form of a {@link BigInteger}.
+ */
 public class BigIntegerAttribute implements Attribute {
     @UniqueByteRepresented
     private BigInteger element;

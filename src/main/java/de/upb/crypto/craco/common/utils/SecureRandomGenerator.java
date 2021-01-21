@@ -8,7 +8,7 @@ import java.util.Random;
 
 
 /**
- * RandomGenerator which uses {@link SecureRandom}.
+ * {@code RandomGenerator} which uses {@link SecureRandom}.
  *
  * @author Marius Dransfeld
  */

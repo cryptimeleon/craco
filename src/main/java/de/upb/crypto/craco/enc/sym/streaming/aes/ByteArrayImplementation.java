@@ -37,7 +37,7 @@ public class ByteArrayImplementation implements PlainText, CipherText, Decryptio
     }
 
     /**
-     * Creates a ByteArrayImplementation filled with [length] bytes of randomness
+     * Creates a new {@code ByteArrayImplementation} instance filled with {@code numberBytes} bytes of randomness
      *
      * @param numberBytes number of random bytes / length of resulting ByteArrayImplementation
      */
@@ -51,10 +51,10 @@ public class ByteArrayImplementation implements PlainText, CipherText, Decryptio
     }
 
     /**
-     * Create new byte array as concatination of this with a.
+     * Create new byte array as concatenation of {@code this} with {@code a}.
      *
-     * @param a - the array to append
-     * @return
+     * @param a the array to append
+     * @return the result of concatenation
      */
     public ByteArrayImplementation append(ByteArrayImplementation a) {
         byte[] result = new byte[data.length + a.getData().length];
@@ -64,9 +64,9 @@ public class ByteArrayImplementation implements PlainText, CipherText, Decryptio
     }
 
     /**
-     * The length of this byte array.
+     * Returns the length of this byte array.
      *
-     * @return
+     * @return the length of this byte array
      */
     public int length() {
         return data.length;
@@ -75,11 +75,11 @@ public class ByteArrayImplementation implements PlainText, CipherText, Decryptio
     /**
      * Compute exclusive or of two byte arrays.
      * <p>
-     * Returns a new byte array where the i-th entry is the exclusive or of this
-     * byte array's i-th entry and a's i-th entry.
+     * Returns a new byte array where the i-th entry is the exclusive or of {@code this}
+     * byte array's i-th entry and {@code a}'s i-th entry.
      *
-     * @param a
-     * @return
+     * @param a the argument to XOR {@code this} with
+     * @return the result of XORing
      */
     public ByteArrayImplementation xor(ByteArrayImplementation a) {
         int min = Math.min(this.length(), a.length());

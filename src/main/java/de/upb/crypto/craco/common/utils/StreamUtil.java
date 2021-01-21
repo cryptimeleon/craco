@@ -18,8 +18,8 @@ public final class StreamUtil {
     }
 
     /**
-     * Starts a thread that reads data from an InputStream and writes them into an
-     * OutputStream. This thread closes the output stream when its done.
+     * Starts a thread that reads data from the given {@code InputStream} and writes them into the given
+     * {@code OutputStream}. This thread closes the output stream when its done.
      *
      * @param readFrom the stream to read the data from
      * @param writeTo  the stream to write the data to
@@ -52,7 +52,7 @@ public final class StreamUtil {
     }
 
     /**
-     * Copy all bytes from in to out.
+     * Copy all bytes from {@code in} to {@code out} using a buffer with the given {@code bufferSize}.
      *
      * @param in the stream to copy bytes from
      * @param out the stream to copy bytes to

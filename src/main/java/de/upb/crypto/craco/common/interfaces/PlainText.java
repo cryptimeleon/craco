@@ -6,13 +6,12 @@ import de.upb.crypto.math.serialization.Representable;
 /**
  * A plaintext.
  * <p>
- * PlainTexts are Representable and can be
- * restored from Representation using the appropriate method of
- * the EncryptionScheme interface.
+ * PlainTexts are representable and can be
+ * restored from their representation using the appropriate method of
+ * the corresponding {@link EncryptionScheme} implementation.
  *
  * @author Jan
  */
 public interface PlainText extends Representable, UniqueByteRepresentable {
     public static final String RECOVERY_METHOD = "getPlainText";
-
 }

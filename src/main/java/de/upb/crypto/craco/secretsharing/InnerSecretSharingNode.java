@@ -7,6 +7,9 @@ import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * An inner node in a tree of {@link ThresholdPolicy}s used by {@link ThresholdTreeSecretSharing}.
+ */
 public class InnerSecretSharingNode implements SecretSharingTreeNode {
 
     private List<SecretSharingTreeNode> children;

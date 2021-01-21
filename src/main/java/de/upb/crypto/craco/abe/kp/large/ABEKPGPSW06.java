@@ -30,7 +30,7 @@ import java.util.Map;
  * [GPSW06] Vipul Goyal, Omkant Pandey, Amit Sahai, and Brent Waters. Attribute-based encryption for fine-grained access
  * control of encrypted data. In ACM Conference on Computer and Communications Security, pages 89–98. ACM, 2006.
  * <p>
- * SW05] Amit Sahai and Brent Waters. Fuzzy identity-based encryption. In Ronald Cramer, editor, Advances in Cryptology
+ * [SW05] Amit Sahai and Brent Waters. Fuzzy identity-based encryption. In Ronald Cramer, editor, Advances in Cryptology
  * – EUROCRYPT 2005, volume 3494 of Lecture Notes in Computer Science, pages 457–473. Springer Berlin Heidelberg, 2005.
  *
  * @author Marius Dransfeld, refactoring: Fabian Eidens

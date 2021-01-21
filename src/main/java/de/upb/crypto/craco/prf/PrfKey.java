@@ -4,6 +4,9 @@ import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
 import de.upb.crypto.math.serialization.Representable;
 
 
+/**
+ * Key used to parameterize a {@link PseudorandomFunction}.
+ */
 public interface PrfKey extends Representable, UniqueByteRepresentable {
 
 }

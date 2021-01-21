@@ -22,8 +22,6 @@ public abstract class KeyShare {
 
     /**
      * Sets the ID of the server corresponding to the share
-     *
-     * @param serverID
      */
     public final void setServerID(BigInteger serverID) {
         this.serverID = serverID;

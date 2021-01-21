@@ -5,6 +5,8 @@ import de.upb.crypto.craco.abe.accessStructure.exception.WrongAccessStructureExc
 /**
  * Interface specifying the methods any visitor for a threshold tree should implement
  * (created out of the extended boolean formula).
+ * <p>
+ * Usage of the visitor is done via {@link TreeNode#performVisitor(Visitor)}.
  *
  * @param <F> type of the return value of the function
  *            {@link Visitor#getResultOfCurrentNode()}
@@ -15,7 +17,7 @@ public interface Visitor<F> {
     /**
      * Returns the value that was calculated during {@link Visitor#visit(TreeNode)}.
      *
-     * @throws WrongAccessStructureException
+     * @throws WrongAccessStructureException if something is wrong with the access structure being traversed
      */
     F getResultOfCurrentNode() throws WrongAccessStructureException;
 
@@ -24,24 +26,24 @@ public interface Visitor<F> {
      * mutated while visiting the current child may be reset.
      *
      * @return a visitor of the same kind
-     * @throws WrongAccessStructureException
+     * @throws WrongAccessStructureException if something is wrong with the access structure being traversed
      */
     Visitor<F> getVisitorForNextChild()
             throws WrongAccessStructureException;
 
     /**
      * Inserts the result of the child of current node, so that the current
-     * visitor can calculate out of it, its own value.
+     * visitor can calculate its own value from it.
      *
-     * @param input
+     * @param input the result of visiting the child of the node currently being visited
      */
     void putResultOfChild(F input);
 
     /**
-     * Performs some kind of computation on the given <code>currentNode</code>.
+     * Performs some kind of computation on the given {@code currentNode}.
      *
      * @param currentNode node of the threshold tree to visit
-     * @throws WrongAccessStructureException
+     * @throws WrongAccessStructureException if something is wrong with the access structure being traversed
      */
     void visit(TreeNode currentNode)
             throws WrongAccessStructureException;

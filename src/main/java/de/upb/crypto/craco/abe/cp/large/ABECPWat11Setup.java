@@ -1,6 +1,7 @@
 package de.upb.crypto.craco.abe.cp.large;
 
 import de.upb.crypto.craco.common.WatersHash;
+import de.upb.crypto.math.interfaces.hash.HashIntoGroup;
 import de.upb.crypto.math.interfaces.hash.HashIntoStructure;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
@@ -9,6 +10,9 @@ import de.upb.crypto.math.pairings.type1.supersingular.SupersingularBilinearGrou
 import de.upb.crypto.math.structures.zn.Zp;
 import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
+/**
+ * Contains methods for generating public parameters and master secret for the scheme.
+ */
 public class ABECPWat11Setup {
     private ABECPWat11PublicParameters pp;
     private ABECPWat11MasterSecret msk;
@@ -83,8 +87,7 @@ public class ABECPWat11Setup {
         if (!watersHash) {
             pp.setHashToG1(group.getHashIntoG1());
         } else {
-            HashIntoStructure hashToGroup = new WatersHash(pp.getGroupG1(), n + lMax);
-            pp.setHashToG1(hashToGroup);
+            pp.setHashToG1(new WatersHash(pp.getGroupG1(), n + lMax));
         }
         pp.setBilinearGroup(group);
 
@@ -115,7 +118,7 @@ public class ABECPWat11Setup {
      * The master secret of this scheme. This is needed for generating a {@link ABECPWat11DecryptionKey} in the
      * {@link ABECPWat11}
      *
-     * @return
+     * @return the master secret
      */
     public ABECPWat11MasterSecret getMasterSecret() {
         return msk;

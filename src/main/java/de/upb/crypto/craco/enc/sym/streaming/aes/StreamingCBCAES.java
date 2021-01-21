@@ -8,6 +8,9 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 
+/**
+ * An implementation of AES with CBC as the mode of operation.
+ */
 public class StreamingCBCAES extends AbstractStreamingSymmetricScheme {
 
     private final static int initialVectorLength = 128; // in bit

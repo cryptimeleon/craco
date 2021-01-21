@@ -10,8 +10,8 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import java.util.Objects;
 
 /**
- * An accumulator value for the Nguyen accumulator scheme, i.e. a short representation of a set.
- * the value is g^(\prod (x_i + secret))
+ * An accumulator value for the Nguyen accumulator scheme, a short representation of a set.
+ * The value is \(g^(\prod (x_i + secret))\).
  */
 public class NguyenAccumulatorValue implements AccumulatorValue {
     @Represented(restorer = "group")

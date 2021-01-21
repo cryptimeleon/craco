@@ -1,13 +1,14 @@
 package de.upb.crypto.craco.abe.accessStructure.util;
 
+import de.upb.crypto.craco.abe.accessStructure.AccessStructure;
 import de.upb.crypto.craco.abe.accessStructure.exception.WrongAccessStructureException;
 
 /**
- * Visitor class that formats the given AccessStructure as a printable string.
+ * Visitor class that formats the given {@link AccessStructure} as a printable string.
  */
 public class ToStringVisitor implements Visitor<String> {
 
-    String output = new String();
+    String output = "";
 
     TreeNode currentNode;
 

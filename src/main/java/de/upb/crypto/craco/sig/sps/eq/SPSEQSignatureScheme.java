@@ -3,7 +3,7 @@ package de.upb.crypto.craco.sig.sps.eq;
 import de.upb.crypto.craco.common.GroupElementPlainText;
 import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.interfaces.PlainText;
-import de.upb.crypto.craco.interfaces.signature.StructurePreservingSignatureEQScheme;
+import de.upb.crypto.craco.sig.interfaces.StructurePreservingSignatureEQScheme;
 import de.upb.crypto.craco.sig.interfaces.Signature;
 import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
 import de.upb.crypto.craco.sig.interfaces.SigningKey;
@@ -28,7 +28,8 @@ import java.util.stream.IntStream;
  * <p>
  * Bilinear map type: 3
  * <p>
- * [1] Georg Fuchsbauer and Christian Hanser and Daniel Slamanig, "Structure-Preserving Signatures on Equivalence Classes and Constant-Size Anonymous Credentials", in Cryptology ePrint Archive, Report
+ * [1] Georg Fuchsbauer and Christian Hanser and Daniel Slamanig, "Structure-Preserving Signatures on Equivalence Classes
+ * and Constant-Size Anonymous Credentials", in Cryptology ePrint Archive, Report
  * 2014/944, 2014.
  *
  * @author Fabian Eidens

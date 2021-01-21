@@ -4,9 +4,9 @@ import de.upb.crypto.math.serialization.StandaloneRepresentable;
 
 /**
  * Takes key material and derives something from it
- * (most typically a symmetric key)
+ * (typically a symmetric key).
  *
- * @param <T>
+ * @param <T> type of the resulting derived key
  * @author Jan
  */
 public interface KeyDerivationFunction<T> extends StandaloneRepresentable {

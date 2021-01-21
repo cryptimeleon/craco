@@ -1,5 +1,7 @@
 package de.upb.crypto.craco.commitment.interfaces;
 
+import de.upb.crypto.craco.commitment.HashThenCommitCommitmentScheme;
+import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
@@ -8,44 +10,45 @@ import de.upb.crypto.math.serialization.annotations.v2.RepresentationRestorer;
 import java.lang.reflect.Type;
 
 /**
- * Interface reflecting the theoretical properties of 'Commitment Schemes' in combination with these interfaces:
- * {@link CommitmentPair}, {@link Commitment} and {@link OpenValue}.
+ * Interface used to implement commitment schemes.
  */
 public interface CommitmentScheme extends StandaloneRepresentable, RepresentationRestorer {
 
     /**
-     * Committing to an original message ({@link PlainText}).
+     * Creates a commitment to the given {@link PlainText}.
      *
-     * @param plainText Original message ({@link PlainText}) that gets committed to.
-     * @return The {@link CommitmentPair} for the original message containing the {@link Commitment} of the
-     * original message and the corresponding {@link OpenValue}.
+     * @param plainText the message to commit to
+     * @return the {@link CommitmentPair} containing the commitment and an {@link OpenValue} that can be used to
+     *         reveal the committed message.
      */
     CommitmentPair commit(PlainText plainText);
 
     /**
-     * Verification that the 'announced' {@link PlainText} (message) equals the result of opening the
-     * {@link Commitment} with the {@link OpenValue} (original message).
-     * This method verifying whether the original message that was committed to equals the announced message. This
-     * functionality is for example useful in order to use hashing.
+     * Verifies that the given announced {@link PlainText} equals the result of opening
+     * the {@link Commitment} with the {@link OpenValue}.
+     * <p>
+     * A commitment scheme such as {@link HashThenCommitCommitmentScheme} may also hash the message before committing
+     * to it. This method can take this into account, i.e. by hashing the given announced plaintext before comparing.
      *
-     * @param commitment {@link Commitment} Commitment of the original message {@link PlainText}.
-     * @param openValue       {@link OpenValue} for the commitment of the original message {@link PlainText}.
-     * @param plainText       {@link PlainText} (announced message) to be verified against the original message.
-     * @return Boolean value whether the opened message equals the announced message (true) or not (false).
+     * @param commitment commitment to verify
+     * @param openValue used to open the commitment and reveal the content
+     * @param plainText the hash of this will be compared with the opened commitment message
+     * @return true if verification succeeds, else false
      */
     boolean verify(Commitment commitment, OpenValue openValue, PlainText plainText);
 
     /**
-     * Provides an injective mapping of the byte[] to a {@link PlainText} usable with this scheme (which may be a
-     * MessageBlock).
-     * It only guarantees injectivity for arrays of the same length. Applications that would like to use mapToPlaintext
-     * with multiple different array lengths, may want to devise a padding method and then only call mapToPlaintext with
-     * byte[] of the same (padded) length.
-     * This method may throw an {@link IllegalArgumentException} if there is no injective {@link PlainText} element of
-     * these bytes (e.g., the byte array is too long).
+     * Provides an injective mapping of the given {@code byte[]} to a {@link PlainText} usable with this scheme
+     * (which may be a {@link MessageBlock}).
+     * It only guarantees injectivity for arrays of the same length.
+     * Applications that would like to use {@code mapToPlaintext} with multiple different array lengths
+     * may want to devise a padding method and then only call mapToPlaintext with
+     * byte arrays of the same (padded) length.
      *
-     * @param bytes byte[] representation of the message to commit
-     * @return Injective {@link PlainText} corresponding to the {@link CommitmentScheme}
+     * @param bytes {@code byte[]} to map to a {@code PlainText} that can be committed to using this commitment scheme
+     * @return {@code PlainText} usable with this commitment scheme
+     * @throws IllegalArgumentException if there is no injective {@code PlainText} element corresponding to the given
+     *                                  bytes, for example if the byte array is too long
      */
     PlainText mapToPlainText(byte[] bytes);
 

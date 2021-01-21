@@ -117,9 +117,9 @@ public class Identity implements StandaloneRepresentable, KeyIndex, CiphertextIn
     /**
      * Creates a policy out of this identity
      *
-     * @param threshold the amount of attributes in the intersection, that the policy
-     *                  needs to be valid
-     * @return
+     * @param threshold the amount of attributes in the intersection that the policy
+     *                  needs to be fulfilled
+     * @return the resulting {@link ThresholdPolicy}
      */
     public Policy toPolicy(int threshold) {
         return new ThresholdPolicy(threshold, attributes);

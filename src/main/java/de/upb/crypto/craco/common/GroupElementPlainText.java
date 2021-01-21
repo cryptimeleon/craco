@@ -11,19 +11,32 @@ import de.upb.crypto.math.serialization.Representation;
 
 import java.util.Objects;
 
+/**
+ * A plaintext consisting of a single group element.
+ */
 public class GroupElementPlainText implements PlainText, UniqueByteRepresentable {
 
     @UniqueByteRepresented
-    private GroupElement p;
+    private final GroupElement p;
 
     public GroupElementPlainText(GroupElement elem) {
         p = elem;
     }
 
+    /**
+     * Reconstructs this group element plaintext from the given representation using the given group
+     * as the restorer.
+     *
+     * @param repr the representation to restore from
+     * @param baseGroup the group to use as restorer; should be the group that contains the group element
+     */
     public GroupElementPlainText(Representation repr, Group baseGroup) {
         p = baseGroup.getElement(repr);
     }
 
+    /**
+     * Returns the group element represented by this plaintext.
+     */
     public GroupElement get() {
         return p;
     }
@@ -40,10 +53,7 @@ public class GroupElementPlainText implements PlainText, UniqueByteRepresentable
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((p == null) ? 0 : p.hashCode());
-        return result;
+        return Objects.hashCode(p);
     }
 
     @Override

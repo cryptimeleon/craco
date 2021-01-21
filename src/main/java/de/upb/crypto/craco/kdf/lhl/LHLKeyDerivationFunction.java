@@ -10,7 +10,9 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import java.util.Objects;
 
 /**
- * An instance of {@link LHLFamily}. For more information see javadoc there.
+ * An instance of {@link LHLFamily}.
+ *
+ * @see LHLFamily
  *
  * @author Mirko Jürgens, javadoc & refactoring: Denis Diemert
  */

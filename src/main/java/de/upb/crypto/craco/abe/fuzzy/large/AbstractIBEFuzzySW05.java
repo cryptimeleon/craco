@@ -3,10 +3,7 @@ package de.upb.crypto.craco.abe.fuzzy.large;
 import de.upb.crypto.craco.abe.interfaces.BigIntegerAttribute;
 import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.common.interfaces.EncryptionKey;
-import de.upb.crypto.craco.common.interfaces.pe.CiphertextIndex;
-import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
-import de.upb.crypto.craco.common.interfaces.pe.MasterSecret;
-import de.upb.crypto.craco.common.interfaces.pe.Predicate;
+import de.upb.crypto.craco.common.interfaces.pe.*;
 import de.upb.crypto.craco.common.utils.LagrangeUtil;
 import de.upb.crypto.craco.common.utils.PrimeFieldPolynomial;
 import de.upb.crypto.craco.common.utils.SecureRandomGenerator;
@@ -92,9 +89,7 @@ public class AbstractIBEFuzzySW05 {
                         i -> i,
                         // value: i -> T(i)^s
                         i -> {
-                            GroupElement hashedi = (GroupElement) pp.getHashToG1()
-                                    .hashIntoStructure((i.subtract(BigInteger.ONE))
-                                            .toString(10));
+                            GroupElement hashedi = pp.getHashToG1().hash((i.subtract(BigInteger.ONE)).toString(10));
                             return hashedi.pow(s).compute();
                         }
                 ));
@@ -220,7 +215,7 @@ public class AbstractIBEFuzzySW05 {
             GroupElement rElement = pp.getG().pow(r);
 
             // compute T(i-1)
-            GroupElement temp = (GroupElement) pp.getHashToG1().hashIntoStructure(
+            GroupElement temp = pp.getHashToG1().hash(
                     i.getAttribute().subtract(BigInteger.ONE).toString(10));
             // D_i = g_2^q(i) * T(i-1)^r
             GroupElement dElement = pp.getG2().pow(q.evaluate(i.getAttribute())).op(temp.pow(r));

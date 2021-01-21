@@ -3,7 +3,7 @@ package de.upb.crypto.craco.interaction;
 import java.security.Provider;
 
 /**
- * {@link Provider} for all CrACo schemes.
+ * {@link Provider} for all Craco schemes.
  *
  * @author Marius Dransfeld, Fabian Eidens
  */
