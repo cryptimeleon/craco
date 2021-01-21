@@ -4,7 +4,7 @@ import de.upb.crypto.craco.abe.accessStructure.exception.NoSatisfyingSet;
 import de.upb.crypto.craco.abe.accessStructure.exception.WrongAccessStructureException;
 import de.upb.crypto.craco.abe.accessStructure.util.MinimalFulfillingSubsetVisitor;
 import de.upb.crypto.craco.abe.accessStructure.util.MonotoneSpanProgramGetMatrixVisitor;
-import de.upb.crypto.craco.abe.accessStructure.util.Pair;
+import de.upb.crypto.craco.abe.accessStructure.util.ComparablePair;
 import de.upb.crypto.craco.abe.accessStructure.util.TreeNode;
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.craco.common.interfaces.policy.PolicyFact;
@@ -86,7 +86,7 @@ public class MonotoneSpanProgram extends AccessStructure {
         MinimalFulfillingSubsetVisitor minimalSubsetVisitor =
                 new MinimalFulfillingSubsetVisitor(getSharesOfReceivers(setOfParties));
         TreeNode tree = thresholdTree;
-        Pair<Integer, ArrayList<Integer>> fulfillingSet = tree.performVisitor(minimalSubsetVisitor);
+        ComparablePair<Integer, ArrayList<Integer>> fulfillingSet = tree.performVisitor(minimalSubsetVisitor);
 
         if (fulfillingSet.getFirst() == 0)
             throw new NoSatisfyingSet("Given set does not satisfy the access structure");
