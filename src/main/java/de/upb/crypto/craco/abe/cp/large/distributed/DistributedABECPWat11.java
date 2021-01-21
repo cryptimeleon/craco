@@ -88,7 +88,7 @@ public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncr
             result = pp.getE().apply(pp.getG(), D_xi.get(i));
 
             if (!result.equals(
-                    pp.getE().apply(D_doublePrime_xi, (GroupElement) pp.getHashToG1().hashIntoStructure(i))
+                    pp.getE().apply(D_doublePrime_xi, pp.getHashToG1().hash(i))
             )) {
                 return false;
             }
@@ -200,7 +200,7 @@ public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncr
         for (Attribute i : attributes) {
             // T(i)^x_u_i
 
-            GroupElement D_i = (GroupElement) pp.getHashToG1().hashIntoStructure(i);
+            GroupElement D_i = pp.getHashToG1().hash(i);
             D_i = D_i.pow(u_xi).compute();
 
             D_xi.put(i, D_i);

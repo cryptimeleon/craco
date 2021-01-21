@@ -3,6 +3,7 @@ package de.upb.crypto.craco.common;
 import de.upb.crypto.craco.common.utils.LagrangeUtil;
 import de.upb.crypto.math.hash.impl.ByteArrayAccumulator;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
+import de.upb.crypto.math.interfaces.hash.HashIntoGroup;
 import de.upb.crypto.math.interfaces.hash.HashIntoStructure;
 import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
 import de.upb.crypto.math.interfaces.structures.Element;
@@ -17,11 +18,10 @@ import de.upb.crypto.math.structures.zn.Zp.ZpElement;
 
 import java.math.BigInteger;
 import java.util.*;
-
 /**
  * A hash function allowing hashing into a specific group.
  */
-public class WatersHash implements HashIntoStructure {
+public class WatersHash implements HashIntoGroup {
     @Represented
     private Group g;
     @Represented(restorer = "[g]")
@@ -45,7 +45,7 @@ public class WatersHash implements HashIntoStructure {
     }
 
     @Override
-    public Element hashIntoStructure(byte[] x) {
+    public GroupElement hash(byte[] x) {
         GroupElement result = g.getNeutralElement();
         Set<BigInteger> N = new HashSet<>();
         for (int i = 1; i <= T.size(); i++) {
@@ -55,7 +55,7 @@ public class WatersHash implements HashIntoStructure {
         for (int i = 1; i <= T.size(); i++) {
             ZpElement lg = LagrangeUtil.computeCoefficient(Zp.valueOf(i, g.size()),
                     N,
-                    Zp.valueOf(baseHash.hashIntoStructure(x).getInteger(), baseHash.getTargetStructure().size())
+                    Zp.valueOf(baseHash.hash(x).getInteger(), baseHash.getTargetStructure().size())
             );
             result = result.op(T.get(i - 1).pow(lg));
         }
@@ -86,12 +86,5 @@ public class WatersHash implements HashIntoStructure {
             return false;
         WatersHash other = (WatersHash) obj;
         return Objects.equals(T, other.T);
-    }
-
-    @Override
-    public Element hashIntoStructure(UniqueByteRepresentable ubr) {
-        ByteAccumulator acc = new ByteArrayAccumulator();
-        acc = ubr.updateAccumulator(acc);
-        return hashIntoStructure(acc.extractBytes());
     }
 }

@@ -122,6 +122,6 @@ public class PS18ROMSignatureScheme extends PS18SignatureScheme {
     private ZpElement romHashIntoZp(MessageBlock messages, Zp zp) {
         byte[] messageBytes = messages.getUniqueByteRepresentation();
 
-        return new HashIntoZp(zp).hashIntoStructure(messageBytes);
+        return new HashIntoZp(zp).hash(messageBytes);
     }
 }

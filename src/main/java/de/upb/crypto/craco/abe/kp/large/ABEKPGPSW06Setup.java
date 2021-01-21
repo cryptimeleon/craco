@@ -65,8 +65,7 @@ public class ABEKPGPSW06Setup {
         if (!watersHash) {
             pp.setHashToG1(group.getHashIntoG1());
         } else {
-            HashIntoStructure hashToGroup = new WatersHash(pp.getGroupG1(), n + 1);
-            pp.setHashToG1(hashToGroup);
+            pp.setHashToG1(new WatersHash(pp.getGroupG1(), n + 1));
         }
 
         Zp zp = new Zp(group.getG1().size());

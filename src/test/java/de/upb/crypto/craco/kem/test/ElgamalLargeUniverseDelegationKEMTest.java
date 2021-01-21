@@ -232,7 +232,7 @@ public class ElgamalLargeUniverseDelegationKEMTest {
             for (Map.Entry<Attribute, GroupElement[]> entry : dk.ki_map.entrySet()) {
                 Attribute ai = entry.getKey();
                 GroupElement[] k23 = entry.getValue();
-                ZnElement h = (ZnElement) hash.hashIntoStructure(ai);
+                ZnElement h = (ZnElement) hash.hash(ai);
 
                 /*
                  *   e(K_ai,3,g2)=
@@ -500,7 +500,7 @@ public class ElgamalLargeUniverseDelegationKEMTest {
             GroupElement[] c123 = entry.getValue();
             Attribute rho_i = (Attribute) msp.getShareReceiver(index.intValue());
 
-            ZnElement h = (ZnElement) hash.hashIntoStructure(rho_i);
+            ZnElement h = (ZnElement) hash.hash(rho_i);
             /*
              * e(g1,Ci,2)
              */
