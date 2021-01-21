@@ -12,7 +12,7 @@ import de.upb.crypto.math.serialization.Representation;
  * These are announcement, challenge and response. Announcement and Response are send by the Prover to the Verifier, the
  * challenge from the Verifier to the Prover.
  */
-public class SigmaProtocolTranscript implements Representable, CompressedSigmaProtocolTranscript {
+public class SigmaProtocolTranscript implements Representable {
     protected Announcement announcement;
     protected Challenge challenge;
     protected Response response;
