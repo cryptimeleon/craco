@@ -10,5 +10,4 @@ import de.upb.crypto.math.serialization.Representable;
  * the corresponding {@link EncryptionScheme} implementation.
  */
 public interface DecryptionKey extends Representable {
-    public static final String RECOVERY_METHOD = "getDecryptionKey";
 }

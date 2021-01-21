@@ -14,5 +14,4 @@ import de.upb.crypto.math.serialization.Representation;
  * @author Jan
  */
 public interface MasterSecret extends Representable {
-    public final static String RECOVERY_METHOD = "getMasterSecret";
 }

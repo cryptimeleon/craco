@@ -12,5 +12,4 @@ import de.upb.crypto.math.serialization.Representation;
  * @author feidens
  */
 public interface SigningKey extends Representable {
-    public static final String RECOVERY_METHOD = "getSigningKey";
 }

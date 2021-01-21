@@ -5,7 +5,7 @@ import de.upb.crypto.craco.abe.accessStructure.util.*;
 import de.upb.crypto.craco.abe.interfaces.LinearSecretSharing;
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.craco.common.interfaces.policy.PolicyFact;
-import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp;
 
 import java.util.HashMap;
 import java.util.Map;

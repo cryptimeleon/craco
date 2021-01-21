@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.common.interfaces;
 
-import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
+import de.upb.crypto.math.hash.UniqueByteRepresentable;
 import de.upb.crypto.math.serialization.Representable;
 
 /**
@@ -11,6 +11,5 @@ import de.upb.crypto.math.serialization.Representable;
  * the corresponding {@link EncryptionScheme} implementation.
  */
 public interface EncryptionKey extends Representable, UniqueByteRepresentable {
-    public static final String RECOVERY_METHOD = "getEncryptionKey";
 
 }

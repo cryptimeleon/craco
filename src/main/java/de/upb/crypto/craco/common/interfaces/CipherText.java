@@ -12,5 +12,4 @@ import de.upb.crypto.math.serialization.Representable;
  * @author Jan
  */
 public interface CipherText extends Representable {
-    public static final String RECOVERY_METHOD = "getCipherText";
 }

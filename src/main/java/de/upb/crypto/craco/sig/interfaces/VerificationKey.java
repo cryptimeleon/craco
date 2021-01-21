@@ -13,5 +13,4 @@ import de.upb.crypto.math.serialization.Representation;
  * @author feidens
  */
 public interface VerificationKey extends Representable {
-    public static final String RECOVERY_METHOD = "getVerificationKey";
 }

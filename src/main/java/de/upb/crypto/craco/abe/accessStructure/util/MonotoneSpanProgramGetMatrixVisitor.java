@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.abe.accessStructure.util;
 
 import de.upb.crypto.craco.abe.accessStructure.exception.WrongAccessStructureException;
-import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+import de.upb.crypto.math.structures.rings.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
 import java.util.ArrayList;
 

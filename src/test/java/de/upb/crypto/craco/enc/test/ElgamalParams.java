@@ -8,9 +8,9 @@ import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPlainText;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPrivateKey;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPublicKey;
 import de.upb.crypto.math.interfaces.structures.Group;
+import de.upb.crypto.math.structures.zn.Zn;
 import de.upb.crypto.math.structures.zn.Zn.ZnElement;
 import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zn;
 
 import java.math.BigInteger;
 import java.util.function.Supplier;

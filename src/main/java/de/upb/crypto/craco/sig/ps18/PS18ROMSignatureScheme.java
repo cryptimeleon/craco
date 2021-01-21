@@ -7,11 +7,11 @@ import de.upb.crypto.craco.sig.interfaces.Signature;
 import de.upb.crypto.craco.sig.interfaces.SigningKey;
 import de.upb.crypto.craco.sig.interfaces.VerificationKey;
 import de.upb.crypto.craco.sig.ps.PSPublicParameters;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.structures.zn.HashIntoZp;
-import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.rings.zn.HashIntoZp;
+import de.upb.crypto.math.structures.rings.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
 /**
  * This class implements the signature scheme from Pointcheval and Sanders 2018 in
@@ -122,6 +122,6 @@ public class PS18ROMSignatureScheme extends PS18SignatureScheme {
     private ZpElement romHashIntoZp(MessageBlock messages, Zp zp) {
         byte[] messageBytes = messages.getUniqueByteRepresentation();
 
-        return new HashIntoZp(zp).hashIntoStructure(messageBytes);
+        return new HashIntoZp(zp).hash(messageBytes);
     }
 }

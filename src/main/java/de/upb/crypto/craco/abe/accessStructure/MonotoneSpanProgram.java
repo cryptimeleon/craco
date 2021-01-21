@@ -8,8 +8,8 @@ import de.upb.crypto.craco.abe.accessStructure.util.Pair;
 import de.upb.crypto.craco.abe.accessStructure.util.TreeNode;
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.craco.common.interfaces.policy.PolicyFact;
-import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+import de.upb.crypto.math.structures.rings.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
 import java.util.*;
 
