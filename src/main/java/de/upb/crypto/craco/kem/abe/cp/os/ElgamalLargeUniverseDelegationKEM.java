@@ -112,7 +112,7 @@ public class ElgamalLargeUniverseDelegationKEM
             Attribute rho_i = (Attribute) msp.getShareReceiver(share.getKey());
 
             // corresponding element in G1
-            ZnElement hash = (ZnElement) hashToZp.hashIntoStructure(rho_i);
+            ZnElement hash = (ZnElement) hashToZp.hash(rho_i);
 
             /*
              * share of s corresponding to this index
@@ -374,7 +374,7 @@ public class ElgamalLargeUniverseDelegationKEM
             GroupElement[] k23 = new GroupElement[2];
             ZpElement ri = zp.getUniformlyRandomElement();
             k23[0] = this.getPublicParameters().g1.pow(ri).compute();
-            k23[1] = this.getPublicParameters().u1.pow((ZnElement) hashIntoExponent.hashIntoStructure(ai))
+            k23[1] = this.getPublicParameters().u1.pow((ZnElement) hashIntoExponent.hash(ai))
                     .op(this.getPublicParameters().h1).pow(ri)
                     .op(this.getPublicParameters().v1.pow(r.neg())).compute();
             map.put(ai, k23);

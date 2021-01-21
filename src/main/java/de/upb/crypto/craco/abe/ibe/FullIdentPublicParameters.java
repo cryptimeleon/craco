@@ -1,6 +1,7 @@
 package de.upb.crypto.craco.abe.ibe;
 
 import de.upb.crypto.craco.common.interfaces.PublicParameters;
+import de.upb.crypto.math.interfaces.hash.HashIntoGroup;
 import de.upb.crypto.math.interfaces.hash.HashIntoStructure;
 import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.interfaces.structures.GroupElement;
@@ -34,7 +35,7 @@ public class FullIdentPublicParameters implements PublicParameters {
     private BigInteger n; // length of the plain-texts
 
     @Represented
-    private HashIntoStructure hashToG1;
+    private HashIntoGroup hashToG1;
 
     public FullIdentPublicParameters() {
 
@@ -109,11 +110,11 @@ public class FullIdentPublicParameters implements PublicParameters {
 
     }
 
-    public HashIntoStructure getHashToG1() {
+    public HashIntoGroup getHashToG1() {
         return hashToG1;
     }
 
-    public void setHashToG1(HashIntoStructure hashToG1) {
+    public void setHashToG1(HashIntoGroup hashToG1) {
         this.hashToG1 = hashToG1;
     }
 }
