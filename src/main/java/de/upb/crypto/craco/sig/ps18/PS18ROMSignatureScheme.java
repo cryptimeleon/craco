@@ -49,7 +49,7 @@ public class PS18ROMSignatureScheme extends PS18SignatureScheme {
         MessageBlock messageBlock = (MessageBlock) plainText;
         PS18SigningKey sk = (PS18SigningKey) secretKey;
 
-        if (messageBlock.size() != sk.getNumberOfMessages()) {
+        if (messageBlock.length() != sk.getNumberOfMessages()) {
             throw new IllegalArgumentException("Message length does not match length " +
                     "supported by signing key.");
         }

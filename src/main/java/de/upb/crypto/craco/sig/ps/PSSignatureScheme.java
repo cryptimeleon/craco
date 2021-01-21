@@ -100,7 +100,7 @@ public class PSSignatureScheme implements StandardMultiMessageSignatureScheme {
         MessageBlock messageBlock = (MessageBlock) plainText;
         PSSigningKey sk = (PSSigningKey) secretKey;
 
-        if (messageBlock.size() != sk.getNumberOfMessages()) {
+        if (messageBlock.length() != sk.getNumberOfMessages()) {
             throw new IllegalArgumentException("Not a valid block size for this scheme");
         }
 

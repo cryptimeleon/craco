@@ -11,17 +11,10 @@ import de.upb.crypto.math.serialization.annotations.v2.Represented;
 import java.util.Objects;
 
 public class PedersenCommitment implements Commitment {
-    @Represented(restorer = "G")
-    private GroupElement commitment;
+    private final GroupElement commitment;
 
     public PedersenCommitment(GroupElement commitment) {
         this.commitment = commitment;
-    }
-
-    public PedersenCommitment(Group group, Representation representation) {
-        new ReprUtil(this)
-                .register(group, "G")
-                .deserialize(representation);
     }
 
     public GroupElement get() {

@@ -6,38 +6,22 @@ import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.structures.zn.Zn;
 import de.upb.crypto.math.structures.zn.Zp;
 
 import java.math.BigInteger;
 import java.util.Objects;
 
 public class PedersenOpenValue implements OpenValue {
-
-    @Represented
-    private Zp zp;
-
     @UniqueByteRepresented
-    @Represented(restorer = "[zp]")
-    private Zp.ZpElement[] messages;
+    @Represented(restorer = "zn")
+    private Zn.ZnElement randomness;
 
-    @UniqueByteRepresented
-    @Represented
-    private BigInteger randomness;
-
-    public PedersenOpenValue(BigInteger randomness) {
+    public PedersenOpenValue(Zn.ZnElement randomness) {
         this.randomness = randomness;
     }
 
-    public PedersenOpenValue(Representation repr) {
-        new ReprUtil(this).deserialize(repr);
-
-    }
-
-    public Zp.ZpElement[] getMessages() {
-        return messages;
-    }
-
-    public BigInteger getRandomValue() {
+    public Zn.ZnElement getRandomValue() {
         return randomness;
     }
 
@@ -48,7 +32,7 @@ public class PedersenOpenValue implements OpenValue {
 
     @Override
     public ByteAccumulator updateAccumulator(ByteAccumulator byteAccumulator) {
-        byteAccumulator.append(randomness.toByteArray());
+        byteAccumulator.append(randomness);
         return byteAccumulator;
     }
 

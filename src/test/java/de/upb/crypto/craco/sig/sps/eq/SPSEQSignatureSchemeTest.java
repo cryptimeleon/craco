@@ -54,7 +54,6 @@ public class SPSEQSignatureSchemeTest {
         for (int i = 0; i < testIterations; i++) {
             SignatureSchemeTester.testSignatureSchemeSignAndVerify(spseqScheme, messageBlock, keyPair.getVerificationKey(),
                     keyPair.getSigningKey());
-
         }
     }
 
@@ -70,7 +69,7 @@ public class SPSEQSignatureSchemeTest {
             SPSEQSignature sigmaChgRep = (SPSEQSignature) spseqScheme.chgRep(sigma, mu, keyPair.getVerificationKey());
             measureTime("ChgRep");
             // change representative of message
-            MessageBlock msgChgRep= new MessageBlock(messageBlock.parallelStream().map(m -> ((GroupElementPlainText) m).get().pow(mu)).
+            MessageBlock msgChgRep= new MessageBlock(messageBlock.stream().map(m -> ((GroupElementPlainText) m).get().pow(mu)).
                     map(GroupElementPlainText::new).collect(Collectors.toList()));
             // check ChgRep
             assertTrue(spseqScheme.verify(msgChgRep, sigmaChgRep, keyPair.getVerificationKey()));

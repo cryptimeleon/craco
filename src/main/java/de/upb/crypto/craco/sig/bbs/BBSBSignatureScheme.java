@@ -82,7 +82,7 @@ public class BBSBSignatureScheme implements StandardMultiMessageSignatureScheme 
         MessageBlock messageBlock = (MessageBlock) plainText;
         BBSBSigningKey sk = (BBSBSigningKey) secretKey;
 
-        if (messageBlock.size() != sk.getNumberOfMessages()) {
+        if (messageBlock.length() != sk.getNumberOfMessages()) {
             throw new IllegalArgumentException("Not a valid block size for this scheme");
         }
 
