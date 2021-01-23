@@ -74,11 +74,15 @@ public class DistributedABECPWat11Setup {
         }
         ZpElement y_0 = zp.getUniformlyRandomUnit();
 
-        PolynomialRing polyRing = new PolynomialRing(zp);
-        // new polynomial q of degree d-1 where q(0) = y
+        // new polynomial q of degree t-1 where q(0) = y_0
         // assign non zero values to all coefficients
-        PolynomialRing.Polynomial q_0 = polyRing.getUniformlyRandomElementWithDegreeAndNoZeros(t-1);
-        q_0.setCoefficient(0, y_0);
+        int degree = t - 1;
+        RingElement[] coefficients = new RingElement[degree + 1];
+        for (int i = 1; i < coefficients.length; ++i) {
+            coefficients[i] = zp.getUniformlyRandomNonzeroElement();
+        }
+        coefficients[0] = y_0;
+        PolynomialRing.Polynomial q_0 = PolynomialRing.getPoly(coefficients);
 
         GroupElement Y = pp.getE().apply(pp.getG(), pp.getG()).pow(y_0);
 

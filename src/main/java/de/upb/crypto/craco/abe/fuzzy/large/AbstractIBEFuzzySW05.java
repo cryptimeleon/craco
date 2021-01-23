@@ -9,6 +9,7 @@ import de.upb.crypto.craco.kem.fuzzy.large.IBEFuzzySW05KEM;
 import de.upb.crypto.craco.kem.fuzzy.large.IBEFuzzySW05KEMCipherText;
 import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.structures.rings.RingElement;
 import de.upb.crypto.math.structures.rings.polynomial.PolynomialRing;
 import de.upb.crypto.math.structures.rings.zn.Zp;
 
@@ -198,13 +199,15 @@ public class AbstractIBEFuzzySW05 {
 
         IBEFuzzySW05MasterSecret masterSecret = (IBEFuzzySW05MasterSecret) msk;
 
-        PolynomialRing polyRing = new PolynomialRing(zp);
         // new polynomial q of degree d-1 where q(0) = y
         // assign non zero values to all coefficients
-        PolynomialRing.Polynomial q = polyRing.getUniformlyRandomElementWithDegreeAndNoZeros(
-                pp.getIdentityThresholdD().intValue() - 1
-        );
-        q.setCoefficient(0, masterSecret.getY());
+        int degree = pp.getIdentityThresholdD().intValue() - 1;
+        RingElement[] coefficients = new RingElement[degree + 1];
+        for (int i = 1; i < coefficients.length; ++i) {
+            coefficients[i] = zp.getUniformlyRandomNonzeroElement();
+        }
+        coefficients[0] = masterSecret.getY();
+        PolynomialRing.Polynomial q = PolynomialRing.getPoly(coefficients);
 
         Map<BigInteger, GroupElement> dMap = new HashMap<>();
         Map<BigInteger, GroupElement> rMap = new HashMap<>();
