@@ -88,9 +88,7 @@ public class AbstractIBEFuzzySW05 {
                         i -> i,
                         // value: i -> T(i)^s
                         i -> {
-                            GroupElement hashedi = (GroupElement) pp.getHashToG1()
-                                    .hash((i.subtract(BigInteger.ONE))
-                                            .toString(10));
+                            GroupElement hashedi = pp.getHashToG1().hash((i.subtract(BigInteger.ONE)).toString(10));
                             return hashedi.pow(s).compute();
                         }
                 ));
@@ -218,8 +216,9 @@ public class AbstractIBEFuzzySW05 {
             GroupElement rElement = pp.getG().pow(r);
 
             // compute T(i-1)
-            GroupElement temp = (GroupElement) pp.getHashToG1().hash(
-                    i.getAttribute().subtract(BigInteger.ONE).toString(10));
+            GroupElement temp = pp.getHashToG1().hash(
+                    i.getAttribute().subtract(BigInteger.ONE).toString(10)
+            );
             // D_i = g_2^q(i) * T(i-1)^r
             GroupElement dElement = pp.getG2()
                     .pow(q.evaluate(zp.createZnElement(i.getAttribute())))

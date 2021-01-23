@@ -1,9 +1,9 @@
 package de.upb.crypto.craco.abe.cp.large;
 
 import de.upb.crypto.craco.common.interfaces.PublicParameters;
-import de.upb.crypto.math.structures.HashIntoStructure;
 import de.upb.crypto.math.structures.groups.Group;
 import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.groups.HashIntoGroup;
 import de.upb.crypto.math.structures.groups.elliptic.BilinearGroup;
 import de.upb.crypto.math.structures.groups.elliptic.BilinearMap;
 import de.upb.crypto.math.serialization.Representation;
@@ -33,7 +33,7 @@ public class ABECPWat11PublicParameters implements PublicParameters {
     protected GroupElement gA; // in G_1
 
     @Represented
-    protected HashIntoStructure hashToG1;
+    protected HashIntoGroup hashToG1;
 
     @Represented
     protected Integer lMax;
@@ -48,11 +48,11 @@ public class ABECPWat11PublicParameters implements PublicParameters {
         new ReprUtil(this).deserialize(repr);
     }
 
-    public HashIntoStructure getHashToG1() {
+    public HashIntoGroup getHashToG1() {
         return hashToG1;
     }
 
-    public void setHashToG1(HashIntoStructure h) {
+    public void setHashToG1(HashIntoGroup h) {
         hashToG1 = h;
     }
 

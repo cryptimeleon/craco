@@ -75,7 +75,7 @@ public abstract class AbstractABECPWat11 {
             Attribute rhoi = (Attribute) msp.getShareReceiver(entry.getKey());
 
             // hash of rho_i to group G_1, T(\rho(i))
-            GroupElement rhoiElement = (GroupElement) pp.getHashToG1().hash(rhoi);
+            GroupElement rhoiElement = pp.getHashToG1().hash(rhoi);
             // share lambda_i
             Zp.ZpElement lambdai = entry.getValue();
 
@@ -219,7 +219,7 @@ public abstract class AbstractABECPWat11 {
         for (Attribute x : attributes) {
             // If hash function is WatersHash, then x_element corresponds to a h_i as
             // defined in the paper.
-            GroupElement xElement = (GroupElement) pp.getHashToG1().hash(x);
+            GroupElement xElement = pp.getHashToG1().hash(x);
             GroupElement dx = xElement.pow(u).compute();
             d.put(x, dx);
         }

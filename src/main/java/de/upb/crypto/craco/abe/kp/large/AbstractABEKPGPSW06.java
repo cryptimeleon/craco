@@ -68,7 +68,7 @@ public class AbstractABEKPGPSW06 {
             Attribute rho_i = (Attribute) msp.getShareReceiver(share.getKey());
 
             Zp.ZpElement lambda_i = share.getValue();
-            GroupElement rho_i_element = (GroupElement) pp.getHashToG1().hash(rho_i);
+            GroupElement rho_i_element = pp.getHashToG1().hash(rho_i);
             // R_i = g^r_i
             GroupElement R_i = pp.getG1Generator().pow(r_i);
             // D_i = g^temp * T (rho_i)^r_i (T is the hash into g1 specified in
@@ -121,7 +121,7 @@ public class AbstractABEKPGPSW06 {
      */
     protected Map<Attribute, GroupElement> restoreE(SetOfAttributes attributes, Zp.ZpElement s) {
         // i -> T(i)
-        Function<Attribute, GroupElement> hash = i -> (GroupElement) pp.getHashToG1().hash(i);
+        Function<Attribute, GroupElement> hash = i -> pp.getHashToG1().hash(i);
 
         // E_i = T(i)^s
         return attributes

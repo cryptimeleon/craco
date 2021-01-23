@@ -1,11 +1,12 @@
 package de.upb.crypto.craco.abe.kp.large;
 
 import de.upb.crypto.craco.common.interfaces.PublicParameters;
-import de.upb.crypto.math.structures.HashIntoStructure;
 import de.upb.crypto.math.structures.groups.Group;
 import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.groups.HashIntoGroup;
 import de.upb.crypto.math.structures.groups.elliptic.BilinearGroup;
 import de.upb.crypto.math.structures.groups.elliptic.BilinearMap;
+
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.Represented;
@@ -40,7 +41,7 @@ public class ABEKPGPSW06PublicParameters implements PublicParameters {
     private BigInteger n;
 
     @Represented
-    private HashIntoStructure hashToG1;
+    private HashIntoGroup hashToG1;
 
     public ABEKPGPSW06PublicParameters() {
     }
@@ -124,11 +125,11 @@ public class ABEKPGPSW06PublicParameters implements PublicParameters {
         this.n = n;
     }
 
-    public HashIntoStructure getHashToG1() {
+    public HashIntoGroup getHashToG1() {
         return hashToG1;
     }
 
-    public void setHashToG1(HashIntoStructure hashToG1) {
+    public void setHashToG1(HashIntoGroup hashToG1) {
         this.hashToG1 = hashToG1;
     }
 

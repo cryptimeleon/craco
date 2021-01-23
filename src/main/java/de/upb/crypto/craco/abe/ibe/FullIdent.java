@@ -49,7 +49,7 @@ public class FullIdent implements PredicateEncryptionScheme {
      * @return group element
      */
     protected GroupElement H1(byte[] data) {
-        return (GroupElement) pp.getHashToG1().hash(data);
+        return pp.getHashToG1().hash(data);
     }
 
     /**

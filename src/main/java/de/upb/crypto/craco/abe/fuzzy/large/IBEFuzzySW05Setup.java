@@ -81,8 +81,7 @@ public class IBEFuzzySW05Setup {
         if (!watersHash) {
             pp.setHashToG1(group.getHashIntoG1());
         } else {
-            HashIntoStructure hashToGroup = new WatersHash(pp.getGroupG1(), n.intValue() + 1);
-            pp.setHashToG1(hashToGroup);
+            pp.setHashToG1(new WatersHash(pp.getGroupG1(), n.intValue() + 1));
         }
 
         // msk =y

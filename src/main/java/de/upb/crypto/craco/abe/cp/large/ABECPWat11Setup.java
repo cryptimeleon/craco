@@ -1,7 +1,6 @@
 package de.upb.crypto.craco.abe.cp.large;
 
 import de.upb.crypto.craco.common.WatersHash;
-import de.upb.crypto.math.structures.HashIntoStructure;
 import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.structures.groups.counting.CountingBilinearGroup;
 import de.upb.crypto.math.structures.groups.elliptic.BilinearGroup;
@@ -86,8 +85,7 @@ public class ABECPWat11Setup {
         if (!watersHash) {
             pp.setHashToG1(group.getHashIntoG1());
         } else {
-            HashIntoStructure hashToGroup = new WatersHash(pp.getGroupG1(), n + lMax);
-            pp.setHashToG1(hashToGroup);
+            pp.setHashToG1(new WatersHash(pp.getGroupG1(), n + lMax));
         }
         pp.setBilinearGroup(group);
 
