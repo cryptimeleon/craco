@@ -126,11 +126,8 @@ public class StandaloneTest {
         toReturn.add(StreamingHybridEncryptionSchemeParams.get());
         toReturn.add(BooleanPolicyParams.get());
         toReturn.add(ByteArrayImplementationParams.get());
-        toReturn.add(EpsilonDistributionTestParams.get());
-        toReturn.addAll(KWiseHashParams.get());
         toReturn.addAll(UniversalHashParams.get());
         toReturn.addAll(HashBasedKDFParams.get());
-        toReturn.addAll(UExtractorParams.get());
         toReturn.addAll(BBSBParams.get());
         toReturn.addAll(LHLParams.get());
         toReturn.add(AesPseudorandomFunction.get());

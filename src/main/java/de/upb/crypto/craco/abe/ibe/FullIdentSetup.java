@@ -1,10 +1,10 @@
 package de.upb.crypto.craco.abe.ibe;
 
-import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
-import de.upb.crypto.math.pairings.generic.BilinearGroup;
-import de.upb.crypto.math.pairings.type1.supersingular.SupersingularBilinearGroup;
-import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+import de.upb.crypto.math.structures.groups.counting.CountingBilinearGroup;
+import de.upb.crypto.math.structures.groups.elliptic.BilinearGroup;
+import de.upb.crypto.math.structures.groups.elliptic.type1.supersingular.SupersingularBilinearGroup;
+import de.upb.crypto.math.structures.rings.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
 import java.math.BigInteger;
 

@@ -6,7 +6,9 @@ import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.craco.sig.interfaces.*;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.rings.zn.Zn;
 import de.upb.crypto.math.structures.rings.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -108,7 +110,7 @@ public class BBSBSignatureScheme implements StandardMultiMessageSignatureScheme 
 
         c = c.pow(resultExponent);
 
-        ZnElement exponent = exponentX.add(sk.getExponentGamma()).inv();// 1/(x+gamma)
+        Zn.ZnElement exponent = exponentX.add(sk.getExponentGamma()).inv();// 1/(x+gamma)
 
         GroupElement signatureElementA = c.pow(exponent).compute(); // A in the paper
 

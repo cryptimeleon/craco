@@ -8,9 +8,9 @@ import de.upb.crypto.craco.kem.KeyEncapsulationMechanism.KeyAndCiphertext;
 import de.upb.crypto.craco.kem.asym.elgamal.ElgamalKEM;
 import de.upb.crypto.craco.kem.asym.elgamal.ElgamalKEMCiphertext;
 import de.upb.crypto.math.hash.impl.SHA256HashFunction;
-import de.upb.crypto.math.interfaces.hash.HashFunction;
-import de.upb.crypto.math.interfaces.structures.RingGroup;
-import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.math.hash.HashFunction;
+import de.upb.crypto.math.structures.groups.RingGroup;
+import de.upb.crypto.math.structures.rings.zn.Zp;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

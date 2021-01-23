@@ -2,11 +2,11 @@ package de.upb.crypto.craco.commitment.pedersen;
 
 import de.upb.crypto.craco.commitment.interfaces.OpenValue;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
+import de.upb.crypto.math.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
-import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.structures.rings.zn.Zp;
 
 import java.math.BigInteger;
 import java.util.Objects;

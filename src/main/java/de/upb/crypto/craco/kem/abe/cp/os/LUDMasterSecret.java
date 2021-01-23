@@ -2,7 +2,7 @@ package de.upb.crypto.craco.kem.abe.cp.os;
 
 import de.upb.crypto.craco.common.interfaces.pe.MasterSecret;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
 
 /**

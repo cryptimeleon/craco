@@ -6,13 +6,12 @@ import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
 import de.upb.crypto.craco.prf.PrfImage;
 import de.upb.crypto.craco.prf.PrfKey;
 import de.upb.crypto.craco.prf.PrfPreimage;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
-import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
-import de.upb.crypto.math.random.interfaces.RandomGenerator;
-import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
+import de.upb.crypto.math.hash.ByteAccumulator;
+import de.upb.crypto.math.hash.UniqueByteRepresentable;
+import de.upb.crypto.math.random.RandomGenerator;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
 
 import java.util.Arrays;
 
@@ -42,8 +41,7 @@ public class ByteArrayImplementation implements PlainText, CipherText, Decryptio
      * @param numberBytes number of random bytes / length of resulting ByteArrayImplementation
      */
     public static ByteArrayImplementation fromRandom(int numberBytes) {
-        RandomGenerator rng = RandomGeneratorSupplier.getRnd();
-        return new ByteArrayImplementation(rng.getRandomByteArray(numberBytes));
+        return new ByteArrayImplementation(RandomGenerator.getRandomBytes(numberBytes));
     }
 
     public byte[] getData() {

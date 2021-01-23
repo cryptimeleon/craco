@@ -7,7 +7,7 @@ import de.upb.crypto.craco.secretsharing.SecretSharingSchemeProvider;
 import de.upb.crypto.craco.secretsharing.ShamirSecretSharingSchemeProvider;
 import de.upb.crypto.craco.secretsharing.ThresholdTreeSecretSharing;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
-import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp;
 
 import java.math.BigInteger;
 

@@ -7,8 +7,8 @@ import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
 import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
-import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
+import de.upb.crypto.math.hash.ByteAccumulator;
+import de.upb.crypto.math.hash.UniqueByteRepresentable;
 import de.upb.crypto.math.serialization.*;
 
 import java.util.*;

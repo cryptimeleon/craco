@@ -1,10 +1,10 @@
 package de.upb.crypto.craco.kdf.lhl;
 
+import de.upb.crypto.math.random.RandomGenerator;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
-import de.upb.crypto.math.structures.polynomial.Seed;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
 
 import java.math.BigInteger;
 import java.util.Objects;
@@ -29,7 +29,7 @@ public class LHLFamily implements StandaloneRepresentable {
     /**
      * Checks whether the given parameters have sufficient entropy and then generates a {@link UniversalHashFamily}
      * for the given parameters.
-     * A key derivation function can then be extracted by calling {@link LHLFamily#seed(Seed)}.
+     * A key derivation function can then be extracted by calling {@link LHLFamily#seed(BigInteger)}.
      *
      * @param securityParameter the security parameter in number of bits
      * @param inputLength       the input length of the hash function
@@ -63,7 +63,7 @@ public class LHLFamily implements StandaloneRepresentable {
         return family.seedLength();
     }
 
-    public LHLKeyDerivationFunction seed(Seed seed) {
+    public LHLKeyDerivationFunction seed(BigInteger seed) {
         return new LHLKeyDerivationFunction(family.seedFunction(seed));
     }
 
@@ -101,6 +101,6 @@ public class LHLFamily implements StandaloneRepresentable {
     }
 
     public LHLKeyDerivationFunction seed() {
-        return seed(new Seed(getSeedLength()));
+        return seed(RandomGenerator.getRandomNumberOfBitlength(getSeedLength()));
     }
 }

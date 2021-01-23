@@ -8,7 +8,7 @@ import de.upb.crypto.craco.sig.SignatureSchemeTester;
 import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
 import de.upb.crypto.craco.sig.interfaces.SigningKey;
 import de.upb.crypto.craco.sig.interfaces.VerificationKey;
-import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -54,7 +54,6 @@ public class SPSEQSignatureSchemeTest {
         for (int i = 0; i < testIterations; i++) {
             SignatureSchemeTester.testSignatureSchemeSignAndVerify(spseqScheme, messageBlock, keyPair.getVerificationKey(),
                     keyPair.getSigningKey());
-
         }
     }
 

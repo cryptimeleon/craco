@@ -14,11 +14,11 @@ import de.upb.crypto.craco.common.interfaces.pe.Predicate;
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.craco.kem.abe.cp.large.ABECPWat11KEM;
 import de.upb.crypto.craco.kem.abe.cp.large.ABECPWat11KEMCipherText;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
-import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.structures.rings.zn.Zp;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -75,7 +75,7 @@ public abstract class AbstractABECPWat11 {
             Attribute rhoi = (Attribute) msp.getShareReceiver(entry.getKey());
 
             // hash of rho_i to group G_1, T(\rho(i))
-            GroupElement rhoiElement = (GroupElement) pp.getHashToG1().hashIntoStructure(rhoi);
+            GroupElement rhoiElement = (GroupElement) pp.getHashToG1().hash(rhoi);
             // share lambda_i
             Zp.ZpElement lambdai = entry.getValue();
 
@@ -219,7 +219,7 @@ public abstract class AbstractABECPWat11 {
         for (Attribute x : attributes) {
             // If hash function is WatersHash, then x_element corresponds to a h_i as
             // defined in the paper.
-            GroupElement xElement = (GroupElement) pp.getHashToG1().hashIntoStructure(x);
+            GroupElement xElement = (GroupElement) pp.getHashToG1().hash(x);
             GroupElement dx = xElement.pow(u).compute();
             d.put(x, dx);
         }

@@ -2,8 +2,8 @@ package de.upb.crypto.craco.ser.standalone.test.classes;
 
 import de.upb.crypto.craco.common.WatersHash;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
-import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
-import de.upb.crypto.math.pairings.generic.BilinearGroup;
+import de.upb.crypto.math.structures.groups.counting.CountingBilinearGroup;
+import de.upb.crypto.math.structures.groups.elliptic.BilinearGroup;
 
 public class WatersHashParams {
     public static StandaloneTestParams get() {

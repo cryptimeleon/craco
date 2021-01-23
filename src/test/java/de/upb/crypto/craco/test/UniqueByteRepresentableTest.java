@@ -2,7 +2,7 @@ package de.upb.crypto.craco.test;
 
 
 import de.upb.crypto.math.hash.impl.SHA256HashFunction;
-import de.upb.crypto.math.interfaces.hash.HashFunction;
+import de.upb.crypto.math.hash.HashFunction;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

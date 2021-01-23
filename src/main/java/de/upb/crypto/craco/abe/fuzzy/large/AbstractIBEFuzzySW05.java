@@ -5,13 +5,12 @@ import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.common.interfaces.EncryptionKey;
 import de.upb.crypto.craco.common.interfaces.pe.*;
 import de.upb.crypto.craco.common.utils.LagrangeUtil;
-import de.upb.crypto.craco.common.utils.PrimeFieldPolynomial;
-import de.upb.crypto.craco.common.utils.SecureRandomGenerator;
 import de.upb.crypto.craco.kem.fuzzy.large.IBEFuzzySW05KEM;
 import de.upb.crypto.craco.kem.fuzzy.large.IBEFuzzySW05KEMCipherText;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.math.structures.rings.polynomial.PolynomialRing;
+import de.upb.crypto.math.structures.rings.zn.Zp;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -90,7 +89,7 @@ public class AbstractIBEFuzzySW05 {
                         // value: i -> T(i)^s
                         i -> {
                             GroupElement hashedi = (GroupElement) pp.getHashToG1()
-                                    .hashIntoStructure((i.subtract(BigInteger.ONE))
+                                    .hash((i.subtract(BigInteger.ONE))
                                             .toString(10));
                             return hashedi.pow(s).compute();
                         }
@@ -201,11 +200,13 @@ public class AbstractIBEFuzzySW05 {
 
         IBEFuzzySW05MasterSecret masterSecret = (IBEFuzzySW05MasterSecret) msk;
 
+        PolynomialRing polyRing = new PolynomialRing(zp);
         // new polynomial q of degree d-1 where q(0) = y
-        final PrimeFieldPolynomial q = new PrimeFieldPolynomial(zp, pp.getIdentityThresholdD().intValue() - 1);
         // assign non zero values to all coefficients
-        q.createRandom(new SecureRandomGenerator());
-        q.setCoefficient(masterSecret.getY(), 0);
+        PolynomialRing.Polynomial q = polyRing.getUniformlyRandomElementWithDegreeAndNoZeros(
+                pp.getIdentityThresholdD().intValue() - 1
+        );
+        q.setCoefficient(0, masterSecret.getY());
 
         Map<BigInteger, GroupElement> dMap = new HashMap<>();
         Map<BigInteger, GroupElement> rMap = new HashMap<>();
@@ -217,10 +218,12 @@ public class AbstractIBEFuzzySW05 {
             GroupElement rElement = pp.getG().pow(r);
 
             // compute T(i-1)
-            GroupElement temp = (GroupElement) pp.getHashToG1().hashIntoStructure(
+            GroupElement temp = (GroupElement) pp.getHashToG1().hash(
                     i.getAttribute().subtract(BigInteger.ONE).toString(10));
             // D_i = g_2^q(i) * T(i-1)^r
-            GroupElement dElement = pp.getG2().pow(q.evaluate(i.getAttribute())).op(temp.pow(r));
+            GroupElement dElement = pp.getG2()
+                    .pow(q.evaluate(zp.createZnElement(i.getAttribute())))
+                    .op(temp.pow(r));
 
             rMap.put(i.getAttribute(), rElement.compute());
             dMap.put(i.getAttribute(), dElement.compute());

@@ -1,12 +1,12 @@
 package de.upb.crypto.craco.abe.cp.small.asymmetric;
 
 import de.upb.crypto.craco.abe.interfaces.Attribute;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
-import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
-import de.upb.crypto.math.pairings.generic.BilinearGroup;
-import de.upb.crypto.math.pairings.type3.bn.BarretoNaehrigBilinearGroup;
-import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.groups.counting.CountingBilinearGroup;
+import de.upb.crypto.math.structures.groups.elliptic.BilinearGroup;
+import de.upb.crypto.math.structures.groups.elliptic.type3.bn.BarretoNaehrigBilinearGroup;
+import de.upb.crypto.math.structures.rings.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
 import java.util.Collection;
 import java.util.HashMap;

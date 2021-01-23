@@ -2,7 +2,7 @@ package de.upb.crypto.craco.sig;
 
 import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.craco.sig.interfaces.*;
-import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
+import de.upb.crypto.math.random.RandomGenerator;
 import de.upb.crypto.math.serialization.Representation;
 
 import java.util.Arrays;
@@ -11,7 +11,6 @@ import static org.junit.Assert.*;
 
 
 public class SignatureSchemeTester {
-    static long timerStart = 0;
     /**
      * Test checking that given a {@link SignatureScheme}, its {@link SigningKey} and {@link VerificationKey}, a
      * given {@link PlainText} can be signed, and that the resulting signature can be successfully verified.
@@ -24,12 +23,8 @@ public class SignatureSchemeTester {
      */
     public static Signature testSignatureSchemeSignAndVerify(SignatureScheme signatureScheme, PlainText plainText,
                                                              VerificationKey verificationKey, SigningKey signingKey) {
-        measureTime(null);
         Signature signature = signatureScheme.sign(plainText, signingKey);
-        measureTime("Sign");
-        measureTime(null);
         assertTrue(signatureScheme.verify(plainText, signature, verificationKey));
-        measureTime("Verify");
         return signature;
     }
 
@@ -128,12 +123,10 @@ public class SignatureSchemeTester {
      * mapToPlaintext.
      */
     public static void testMapToPlaintext(SignatureScheme sig, VerificationKey pk) {
-        byte[] randomBytes1 =
-                RandomGeneratorSupplier.getRnd().getRandomByteArray(sig.getMaxNumberOfBytesForMapToPlaintext());
+        byte[] randomBytes1 = RandomGenerator.getRandomBytes(sig.getMaxNumberOfBytesForMapToPlaintext());
         byte[] randomBytes2;
         do {
-            randomBytes2 =
-                    RandomGeneratorSupplier.getRnd().getRandomByteArray(sig.getMaxNumberOfBytesForMapToPlaintext());
+            randomBytes2 = RandomGenerator.getRandomBytes(sig.getMaxNumberOfBytesForMapToPlaintext());
         } while (Arrays.equals(randomBytes1, randomBytes2));
 
         // different arrays of the same length yield different plaintext
@@ -147,21 +140,9 @@ public class SignatureSchemeTester {
      * mapToPlaintext(b , pk) == mapToPlaintext(b, sk)
      */
     public static void testMapToPlainTextContract(SignatureScheme sig, SignatureKeyPair keyPair) {
-        byte[] randomBytes =
-                RandomGeneratorSupplier.getRnd().getRandomByteArray(sig.getMaxNumberOfBytesForMapToPlaintext());
+        byte[] randomBytes = RandomGenerator.getRandomBytes(sig.getMaxNumberOfBytesForMapToPlaintext());
 
         assertEquals(sig.mapToPlaintext(randomBytes, keyPair.getVerificationKey()),
                 sig.mapToPlaintext(randomBytes, keyPair.getSigningKey()));
-    }
-
-
-    protected static void measureTime(String str) {
-        if (timerStart == 0) {
-            timerStart = System.currentTimeMillis();
-        } else {
-            long end = System.currentTimeMillis();
-            System.out.println(str + ": " + ((end - timerStart) / 1000) + "s, " + ((end - timerStart) % 1000) + "ms");
-            timerStart = 0;
-        }
     }
 }

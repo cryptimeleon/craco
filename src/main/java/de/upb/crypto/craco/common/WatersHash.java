@@ -2,18 +2,18 @@ package de.upb.crypto.craco.common;
 
 import de.upb.crypto.craco.common.utils.LagrangeUtil;
 import de.upb.crypto.math.hash.impl.ByteArrayAccumulator;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
-import de.upb.crypto.math.interfaces.hash.HashIntoStructure;
-import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
-import de.upb.crypto.math.interfaces.structures.Element;
-import de.upb.crypto.math.interfaces.structures.Group;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.hash.ByteAccumulator;
+import de.upb.crypto.math.structures.HashIntoStructure;
+import de.upb.crypto.math.hash.UniqueByteRepresentable;
+import de.upb.crypto.math.structures.Element;
+import de.upb.crypto.math.structures.groups.Group;
+import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
-import de.upb.crypto.math.structures.zn.HashIntoZn;
-import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.structures.rings.zn.HashIntoZn;
+import de.upb.crypto.math.structures.rings.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -45,7 +45,7 @@ public class WatersHash implements HashIntoStructure {
     }
 
     @Override
-    public Element hashIntoStructure(byte[] x) {
+    public Element hash(byte[] x) {
         GroupElement result = g.getNeutralElement();
         Set<BigInteger> N = new HashSet<>();
         for (int i = 1; i <= T.size(); i++) {
@@ -55,7 +55,7 @@ public class WatersHash implements HashIntoStructure {
         for (int i = 1; i <= T.size(); i++) {
             ZpElement lg = LagrangeUtil.computeCoefficient(Zp.valueOf(i, g.size()),
                     N,
-                    Zp.valueOf(baseHash.hashIntoStructure(x).getInteger(), baseHash.getTargetStructure().size())
+                    Zp.valueOf(baseHash.hash(x).getInteger(), baseHash.getTargetStructure().size())
             );
             result = result.op(T.get(i - 1).pow(lg));
         }
@@ -89,9 +89,9 @@ public class WatersHash implements HashIntoStructure {
     }
 
     @Override
-    public Element hashIntoStructure(UniqueByteRepresentable ubr) {
+    public Element hash(UniqueByteRepresentable ubr) {
         ByteAccumulator acc = new ByteArrayAccumulator();
         acc = ubr.updateAccumulator(acc);
-        return hashIntoStructure(acc.extractBytes());
+        return hash(acc.extractBytes());
     }
 }

@@ -7,8 +7,8 @@ import de.upb.crypto.craco.secretsharing.SecretSharingSchemeProvider;
 import de.upb.crypto.craco.secretsharing.ShamirSecretSharing;
 import de.upb.crypto.craco.secretsharing.ShamirSecretSharingSchemeProvider;
 import de.upb.crypto.craco.secretsharing.ThresholdTreeSecretSharing;
-import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+import de.upb.crypto.math.structures.rings.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -20,6 +20,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 @RunWith(Parameterized.class)

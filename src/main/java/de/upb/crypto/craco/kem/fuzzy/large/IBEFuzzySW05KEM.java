@@ -10,9 +10,9 @@ import de.upb.crypto.craco.common.interfaces.pe.PredicateKEM;
 import de.upb.crypto.craco.kem.KeyMaterial;
 import de.upb.crypto.craco.kem.SymmetricKeyPredicateKEM;
 import de.upb.crypto.craco.kem.UniqueByteKeyMaterial;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp;
 
 import java.math.BigInteger;
 import java.util.HashSet;

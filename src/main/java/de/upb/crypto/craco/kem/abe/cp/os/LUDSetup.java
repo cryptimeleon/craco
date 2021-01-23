@@ -2,11 +2,11 @@ package de.upb.crypto.craco.kem.abe.cp.os;
 
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPublicKey;
 import de.upb.crypto.craco.kem.asym.elgamal.ElgamalKEM;
-import de.upb.crypto.math.interfaces.hash.HashFunction;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
-import de.upb.crypto.math.pairings.generic.BilinearGroup;
-import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+import de.upb.crypto.math.hash.HashFunction;
+import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.groups.elliptic.BilinearGroup;
+import de.upb.crypto.math.structures.rings.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
 import java.math.BigInteger;
 import java.util.Objects;

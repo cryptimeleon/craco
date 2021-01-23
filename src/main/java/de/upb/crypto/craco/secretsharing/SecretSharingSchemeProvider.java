@@ -4,7 +4,7 @@ import de.upb.crypto.craco.abe.interfaces.LinearSecretSharing;
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
-import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp;
 
 /**
  * Represents a provider that can create instances of {@link LinearSecretSharing}

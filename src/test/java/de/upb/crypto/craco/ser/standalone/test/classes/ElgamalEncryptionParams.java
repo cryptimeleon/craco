@@ -2,8 +2,8 @@ package de.upb.crypto.craco.ser.standalone.test.classes;
 
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalEncryption;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
-import de.upb.crypto.math.interfaces.structures.Group;
-import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.math.structures.groups.Group;
+import de.upb.crypto.math.structures.rings.zn.Zp;
 
 import java.math.BigInteger;
 

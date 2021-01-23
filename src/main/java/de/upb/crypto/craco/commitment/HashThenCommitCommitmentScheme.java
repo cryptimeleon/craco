@@ -6,10 +6,10 @@ import de.upb.crypto.craco.commitment.interfaces.CommitmentScheme;
 import de.upb.crypto.craco.commitment.interfaces.OpenValue;
 import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
-import de.upb.crypto.math.interfaces.hash.HashFunction;
+import de.upb.crypto.math.hash.HashFunction;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
 
 import java.util.Objects;
 

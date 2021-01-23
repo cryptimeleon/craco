@@ -9,9 +9,9 @@ import de.upb.crypto.craco.common.interfaces.UnqualifiedKeyException;
 import de.upb.crypto.craco.common.interfaces.pe.*;
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.craco.kem.abe.kp.large.ABEKPGPSW06KEMCipherText;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -68,7 +68,7 @@ public class AbstractABEKPGPSW06 {
             Attribute rho_i = (Attribute) msp.getShareReceiver(share.getKey());
 
             Zp.ZpElement lambda_i = share.getValue();
-            GroupElement rho_i_element = (GroupElement) pp.getHashToG1().hashIntoStructure(rho_i);
+            GroupElement rho_i_element = (GroupElement) pp.getHashToG1().hash(rho_i);
             // R_i = g^r_i
             GroupElement R_i = pp.getG1Generator().pow(r_i);
             // D_i = g^temp * T (rho_i)^r_i (T is the hash into g1 specified in
@@ -121,7 +121,7 @@ public class AbstractABEKPGPSW06 {
      */
     protected Map<Attribute, GroupElement> restoreE(SetOfAttributes attributes, Zp.ZpElement s) {
         // i -> T(i)
-        Function<Attribute, GroupElement> hash = i -> (GroupElement) pp.getHashToG1().hashIntoStructure(i);
+        Function<Attribute, GroupElement> hash = i -> (GroupElement) pp.getHashToG1().hash(i);
 
         // E_i = T(i)^s
         return attributes

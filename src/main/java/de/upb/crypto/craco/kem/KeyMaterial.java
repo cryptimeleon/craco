@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.kem;
 
 import de.upb.crypto.craco.common.interfaces.EncryptionKey;
-import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
+import de.upb.crypto.math.hash.UniqueByteRepresentable;
 
 /**
  * Used to derive a key that is encapsulated by {@link KeyEncapsulationMechanism#encaps(EncryptionKey)}.

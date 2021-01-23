@@ -11,10 +11,10 @@ import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
 import de.upb.crypto.craco.common.interfaces.pe.MasterSecret;
 import de.upb.crypto.craco.common.utils.LagrangeUtil;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+import de.upb.crypto.math.structures.rings.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -90,7 +90,7 @@ public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncr
             result = pp.getE().apply(pp.getG(), D_xi.get(i));
 
             if (!result.equals(
-                    pp.getE().apply(D_doublePrime_xi, (GroupElement) pp.getHashToG1().hashIntoStructure(i))
+                    pp.getE().apply(D_doublePrime_xi, (GroupElement) pp.getHashToG1().hash(i))
             )) {
                 return false;
             }
@@ -202,7 +202,7 @@ public class DistributedABECPWat11 extends ABECPWat11 implements DistributedEncr
         for (Attribute i : attributes) {
             // T(i)^x_u_i
 
-            GroupElement D_i = (GroupElement) pp.getHashToG1().hashIntoStructure(i);
+            GroupElement D_i = (GroupElement) pp.getHashToG1().hash(i);
             D_i = D_i.pow(u_xi).compute();
 
             D_xi.put(i, D_i);

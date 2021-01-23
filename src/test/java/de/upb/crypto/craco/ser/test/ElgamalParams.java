@@ -4,8 +4,8 @@ import de.upb.crypto.craco.common.interfaces.*;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalCipherText;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalEncryption;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPlainText;
-import de.upb.crypto.math.interfaces.structures.Group;
-import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.math.structures.groups.Group;
+import de.upb.crypto.math.structures.rings.zn.Zp;
 
 import java.math.BigInteger;
 

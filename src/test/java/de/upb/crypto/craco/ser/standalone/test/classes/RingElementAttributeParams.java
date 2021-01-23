@@ -2,8 +2,8 @@ package de.upb.crypto.craco.ser.standalone.test.classes;
 
 import de.upb.crypto.craco.abe.interfaces.RingElementAttribute;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
-import de.upb.crypto.math.interfaces.structures.RingElement;
-import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.math.structures.rings.RingElement;
+import de.upb.crypto.math.structures.rings.zn.Zp;
 
 import java.math.BigInteger;
 

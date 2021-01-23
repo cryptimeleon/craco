@@ -3,10 +3,10 @@ package de.upb.crypto.craco.kem;
 import de.upb.crypto.craco.common.interfaces.SymmetricKey;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
 import de.upb.crypto.math.hash.impl.SHA256HashFunction;
-import de.upb.crypto.math.interfaces.hash.HashFunction;
+import de.upb.crypto.math.hash.HashFunction;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
 
 import java.util.Arrays;
 import java.util.Objects;

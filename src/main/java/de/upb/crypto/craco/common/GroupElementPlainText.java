@@ -3,10 +3,10 @@ package de.upb.crypto.craco.common;
 import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
-import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
-import de.upb.crypto.math.interfaces.structures.Group;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.hash.ByteAccumulator;
+import de.upb.crypto.math.hash.UniqueByteRepresentable;
+import de.upb.crypto.math.structures.groups.Group;
+import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 
 import java.util.Objects;

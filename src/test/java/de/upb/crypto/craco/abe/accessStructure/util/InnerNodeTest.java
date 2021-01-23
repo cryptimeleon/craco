@@ -5,7 +5,7 @@ import de.upb.crypto.craco.abe.interfaces.RingElementAttribute;
 import de.upb.crypto.craco.abe.interfaces.StringAttribute;
 import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.structures.zn.Zn;
+import de.upb.crypto.math.structures.rings.zn.Zn;
 import org.junit.Before;
 import org.junit.Test;
 

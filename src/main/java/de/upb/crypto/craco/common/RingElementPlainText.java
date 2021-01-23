@@ -1,9 +1,9 @@
 package de.upb.crypto.craco.common;
 
 import de.upb.crypto.craco.common.interfaces.PlainText;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
-import de.upb.crypto.math.interfaces.structures.Ring;
-import de.upb.crypto.math.interfaces.structures.RingElement;
+import de.upb.crypto.math.hash.ByteAccumulator;
+import de.upb.crypto.math.structures.rings.Ring;
+import de.upb.crypto.math.structures.rings.RingElement;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;

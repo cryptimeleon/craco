@@ -1,14 +1,14 @@
 package de.upb.crypto.craco.abe.cp.large.distributed;
 
 import de.upb.crypto.craco.abe.cp.large.ABECPWat11MasterSecret;
-import de.upb.crypto.craco.common.utils.PrimeFieldPolynomial;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
-import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
-import de.upb.crypto.math.pairings.generic.BilinearGroup;
-import de.upb.crypto.math.pairings.type1.supersingular.SupersingularBilinearGroup;
-import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
-import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.groups.counting.CountingBilinearGroup;
+import de.upb.crypto.math.structures.groups.elliptic.BilinearGroup;
+import de.upb.crypto.math.structures.groups.elliptic.type1.supersingular.SupersingularBilinearGroup;
+import de.upb.crypto.math.structures.rings.RingElement;
+import de.upb.crypto.math.structures.rings.polynomial.PolynomialRing;
+import de.upb.crypto.math.structures.rings.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -74,10 +74,11 @@ public class DistributedABECPWat11Setup {
         }
         ZpElement y_0 = zp.getUniformlyRandomUnit();
 
-        PrimeFieldPolynomial q_0 = new PrimeFieldPolynomial(zp, t - 1);
-
-        q_0.createRandom(RandomGeneratorSupplier.instance().get());
-        q_0.setCoefficient(y_0, 0);
+        PolynomialRing polyRing = new PolynomialRing(zp);
+        // new polynomial q of degree d-1 where q(0) = y
+        // assign non zero values to all coefficients
+        PolynomialRing.Polynomial q_0 = polyRing.getUniformlyRandomElementWithDegreeAndNoZeros(t-1);
+        q_0.setCoefficient(0, y_0);
 
         GroupElement Y = pp.getE().apply(pp.getG(), pp.getG()).pow(y_0);
 
@@ -90,9 +91,9 @@ public class DistributedABECPWat11Setup {
 
         for (int xi = 1; xi <= L; xi++) {
             int serverID = xi;
-            BigInteger tmp = q_0.evaluate(BigInteger.valueOf(serverID));
+            RingElement tmp = q_0.evaluate(zp.createZnElement(BigInteger.valueOf(serverID)));
             VK.put(xi, pp.getE().apply(pp.getG(), pp.getG()).pow(tmp).compute());
-            masterKeyShares.add(new DistributedABECPWat11MasterKeyShare(serverID, tmp));
+            masterKeyShares.add(new DistributedABECPWat11MasterKeyShare(serverID, tmp.asInteger()));
         }
         pp.setVerificationKeys(VK);
         Map<BigInteger, GroupElement> T = new HashMap<>();

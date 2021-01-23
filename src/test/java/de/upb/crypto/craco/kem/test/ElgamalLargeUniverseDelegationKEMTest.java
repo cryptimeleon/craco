@@ -17,20 +17,20 @@ import de.upb.crypto.craco.kem.abe.cp.os.*;
 import de.upb.crypto.craco.kem.abe.interfaces.proxy.DelegatedPartialDecapsulationScheme.TransformationAndDecryptionKey;
 import de.upb.crypto.craco.kem.asym.elgamal.ElgamalKEMCiphertext;
 import de.upb.crypto.math.hash.impl.SHA256HashFunction;
-import de.upb.crypto.math.interfaces.hash.HashIntoStructure;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
-import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
-import de.upb.crypto.math.pairings.generic.BilinearGroup;
-import de.upb.crypto.math.pairings.generic.BilinearMap;
-import de.upb.crypto.math.pairings.type3.bn.BarretoNaehrigBilinearGroupImpl;
+import de.upb.crypto.math.structures.HashIntoStructure;
+import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.groups.counting.CountingBilinearGroup;
+import de.upb.crypto.math.structures.groups.elliptic.BilinearGroup;
+import de.upb.crypto.math.structures.groups.elliptic.BilinearMap;
+import de.upb.crypto.math.structures.groups.elliptic.type3.bn.BarretoNaehrigBilinearGroupImpl;
 import de.upb.crypto.math.serialization.RepresentableRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
 import de.upb.crypto.math.serialization.converter.JSONConverter;
 import de.upb.crypto.math.structures.groups.basic.BasicBilinearGroup;
-import de.upb.crypto.math.structures.zn.Zn.ZnElement;
-import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+import de.upb.crypto.math.structures.rings.zn.Zn.ZnElement;
+import de.upb.crypto.math.structures.rings.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -232,7 +232,7 @@ public class ElgamalLargeUniverseDelegationKEMTest {
             for (Map.Entry<Attribute, GroupElement[]> entry : dk.ki_map.entrySet()) {
                 Attribute ai = entry.getKey();
                 GroupElement[] k23 = entry.getValue();
-                ZnElement h = (ZnElement) hash.hashIntoStructure(ai);
+                ZnElement h = (ZnElement) hash.hash(ai);
 
                 /*
                  *   e(K_ai,3,g2)=
@@ -500,7 +500,7 @@ public class ElgamalLargeUniverseDelegationKEMTest {
             GroupElement[] c123 = entry.getValue();
             Attribute rho_i = (Attribute) msp.getShareReceiver(index.intValue());
 
-            ZnElement h = (ZnElement) hash.hashIntoStructure(rho_i);
+            ZnElement h = (ZnElement) hash.hash(rho_i);
             /*
              * e(g1,Ci,2)
              */

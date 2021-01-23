@@ -1,8 +1,7 @@
 package de.upb.crypto.craco.enc.sym.streaming.aes;
 
 import de.upb.crypto.craco.common.interfaces.*;
-import de.upb.crypto.math.random.interfaces.RandomGenerator;
-import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
+import de.upb.crypto.math.random.RandomGenerator;
 import de.upb.crypto.math.serialization.BigIntegerRepresentation;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
@@ -49,7 +48,7 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
 
     private final int tagLength = 128; // in bit, needed for GCM
 
-    private final byte[] initialVector = new byte[initialVectorLength / 8];
+    private byte[] initialVector = new byte[initialVectorLength / 8];
 
     private final String transformation = "AES/GCM/PKCS5Padding";
     
@@ -827,10 +826,7 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
     }
 
     private void createRandomIV() {
-        RandomGenerator gen = RandomGeneratorSupplier.getRnd();
-        for (int i = 0; i < initialVectorLength / 8; i++) {
-            initialVector[i] = gen.getRandomElement(BigInteger.valueOf(256)).byteValue();
-        }
+        initialVector = RandomGenerator.getRandomBytes(initialVectorLength / 8);
     }
 
     /**
@@ -840,13 +836,7 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
      * @return the representable symmetric key
      */
     public SymmetricKey generateSymmetricKey() {
-        RandomGenerator gen = RandomGeneratorSupplier.getRnd();
-        // since every entry stores 8 bits we need 1/8 of the bit-length.
-        byte[] result = new byte[symmetricKeyLength / 8];
-        for (int i = 0; i < symmetricKeyLength / 8; i++) {
-            result[i] = gen.getRandomElement(BigInteger.valueOf(256)).byteValue();
-        }
-        return new ByteArrayImplementation(result);
+        return new ByteArrayImplementation(RandomGenerator.getRandomBytes(symmetricKeyLength / 8));
     }
 
     @Override

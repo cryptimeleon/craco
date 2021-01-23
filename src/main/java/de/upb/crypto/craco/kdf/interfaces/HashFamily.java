@@ -1,9 +1,10 @@
 package de.upb.crypto.craco.kdf.interfaces;
 
-import de.upb.crypto.math.interfaces.hash.HashFunction;
+import de.upb.crypto.math.hash.HashFunction;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
-import de.upb.crypto.math.structures.polynomial.Seed;
+
+import java.math.BigInteger;
 
 /**
  * A family of hash functions \(\{H_k: \{0,1\}^n \rightarrow \{0,1\}^m\}_{k \in \{0,1\}^d}\)
@@ -34,7 +35,7 @@ public interface HashFamily extends StandaloneRepresentable {
      * @param seed the key of the function
      * @return the hash function corresponding to the key {@code seed}
      */
-    public HashFunction seedFunction(Seed seed);
+    public HashFunction seedFunction(BigInteger seed);
 
     /**
      * Deserializes a representation of a hash function.

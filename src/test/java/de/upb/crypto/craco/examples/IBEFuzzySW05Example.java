@@ -14,7 +14,7 @@ import de.upb.crypto.craco.common.interfaces.pe.CiphertextIndex;
 import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
 import de.upb.crypto.craco.common.interfaces.pe.MasterSecret;
 import de.upb.crypto.craco.common.interfaces.pe.PredicateEncryptionScheme;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.structures.groups.GroupElement;
 
 import java.math.BigInteger;
 

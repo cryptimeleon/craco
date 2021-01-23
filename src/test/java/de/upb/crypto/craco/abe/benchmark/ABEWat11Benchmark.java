@@ -10,9 +10,9 @@ import de.upb.crypto.craco.common.interfaces.CipherText;
 import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
 import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
-import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.rings.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
 /**
  * This benchmarks the key generation, encryption, decryption, and total time

@@ -6,7 +6,7 @@ import de.upb.crypto.craco.common.interfaces.EncryptionKey;
 import de.upb.crypto.craco.common.interfaces.UnqualifiedKeyException;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
-import de.upb.crypto.math.serialization.annotations.v2.RepresentationRestorer;
+import de.upb.crypto.math.serialization.annotations.RepresentationRestorer;
 
 import java.lang.reflect.Type;
 

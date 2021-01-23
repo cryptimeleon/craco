@@ -3,7 +3,7 @@ package de.upb.crypto.craco.abe.interfaces;
 import de.upb.crypto.craco.common.interfaces.policy.PolicyFact;
 import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
+import de.upb.crypto.math.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.BigIntegerRepresentation;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;

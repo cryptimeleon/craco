@@ -3,10 +3,10 @@ package de.upb.crypto.craco.abe.cp.large.distributed;
 import de.upb.crypto.craco.abe.interfaces.Attribute;
 import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
 import de.upb.crypto.craco.abe.interfaces.distributed.KeyShare;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
 
 import java.util.Map;
 import java.util.Objects;

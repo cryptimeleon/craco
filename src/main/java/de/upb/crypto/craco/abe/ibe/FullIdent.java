@@ -6,9 +6,9 @@ import de.upb.crypto.craco.common.utils.ByteUtil;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
 import de.upb.crypto.math.hash.impl.ByteArrayAccumulator;
 import de.upb.crypto.math.hash.impl.SHA256HashFunction;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
-import de.upb.crypto.math.interfaces.hash.HashFunction;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.hash.ByteAccumulator;
+import de.upb.crypto.math.hash.HashFunction;
+import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 
 import java.math.BigInteger;
@@ -49,7 +49,7 @@ public class FullIdent implements PredicateEncryptionScheme {
      * @return group element
      */
     protected GroupElement H1(byte[] data) {
-        return (GroupElement) pp.getHashToG1().hashIntoStructure(data);
+        return (GroupElement) pp.getHashToG1().hash(data);
     }
 
     /**

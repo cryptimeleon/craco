@@ -6,8 +6,7 @@ import de.upb.crypto.craco.enc.exceptions.BadIVException;
 import de.upb.crypto.craco.enc.exceptions.DecryptionFailedException;
 import de.upb.crypto.craco.enc.exceptions.EncryptionFailedException;
 import de.upb.crypto.craco.enc.exceptions.IllegalKeyException;
-import de.upb.crypto.math.random.interfaces.RandomGenerator;
-import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
+import de.upb.crypto.math.random.RandomGenerator;
 import de.upb.crypto.math.serialization.BigIntegerRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 
@@ -50,7 +49,7 @@ abstract class AbstractStreamingSymmetricScheme implements StreamingEncryptionSc
 
     private final int initialVectorLength; // in bit
 
-    protected final byte[] initialVector;
+    protected byte[] initialVector;
 
     private String transformation;
 
@@ -304,10 +303,7 @@ abstract class AbstractStreamingSymmetricScheme implements StreamingEncryptionSc
     }
 
     private void createRandomIV() {
-        RandomGenerator gen = RandomGeneratorSupplier.getRnd();
-        for (int i = 0; i < initialVectorLength / 8; i++) {
-            initialVector[i] = gen.getRandomElement(BigInteger.valueOf(256)).byteValue();
-        }
+        initialVector = RandomGenerator.getRandomBytes(initialVectorLength / 8);
     }
 
     /**
@@ -317,13 +313,7 @@ abstract class AbstractStreamingSymmetricScheme implements StreamingEncryptionSc
      * @return the representable symmetric key
      */
     public SymmetricKey generateSymmetricKey() {
-        RandomGenerator gen = RandomGeneratorSupplier.getRnd();
-        // since every entry stores 8 bits we need 1/8 of the bit-length.
-        byte[] result = new byte[symmetricKeyLength / 8];
-        for (int i = 0; i < symmetricKeyLength / 8; i++) {
-            result[i] = gen.getRandomElement(BigInteger.valueOf(256)).byteValue();
-        }
-        return new ByteArrayImplementation(result);
+        return new ByteArrayImplementation(RandomGenerator.getRandomBytes(symmetricKeyLength / 8));
     }
 
     @Override

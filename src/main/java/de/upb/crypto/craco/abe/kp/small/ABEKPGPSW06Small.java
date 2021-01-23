@@ -11,10 +11,10 @@ import de.upb.crypto.craco.common.interfaces.EncryptionKey;
 import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.craco.common.interfaces.pe.*;
 import de.upb.crypto.craco.common.interfaces.policy.Policy;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+import de.upb.crypto.math.structures.rings.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
 import java.math.BigInteger;
 import java.util.*;

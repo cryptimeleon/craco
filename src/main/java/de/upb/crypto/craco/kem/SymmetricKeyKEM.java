@@ -5,8 +5,8 @@ import de.upb.crypto.craco.common.interfaces.DecryptionKey;
 import de.upb.crypto.craco.common.interfaces.EncryptionKey;
 import de.upb.crypto.craco.common.interfaces.SymmetricKey;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
 
 import java.util.Objects;
 

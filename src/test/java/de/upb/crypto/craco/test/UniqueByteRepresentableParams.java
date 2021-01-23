@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.test;
 
-import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
+import de.upb.crypto.math.hash.UniqueByteRepresentable;
 
 public class UniqueByteRepresentableParams {
 

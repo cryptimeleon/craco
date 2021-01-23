@@ -2,7 +2,7 @@ package de.upb.crypto.craco.kdf.interfaces.source;
 
 import de.upb.crypto.craco.kdf.interfaces.SourceOfRandomness;
 import de.upb.crypto.craco.kem.KeyMaterial;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
+import de.upb.crypto.math.hash.ByteAccumulator;
 
 import java.io.Serializable;
 import java.util.ArrayList;

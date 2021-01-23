@@ -8,7 +8,7 @@ import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
 import de.upb.crypto.craco.sig.interfaces.SignatureScheme;
 import de.upb.crypto.craco.sig.interfaces.SigningKey;
 import de.upb.crypto.craco.sig.interfaces.VerificationKey;
-import de.upb.crypto.math.interfaces.hash.HashFunction;
+import de.upb.crypto.math.hash.HashFunction;
 
 /**
  * {@link SignatureSchemeParams} extended by an {@link HashFunction} to specify an instance of the {@link HashThenSign}

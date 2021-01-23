@@ -3,12 +3,12 @@ package de.upb.crypto.craco.enc.asym.elgamal;
 import de.upb.crypto.craco.common.interfaces.EncryptionKey;
 import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
-import de.upb.crypto.math.interfaces.structures.Group;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.hash.ByteAccumulator;
+import de.upb.crypto.math.structures.groups.Group;
+import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
 
 import java.util.Objects;
 

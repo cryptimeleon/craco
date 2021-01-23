@@ -2,9 +2,8 @@ package de.upb.crypto.craco.kdf.lhl;
 
 import de.upb.crypto.craco.kdf.interfaces.HashFamily;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
-import de.upb.crypto.math.structures.polynomial.Seed;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -82,20 +81,20 @@ public class UniversalHashFamily implements HashFamily {
     }
 
     @Override
-    public UniversalHashFunction seedFunction(Seed seed) {
+    public UniversalHashFunction seedFunction(BigInteger seed) {
         StringBuilder a = new StringBuilder();
         for (int i = 0; i < p.bitLength(); i++) {
-            if (seed.getBitAt(i) == 0)
-                a.append(0);
-            else
+            if (seed.testBit(i))
                 a.append(1);
+            else
+                a.append(0);
         }
         StringBuilder b = new StringBuilder();
         for (int i = p.bitLength(); i < p.bitLength() * 2; i++) {
-            if (seed.getBitAt(i) == 0)
-                b.append(0);
-            else
+            if (seed.testBit(i))
                 b.append(1);
+            else
+                b.append(0);
         }
         BigInteger bigA = new BigInteger(a.toString(), 2);
         BigInteger bigB = new BigInteger(b.toString(), 2);
