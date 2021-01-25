@@ -83,6 +83,11 @@ task javadocLatex(type: Javadoc) {
             "config=TeX-MML-AM_CHTML\"></script>"
 }
 
+java {
+    registerFeature("tests") {
+        usingSourceSet(sourceSets.test)
+    }
+}
 
 publishing {
     publications {
