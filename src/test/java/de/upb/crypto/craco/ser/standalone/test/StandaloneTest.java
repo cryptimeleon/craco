@@ -126,10 +126,8 @@ public class StandaloneTest {
         toReturn.add(StreamingHybridEncryptionSchemeParams.get());
         toReturn.add(BooleanPolicyParams.get());
         toReturn.add(ByteArrayImplementationParams.get());
-        toReturn.addAll(UniversalHashParams.get());
-        toReturn.addAll(HashBasedKDFParams.get());
+        toReturn.add(HashBasedKDFParams.get());
         toReturn.addAll(BBSBParams.get());
-        toReturn.addAll(LHLParams.get());
         toReturn.add(AesPseudorandomFunction.get());
         toReturn.add(new StandaloneTestParams(ShamirSecretSharingSchemeProvider.class, new
                 ShamirSecretSharingSchemeProvider()));
