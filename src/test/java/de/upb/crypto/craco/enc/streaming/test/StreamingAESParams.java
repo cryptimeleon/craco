@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.enc.streaming.test;
 
-import de.upb.crypto.craco.common.interfaces.KeyPair;
-import de.upb.crypto.craco.common.interfaces.SymmetricKey;
+import de.upb.crypto.craco.enc.KeyPair;
+import de.upb.crypto.craco.enc.SymmetricKey;
 import de.upb.crypto.craco.enc.sym.streaming.aes.StreamingCBCAES;
 import de.upb.crypto.craco.enc.sym.streaming.aes.StreamingGCMAES;
 import de.upb.crypto.craco.enc.sym.streaming.aes.StreamingGCMAESPacketMode;

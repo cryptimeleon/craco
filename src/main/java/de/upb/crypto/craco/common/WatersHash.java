@@ -4,7 +4,6 @@ import de.upb.crypto.craco.common.utils.LagrangeUtil;
 import de.upb.crypto.math.hash.impl.ByteArrayAccumulator;
 import de.upb.crypto.math.hash.ByteAccumulator;
 import de.upb.crypto.math.hash.UniqueByteRepresentable;
-import de.upb.crypto.math.structures.Element;
 import de.upb.crypto.math.structures.groups.Group;
 import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;

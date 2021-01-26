@@ -1,11 +1,11 @@
 package de.upb.crypto.craco.hashthensign;
 
-import de.upb.crypto.craco.common.interfaces.PlainText;
+import de.upb.crypto.craco.common.PlainText;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
-import de.upb.crypto.craco.sig.interfaces.Signature;
-import de.upb.crypto.craco.sig.interfaces.SignatureScheme;
-import de.upb.crypto.craco.sig.interfaces.SigningKey;
-import de.upb.crypto.craco.sig.interfaces.VerificationKey;
+import de.upb.crypto.craco.sig.Signature;
+import de.upb.crypto.craco.sig.SignatureScheme;
+import de.upb.crypto.craco.sig.SigningKey;
+import de.upb.crypto.craco.sig.VerificationKey;
 import de.upb.crypto.math.hash.impl.VariableOutputLengthHashFunction;
 import de.upb.crypto.math.hash.ByteAccumulator;
 import de.upb.crypto.math.hash.HashFunction;

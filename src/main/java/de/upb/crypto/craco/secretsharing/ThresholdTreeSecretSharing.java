@@ -1,11 +1,10 @@
 package de.upb.crypto.craco.secretsharing;
 
-import de.upb.crypto.craco.abe.accessStructure.exception.NoSatisfyingSet;
-import de.upb.crypto.craco.abe.accessStructure.exception.WrongAccessStructureException;
-import de.upb.crypto.craco.abe.interfaces.LinearSecretSharing;
-import de.upb.crypto.craco.common.interfaces.policy.Policy;
-import de.upb.crypto.craco.common.interfaces.policy.PolicyFact;
-import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
+import de.upb.crypto.craco.secretsharing.accessstructure.exception.NoSatisfyingSet;
+import de.upb.crypto.craco.secretsharing.accessstructure.exception.WrongAccessStructureException;
+import de.upb.crypto.craco.secretsharing.policy.Policy;
+import de.upb.crypto.craco.secretsharing.policy.PolicyFact;
+import de.upb.crypto.craco.secretsharing.policy.ThresholdPolicy;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
 import de.upb.crypto.math.serialization.annotations.ReprUtil;

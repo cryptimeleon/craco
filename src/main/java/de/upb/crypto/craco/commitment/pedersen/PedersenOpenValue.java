@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.commitment.pedersen;
 
-import de.upb.crypto.craco.commitment.interfaces.OpenValue;
+import de.upb.crypto.craco.commitment.OpenValue;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
 import de.upb.crypto.math.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.Representation;

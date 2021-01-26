@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.kem;
 
-import de.upb.crypto.craco.common.interfaces.*;
-import de.upb.crypto.craco.kem.KeyEncapsulationMechanism.KeyAndCiphertext;
+import de.upb.crypto.craco.common.PlainText;
+import de.upb.crypto.craco.enc.*;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.Represented;

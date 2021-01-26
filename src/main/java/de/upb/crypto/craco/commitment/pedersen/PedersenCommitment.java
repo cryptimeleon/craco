@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.commitment.pedersen;
 
-import de.upb.crypto.craco.commitment.interfaces.Commitment;
+import de.upb.crypto.craco.commitment.Commitment;
 import de.upb.crypto.math.hash.ByteAccumulator;
 import de.upb.crypto.math.structures.groups.Group;
 import de.upb.crypto.math.structures.groups.GroupElement;

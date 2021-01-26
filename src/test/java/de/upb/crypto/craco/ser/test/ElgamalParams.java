@@ -1,6 +1,7 @@
 package de.upb.crypto.craco.ser.test;
 
-import de.upb.crypto.craco.common.interfaces.*;
+import de.upb.crypto.craco.common.PlainText;
+import de.upb.crypto.craco.enc.*;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalCipherText;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalEncryption;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPlainText;

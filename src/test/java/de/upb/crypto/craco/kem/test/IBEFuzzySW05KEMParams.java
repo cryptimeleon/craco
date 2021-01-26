@@ -5,12 +5,12 @@ import de.upb.crypto.craco.abe.fuzzy.large.IBEFuzzySW05PublicParameters;
 import de.upb.crypto.craco.abe.fuzzy.large.IBEFuzzySW05Setup;
 import de.upb.crypto.craco.abe.fuzzy.large.Identity;
 import de.upb.crypto.craco.abe.util.IBEFuzzySW05TestParamGenerator;
-import de.upb.crypto.craco.common.interfaces.DecryptionKey;
-import de.upb.crypto.craco.common.interfaces.EncryptionKey;
-import de.upb.crypto.craco.common.interfaces.KeyPair;
+import de.upb.crypto.craco.enc.DecryptionKey;
+import de.upb.crypto.craco.enc.EncryptionKey;
+import de.upb.crypto.craco.enc.KeyPair;
 import de.upb.crypto.craco.kem.HashBasedKeyDerivationFunction;
 import de.upb.crypto.craco.kem.SymmetricKeyPredicateKEM;
-import de.upb.crypto.craco.kem.fuzzy.large.IBEFuzzySW05KEM;
+import de.upb.crypto.predenc.kem.fuzzy.large.IBEFuzzySW05KEM;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

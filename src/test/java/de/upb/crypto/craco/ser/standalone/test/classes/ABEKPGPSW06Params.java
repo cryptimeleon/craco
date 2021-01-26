@@ -3,7 +3,7 @@ package de.upb.crypto.craco.ser.standalone.test.classes;
 import de.upb.crypto.craco.abe.kp.large.ABEKPGPSW06;
 import de.upb.crypto.craco.abe.kp.large.ABEKPGPSW06PublicParameters;
 import de.upb.crypto.craco.abe.kp.large.ABEKPGPSW06Setup;
-import de.upb.crypto.craco.kem.abe.kp.large.ABEKPGPSW06KEM;
+import de.upb.crypto.predenc.kem.abe.kp.large.ABEKPGPSW06KEM;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTest;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
 
@@ -21,7 +21,7 @@ public class ABEKPGPSW06Params {
         ABEKPGPSW06Setup setup = new ABEKPGPSW06Setup();
         setup.doKeyGen(80, 5, false, true);
 
-        // add KP public params to test
+        // add KP public de.upb.crypto.groupsig.params to test
         ABEKPGPSW06PublicParameters kpp = setup.getPublicParameters();
         toReturn.add(new StandaloneTestParams(ABEKPGPSW06PublicParameters.class, kpp));
 

@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.ser.standalone.test;
 
-import de.upb.crypto.craco.secretsharing.ShamirSecretSharingSchemeProvider;
+import de.upb.crypto.craco.secretsharing.shamir.ShamirSecretSharingSchemeProvider;
 import de.upb.crypto.craco.ser.standalone.test.classes.*;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
@@ -95,7 +95,7 @@ public class StandaloneTest {
         // get all classes that are subtypes of standalone representable
         Set<Class<? extends StandaloneRepresentable>> classes = reflection.getSubTypesOf(StandaloneRepresentable.class);
         ArrayList<StandaloneTestParams> toReturn = new ArrayList<>();
-        // add params here
+        // add de.upb.crypto.groupsig.params here
         System.out.println("Creating objects that will be serialized...");
         toReturn.addAll(ABECPWat11Params.get());
         toReturn.addAll(ABECPWat11SmallParams.get());
@@ -143,7 +143,7 @@ public class StandaloneTest {
         toReturn.addAll(AccumulatorParams.get());
 
         System.out.println("Finished creating objects...");
-        // remove all provided params
+        // remove all provided de.upb.crypto.groupsig.params
         for (StandaloneTestParams stp : toReturn) {
             classes.remove(stp.toTest);
         }

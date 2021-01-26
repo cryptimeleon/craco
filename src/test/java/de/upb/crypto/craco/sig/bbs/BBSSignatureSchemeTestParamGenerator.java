@@ -3,7 +3,7 @@ package de.upb.crypto.craco.sig.bbs;
 import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.RingElementPlainText;
 import de.upb.crypto.craco.sig.SignatureSchemeParams;
-import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
+import de.upb.crypto.craco.sig.SignatureKeyPair;
 
 /**
  * Generates an instance of the {@link SignatureSchemeParams} for the {@link BBSBSignatureScheme}.

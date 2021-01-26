@@ -1,6 +1,5 @@
 package de.upb.crypto.craco.common;
 
-import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.math.hash.ByteAccumulator;
 import de.upb.crypto.math.structures.rings.Ring;
 import de.upb.crypto.math.structures.rings.RingElement;

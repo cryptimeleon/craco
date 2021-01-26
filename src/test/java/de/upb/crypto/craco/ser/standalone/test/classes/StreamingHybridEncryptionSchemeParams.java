@@ -1,14 +1,14 @@
 package de.upb.crypto.craco.ser.standalone.test.classes;
 
 import de.upb.crypto.craco.abe.cp.large.ABECPWat11Setup;
-import de.upb.crypto.craco.common.interfaces.StreamingEncryptionScheme;
-import de.upb.crypto.craco.common.interfaces.SymmetricKey;
+import de.upb.crypto.craco.enc.StreamingEncryptionScheme;
+import de.upb.crypto.craco.enc.SymmetricKey;
 import de.upb.crypto.craco.enc.sym.streaming.aes.StreamingGCMAESPacketMode;
 import de.upb.crypto.craco.kem.HashBasedKeyDerivationFunction;
 import de.upb.crypto.craco.kem.KeyEncapsulationMechanism;
 import de.upb.crypto.craco.kem.StreamingHybridEncryptionScheme;
 import de.upb.crypto.craco.kem.SymmetricKeyPredicateKEM;
-import de.upb.crypto.craco.kem.abe.cp.large.ABECPWat11KEM;
+import de.upb.crypto.predenc.kem.abe.cp.large.ABECPWat11KEM;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
 
 public class StreamingHybridEncryptionSchemeParams {

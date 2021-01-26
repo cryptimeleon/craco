@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.enc.test;
 
-import de.upb.crypto.craco.common.interfaces.EncryptionScheme;
-import de.upb.crypto.craco.common.interfaces.KeyPair;
-import de.upb.crypto.craco.common.interfaces.PlainText;
+import de.upb.crypto.craco.enc.EncryptionScheme;
+import de.upb.crypto.craco.enc.KeyPair;
+import de.upb.crypto.craco.common.PlainText;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalEncryption;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPlainText;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPrivateKey;

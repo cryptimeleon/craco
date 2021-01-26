@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.sig.ps;
 
-import de.upb.crypto.craco.common.interfaces.PublicParameters;
+import de.upb.crypto.craco.common.PublicParameters;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.Represented;

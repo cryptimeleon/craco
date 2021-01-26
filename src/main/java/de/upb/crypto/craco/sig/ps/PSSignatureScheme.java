@@ -1,9 +1,9 @@
 package de.upb.crypto.craco.sig.ps;
 
 import de.upb.crypto.craco.common.MessageBlock;
+import de.upb.crypto.craco.common.PlainText;
 import de.upb.crypto.craco.common.RingElementPlainText;
-import de.upb.crypto.craco.common.interfaces.PlainText;
-import de.upb.crypto.craco.sig.interfaces.*;
+import de.upb.crypto.craco.sig.*;
 import de.upb.crypto.math.structures.groups.Group;
 import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;

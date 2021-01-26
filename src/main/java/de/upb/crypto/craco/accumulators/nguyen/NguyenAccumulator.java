@@ -1,9 +1,9 @@
 package de.upb.crypto.craco.accumulators.nguyen;
 
-import de.upb.crypto.craco.accumulators.interfaces.AccumulatorIdentity;
-import de.upb.crypto.craco.accumulators.interfaces.AccumulatorValue;
-import de.upb.crypto.craco.accumulators.interfaces.AccumulatorWitness;
-import de.upb.crypto.craco.accumulators.interfaces.DynamicAccumulator;
+import de.upb.crypto.craco.accumulators.de.upb.crypto.craco.interfaces.AccumulatorIdentity;
+import de.upb.crypto.craco.accumulators.de.upb.crypto.craco.interfaces.AccumulatorValue;
+import de.upb.crypto.craco.accumulators.de.upb.crypto.craco.interfaces.AccumulatorWitness;
+import de.upb.crypto.craco.accumulators.de.upb.crypto.craco.interfaces.DynamicAccumulator;
 import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.structures.rings.RingElement;
 import de.upb.crypto.math.structures.groups.elliptic.BilinearMap;

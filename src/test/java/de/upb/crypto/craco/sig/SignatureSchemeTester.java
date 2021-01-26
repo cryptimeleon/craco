@@ -1,7 +1,6 @@
 package de.upb.crypto.craco.sig;
 
-import de.upb.crypto.craco.common.interfaces.PlainText;
-import de.upb.crypto.craco.sig.interfaces.*;
+import de.upb.crypto.craco.common.PlainText;
 import de.upb.crypto.math.random.RandomGenerator;
 import de.upb.crypto.math.serialization.Representation;
 

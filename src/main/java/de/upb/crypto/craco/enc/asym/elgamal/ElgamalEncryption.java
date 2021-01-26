@@ -1,6 +1,10 @@
 package de.upb.crypto.craco.enc.asym.elgamal;
 
-import de.upb.crypto.craco.common.interfaces.*;
+import de.upb.crypto.craco.common.PlainText;
+import de.upb.crypto.craco.enc.AsymmetricEncryptionScheme;
+import de.upb.crypto.craco.enc.CipherText;
+import de.upb.crypto.craco.enc.DecryptionKey;
+import de.upb.crypto.craco.enc.EncryptionKey;
 import de.upb.crypto.math.structures.groups.Group;
 import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;

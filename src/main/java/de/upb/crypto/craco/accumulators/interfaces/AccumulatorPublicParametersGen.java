@@ -2,8 +2,8 @@ package de.upb.crypto.craco.accumulators.interfaces;
 
 /**
  * Interface for 'setup()-method' of 'Accumulators', generating the {@link AccumulatorPublicParameters} and
- * reflecting the theoretical properties of 'Accumulators' in combination with the interfaces in
- * accumulators.interfaces.
+ * reflecting the theoretical properties of 'Accumulators' in combination with the de.upb.crypto.craco.interfaces in
+ * accumulators.de.upb.crypto.craco.interfaces.
  * <p>
  * It contains the following methods of the theoretical definition:
  * Setup

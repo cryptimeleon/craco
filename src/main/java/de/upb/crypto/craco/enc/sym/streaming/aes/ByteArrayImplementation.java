@@ -1,11 +1,15 @@
 package de.upb.crypto.craco.enc.sym.streaming.aes;
 
-import de.upb.crypto.craco.common.interfaces.*;
-import de.upb.crypto.craco.common.interfaces.pe.CiphertextIndex;
-import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
+import de.upb.crypto.craco.common.PlainText;
+import de.upb.crypto.craco.enc.CipherText;
+import de.upb.crypto.craco.enc.DecryptionKey;
+import de.upb.crypto.craco.enc.EncryptionKey;
+import de.upb.crypto.craco.enc.SymmetricKey;
 import de.upb.crypto.craco.prf.PrfImage;
 import de.upb.crypto.craco.prf.PrfKey;
 import de.upb.crypto.craco.prf.PrfPreimage;
+import de.upb.crypto.craco.secretsharing.policy.CiphertextIndex;
+import de.upb.crypto.craco.secretsharing.policy.KeyIndex;
 import de.upb.crypto.math.hash.ByteAccumulator;
 import de.upb.crypto.math.hash.UniqueByteRepresentable;
 import de.upb.crypto.math.random.RandomGenerator;

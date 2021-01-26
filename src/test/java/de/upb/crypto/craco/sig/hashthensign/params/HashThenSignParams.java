@@ -1,13 +1,13 @@
 package de.upb.crypto.craco.sig.hashthensign.params;
 
-import de.upb.crypto.craco.common.interfaces.PublicParameters;
+import de.upb.crypto.craco.common.PublicParameters;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
 import de.upb.crypto.craco.hashthensign.HashThenSign;
 import de.upb.crypto.craco.sig.SignatureSchemeParams;
-import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
-import de.upb.crypto.craco.sig.interfaces.SignatureScheme;
-import de.upb.crypto.craco.sig.interfaces.SigningKey;
-import de.upb.crypto.craco.sig.interfaces.VerificationKey;
+import de.upb.crypto.craco.sig.SignatureKeyPair;
+import de.upb.crypto.craco.sig.SignatureScheme;
+import de.upb.crypto.craco.sig.SigningKey;
+import de.upb.crypto.craco.sig.VerificationKey;
 import de.upb.crypto.math.hash.HashFunction;
 
 /**
@@ -28,7 +28,7 @@ public class HashThenSignParams extends de.upb.crypto.craco.sig.SignatureSchemeP
     }
 
     HashThenSignParams(SignatureSchemeParams params, HashFunction hashFunction) {
-        // discards message1 and message2 contained in params and replaces them by random bytes
+        // discards message1 and message2 contained in de.upb.crypto.groupsig.params and replaces them by random bytes
         super(params.getSignatureScheme(), params.getPublicParameters()
                 , ByteArrayImplementation.fromRandom(32), ByteArrayImplementation.fromRandom(32)
                 , params.getKeyPair1(), params.getKeyPair2());

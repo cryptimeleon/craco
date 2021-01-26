@@ -1,12 +1,15 @@
 package de.upb.crypto.craco.kem.asym.elgamal;
 
-import de.upb.crypto.craco.common.interfaces.*;
+import de.upb.crypto.craco.enc.CipherText;
+import de.upb.crypto.craco.enc.DecryptionKey;
+import de.upb.crypto.craco.enc.EncryptionKey;
+import de.upb.crypto.craco.enc.SymmetricKey;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalCipherText;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalEncryption;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPlainText;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPrivateKey;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
-import de.upb.crypto.craco.kem.AsymmetricKEM;
+import de.upb.crypto.craco.kem.asym.AsymmetricKEM;
 import de.upb.crypto.math.hash.impl.ByteArrayAccumulator;
 import de.upb.crypto.math.hash.HashFunction;
 import de.upb.crypto.math.random.RandomGenerator;

@@ -3,7 +3,7 @@ package de.upb.crypto.craco.sig.bbs;
 import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.sig.SignatureSchemeParams;
 import de.upb.crypto.craco.sig.SignatureSchemeTester;
-import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
+import de.upb.crypto.craco.sig.SignatureKeyPair;
 import org.junit.Before;
 import org.junit.Test;
 

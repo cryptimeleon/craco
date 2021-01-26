@@ -3,7 +3,7 @@ package de.upb.crypto.craco.ser.standalone.test.classes;
 import de.upb.crypto.craco.abe.cp.large.ABECPWat11Setup;
 import de.upb.crypto.craco.kem.HashBasedKeyDerivationFunction;
 import de.upb.crypto.craco.kem.SymmetricKeyPredicateKEM;
-import de.upb.crypto.craco.kem.abe.cp.large.ABECPWat11KEM;
+import de.upb.crypto.predenc.kem.abe.cp.large.ABECPWat11KEM;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
 
 public class ABECPWat11SymmetricKEMParams {

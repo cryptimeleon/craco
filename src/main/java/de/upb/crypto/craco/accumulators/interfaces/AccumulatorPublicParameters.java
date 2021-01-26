@@ -1,13 +1,13 @@
 package de.upb.crypto.craco.accumulators.interfaces;
 
-import de.upb.crypto.craco.common.interfaces.PublicParameters;
+import de.upb.crypto.craco.common.PublicParameters;
 
 import java.math.BigInteger;
 import java.util.List;
 
 /**
  * Interface for public parameters of 'Accumulators' reflecting the theoretical properties of 'Accumulators' in
- * combination with the interfaces in accumulators.interfaces.
+ * combination with the de.upb.crypto.craco.interfaces in accumulators.de.upb.crypto.craco.interfaces.
  * Thus, it contains the universe of {@link AccumulatorIdentity} that can be accumulated ait contains the upper bound
  * of {@link AccumulatorIdentity} that can be accumulated using this pp.
  */

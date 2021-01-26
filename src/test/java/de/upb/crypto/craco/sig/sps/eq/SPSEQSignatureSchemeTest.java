@@ -2,12 +2,12 @@ package de.upb.crypto.craco.sig.sps.eq;
 
 import de.upb.crypto.craco.common.GroupElementPlainText;
 import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.common.interfaces.PlainText;
+import de.upb.crypto.craco.common.PlainText;
 import de.upb.crypto.craco.sig.SignatureSchemeParams;
 import de.upb.crypto.craco.sig.SignatureSchemeTester;
-import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
-import de.upb.crypto.craco.sig.interfaces.SigningKey;
-import de.upb.crypto.craco.sig.interfaces.VerificationKey;
+import de.upb.crypto.craco.sig.SignatureKeyPair;
+import de.upb.crypto.craco.sig.SigningKey;
+import de.upb.crypto.craco.sig.VerificationKey;
 import de.upb.crypto.math.structures.rings.zn.Zp;
 import org.junit.Before;
 import org.junit.Test;

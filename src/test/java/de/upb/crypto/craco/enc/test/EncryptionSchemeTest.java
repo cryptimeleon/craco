@@ -1,6 +1,8 @@
 package de.upb.crypto.craco.enc.test;
 
-import de.upb.crypto.craco.common.interfaces.*;
+import de.upb.crypto.craco.common.PlainText;
+import de.upb.crypto.craco.enc.*;
+import de.upb.crypto.craco.kem.UnqualifiedKeyException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -70,15 +72,6 @@ public class EncryptionSchemeTest {
         ArrayList<TestParams> schemes = new ArrayList<>();
         //non generic schemes
         schemes.add(ElgamalParams.getParams());
-        schemes.add(IBEFuzzySW05SmallParams.getParams());
-        schemes.add(IBEFuzzySW05Params.getParams());
-        schemes.add(FullIdentParams.getParams());
-        //generic schemes
-        schemes.addAll(ABECPWat11Params.getParams());
-        schemes.addAll(ABECPWat11SmallParams.getParams());
-        schemes.addAll(ABEKPGPSW06Params.getParams());
-        schemes.addAll(DistributedABECPWat11Params.getParams());
-        schemes.addAll(ABECPWat11AsymSmallParams.getParams());
         return schemes;
     }
 

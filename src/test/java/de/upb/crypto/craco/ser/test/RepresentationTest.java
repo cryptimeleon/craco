@@ -1,8 +1,9 @@
 package de.upb.crypto.craco.ser.test;
 
-import de.upb.crypto.craco.common.interfaces.*;
+import de.upb.crypto.craco.common.PlainText;
 import de.upb.crypto.craco.common.interfaces.pe.MasterSecret;
 import de.upb.crypto.craco.common.interfaces.pe.PredicateEncryptionScheme;
+import de.upb.crypto.craco.enc.*;
 import de.upb.crypto.math.serialization.Representation;
 import org.junit.Test;
 import org.junit.runner.RunWith;

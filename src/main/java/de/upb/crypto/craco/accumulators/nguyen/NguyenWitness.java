@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.accumulators.nguyen;
 
-import de.upb.crypto.craco.accumulators.interfaces.AccumulatorWitness;
+import de.upb.crypto.craco.accumulators.de.upb.crypto.craco.interfaces.AccumulatorWitness;
 import de.upb.crypto.math.structures.groups.Group;
 import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;

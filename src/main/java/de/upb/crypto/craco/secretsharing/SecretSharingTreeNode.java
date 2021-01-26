@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.secretsharing;
 
-import de.upb.crypto.craco.common.interfaces.policy.Policy;
+import de.upb.crypto.craco.secretsharing.policy.Policy;
 
 /**
  * Interface for tree nodes used for {@link ThresholdTreeSecretSharing}.

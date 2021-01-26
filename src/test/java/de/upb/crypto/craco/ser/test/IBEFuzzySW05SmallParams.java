@@ -7,10 +7,10 @@ import de.upb.crypto.craco.abe.fuzzy.small.IBEFuzzySW05SmallSetup;
 import de.upb.crypto.craco.abe.interfaces.BigIntegerAttribute;
 import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
 import de.upb.crypto.craco.common.GroupElementPlainText;
-import de.upb.crypto.craco.common.interfaces.CipherText;
-import de.upb.crypto.craco.common.interfaces.DecryptionKey;
-import de.upb.crypto.craco.common.interfaces.EncryptionKey;
-import de.upb.crypto.craco.common.interfaces.PlainText;
+import de.upb.crypto.craco.enc.CipherText;
+import de.upb.crypto.craco.enc.DecryptionKey;
+import de.upb.crypto.craco.enc.EncryptionKey;
+import de.upb.crypto.craco.common.PlainText;
 
 import java.math.BigInteger;
 

@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.accumulators.nguyen;
 
-import de.upb.crypto.craco.accumulators.interfaces.AccumulatorPublicParameters;
+import de.upb.crypto.craco.accumulators.de.upb.crypto.craco.interfaces.AccumulatorPublicParameters;
 import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
 import de.upb.crypto.math.hash.ByteAccumulator;

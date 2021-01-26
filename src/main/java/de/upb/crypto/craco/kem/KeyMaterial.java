@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.kem;
 
-import de.upb.crypto.craco.common.interfaces.EncryptionKey;
+import de.upb.crypto.craco.enc.EncryptionKey;
 import de.upb.crypto.math.hash.UniqueByteRepresentable;
 
 /**

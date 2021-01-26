@@ -6,7 +6,7 @@ import java.util.Set;
  * Interface for an accumulator that allows to dynamically insert/delete {@link AccumulatorIdentity} to/from the
  * accumulator and to
  * dynamically update the corresponding {@link AccumulatorWitness}es. It is reflecting the theoretical properties of
- * 'Accumulators' in combination with the interfaces in accumulators.interfaces.
+ * 'Accumulators' in combination with the de.upb.crypto.craco.interfaces in accumulators.de.upb.crypto.craco.interfaces.
  * <p>
  * It contains the following methods of the theoretical definition:
  * AccInsert

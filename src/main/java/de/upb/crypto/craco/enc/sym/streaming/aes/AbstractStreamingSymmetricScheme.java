@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.enc.sym.streaming.aes;
 
-import de.upb.crypto.craco.common.interfaces.*;
+import de.upb.crypto.craco.common.de.upb.crypto.craco.interfaces.*;
 import de.upb.crypto.craco.common.utils.StreamUtil;
 import de.upb.crypto.craco.enc.exceptions.BadIVException;
 import de.upb.crypto.craco.enc.exceptions.DecryptionFailedException;
@@ -15,7 +15,6 @@ import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.NoSuchPaddingException;
 import java.io.*;
-import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;

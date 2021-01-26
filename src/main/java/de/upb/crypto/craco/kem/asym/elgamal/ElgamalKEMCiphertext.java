@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.kem.asym.elgamal;
 
-import de.upb.crypto.craco.common.interfaces.CipherText;
+import de.upb.crypto.craco.common.de.upb.crypto.craco.interfaces.CipherText;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalCipherText;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalEncryption;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;

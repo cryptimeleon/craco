@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.sig.sps.eq;
 
-import de.upb.crypto.craco.sig.interfaces.SigningKey;
+import de.upb.crypto.craco.sig.SigningKey;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.Represented;

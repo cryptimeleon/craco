@@ -1,11 +1,11 @@
 package de.upb.crypto.craco.kem.test;
 
-import de.upb.crypto.craco.common.interfaces.KeyPair;
-import de.upb.crypto.craco.common.interfaces.policy.Policy;
-import de.upb.crypto.craco.kem.abe.cp.os.ElgamalLargeUniverseDelegationKEM;
-import de.upb.crypto.craco.kem.abe.cp.os.LUDDecryptionKey;
-import de.upb.crypto.craco.kem.abe.cp.os.LUDEncryptionKey;
-import de.upb.crypto.craco.kem.abe.cp.os.LUDSetup;
+import de.upb.crypto.craco.enc.KeyPair;
+import de.upb.crypto.craco.secretsharing.policy.Policy;
+import de.upb.crypto.predenc.kem.abe.cp.os.ElgamalLargeUniverseDelegationKEM;
+import de.upb.crypto.predenc.kem.abe.cp.os.LUDDecryptionKey;
+import de.upb.crypto.predenc.kem.abe.cp.os.LUDEncryptionKey;
+import de.upb.crypto.predenc.kem.abe.cp.os.LUDSetup;
 import de.upb.crypto.math.hash.impl.SHA256HashFunction;
 import de.upb.crypto.math.structures.groups.counting.CountingBilinearGroup;
 import de.upb.crypto.math.structures.groups.elliptic.BilinearGroup;
