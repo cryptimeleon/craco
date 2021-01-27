@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.secretsharing.shamir;
 
-import de.upb.crypto.craco.secretsharing.LinearSecretSharing;
 import de.upb.crypto.craco.common.policy.Policy;
 import de.upb.crypto.craco.common.policy.ThresholdPolicy;
+import de.upb.crypto.craco.secretsharing.LinearSecretSharing;
 import de.upb.crypto.craco.secretsharing.SecretSharingSchemeProvider;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;

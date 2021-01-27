@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * Class for a signature of the BBS-A and BBS-B signature scheme.
  *
- * @author Fabian Eidens
+ *
  */
 public class BBSABSignature implements Signature {
 

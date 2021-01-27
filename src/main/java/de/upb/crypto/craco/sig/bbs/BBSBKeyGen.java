@@ -8,7 +8,7 @@ import de.upb.crypto.math.structures.rings.zn.HashIntoZn;
 /**
  * Does the key generation for the BBS-B signature scheme respectively organization in the anonymous credential system
  *
- * @author Fabian Eidens
+ *
  */
 public class BBSBKeyGen {
     private BBSBPublicParameter pp;

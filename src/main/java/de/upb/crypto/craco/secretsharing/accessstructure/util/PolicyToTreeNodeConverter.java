@@ -1,10 +1,10 @@
 package de.upb.crypto.craco.secretsharing.accessstructure.util;
 
-import de.upb.crypto.craco.secretsharing.accessstructure.AccessStructure;
 import de.upb.crypto.craco.common.policy.BooleanPolicy;
 import de.upb.crypto.craco.common.policy.Policy;
 import de.upb.crypto.craco.common.policy.PolicyFact;
 import de.upb.crypto.craco.common.policy.ThresholdPolicy;
+import de.upb.crypto.craco.secretsharing.accessstructure.AccessStructure;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,8 +12,6 @@ import java.util.HashMap;
 /**
  * Takes a {@link Policy} and computes the internal tree used by the {@link AccessStructure}.
  * class.
- *
- * @author Jan
  */
 public class PolicyToTreeNodeConverter {
     private final HashMap<Integer, PolicyFact> shareReceivers;
@@ -64,7 +62,7 @@ public class PolicyToTreeNodeConverter {
                 children.add(policyToThresholdTree(child));
             }
 
-            if (booleanPolicy.getOperator() == BooleanOperator.AND) {
+            if (booleanPolicy.getOperator() == BooleanPolicy.BooleanOperator.AND) {
                 return new InnerNode(children, children.size());
             } else {
                 return new InnerNode(children, 1);

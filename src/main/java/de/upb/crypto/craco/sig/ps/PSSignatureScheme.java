@@ -4,11 +4,11 @@ import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.PlainText;
 import de.upb.crypto.craco.common.RingElementPlainText;
 import de.upb.crypto.craco.sig.*;
-import de.upb.crypto.math.structures.groups.Group;
-import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.structures.groups.Group;
+import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.structures.rings.zn.Zp;
 import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
@@ -26,7 +26,7 @@ import java.util.stream.IntStream;
  * [1] David Pointcheval and Olivier Sanders, "Short Randomizable Signatures", in Cryptology ePrint Archive, Report
  * 2015/525, 2015.
  *
- * @author Fynn Dallmeier
+ *
  */
 
 public class PSSignatureScheme implements StandardMultiMessageSignatureScheme {
@@ -100,7 +100,7 @@ public class PSSignatureScheme implements StandardMultiMessageSignatureScheme {
         MessageBlock messageBlock = (MessageBlock) plainText;
         PSSigningKey sk = (PSSigningKey) secretKey;
 
-        if (messageBlock.size() != sk.getNumberOfMessages()) {
+        if (messageBlock.length() != sk.getNumberOfMessages()) {
             throw new IllegalArgumentException("Not a valid block size for this scheme");
         }
 

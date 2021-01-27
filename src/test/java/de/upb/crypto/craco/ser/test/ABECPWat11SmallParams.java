@@ -4,12 +4,12 @@ import de.upb.crypto.craco.abe.cp.small.*;
 import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
 import de.upb.crypto.craco.abe.interfaces.StringAttribute;
 import de.upb.crypto.craco.common.GroupElementPlainText;
+import de.upb.crypto.craco.common.PlainText;
+import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
+import de.upb.crypto.craco.common.policy.Policy;
 import de.upb.crypto.craco.enc.CipherText;
 import de.upb.crypto.craco.enc.DecryptionKey;
 import de.upb.crypto.craco.enc.EncryptionKey;
-import de.upb.crypto.craco.common.PlainText;
-import de.upb.crypto.craco.common.policy.Policy;
-import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
 
 import java.util.HashSet;
 import java.util.Set;

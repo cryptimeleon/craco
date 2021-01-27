@@ -10,7 +10,6 @@ import de.upb.crypto.craco.secretsharing.accessstructure.exception.WrongAccessSt
  *
  * @param <F> type of the return value of the function
  *            {@link Visitor#getResultOfCurrentNode()}
- * @author pschleiter
  */
 public interface Visitor<F> {
 

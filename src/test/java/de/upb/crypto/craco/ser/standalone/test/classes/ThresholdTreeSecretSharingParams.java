@@ -4,8 +4,8 @@ import de.upb.crypto.craco.abe.interfaces.Attribute;
 import de.upb.crypto.craco.abe.interfaces.StringAttribute;
 import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
 import de.upb.crypto.craco.secretsharing.SecretSharingSchemeProvider;
-import de.upb.crypto.craco.secretsharing.shamir.ShamirSecretSharingSchemeProvider;
 import de.upb.crypto.craco.secretsharing.ThresholdTreeSecretSharing;
+import de.upb.crypto.craco.secretsharing.shamir.ShamirSecretSharingSchemeProvider;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
 import de.upb.crypto.math.structures.rings.zn.Zp;
 

@@ -4,12 +4,12 @@ import de.upb.crypto.craco.accumulators.de.upb.crypto.craco.interfaces.Accumulat
 import de.upb.crypto.craco.accumulators.de.upb.crypto.craco.interfaces.AccumulatorValue;
 import de.upb.crypto.craco.accumulators.de.upb.crypto.craco.interfaces.AccumulatorWitness;
 import de.upb.crypto.craco.accumulators.de.upb.crypto.craco.interfaces.DynamicAccumulator;
-import de.upb.crypto.math.structures.groups.GroupElement;
-import de.upb.crypto.math.structures.rings.RingElement;
-import de.upb.crypto.math.structures.groups.elliptic.BilinearMap;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.groups.elliptic.BilinearMap;
+import de.upb.crypto.math.structures.rings.RingElement;
 import de.upb.crypto.math.structures.rings.polynomial.PolynomialRing;
 import de.upb.crypto.math.structures.rings.zn.Zp;
 

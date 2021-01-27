@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * Class for the secret (signing) key of the Pointcheval Sanders signature scheme.
  *
- * @author Fynn Dallmeier
+ *
  */
 
 public class PSSigningKey implements SigningKey {

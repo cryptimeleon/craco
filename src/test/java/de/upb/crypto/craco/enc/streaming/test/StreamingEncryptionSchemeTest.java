@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.enc.streaming.test;
 
+import de.upb.crypto.craco.common.utils.StreamUtil;
 import de.upb.crypto.craco.enc.KeyPair;
 import de.upb.crypto.craco.enc.StreamingEncryptionScheme;
-import de.upb.crypto.craco.common.utils.StreamUtil;
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;

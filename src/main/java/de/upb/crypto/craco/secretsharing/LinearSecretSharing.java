@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  *
  * @param <ShareReceiverType> the type of the entities that the secret shares are distributed to
  *
- * @author pschleiter, refactoring: Fabian Eidens, javadoc: Jan
+ *
  */
 public interface LinearSecretSharing<ShareReceiverType> {
 

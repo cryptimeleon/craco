@@ -15,7 +15,7 @@ import java.util.Objects;
  * Class for the public parameters of the SPS-EQ signature scheme.
  * Bilinear group type 3
  *
- * @author Fabian Eidens
+ *
  */
 
 public class SPSEQPublicParameters implements PublicParameters {

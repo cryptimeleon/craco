@@ -2,7 +2,10 @@ package de.upb.crypto.craco.ser.test;
 
 import de.upb.crypto.craco.common.PlainText;
 import de.upb.crypto.craco.common.interfaces.pe.MasterSecret;
-import de.upb.crypto.craco.enc.*;
+import de.upb.crypto.craco.enc.CipherText;
+import de.upb.crypto.craco.enc.DecryptionKey;
+import de.upb.crypto.craco.enc.EncryptionKey;
+import de.upb.crypto.craco.enc.EncryptionScheme;
 
 public class RepresentationTestParams {
     protected EncryptionScheme scheme;

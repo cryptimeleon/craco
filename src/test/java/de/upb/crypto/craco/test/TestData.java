@@ -10,13 +10,13 @@ import de.upb.crypto.craco.sig.de.upb.crypto.craco.interfaces.SignatureKeyPair;
 import de.upb.crypto.craco.sig.de.upb.crypto.craco.interfaces.SigningKey;
 import de.upb.crypto.craco.sig.de.upb.crypto.craco.interfaces.VerificationKey;
 import de.upb.crypto.craco.sig.ps.*;
-import de.upb.crypto.math.structures.groups.Group;
-import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representable;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
 import de.upb.crypto.math.serialization.annotations.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.structures.groups.Group;
+import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.structures.rings.zn.Zn;
 import de.upb.crypto.math.structures.rings.zn.Zp;
 

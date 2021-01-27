@@ -1,10 +1,10 @@
 package de.upb.crypto.craco.secretsharing.accessstructure;
 
-import de.upb.crypto.craco.secretsharing.accessstructure.exception.WrongAccessStructureException;
-import de.upb.crypto.craco.secretsharing.accessstructure.util.*;
-import de.upb.crypto.craco.secretsharing.LinearSecretSharing;
 import de.upb.crypto.craco.common.policy.Policy;
 import de.upb.crypto.craco.common.policy.PolicyFact;
+import de.upb.crypto.craco.secretsharing.LinearSecretSharing;
+import de.upb.crypto.craco.secretsharing.accessstructure.exception.WrongAccessStructureException;
+import de.upb.crypto.craco.secretsharing.accessstructure.util.*;
 import de.upb.crypto.math.structures.rings.zn.Zp;
 
 import java.util.HashMap;
@@ -18,8 +18,6 @@ import java.util.Set;
  * An additional map associates a share receiver to each number/leaf.
  *
  * @see LinearSecretSharing
- *
- * @author pschleiter, Fabian Eidens (refactor)
  */
 public abstract class AccessStructure implements LinearSecretSharing<PolicyFact> {
 

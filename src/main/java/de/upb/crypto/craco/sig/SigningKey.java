@@ -9,7 +9,7 @@ import de.upb.crypto.math.serialization.Representation;
  * {@code SigningKey}s are {@link Representable} and can be restored from their {@link Representation}
  * using {@link SignatureScheme#getSigningKey(Representation)}.
  *
- * @author feidens
+ *
  */
 public interface SigningKey extends Representable {
 }

@@ -24,7 +24,7 @@ import java.util.Objects;
  * <p>
  * [2] F. Eidens, Anonymous Credential System based on the q-Strong Diffie-Hellman Assumption 2015.
  *
- * @author Fabian Eidens
+ *
  */
 public class BBSBSignatureScheme implements StandardMultiMessageSignatureScheme {
 
@@ -82,7 +82,7 @@ public class BBSBSignatureScheme implements StandardMultiMessageSignatureScheme 
         MessageBlock messageBlock = (MessageBlock) plainText;
         BBSBSigningKey sk = (BBSBSigningKey) secretKey;
 
-        if (messageBlock.size() != sk.getNumberOfMessages()) {
+        if (messageBlock.length() != sk.getNumberOfMessages()) {
             throw new IllegalArgumentException("Not a valid block size for this scheme");
         }
 

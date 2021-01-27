@@ -9,7 +9,7 @@ import java.util.Objects;
  * The most basic implementation of a {@link KeyMaterial} based on a {@link UniqueByteRepresentable}.
  * It is extracted from a source of randomness with a well defined amount of min-entropy.
  *
- * @author Jan, refactoring: Mirko Jürgens
+ *
  */
 public class UniqueByteKeyMaterial implements KeyMaterial {
 

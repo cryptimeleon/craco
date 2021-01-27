@@ -12,7 +12,7 @@ import java.util.Set;
  * a shared secret.
  */
 public class MinimalFulfillingSubsetVisitor implements
-        Visitor<Pair<Integer, ArrayList<Integer>>> {
+        Visitor<ComparablePair<Integer, ArrayList<Integer>>> {
 
     /**
      * The set of party share identifiers that are used to check fulfillment of the access structure.
@@ -36,7 +36,7 @@ public class MinimalFulfillingSubsetVisitor implements
      * (at most its threshold).
      * Second element contains identifiers of the fulfilled shares.
      */
-    private final ArrayList<Pair<Integer, ArrayList<Integer>>> fulfilledChildrenInfo;
+    private final ArrayList<ComparablePair<Integer, ArrayList<Integer>>> fulfilledChildrenInfo;
 
     /**
      * Whether the threshold of the current node is reached (it is fulfilled).
@@ -66,7 +66,7 @@ public class MinimalFulfillingSubsetVisitor implements
      * This identifies a minimal subset of shares necessary to fulfill this node.
      */
     @Override
-    public Pair<Integer, ArrayList<Integer>> getResultOfCurrentNode() {
+    public ComparablePair<Integer, ArrayList<Integer>> getResultOfCurrentNode() {
         if (fulfilled) {
             ArrayList<Integer> arraylist = new ArrayList<>();
             int minimalNumberOfFulfilledLeafs = 0;
@@ -80,7 +80,7 @@ public class MinimalFulfillingSubsetVisitor implements
 
                 Collections.sort(fulfilledChildrenInfo);
 
-                for (Pair<Integer, ArrayList<Integer>> entry : fulfilledChildrenInfo) {
+                for (ComparablePair<Integer, ArrayList<Integer>> entry : fulfilledChildrenInfo) {
                     counter++;
                     minimalNumberOfFulfilledLeafs = minimalNumberOfFulfilledLeafs
                             + entry.getFirst();
@@ -92,10 +92,10 @@ public class MinimalFulfillingSubsetVisitor implements
                         break;
                 }
             }
-            return new Pair<>(
+            return new ComparablePair<>(
                     minimalNumberOfFulfilledLeafs, arraylist);
         } else {
-            return new Pair<>(0, null);
+            return new ComparablePair<>(0, null);
         }
     }
 
@@ -110,7 +110,7 @@ public class MinimalFulfillingSubsetVisitor implements
      * Furthermore, the result is added to {@code fulfilledChildrenInfo}.
      */
     @Override
-    public void putResultOfChild(Pair<Integer, ArrayList<Integer>> result) {
+    public void putResultOfChild(ComparablePair<Integer, ArrayList<Integer>> result) {
         if (!(result.getFirst() == 0)) {
             numberOfFulfilledChildren = numberOfFulfilledChildren + 1;
             if (numberOfFulfilledChildren == threshold)

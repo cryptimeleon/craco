@@ -9,7 +9,6 @@ import de.upb.crypto.craco.enc.DecryptionKey;
 import de.upb.crypto.craco.enc.EncryptionKey;
 import de.upb.crypto.craco.enc.KeyPair;
 import de.upb.crypto.craco.kem.HashBasedKeyDerivationFunction;
-import de.upb.crypto.craco.kem.SymmetricKeyPredicateKEM;
 import de.upb.crypto.predenc.kem.fuzzy.large.IBEFuzzySW05KEM;
 
 import java.math.BigInteger;

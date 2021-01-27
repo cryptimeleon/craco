@@ -3,9 +3,9 @@ package de.upb.crypto.craco.ser.standalone.test.classes;
 import de.upb.crypto.craco.abe.kp.large.ABEKPGPSW06;
 import de.upb.crypto.craco.abe.kp.large.ABEKPGPSW06PublicParameters;
 import de.upb.crypto.craco.abe.kp.large.ABEKPGPSW06Setup;
-import de.upb.crypto.predenc.kem.abe.kp.large.ABEKPGPSW06KEM;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTest;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
+import de.upb.crypto.predenc.kem.abe.kp.large.ABEKPGPSW06KEM;
 
 import java.util.ArrayList;
 import java.util.Collection;

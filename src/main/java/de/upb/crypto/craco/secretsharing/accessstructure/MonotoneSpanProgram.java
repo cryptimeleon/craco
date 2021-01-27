@@ -1,13 +1,13 @@
 package de.upb.crypto.craco.secretsharing.accessstructure;
 
-import de.upb.crypto.craco.secretsharing.accessstructure.exception.NoSatisfyingSet;
-import de.upb.crypto.craco.secretsharing.accessstructure.exception.WrongAccessStructureException;
-import de.upb.crypto.craco.secretsharing.accessstructure.util.MinimalFulfillingSubsetVisitor;
-import de.upb.crypto.craco.secretsharing.accessstructure.util.MonotoneSpanProgramGetMatrixVisitor;
-import de.upb.crypto.craco.secretsharing.accessstructure.util.Pair;
-import de.upb.crypto.craco.secretsharing.accessstructure.util.TreeNode;
 import de.upb.crypto.craco.common.policy.Policy;
 import de.upb.crypto.craco.common.policy.PolicyFact;
+import de.upb.crypto.craco.secretsharing.accessstructure.exception.NoSatisfyingSet;
+import de.upb.crypto.craco.secretsharing.accessstructure.exception.WrongAccessStructureException;
+import de.upb.crypto.craco.secretsharing.accessstructure.util.ComparablePair;
+import de.upb.crypto.craco.secretsharing.accessstructure.util.MinimalFulfillingSubsetVisitor;
+import de.upb.crypto.craco.secretsharing.accessstructure.util.MonotoneSpanProgramGetMatrixVisitor;
+import de.upb.crypto.craco.secretsharing.accessstructure.util.TreeNode;
 import de.upb.crypto.math.structures.rings.zn.Zp;
 import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
@@ -15,8 +15,6 @@ import java.util.*;
 
 /**
  * Access structure realized by using monotone span programs.
- *
- * @author pschleiter, Fabian Eidens (refactor)
  */
 public class MonotoneSpanProgram extends AccessStructure {
 
@@ -86,7 +84,7 @@ public class MonotoneSpanProgram extends AccessStructure {
         MinimalFulfillingSubsetVisitor minimalSubsetVisitor =
                 new MinimalFulfillingSubsetVisitor(getSharesOfReceivers(setOfParties));
         TreeNode tree = thresholdTree;
-        Pair<Integer, ArrayList<Integer>> fulfillingSet = tree.performVisitor(minimalSubsetVisitor);
+        ComparablePair<Integer, ArrayList<Integer>> fulfillingSet = tree.performVisitor(minimalSubsetVisitor);
 
         if (fulfillingSet.getFirst() == 0)
             throw new NoSatisfyingSet("Given set does not satisfy the access structure");

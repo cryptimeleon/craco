@@ -12,7 +12,7 @@ import java.util.Arrays;
 /**
  * Class for the public (verification) key of the SPS-EQ signature scheme.
  *
- * @author Fabian Eidens
+ *
  */
 
 public class SPSEQVerificationKey implements VerificationKey {

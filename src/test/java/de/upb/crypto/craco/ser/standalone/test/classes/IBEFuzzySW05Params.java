@@ -3,9 +3,9 @@ package de.upb.crypto.craco.ser.standalone.test.classes;
 import de.upb.crypto.craco.abe.fuzzy.large.IBEFuzzySW05;
 import de.upb.crypto.craco.abe.fuzzy.large.IBEFuzzySW05PublicParameters;
 import de.upb.crypto.craco.abe.fuzzy.large.IBEFuzzySW05Setup;
-import de.upb.crypto.predenc.kem.fuzzy.large.IBEFuzzySW05KEM;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTest;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
+import de.upb.crypto.predenc.kem.fuzzy.large.IBEFuzzySW05KEM;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

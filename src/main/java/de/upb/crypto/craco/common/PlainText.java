@@ -11,7 +11,7 @@ import de.upb.crypto.math.serialization.Representable;
  * restored from their representation using the appropriate method of
  * the corresponding {@link EncryptionScheme} implementation.
  *
- * @author Jan
+ *
  */
 public interface PlainText extends Representable, UniqueByteRepresentable {
 }

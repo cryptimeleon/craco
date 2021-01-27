@@ -6,7 +6,6 @@ import de.upb.crypto.craco.abe.cp.large.ABECPWat11Setup;
 import de.upb.crypto.craco.abe.util.ABECPWat11TestParamGenerator;
 import de.upb.crypto.craco.enc.KeyPair;
 import de.upb.crypto.craco.kem.HashBasedKeyDerivationFunction;
-import de.upb.crypto.craco.kem.SymmetricKeyPredicateKEM;
 import de.upb.crypto.predenc.kem.abe.cp.large.ABECPWat11KEM;
 
 import java.util.ArrayList;

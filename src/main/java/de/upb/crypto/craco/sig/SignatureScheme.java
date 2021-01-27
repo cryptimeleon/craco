@@ -26,7 +26,7 @@ import java.lang.reflect.Type;
  * However, some signature schemes may be able to sign {@link de.upb.crypto.craco.common.MessageBlock}s
  * (cf., for example, {@link StandardMultiMessageSignatureScheme}).
  *
- * @author feidens
+ *
  */
 public interface SignatureScheme extends StandaloneRepresentable, RepresentationRestorer {
     /**

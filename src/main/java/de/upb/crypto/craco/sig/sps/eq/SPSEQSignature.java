@@ -12,7 +12,7 @@ import java.util.Objects;
 /**
  * Class for a signature of the SPS-EQ signature scheme.
  *
- * @author Fabian Eidens
+ *
  */
 
 public class SPSEQSignature implements Signature {

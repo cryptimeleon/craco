@@ -7,8 +7,6 @@ import java.util.Set;
 /**
  * A visitor that checks whether a given {@link AccessStructure} fulfills the threshold requirement needed
  * to allow access.
- *
- * @author pschleiter
  */
 public class AccessGrantedVisitor implements Visitor<Boolean> {
 

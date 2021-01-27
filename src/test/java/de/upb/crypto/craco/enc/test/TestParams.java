@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.enc.test;
 
+import de.upb.crypto.craco.common.PlainText;
 import de.upb.crypto.craco.enc.EncryptionScheme;
 import de.upb.crypto.craco.enc.KeyPair;
-import de.upb.crypto.craco.common.PlainText;
 
 import java.util.function.Supplier;
 

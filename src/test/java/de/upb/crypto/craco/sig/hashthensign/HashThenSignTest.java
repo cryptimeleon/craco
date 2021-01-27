@@ -1,14 +1,10 @@
 package de.upb.crypto.craco.sig.hashthensign;
 
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
-import de.upb.crypto.craco.sig.SignatureSchemeTester;
+import de.upb.crypto.craco.sig.*;
 import de.upb.crypto.craco.sig.hashthensign.params.BBSHTSParams;
 import de.upb.crypto.craco.sig.hashthensign.params.HashThenSignParams;
 import de.upb.crypto.craco.sig.hashthensign.params.PSHTSParams;
-import de.upb.crypto.craco.sig.SignatureKeyPair;
-import de.upb.crypto.craco.sig.SignatureScheme;
-import de.upb.crypto.craco.sig.SigningKey;
-import de.upb.crypto.craco.sig.VerificationKey;
 import de.upb.crypto.math.hash.HashFunction;
 import org.junit.Test;
 import org.junit.runner.RunWith;

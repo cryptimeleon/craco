@@ -2,26 +2,17 @@ package de.upb.crypto.craco.commitment.pedersen;
 
 import de.upb.crypto.craco.commitment.Commitment;
 import de.upb.crypto.math.hash.ByteAccumulator;
-import de.upb.crypto.math.structures.groups.Group;
-import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.structures.groups.GroupElement;
 
 import java.util.Objects;
 
 public class PedersenCommitment implements Commitment {
-    @Represented(restorer = "G")
-    private GroupElement commitment;
+    private final GroupElement commitment;
 
     public PedersenCommitment(GroupElement commitment) {
         this.commitment = commitment;
-    }
-
-    public PedersenCommitment(Group group, Representation representation) {
-        new ReprUtil(this)
-                .register(group, "G")
-                .deserialize(representation);
     }
 
     public GroupElement get() {

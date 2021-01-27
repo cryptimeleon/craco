@@ -1,11 +1,11 @@
 package de.upb.crypto.craco.secretsharing.shamir;
 
-import de.upb.crypto.craco.secretsharing.LinearSecretSharing;
-import de.upb.crypto.craco.secretsharing.accessstructure.exception.NoSatisfyingSet;
-import de.upb.crypto.craco.secretsharing.accessstructure.exception.WrongAccessStructureException;
 import de.upb.crypto.craco.common.policy.Policy;
 import de.upb.crypto.craco.common.policy.ThresholdPolicy;
+import de.upb.crypto.craco.secretsharing.LinearSecretSharing;
 import de.upb.crypto.craco.secretsharing.ThresholdTreeSecretSharing;
+import de.upb.crypto.craco.secretsharing.accessstructure.exception.NoSatisfyingSet;
+import de.upb.crypto.craco.secretsharing.accessstructure.exception.WrongAccessStructureException;
 import de.upb.crypto.math.structures.rings.RingElement;
 import de.upb.crypto.math.structures.rings.polynomial.PolynomialRing;
 import de.upb.crypto.math.structures.rings.zn.Zp;

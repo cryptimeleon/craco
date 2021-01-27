@@ -4,8 +4,6 @@ import de.upb.crypto.craco.secretsharing.accessstructure.exception.WrongAccessSt
 
 /**
  * A node in a threshold tree.
- *
- * @author pschleiter, Fabian Eidens (refactor)
  */
 public interface TreeNode {
 

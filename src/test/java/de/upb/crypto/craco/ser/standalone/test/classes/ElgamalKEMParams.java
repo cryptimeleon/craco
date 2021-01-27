@@ -2,8 +2,8 @@ package de.upb.crypto.craco.ser.standalone.test.classes;
 
 import de.upb.crypto.craco.kem.asym.elgamal.ElgamalKEM;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
-import de.upb.crypto.math.hash.impl.SHA256HashFunction;
 import de.upb.crypto.math.hash.HashFunction;
+import de.upb.crypto.math.hash.impl.SHA256HashFunction;
 import de.upb.crypto.math.structures.groups.RingGroup;
 import de.upb.crypto.math.structures.rings.zn.Zp;
 

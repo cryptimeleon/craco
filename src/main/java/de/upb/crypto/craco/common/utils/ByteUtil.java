@@ -4,7 +4,7 @@ package de.upb.crypto.craco.common.utils;
 /**
  * Various {@code byte[]} helper methods.
  *
- * @author Marius Dransfeld
+ *
  */
 public final class ByteUtil {
     /**

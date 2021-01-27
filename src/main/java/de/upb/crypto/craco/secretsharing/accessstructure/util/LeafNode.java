@@ -5,7 +5,7 @@ import de.upb.crypto.craco.secretsharing.accessstructure.exception.WrongAccessSt
 /**
  * A leaf node in a threshold tree, a node without children and threshold set to 0.
  *
- * @author pschleiter, Fabian Eidens (refactoring)
+ *
  */
 public class LeafNode implements TreeNode {
 

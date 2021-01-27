@@ -35,7 +35,7 @@ import java.util.Arrays;
  * decrypted ciphertext will be written when you finished writing your cipher
  * text (and close the stream).
  *
- * @author Mirko Jürgens
+ *
  */
 public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
     public static final int DEFAULT_PACKET_SIZE = 5 * 1024;

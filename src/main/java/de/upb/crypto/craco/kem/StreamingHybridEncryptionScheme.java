@@ -61,7 +61,7 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
 
     @Override
     public CipherText encrypt(PlainText plainText, EncryptionKey publicKey) {
-        KeyAndCiphertext<SymmetricKey> keyAndCiphertext = kem.encaps(publicKey);
+        KeyEncapsulationMechanism.KeyAndCiphertext<SymmetricKey> keyAndCiphertext = kem.encaps(publicKey);
         return new HybridCipherText(symmetricScheme
                 .encrypt(plainText, keyAndCiphertext.key), keyAndCiphertext.encapsulatedKey);
     }
@@ -100,7 +100,7 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
     @Override
     public InputStream encrypt(InputStream in, EncryptionKey publicKey) throws IOException {
         //Generate symmetric key and encapsulate it
-        KeyAndCiphertext<SymmetricKey> keyAndCiphertext = kem.encaps(publicKey);
+        KeyEncapsulationMechanism.KeyAndCiphertext<SymmetricKey> keyAndCiphertext = kem.encaps(publicKey);
 
         //Serialize the encapsulated key
         byte[] encapsulatedKey = new JSONConverter().serialize(keyAndCiphertext.encapsulatedKey.getRepresentation())
@@ -119,7 +119,7 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
     @Override
     public OutputStream encrypt(OutputStream out, EncryptionKey publicKey) throws IOException {
         //Generate symmetric key and encapsulate it
-        KeyAndCiphertext<SymmetricKey> keyAndCiphertext = kem.encaps(publicKey);
+        KeyEncapsulationMechanism.KeyAndCiphertext<SymmetricKey> keyAndCiphertext = kem.encaps(publicKey);
 
         //Serialize the encapsulated key
         byte[] encapsulatedKey = new JSONConverter().serialize(keyAndCiphertext.encapsulatedKey.getRepresentation())

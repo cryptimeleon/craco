@@ -12,7 +12,7 @@ import java.util.Arrays;
 /**
  * Class for the secret (signing) key of the SPS-EQ signature scheme.
  *
- * @author Fabian Eidens
+ *
  */
 
 public class SPSEQSigningKey implements SigningKey {

@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.sig.ps18;
 
 import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.common.RingElementPlainText;
 import de.upb.crypto.craco.common.PlainText;
+import de.upb.crypto.craco.common.RingElementPlainText;
 import de.upb.crypto.craco.sig.Signature;
 import de.upb.crypto.craco.sig.SigningKey;
 import de.upb.crypto.craco.sig.VerificationKey;
@@ -20,7 +20,7 @@ import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
  * However, the reduction adversary has to also guess in which random oracle
  * query the right message is, so the reduction loses a poly factor in success probability.
  *
- * @author Raphael Heitjohann
+ *
  */
 public class PS18ROMSignatureScheme extends PS18SignatureScheme {
 
@@ -49,7 +49,7 @@ public class PS18ROMSignatureScheme extends PS18SignatureScheme {
         MessageBlock messageBlock = (MessageBlock) plainText;
         PS18SigningKey sk = (PS18SigningKey) secretKey;
 
-        if (messageBlock.size() != sk.getNumberOfMessages()) {
+        if (messageBlock.length() != sk.getNumberOfMessages()) {
             throw new IllegalArgumentException("Message length does not match length " +
                     "supported by signing key.");
         }

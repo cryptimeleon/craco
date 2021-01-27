@@ -6,9 +6,9 @@ import de.upb.crypto.craco.sig.Signature;
 import de.upb.crypto.craco.sig.SignatureScheme;
 import de.upb.crypto.craco.sig.SigningKey;
 import de.upb.crypto.craco.sig.VerificationKey;
-import de.upb.crypto.math.hash.impl.VariableOutputLengthHashFunction;
 import de.upb.crypto.math.hash.ByteAccumulator;
 import de.upb.crypto.math.hash.HashFunction;
+import de.upb.crypto.math.hash.impl.VariableOutputLengthHashFunction;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.Represented;
@@ -19,7 +19,7 @@ import java.util.Objects;
  * Simple implementation of the hash-then-sign paradigm, where the given hash function will be used
  * to hash the plaintext before verifying it with the signature scheme.
  *
- * @author Mirko Jürgens
+ *
  */
 public class HashThenSign implements SignatureScheme {
 

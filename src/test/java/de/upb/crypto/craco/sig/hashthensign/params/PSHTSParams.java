@@ -2,8 +2,8 @@ package de.upb.crypto.craco.sig.hashthensign.params;
 
 import de.upb.crypto.craco.sig.SignatureSchemeParams;
 import de.upb.crypto.craco.sig.ps.PSSignatureSchemeTestParamGenerator;
-import de.upb.crypto.math.hash.impl.VariableOutputLengthHashFunction;
 import de.upb.crypto.math.hash.HashFunction;
+import de.upb.crypto.math.hash.impl.VariableOutputLengthHashFunction;
 
 import java.util.Arrays;
 import java.util.Collection;

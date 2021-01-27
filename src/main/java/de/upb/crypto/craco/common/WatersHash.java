@@ -1,14 +1,14 @@
 package de.upb.crypto.craco.common;
 
 import de.upb.crypto.craco.common.utils.LagrangeUtil;
-import de.upb.crypto.math.hash.impl.ByteArrayAccumulator;
 import de.upb.crypto.math.hash.ByteAccumulator;
 import de.upb.crypto.math.hash.UniqueByteRepresentable;
-import de.upb.crypto.math.structures.groups.Group;
-import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.hash.impl.ByteArrayAccumulator;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.structures.groups.Group;
+import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.structures.groups.HashIntoGroup;
 import de.upb.crypto.math.structures.rings.zn.HashIntoZn;
 import de.upb.crypto.math.structures.rings.zn.Zp;

@@ -11,7 +11,7 @@ import de.upb.crypto.craco.common.MessageBlock;
  * <p>
  * This interface introduces some helper methods for this case.
  *
- * @author Jan
+ *
  */
 public interface MultiMessageSignatureScheme extends SignatureScheme {
 

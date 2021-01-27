@@ -9,8 +9,6 @@ import java.util.ArrayList;
 /**
  * Represents a random polynomial, where only the value at position 0 is set.
  * This is for example used in Shamir secret sharing
- *
- * @author pschleiter
  */
 public class RandomFunction {
 

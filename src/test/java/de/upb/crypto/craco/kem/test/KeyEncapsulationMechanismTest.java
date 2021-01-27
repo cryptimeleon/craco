@@ -3,8 +3,8 @@ package de.upb.crypto.craco.kem.test;
 import de.upb.crypto.craco.enc.DecryptionKey;
 import de.upb.crypto.craco.enc.EncryptionKey;
 import de.upb.crypto.craco.enc.KeyPair;
-import de.upb.crypto.craco.kem.UnqualifiedKeyException;
 import de.upb.crypto.craco.kem.KeyEncapsulationMechanism;
+import de.upb.crypto.craco.kem.UnqualifiedKeyException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
  * secret key that satisfies the public keys policy, and a invalid key pair. Scheme and keys to test are defined by a
  * parameter class, e.g. {@link ABECPWat11KEMParams}.
  *
- * @author Denis Diemert (based on {@link de.upb.crypto.craco.enc.test.EncryptionSchemeTest})
+ *
  */
 @RunWith(value = Parameterized.class)
 public class KeyEncapsulationMechanismTest {

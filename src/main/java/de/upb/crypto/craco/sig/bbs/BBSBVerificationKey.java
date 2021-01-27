@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * @author Fabian Eidens
+ *
  */
 public class BBSBVerificationKey implements VerificationKey {
     @Represented(restorer = "G2")

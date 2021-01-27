@@ -1,18 +1,18 @@
 package de.upb.crypto.craco.enc.asym.elgamal;
 
-import de.upb.crypto.craco.common.de.upb.crypto.craco.interfaces.CipherText;
-import de.upb.crypto.math.structures.groups.Group;
-import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.craco.enc.CipherText;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.structures.groups.Group;
+import de.upb.crypto.math.structures.groups.GroupElement;
 
 import java.util.Objects;
 
 /**
  * The cipher text representation of an elgamal-encrypted plaintext.
  *
- * @author Mirko Jürgens
+ *
  */
 public class ElgamalCipherText implements CipherText {
     /**

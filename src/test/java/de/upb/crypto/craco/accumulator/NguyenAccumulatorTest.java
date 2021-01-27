@@ -9,7 +9,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.*;
 
 

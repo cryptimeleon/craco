@@ -1,20 +1,20 @@
 package de.upb.crypto.craco.enc.asym.elgamal;
 
-import de.upb.crypto.craco.common.de.upb.crypto.craco.interfaces.PlainText;
-import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
-import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
+import de.upb.crypto.craco.common.PlainText;
 import de.upb.crypto.math.hash.ByteAccumulator;
 import de.upb.crypto.math.hash.UniqueByteRepresentable;
+import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
+import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
+import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.groups.Group;
 import de.upb.crypto.math.structures.groups.GroupElement;
-import de.upb.crypto.math.serialization.Representation;
 
 import java.util.Objects;
 
 /**
  * An elgamal plaintext, which is an element of the specified group.
  *
- * @author Mirko Jürgens
+ *
  */
 public class ElgamalPlainText implements PlainText, UniqueByteRepresentable {
     /**
