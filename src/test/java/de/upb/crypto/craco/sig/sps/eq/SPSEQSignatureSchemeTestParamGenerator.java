@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.sig.sps.eq;
 
-import de.upb.crypto.craco.common.GroupElementPlainText;
-import de.upb.crypto.craco.common.MessageBlock;
+import de.upb.crypto.craco.common.plaintexts.GroupElementPlainText;
+import de.upb.crypto.craco.common.plaintexts.MessageBlock;
 import de.upb.crypto.craco.sig.SignatureKeyPair;
 import de.upb.crypto.craco.sig.SignatureSchemeParams;
 

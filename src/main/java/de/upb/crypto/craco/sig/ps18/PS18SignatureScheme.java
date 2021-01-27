@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.sig.ps18;
 
-import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.common.PlainText;
-import de.upb.crypto.craco.common.RingElementPlainText;
+import de.upb.crypto.craco.common.plaintexts.MessageBlock;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
+import de.upb.crypto.craco.common.plaintexts.RingElementPlainText;
 import de.upb.crypto.craco.sig.*;
 import de.upb.crypto.craco.sig.ps.PSPublicParameters;
 import de.upb.crypto.math.serialization.Representation;
@@ -58,7 +58,7 @@ public class PS18SignatureScheme implements SignatureScheme {
 
         // Precompute for bases in multi-exponentiation
         group2ElementTildeX.precomputePow();
-        group2ElementsTildeYi.map(GroupElement::precomputePow);
+        group2ElementsTildeYi.map(x -> x.precomputePow()); // don't replace with lambda; doesn't work cause double match
 
         // Construct secret signing key
         PS18SigningKey sk = new PS18SigningKey(exponentX, exponentsYi);

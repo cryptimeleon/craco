@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.enc.sym.streaming.aes;
 
-import de.upb.crypto.craco.common.PlainText;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
 import de.upb.crypto.craco.common.predicate.CiphertextIndex;
 import de.upb.crypto.craco.common.predicate.KeyIndex;
 import de.upb.crypto.craco.enc.CipherText;

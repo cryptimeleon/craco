@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.sig;
 
-import de.upb.crypto.craco.common.MessageBlock;
+import de.upb.crypto.craco.common.plaintexts.MessageBlock;
 
 /**
  * A {@code MultiMessageSignatureScheme} is one where the sign and verify algorithms take a list of messages as input

@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.sig;
 
-import de.upb.crypto.craco.common.PlainText;
 import de.upb.crypto.craco.common.PublicParameters;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
 import de.upb.crypto.craco.sig.hashthensign.params.HashThenSignParams;
 
 /**

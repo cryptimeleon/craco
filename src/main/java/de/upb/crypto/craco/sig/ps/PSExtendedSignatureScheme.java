@@ -1,9 +1,9 @@
 package de.upb.crypto.craco.sig.ps;
 
 import de.upb.crypto.craco.commitment.pedersen.PedersenCommitmentScheme;
-import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.common.PlainText;
-import de.upb.crypto.craco.common.RingElementPlainText;
+import de.upb.crypto.craco.common.plaintexts.MessageBlock;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
+import de.upb.crypto.craco.common.plaintexts.RingElementPlainText;
 import de.upb.crypto.craco.sig.SignatureKeyPair;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.groups.GroupElement;

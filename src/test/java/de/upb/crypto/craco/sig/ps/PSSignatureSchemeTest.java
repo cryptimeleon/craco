@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.sig.ps;
 
-import de.upb.crypto.craco.common.MessageBlock;
+import de.upb.crypto.craco.common.plaintexts.MessageBlock;
 import de.upb.crypto.craco.sig.*;
 import org.junit.Before;
 import org.junit.Test;

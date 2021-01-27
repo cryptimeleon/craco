@@ -4,7 +4,7 @@ import de.upb.crypto.craco.commitment.Commitment;
 import de.upb.crypto.craco.commitment.CommitmentPair;
 import de.upb.crypto.craco.commitment.CommitmentScheme;
 import de.upb.crypto.craco.commitment.OpenValue;
-import de.upb.crypto.craco.common.PlainText;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
 import de.upb.crypto.math.hash.HashFunction;
 import de.upb.crypto.math.serialization.Representation;

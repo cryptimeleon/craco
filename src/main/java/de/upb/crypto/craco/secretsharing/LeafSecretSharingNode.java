@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.secretsharing;
 
-import de.upb.crypto.craco.common.policy.Policy;
-import de.upb.crypto.craco.common.policy.ThresholdPolicy;
+import de.upb.crypto.craco.common.policies.Policy;
+import de.upb.crypto.craco.common.policies.ThresholdPolicy;
 
 import java.util.Objects;
 

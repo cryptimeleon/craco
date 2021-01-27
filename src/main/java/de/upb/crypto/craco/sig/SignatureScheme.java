@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.sig;
 
-import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.common.PlainText;
+import de.upb.crypto.craco.common.plaintexts.MessageBlock;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
 import de.upb.crypto.math.serialization.annotations.RepresentationRestorer;
@@ -23,7 +23,7 @@ import java.lang.reflect.Type;
  * with a {@code Representation} argument).
  * <p>
  * We note that we see all signature schemes as single-message schemes.
- * However, some signature schemes may be able to sign {@link de.upb.crypto.craco.common.MessageBlock}s
+ * However, some signature schemes may be able to sign {@link MessageBlock}s
  * (cf., for example, {@link StandardMultiMessageSignatureScheme}).
  *
  *

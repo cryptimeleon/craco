@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.secretsharing;
 
-import de.upb.crypto.craco.secretsharing.accessstructure.exception.NoSatisfyingSet;
-import de.upb.crypto.craco.secretsharing.accessstructure.exception.WrongAccessStructureException;
+import de.upb.crypto.craco.secretsharing.accessstructure.exceptions.NoSatisfyingSet;
+import de.upb.crypto.craco.secretsharing.accessstructure.exceptions.WrongAccessStructureException;
 import de.upb.crypto.math.structures.rings.zn.Zp;
 import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 

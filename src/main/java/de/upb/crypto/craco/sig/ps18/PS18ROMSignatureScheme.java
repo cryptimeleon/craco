@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.sig.ps18;
 
-import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.common.PlainText;
-import de.upb.crypto.craco.common.RingElementPlainText;
+import de.upb.crypto.craco.common.plaintexts.MessageBlock;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
+import de.upb.crypto.craco.common.plaintexts.RingElementPlainText;
 import de.upb.crypto.craco.sig.Signature;
 import de.upb.crypto.craco.sig.SigningKey;
 import de.upb.crypto.craco.sig.VerificationKey;

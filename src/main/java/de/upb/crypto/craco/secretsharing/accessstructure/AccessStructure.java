@@ -1,10 +1,14 @@
 package de.upb.crypto.craco.secretsharing.accessstructure;
 
-import de.upb.crypto.craco.common.policy.Policy;
-import de.upb.crypto.craco.common.policy.PolicyFact;
+import de.upb.crypto.craco.common.policies.Policy;
+import de.upb.crypto.craco.common.policies.PolicyFact;
 import de.upb.crypto.craco.secretsharing.LinearSecretSharing;
-import de.upb.crypto.craco.secretsharing.accessstructure.exception.WrongAccessStructureException;
-import de.upb.crypto.craco.secretsharing.accessstructure.util.*;
+import de.upb.crypto.craco.secretsharing.accessstructure.exceptions.WrongAccessStructureException;
+import de.upb.crypto.craco.secretsharing.accessstructure.utils.PolicyToTreeNodeConverter;
+import de.upb.crypto.craco.secretsharing.accessstructure.utils.TreeNode;
+import de.upb.crypto.craco.secretsharing.accessstructure.visitors.AccessGrantedVisitor;
+import de.upb.crypto.craco.secretsharing.accessstructure.visitors.ToStringVisitor;
+import de.upb.crypto.craco.secretsharing.accessstructure.visitors.Visitor;
 import de.upb.crypto.math.structures.rings.zn.Zp;
 
 import java.util.HashMap;

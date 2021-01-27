@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.commitment;
 
-import de.upb.crypto.craco.common.PlainText;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

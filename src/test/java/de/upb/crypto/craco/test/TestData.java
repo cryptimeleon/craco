@@ -1,14 +1,15 @@
 package de.upb.crypto.craco.test;
 
-import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.common.RingElementPlainText;
-import de.upb.crypto.craco.common.de.upb.crypto.craco.interfaces.*;
+import de.upb.crypto.craco.common.plaintexts.MessageBlock;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
+import de.upb.crypto.craco.common.plaintexts.RingElementPlainText;
+import de.upb.crypto.craco.enc.*;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalEncryption;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPlainText;
-import de.upb.crypto.craco.sig.de.upb.crypto.craco.interfaces.Signature;
-import de.upb.crypto.craco.sig.de.upb.crypto.craco.interfaces.SignatureKeyPair;
-import de.upb.crypto.craco.sig.de.upb.crypto.craco.interfaces.SigningKey;
-import de.upb.crypto.craco.sig.de.upb.crypto.craco.interfaces.VerificationKey;
+import de.upb.crypto.craco.sig.Signature;
+import de.upb.crypto.craco.sig.SignatureKeyPair;
+import de.upb.crypto.craco.sig.SigningKey;
+import de.upb.crypto.craco.sig.VerificationKey;
 import de.upb.crypto.craco.sig.ps.*;
 import de.upb.crypto.math.serialization.Representable;
 import de.upb.crypto.math.serialization.Representation;
