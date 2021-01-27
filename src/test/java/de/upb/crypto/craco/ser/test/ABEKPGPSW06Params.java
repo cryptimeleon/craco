@@ -8,7 +8,7 @@ import de.upb.crypto.craco.enc.CipherText;
 import de.upb.crypto.craco.enc.DecryptionKey;
 import de.upb.crypto.craco.enc.EncryptionKey;
 import de.upb.crypto.craco.common.PlainText;
-import de.upb.crypto.craco.secretsharing.policy.Policy;
+import de.upb.crypto.craco.common.policy.Policy;
 import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
 
 public class ABEKPGPSW06Params {

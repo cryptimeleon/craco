@@ -1,5 +1,6 @@
 package de.upb.crypto.craco.commitment;
 
+import de.upb.crypto.craco.commitment.hashthencommit.HashThenCommitCommitmentScheme;
 import de.upb.crypto.craco.common.MessageBlock;
 import de.upb.crypto.craco.common.PlainText;
 import de.upb.crypto.math.serialization.Representation;

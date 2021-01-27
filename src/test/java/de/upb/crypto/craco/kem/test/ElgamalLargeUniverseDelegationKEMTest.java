@@ -7,7 +7,7 @@ import de.upb.crypto.craco.abe.interfaces.SetOfAttributes;
 import de.upb.crypto.craco.abe.interfaces.StringAttribute;
 import de.upb.crypto.craco.enc.SymmetricKey;
 import de.upb.crypto.craco.kem.UnqualifiedKeyException;
-import de.upb.crypto.craco.secretsharing.policy.Policy;
+import de.upb.crypto.craco.common.policy.Policy;
 import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalCipherText;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPrivateKey;

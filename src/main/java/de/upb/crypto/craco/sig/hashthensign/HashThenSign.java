@@ -1,4 +1,4 @@
-package de.upb.crypto.craco.hashthensign;
+package de.upb.crypto.craco.sig.hashthensign;
 
 import de.upb.crypto.craco.common.PlainText;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;

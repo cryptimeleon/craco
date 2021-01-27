@@ -1,4 +1,4 @@
-package de.upb.crypto.craco.accumulators.interfaces;
+package de.upb.crypto.craco.accumulators;
 
 import java.util.Set;
 

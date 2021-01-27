@@ -10,7 +10,7 @@ import java.util.Collection;
 
 /**
  * Params for the {@link de.upb.crypto.craco.sig.ps.PSSignatureScheme} for testing its use in the
- * {@link de.upb.crypto.craco.hashthensign.HashThenSign} construction.
+ * {@link de.upb.crypto.craco.sig.hashthensign.HashThenSign} construction.
  */
 public class PSHTSParams {
     public static Collection<HashThenSignParams> getParams() {

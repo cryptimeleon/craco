@@ -1,4 +1,4 @@
-package de.upb.crypto.craco.secretsharing.policy;
+package de.upb.crypto.craco.common.policy;
 
 import de.upb.crypto.craco.secretsharing.accessstructure.exception.WrongAccessStructureException;
 import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;

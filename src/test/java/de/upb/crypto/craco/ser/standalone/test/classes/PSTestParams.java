@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.ser.standalone.test.classes;
 
-import de.upb.crypto.craco.hashthensign.HashThenSign;
+import de.upb.crypto.craco.sig.hashthensign.HashThenSign;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
 import de.upb.crypto.craco.sig.ps.PSPublicParameters;
 import de.upb.crypto.craco.sig.ps.PSPublicParametersGen;

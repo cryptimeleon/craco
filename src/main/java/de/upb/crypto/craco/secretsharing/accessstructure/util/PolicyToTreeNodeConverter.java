@@ -1,10 +1,10 @@
 package de.upb.crypto.craco.secretsharing.accessstructure.util;
 
 import de.upb.crypto.craco.secretsharing.accessstructure.AccessStructure;
-import de.upb.crypto.craco.secretsharing.policy.BooleanPolicy;
-import de.upb.crypto.craco.secretsharing.policy.Policy;
-import de.upb.crypto.craco.secretsharing.policy.PolicyFact;
-import de.upb.crypto.craco.secretsharing.policy.ThresholdPolicy;
+import de.upb.crypto.craco.common.policy.BooleanPolicy;
+import de.upb.crypto.craco.common.policy.Policy;
+import de.upb.crypto.craco.common.policy.PolicyFact;
+import de.upb.crypto.craco.common.policy.ThresholdPolicy;
 
 import java.util.ArrayList;
 import java.util.HashMap;

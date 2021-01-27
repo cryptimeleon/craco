@@ -6,7 +6,7 @@ import de.upb.crypto.craco.sig.hashthensign.params.HashThenSignParams;
 
 /**
  * Parameter for a signature scheme test. These parameters can be reused to instantiate {@link HashThenSignParams} to
- * test the signature scheme in the {@link de.upb.crypto.craco.hashthensign.HashThenSign} construction.
+ * test the signature scheme in the {@link de.upb.crypto.craco.sig.hashthensign.HashThenSign} construction.
  */
 public class SignatureSchemeParams {
     private SignatureScheme signatureScheme;

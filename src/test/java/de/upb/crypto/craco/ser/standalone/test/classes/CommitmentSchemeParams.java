@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.ser.standalone.test.classes;
 
-import de.upb.crypto.craco.commitment.HashThenCommitCommitmentScheme;
+import de.upb.crypto.craco.commitment.hashthencommit.HashThenCommitCommitmentScheme;
 import de.upb.crypto.craco.commitment.pedersen.PedersenCommitmentScheme;
 import de.upb.crypto.craco.ser.standalone.test.StandaloneTestParams;
 import de.upb.crypto.math.hash.impl.SHA256HashFunction;

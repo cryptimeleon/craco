@@ -1,4 +1,4 @@
-package de.upb.crypto.craco.secretsharing.policy;
+package de.upb.crypto.craco.common.predicate;
 
 import de.upb.crypto.craco.enc.DecryptionKey;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;

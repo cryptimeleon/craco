@@ -1,4 +1,4 @@
-package de.upb.crypto.craco.secretsharing.policy;
+package de.upb.crypto.craco.common.policy;
 
 import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;

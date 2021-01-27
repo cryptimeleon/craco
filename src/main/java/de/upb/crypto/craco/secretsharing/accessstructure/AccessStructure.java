@@ -3,8 +3,8 @@ package de.upb.crypto.craco.secretsharing.accessstructure;
 import de.upb.crypto.craco.secretsharing.accessstructure.exception.WrongAccessStructureException;
 import de.upb.crypto.craco.secretsharing.accessstructure.util.*;
 import de.upb.crypto.craco.secretsharing.LinearSecretSharing;
-import de.upb.crypto.craco.secretsharing.policy.Policy;
-import de.upb.crypto.craco.secretsharing.policy.PolicyFact;
+import de.upb.crypto.craco.common.policy.Policy;
+import de.upb.crypto.craco.common.policy.PolicyFact;
 import de.upb.crypto.math.structures.rings.zn.Zp;
 
 import java.util.HashMap;

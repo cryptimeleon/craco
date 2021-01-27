@@ -1,5 +1,7 @@
-package de.upb.crypto.craco.secretsharing.policy;
+package de.upb.crypto.craco.common.policy;
 
+import de.upb.crypto.craco.common.predicate.CiphertextIndex;
+import de.upb.crypto.craco.common.predicate.KeyIndex;
 import de.upb.crypto.math.hash.UniqueByteRepresentable;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
 

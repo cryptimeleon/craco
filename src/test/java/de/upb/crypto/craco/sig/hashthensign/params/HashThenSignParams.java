@@ -2,7 +2,7 @@ package de.upb.crypto.craco.sig.hashthensign.params;
 
 import de.upb.crypto.craco.common.PublicParameters;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
-import de.upb.crypto.craco.hashthensign.HashThenSign;
+import de.upb.crypto.craco.sig.hashthensign.HashThenSign;
 import de.upb.crypto.craco.sig.SignatureSchemeParams;
 import de.upb.crypto.craco.sig.SignatureKeyPair;
 import de.upb.crypto.craco.sig.SignatureScheme;

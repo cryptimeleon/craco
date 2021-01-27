@@ -1,4 +1,4 @@
-package de.upb.crypto.craco.accumulators.interfaces;
+package de.upb.crypto.craco.accumulators;
 
 /**
  * Interface for 'setup()-method' of 'Accumulators', generating the {@link AccumulatorPublicParameters} and

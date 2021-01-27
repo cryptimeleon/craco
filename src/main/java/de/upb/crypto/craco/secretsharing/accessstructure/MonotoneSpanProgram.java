@@ -6,8 +6,8 @@ import de.upb.crypto.craco.secretsharing.accessstructure.util.MinimalFulfillingS
 import de.upb.crypto.craco.secretsharing.accessstructure.util.MonotoneSpanProgramGetMatrixVisitor;
 import de.upb.crypto.craco.secretsharing.accessstructure.util.Pair;
 import de.upb.crypto.craco.secretsharing.accessstructure.util.TreeNode;
-import de.upb.crypto.craco.secretsharing.policy.Policy;
-import de.upb.crypto.craco.secretsharing.policy.PolicyFact;
+import de.upb.crypto.craco.common.policy.Policy;
+import de.upb.crypto.craco.common.policy.PolicyFact;
 import de.upb.crypto.math.structures.rings.zn.Zp;
 import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 

@@ -1,4 +1,4 @@
-package de.upb.crypto.craco.secretsharing.policy;
+package de.upb.crypto.craco.common.policy;
 
 import de.upb.crypto.craco.secretsharing.accessstructure.AccessStructure;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
