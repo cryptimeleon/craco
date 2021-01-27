@@ -27,9 +27,9 @@ public class StreamingEncryptionSchemeTest {
 
     private static int LENGTH = 18 * 1024;
 
-    private static String PATH = "src/test/resources/tmp/";
+    private static String PATH = "src/test/java/de/upb/crypto/craco/enc/streaming/";
 
-    private static String CIPHERTEXT_PATH = PATH + "streamingCipherText";
+    private static String CIPHERTEXT_PATH = PATH + "cipherText";
 
     private StreamingEncryptionScheme encryptionScheme;
 
