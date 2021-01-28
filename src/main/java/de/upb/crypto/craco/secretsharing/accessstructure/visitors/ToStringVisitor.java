@@ -1,5 +1,6 @@
 package de.upb.crypto.craco.secretsharing.accessstructure.visitors;
 
+import de.upb.crypto.craco.secretsharing.accessstructure.AccessStructure;
 import de.upb.crypto.craco.secretsharing.accessstructure.exceptions.WrongAccessStructureException;
 import de.upb.crypto.craco.secretsharing.accessstructure.utils.TreeNode;
 

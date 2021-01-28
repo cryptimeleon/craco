@@ -1,4 +1,4 @@
 /**
- * Contains utility classes used by the access structure.
+ * Contains basic classes used by access structure implementations.
  */
 package de.upb.crypto.craco.secretsharing.accessstructure.utils;

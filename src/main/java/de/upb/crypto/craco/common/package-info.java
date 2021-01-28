@@ -1,5 +1,4 @@
 /**
- * Contains {@link de.upb.crypto.craco.common.plaintexts.PlainText} implementations and
- * {@link de.upb.crypto.craco.common.WatersHash}.
+ * Contains the {@link de.upb.crypto.craco.common.PublicParameters} class.
  */
 package de.upb.crypto.craco.common;

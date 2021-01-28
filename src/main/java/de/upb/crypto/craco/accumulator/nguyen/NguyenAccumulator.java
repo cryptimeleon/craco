@@ -1,5 +1,6 @@
 package de.upb.crypto.craco.accumulator.nguyen;
 
+import de.upb.crypto.craco.accumulator.AccumulatorIdentity;
 import de.upb.crypto.craco.accumulator.AccumulatorValue;
 import de.upb.crypto.craco.accumulator.AccumulatorWitness;
 import de.upb.crypto.craco.accumulator.DynamicAccumulator;

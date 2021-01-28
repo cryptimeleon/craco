@@ -8,6 +8,7 @@ import de.upb.crypto.craco.secretsharing.accessstructure.exceptions.NoSatisfying
 import de.upb.crypto.craco.secretsharing.accessstructure.exceptions.WrongAccessStructureException;
 import de.upb.crypto.math.structures.rings.RingElement;
 import de.upb.crypto.math.structures.rings.polynomial.PolynomialRing;
+import de.upb.crypto.math.structures.rings.polynomial.PolynomialRing.Polynomial;
 import de.upb.crypto.math.structures.rings.zn.Zp;
 
 import java.math.BigInteger;
@@ -19,7 +20,7 @@ import java.util.stream.IntStream;
  * Shamir's secret sharing scheme is a linear secret sharing scheme based on polynomial interpolation.
  * <p>
  * Assume s is the secret to be shared. Based on the threshold t of the given {@link ThresholdPolicy} a
- * {@link PolynomialRing.Polynomial} P(x) of degree t-1 is computed,
+ * {@link Polynomial} P(x) of degree t-1 is computed,
  * such that \(P(0)=s\).
  * <p>
  * The shares \((i, s_i = P(i))\) correspond to data points on the polynomial therefore any set \(S\) of shares

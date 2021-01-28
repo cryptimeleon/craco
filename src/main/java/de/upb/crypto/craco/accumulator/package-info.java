@@ -1,4 +1,4 @@
 /**
- * Contains de.upb.crypto.craco.interfaces used for accumulator implementations.
+ * Contains common interfaces used for accumulator implementations.
  */
 package de.upb.crypto.craco.accumulator;
