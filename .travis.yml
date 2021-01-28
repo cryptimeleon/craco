@@ -1,27 +1,36 @@
 language: java
-install: true
+
 jdk:
 - openjdk8
+
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
 - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
 cache:
   directories:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
+
 stages:
 - name: build
 - name: release
   if: branch = release
+
 before_script:
   git checkout ${TRAVIS_BRANCH} # to fix travis checking out HEAD branch which breaks grgit
+
 jobs:
   include:
   - stage: build
-    script: "./gradlew build -PcheckoutIfCloned=true"
+    before_install:
+      git checkout ${TRAVIS_BRANCH} # to fix travis checking out HEAD branch (breaks grgit)
+    install: ./gradlew assemble -PcheckoutIfCloned=true
+    script: ./gradlew check -PcheckoutIfCloned=true
   - stage: release
-    script: "./gradlew publish -x test -Ddisablesnapshot=true -Dnexus.user=$NEXUS_USER -Dnexus.key=$NEXUS_KEY
-      -Dbuild.number=$TRAVIS_BUILD_NUMBER"
+    script: ./gradlew publish -Ddisablesnapshot=true -Dnexus.user=$NEXUS_USER -Dnexus.key=$NEXUS_KEY
+      -Dbuild.number=$TRAVIS_BUILD_NUMBER
+
 deploy:
   provider: releases
   api_key:
