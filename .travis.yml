@@ -10,7 +10,6 @@ cache:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
 stages:
-- name: test
 - name: build
 - name: release
   if: branch = release
@@ -18,10 +17,8 @@ before_script:
   git checkout ${TRAVIS_BRANCH} # to fix travis checking out HEAD branch which breaks grgit
 jobs:
   include:
-  - stage: test
-    script: "./gradlew test -PcheckoutIfCloned=true"
   - stage: build
-    script: "./gradlew build -x test -PcheckoutIfCloned=true"
+    script: "./gradlew build -PcheckoutIfCloned=true"
   - stage: release
     script: "./gradlew publish -x test -Ddisablesnapshot=true -Dnexus.user=$NEXUS_USER -Dnexus.key=$NEXUS_KEY
       -Dbuild.number=$TRAVIS_BUILD_NUMBER"
