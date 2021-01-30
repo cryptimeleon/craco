@@ -134,7 +134,7 @@ abstract class AbstractStreamingSymmetricScheme implements StreamingEncryptionSc
     }
 
     @Override
-    public OutputStream encrypt(OutputStream out, EncryptionKey publicKey) throws IOException {
+    public OutputStream createEncryptor(OutputStream out, EncryptionKey publicKey) throws IOException {
         if (!(publicKey instanceof ByteArrayImplementation))
             throw new IllegalArgumentException(INVALID_SYMMETRIC_KEY);
         ByteArrayImplementation symmetricKey = (ByteArrayImplementation) publicKey;
@@ -156,7 +156,7 @@ abstract class AbstractStreamingSymmetricScheme implements StreamingEncryptionSc
     }
 
     @Override
-    public OutputStream decrypt(OutputStream out, final DecryptionKey privateKey) throws IOException {
+    public OutputStream createDecryptor(OutputStream out, final DecryptionKey privateKey) throws IOException {
         if (!(privateKey instanceof ByteArrayImplementation))
             throw new IllegalArgumentException(INVALID_SYMMETRIC_KEY);
 

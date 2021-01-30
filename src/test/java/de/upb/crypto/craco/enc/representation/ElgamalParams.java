@@ -28,6 +28,5 @@ public class ElgamalParams {
         CipherText ciphertext = elgamalScheme.encrypt(plaintext, validPK);
 
         return new RepresentationTestParams(elgamalScheme, validPK, validSK, plaintext, ciphertext);
-
     }
 }

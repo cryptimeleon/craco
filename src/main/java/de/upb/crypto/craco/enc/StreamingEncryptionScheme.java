@@ -87,7 +87,7 @@ public interface StreamingEncryptionScheme extends EncryptionScheme {
      * @return a stream that encrypts any input and writes the ciphertext to out.
      * @throws IOException
      */
-    OutputStream encrypt(OutputStream out, EncryptionKey publicKey) throws IOException;
+    OutputStream createEncryptor(OutputStream out, EncryptionKey publicKey) throws IOException;
 
     /**
      * Returns an InputStream containing the plaintext obtained
@@ -113,5 +113,5 @@ public interface StreamingEncryptionScheme extends EncryptionScheme {
      * @return a stream that decrypts any input and writes the plaintext to out.
      * @throws IOException
      */
-    OutputStream decrypt(OutputStream out, DecryptionKey privateKey) throws IOException;
+    OutputStream createDecryptor(OutputStream out, DecryptionKey privateKey) throws IOException;
 }

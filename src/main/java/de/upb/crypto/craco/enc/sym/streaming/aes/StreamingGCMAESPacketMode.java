@@ -364,7 +364,7 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
      * a packet.
      */
     @Override
-    public OutputStream encrypt(OutputStream out, EncryptionKey publicKey) throws IOException {
+    public OutputStream createEncryptor(OutputStream out, EncryptionKey publicKey) throws IOException {
         if (!(publicKey instanceof ByteArrayImplementation))
             throw new IllegalArgumentException("Not a valid symmetric key for this scheme");
         ByteArrayImplementation symmetricKey = (ByteArrayImplementation) publicKey;
@@ -667,7 +667,7 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
      * a packet.
      */
     @Override
-    public OutputStream decrypt(OutputStream out, DecryptionKey privateKey) throws IOException {
+    public OutputStream createDecryptor(OutputStream out, DecryptionKey privateKey) throws IOException {
         if (!(privateKey instanceof ByteArrayImplementation))
             throw new IllegalArgumentException("Not a valid symmetric key for this scheme");
         // setting up the scheme

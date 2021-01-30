@@ -117,7 +117,7 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
     }
 
     @Override
-    public OutputStream encrypt(OutputStream out, EncryptionKey publicKey) throws IOException {
+    public OutputStream createEncryptor(OutputStream out, EncryptionKey publicKey) throws IOException {
         //Generate symmetric key and encapsulate it
         KeyEncapsulationMechanism.KeyAndCiphertext<SymmetricKey> keyAndCiphertext = kem.encaps(publicKey);
 
@@ -134,7 +134,7 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
         out.write(encapsulatedKey);
 
         //Return resulting stream that symmetrically encrypts any input and writes the ciphertext to out
-        return symmetricScheme.encrypt(out, keyAndCiphertext.key);
+        return symmetricScheme.createEncryptor(out, keyAndCiphertext.key);
     }
 
     @Override
@@ -172,7 +172,7 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
     }
 
     @Override
-    public OutputStream decrypt(OutputStream out, DecryptionKey privateKey) {
+    public OutputStream createDecryptor(OutputStream out, DecryptionKey privateKey) {
         return new OutputStream() {
             int byteOffset = 0;
             byte[] keyLenBytes = new byte[4];
@@ -196,7 +196,7 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
 
                         //decaps the encapsulated key
                         SymmetricKey symmetricKey = kem.decaps(encapsulatedKey, privateKey);
-                        decryptedOut = symmetricScheme.decrypt(out, symmetricKey);
+                        decryptedOut = symmetricScheme.createDecryptor(out, symmetricKey);
                     }
                 } else { //we're done reading the encapsulation part and are now getting the symmetric scheme's
                     // ciphertext
