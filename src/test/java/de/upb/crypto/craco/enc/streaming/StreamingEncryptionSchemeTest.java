@@ -56,13 +56,8 @@ public class StreamingEncryptionSchemeTest {
             ByteArrayOutputStream plainOut = new ByteArrayOutputStream();
             // decrypt it
             encryptionScheme.decrypt(cipherIn, plainOut, keyPair.getSk());
-            plainOut.flush();
             System.out.println("Asserting the results...");
-            assertArrayEquals(plainOut.toByteArray(), randomBytes);
-            // cleanup
-            cipherIn.close();
-            plainOut.close();
-
+            assertArrayEquals(randomBytes, plainOut.toByteArray());
         } catch (IOException e) {
             e.printStackTrace();
             fail();
@@ -79,17 +74,18 @@ public class StreamingEncryptionSchemeTest {
             RANDOM.nextBytes(randomBytes);
             // write the encrypted bytes to an input stream
             ByteArrayInputStream plainBytesIn = new ByteArrayInputStream(randomBytes);
-            InputStream encryptedInputStream = encryptionScheme.encrypt(plainBytesIn, keyPair.getPk());
-
-            System.out.println("Testing the decrypt(InputStream cipherIn, DecryptionKey sk) for "
-                    + encryptionScheme.getClass().getName());
-            // decrypt the bytes from the input stream
             ByteArrayOutputStream plainBytesOut = new ByteArrayOutputStream(LENGTH);
-            InputStream decryptedCiphertext = encryptionScheme.decrypt(encryptedInputStream, keyPair.getSk());
-            StreamUtil.copy(decryptedCiphertext, plainBytesOut);
+            try (InputStream encryptedInputStream = encryptionScheme.encrypt(plainBytesIn, keyPair.getPk())) {
+                System.out.println("Testing the decrypt(InputStream cipherIn, DecryptionKey sk) for "
+                        + encryptionScheme.getClass().getName());
+                // decrypt the bytes from the input stream
+                try (InputStream decryptedCiphertext = encryptionScheme.decrypt(encryptedInputStream, keyPair.getSk())) {
+                    StreamUtil.copy(decryptedCiphertext, plainBytesOut);
+                }
+            }
 
             System.out.println("Asserting the results...");
-            assertArrayEquals(plainBytesOut.toByteArray(), randomBytes);
+            assertArrayEquals(randomBytes, plainBytesOut.toByteArray());
         } catch (IOException e) {
             e.printStackTrace();
             fail();
@@ -104,21 +100,22 @@ public class StreamingEncryptionSchemeTest {
             // Generate new random bytes to be decrypted
             byte[] randomBytes = new byte[LENGTH];
             RANDOM.nextBytes(randomBytes);
-            // create a output stream to write the random bytes to
+            // create an output stream to write the random bytes to
             ByteArrayOutputStream cipherOut = new ByteArrayOutputStream();
-            // let encryptingOut write the encrypted bytes to cipherOut
-            OutputStream encryptingOut = encryptionScheme.createEncryptor(cipherOut, keyPair.getPk());
-            encryptingOut.write(randomBytes);
-
-            System.out.println("Testing the createDecryptor(OutputStream plainOut, DecryptionKey sk) for "
-                    + encryptionScheme.getClass().getName());
-            // let decryptingOut write the decrypted bytes to plainOut
             ByteArrayOutputStream plainOut = new ByteArrayOutputStream();
-            OutputStream decryptingOut = encryptionScheme.createDecryptor(plainOut, keyPair.getSk());
-            decryptingOut.write(cipherOut.toByteArray());
+            // let encryptingOut write the encrypted bytes to cipherOut
+            try (OutputStream encryptingOut = encryptionScheme.createEncryptor(cipherOut, keyPair.getPk())) {
+                encryptingOut.write(randomBytes);
+                System.out.println("Testing the createDecryptor(OutputStream plainOut, DecryptionKey sk) for "
+                        + encryptionScheme.getClass().getName());
+                // let decryptingOut write the decrypted bytes to plainOut
+                try (OutputStream decryptingOut = encryptionScheme.createDecryptor(plainOut, keyPair.getSk())) {
+                    decryptingOut.write(cipherOut.toByteArray());
+                }
+            }
 
             System.out.println("Asserting the results...");
-            assertArrayEquals(plainOut.toByteArray(), randomBytes);
+            assertArrayEquals(randomBytes, plainOut.toByteArray());
         } catch (IOException e) {
             e.printStackTrace();
             fail();
