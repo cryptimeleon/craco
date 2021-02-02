@@ -107,7 +107,6 @@ public class StandaloneTest {
         toReturn.add(StreamingCBCAESParams.get());
         toReturn.add(StreamingGCMAESPacketModeParams.get());
         toReturn.add(RingElementAttributeParams.get());
-        toReturn.add(WatersHashParams.get());
         toReturn.add(SnParams.get());
         toReturn.addAll(ElgamalKEMParams.get());
         toReturn.addAll(PSTestParams.get());
