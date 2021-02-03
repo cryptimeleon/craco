@@ -27,7 +27,7 @@ public class FiatShamirProofSystem {
         Challenge challenge = computeChallengeForAnnouncement(commonInput, announcement, additionalData);
         Response response = protocol.generateResponse(commonInput, secretInput, announcement, announcementSecret, challenge);
 
-        return new FiatShamirProof(protocol.compressTranscript(commonInput, new SigmaProtocolTranscript(announcement, challenge, response)), additionalData);
+        return new FiatShamirProof(protocol.compressTranscript(commonInput, new SigmaProtocolTranscript(announcement, challenge, response)), challenge);
     }
 
     public FiatShamirProof createProof(CommonInput commonInput, SecretInput secretInput) {
@@ -35,7 +35,7 @@ public class FiatShamirProofSystem {
     }
 
     public boolean checkProof(CommonInput commonInput, FiatShamirProof proof, byte[] additionalData) {
-        SigmaProtocolTranscript transcript = protocol.decompressTranscript(commonInput, proof.compressedTranscript);
+        SigmaProtocolTranscript transcript = protocol.decompressTranscript(commonInput, proof.challenge, proof.compressedTranscript);
         return computeChallengeForAnnouncement(commonInput, transcript.getAnnouncement(), additionalData).equals(transcript.getChallenge());
     }
 

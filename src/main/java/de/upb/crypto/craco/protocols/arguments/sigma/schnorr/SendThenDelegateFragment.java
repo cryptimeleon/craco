@@ -334,7 +334,7 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
         }
     }
 
-    private static class SendThenDelegateAnnouncement implements Announcement {
+    protected static class SendThenDelegateAnnouncement implements Announcement {
         @UniqueByteRepresented
         public final HashMap<String, Announcement> subprotocolAnnouncements = new HashMap<>();
         @UniqueByteRepresented

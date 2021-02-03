@@ -1,5 +1,8 @@
 package de.upb.crypto.craco.protocols;
 
+import de.upb.crypto.craco.protocols.arguments.damgardtechnique.DamgardTechnique;
+import de.upb.crypto.craco.protocols.arguments.fiatshamir.FiatShamirProof;
+import de.upb.crypto.craco.protocols.arguments.fiatshamir.FiatShamirProofSystem;
 import de.upb.crypto.craco.protocols.arguments.sigma.SigmaProtocol;
 import de.upb.crypto.craco.protocols.arguments.sigma.instance.SigmaProtocolProverInstance;
 import de.upb.crypto.craco.protocols.arguments.sigma.instance.SigmaProtocolVerifierInstance;
@@ -9,6 +12,7 @@ import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.SendThenDelegateFra
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.setmembership.SetMembershipPublicParameters;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.setmembership.SmallerThanPowerFragment;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrZnVariable;
+import de.upb.crypto.math.random.RandomGenerator;
 import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.structures.groups.counting.CountingGroup;
 import de.upb.crypto.math.serialization.Representation;
@@ -20,11 +24,19 @@ import de.upb.crypto.math.structures.rings.zn.Zn;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class SchnorrTest {
-    public static Group group = new CountingGroup("test", BigInteger.valueOf(13));
+    public static Group group = new CountingGroup("test", RandomGenerator.getRandomPrime(80));
     public static BilinearGroup bilGroup = new CountingBilinearGroup(128, BilinearGroup.Type.TYPE_3,1);
+
+    protected void runProtocol(SigmaProtocol protocol) {
+        runProtocol(protocol, CommonInput.EMPTY, SecretInput.EMPTY);
+    }
 
     protected void runProtocol(SigmaProtocol protocol, CommonInput commonInput, SecretInput secretInput) {
         SigmaProtocolProverInstance prover = protocol.getProverInstance(commonInput, secretInput);
@@ -38,8 +50,22 @@ public class SchnorrTest {
         System.out.println(response);
         verifier.nextMessage(response);
 
-        assert verifier.hasTerminated();
-        assert verifier.isAccepting();
+        assertTrue(verifier.hasTerminated());
+        assertTrue(verifier.isAccepting());
+    }
+
+    protected void runNoninteractiveProof(FiatShamirProofSystem proofSystem) {
+        runNoninteractiveProof(proofSystem, CommonInput.EMPTY, SecretInput.EMPTY);
+    }
+
+    protected void runNoninteractiveProof(FiatShamirProofSystem proofSystem, CommonInput commonInput, SecretInput secretInput) {
+        FiatShamirProof proof = proofSystem.createProof(commonInput, secretInput);
+        assertTrue(proofSystem.checkProof(commonInput, proof));
+
+        byte[] additionalData = "foo".getBytes(StandardCharsets.UTF_8);
+        proof = proofSystem.createProof(commonInput, secretInput, additionalData);
+        assertTrue(proofSystem.checkProof(commonInput, proof, additionalData));
+        assertFalse(proofSystem.checkProof(commonInput, proof, new byte[] {123}));
     }
 
     @Test
@@ -48,7 +74,7 @@ public class SchnorrTest {
         Zn.ZnElement x = group.getUniformlyRandomExponent();
         GroupElement h = g.pow(x);
 
-        runProtocol(new DelegateProtocol() {
+        DelegateProtocol protocol = new DelegateProtocol() {
             @Override
             protected SendThenDelegateFragment.ProverSpec provideProverSpecWithNoSendFirst(CommonInput commonInput, SecretInput secretInput, SendThenDelegateFragment.ProverSpecBuilder builder) {
                 builder.putWitnessValue("x", x);
@@ -67,7 +93,11 @@ public class SchnorrTest {
                 return group.size();
             }
 
-        }, CommonInput.EMPTY, SecretInput.EMPTY);
+        };
+
+        runProtocol(protocol);
+        runProtocol(new DamgardTechnique(protocol, DamgardTechnique.generateCommitmentScheme(group)));
+        runNoninteractiveProof(new FiatShamirProofSystem(protocol));
     }
 
     @Test
@@ -81,7 +111,7 @@ public class SchnorrTest {
 
         SetMembershipPublicParameters setMembershipPublicParameters = SmallerThanPowerFragment.generatePublicParameters(bilGroup, 2);
 
-        runProtocol(new DelegateProtocol() {
+        DelegateProtocol protocol = new DelegateProtocol() {
             @Override
             public BigInteger getChallengeSpaceSize() {
                 return bilGroup.getG1().size();
@@ -107,6 +137,10 @@ public class SchnorrTest {
 
                 return builder.build();
             }
-        }, CommonInput.EMPTY, SecretInput.EMPTY);
+        };
+
+        runProtocol(protocol);
+        runProtocol(new DamgardTechnique(protocol, DamgardTechnique.generateCommitmentScheme(group)));
+        runNoninteractiveProof(new FiatShamirProofSystem(protocol));
     }
 }

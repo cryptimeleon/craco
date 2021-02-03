@@ -62,7 +62,7 @@ public abstract class SendThenDelegateProtocol implements SigmaProtocol {
     @Override
     public Announcement generateAnnouncement(CommonInput commonInput, SecretInput secretInput, AnnouncementSecret announcementSecret) {
         SchnorrAnnouncementSecret announcementSecret1 = (SchnorrAnnouncementSecret) announcementSecret;
-        return announcementSecret1.fragment.generateAnnouncement(SchnorrVariableAssignment.EMPTY, announcementSecret1.fragmentAnnouncementSecret, SchnorrVariableAssignment.EMPTY);
+        return new SchnorrAnnouncement(announcementSecret1.fragment, announcementSecret1.fragment.generateAnnouncement(SchnorrVariableAssignment.EMPTY, announcementSecret1.fragmentAnnouncementSecret, SchnorrVariableAssignment.EMPTY));
     }
 
     @Override
@@ -180,19 +180,13 @@ public abstract class SendThenDelegateProtocol implements SigmaProtocol {
     @Override
     public Representation compressTranscript(CommonInput commonInput, SigmaProtocolTranscript transcript) {
         SchnorrAnnouncement announcement = (SchnorrAnnouncement) transcript.getAnnouncement();
-        Representation fragmentRepr = announcement.fragment.compressTranscript(announcement.fragmentAnnouncement, (SchnorrChallenge) transcript.getChallenge(), transcript.getResponse(), SchnorrVariableAssignment.EMPTY);
-        ListRepresentation result = new ListRepresentation();
-        result.add(transcript.getChallenge().getRepresentation());
-        result.add(fragmentRepr);
-
-        return result;
+        return announcement.fragment.compressTranscript(announcement.fragmentAnnouncement, (SchnorrChallenge) transcript.getChallenge(), transcript.getResponse(), SchnorrVariableAssignment.EMPTY);
     }
 
     @Override
-    public SigmaProtocolTranscript decompressTranscript(CommonInput commonInput, Representation compressedTranscript) throws IllegalArgumentException {
+    public SigmaProtocolTranscript decompressTranscript(CommonInput commonInput, Challenge challenge, Representation compressedTranscript) throws IllegalArgumentException {
         TopLevelSchnorrFragment fragment = new TopLevelSchnorrFragment(commonInput);
-        SchnorrChallenge challenge = new SchnorrChallenge(compressedTranscript.list().get(0));
-        SigmaProtocolTranscript fragmentTranscript = fragment.decompressTranscript(compressedTranscript.list().get(1), challenge, SchnorrVariableAssignment.EMPTY);
+        SigmaProtocolTranscript fragmentTranscript = fragment.decompressTranscript(compressedTranscript, (SchnorrChallenge) challenge, SchnorrVariableAssignment.EMPTY);
         return new SigmaProtocolTranscript(new SchnorrAnnouncement(fragment, fragmentTranscript.getAnnouncement()), challenge, fragmentTranscript.getResponse());
     }
 }

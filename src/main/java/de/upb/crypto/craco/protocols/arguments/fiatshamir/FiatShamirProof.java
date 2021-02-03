@@ -1,5 +1,6 @@
 package de.upb.crypto.craco.protocols.arguments.fiatshamir;
 
+import de.upb.crypto.craco.protocols.arguments.sigma.Challenge;
 import de.upb.crypto.math.serialization.ByteArrayRepresentation;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representable;
@@ -10,18 +11,18 @@ import java.util.Arrays;
 
 public class FiatShamirProof implements Representable {
     public final Representation compressedTranscript;
-    public final byte[] additionalData;
+    public final Challenge challenge;
 
-    public FiatShamirProof(Representation compressedTranscript, byte[] additionalData) {
+    public FiatShamirProof(Representation compressedTranscript, Challenge challenge) {
         this.compressedTranscript = compressedTranscript;
-        this.additionalData = Arrays.copyOf(additionalData, additionalData.length);
+        this.challenge = challenge;
     }
 
     @Override
     public Representation getRepresentation() {
         ObjectRepresentation repr = new ObjectRepresentation();
         repr.put("transcript", compressedTranscript);
-        repr.put("additionalData", new ByteArrayRepresentation(additionalData));
+        repr.put("challenge", challenge.getRepresentation());
         return repr;
     }
 }

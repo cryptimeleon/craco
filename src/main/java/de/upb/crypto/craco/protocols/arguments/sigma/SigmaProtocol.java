@@ -7,6 +7,7 @@ import de.upb.crypto.craco.protocols.arguments.InteractiveArgumentInstance;
 import de.upb.crypto.craco.protocols.arguments.sigma.instance.SigmaProtocolInstance;
 import de.upb.crypto.craco.protocols.arguments.sigma.instance.SigmaProtocolProverInstance;
 import de.upb.crypto.craco.protocols.arguments.sigma.instance.SigmaProtocolVerifierInstance;
+import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 
 import java.math.BigInteger;
@@ -73,6 +74,7 @@ public interface SigmaProtocol extends InteractiveArgument {
     /**
      * Returns a compressed (shorter) version of the given transcript.
      * Useful for {@link de.upb.crypto.craco.protocols.arguments.fiatshamir.FiatShamirProofSystem}.
+     * Compressed transcript does not necessarily contain the challenge (see {@link SigmaProtocol#decompressTranscript(CommonInput, Challenge, Representation)})
      */
     default Representation compressTranscript(CommonInput commonInput, SigmaProtocolTranscript transcript) {
         return transcript.getRepresentation();
@@ -86,8 +88,11 @@ public interface SigmaProtocol extends InteractiveArgument {
      *
      * @throws IllegalArgumentException is the given compressedTranscript cannot be decompressed into a valid transcript.
      */
-    default SigmaProtocolTranscript decompressTranscript(CommonInput commonInput, Representation compressedTranscript) throws IllegalArgumentException {
-        return recreateTranscript(compressedTranscript, commonInput);
+    default SigmaProtocolTranscript decompressTranscript(CommonInput commonInput, Challenge challenge, Representation compressedTranscript) throws IllegalArgumentException {
+        SigmaProtocolTranscript transcript = recreateTranscript(compressedTranscript, commonInput);
+        if (!checkTranscript(commonInput, transcript) || !challenge.equals(transcript.getChallenge()))
+            throw new IllegalArgumentException("Invalid transcript or challenge");
+        return transcript;
     }
 
     /**

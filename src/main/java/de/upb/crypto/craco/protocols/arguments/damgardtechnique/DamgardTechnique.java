@@ -1,20 +1,19 @@
 package de.upb.crypto.craco.protocols.arguments.damgardtechnique;
 
+import de.upb.crypto.craco.commitment.CommitmentPair;
+import de.upb.crypto.craco.commitment.CommitmentScheme;
 import de.upb.crypto.craco.commitment.hashthencommit.HashThenCommitCommitmentScheme;
 import de.upb.crypto.craco.commitment.pedersen.PedersenCommitmentScheme;
 import de.upb.crypto.craco.common.plaintexts.PlainText;
+import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
 import de.upb.crypto.craco.protocols.CommonInput;
 import de.upb.crypto.craco.protocols.SecretInput;
 import de.upb.crypto.craco.protocols.arguments.sigma.*;
-import de.upb.crypto.craco.commitment.CommitmentPair;
-import de.upb.crypto.craco.commitment.CommitmentScheme;
-import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
 import de.upb.crypto.math.hash.impl.VariableOutputLengthHashFunction;
-import de.upb.crypto.math.structures.groups.Group;
 import de.upb.crypto.math.serialization.Representation;
+import de.upb.crypto.math.structures.groups.Group;
 
 import java.math.BigInteger;
-import java.util.Collections;
 
 /**
  * This class provides Damgard's Technique. Damgard's Technique is a construction to improve Sigma-Protocols in order to
@@ -71,7 +70,10 @@ public class DamgardTechnique implements SigmaProtocol {
                 ((DamgardAnnouncementSecret) announcementSecret).innerAnnouncement,
                 ((DamgardAnnouncementSecret) announcementSecret).innerAnnouncementSecret,
                 challenge);
-        return new DamgardResponse(innerResponse, ((DamgardAnnouncementSecret) announcementSecret).innerAnnouncement, ((DamgardAnnouncementSecret) announcementSecret).commitment. getOpenValue());
+        Announcement innerAnnouncement = ((DamgardAnnouncementSecret) announcementSecret).innerAnnouncement;
+
+        Representation compressedTranscript = innerProtocol.compressTranscript(commonInput, new SigmaProtocolTranscript(innerAnnouncement, challenge, innerResponse));
+        return new DamgardResponse(innerResponse, innerAnnouncement, ((DamgardAnnouncementSecret) announcementSecret).commitment.getOpenValue(), compressedTranscript);
     }
 
     @Override
@@ -91,10 +93,11 @@ public class DamgardTechnique implements SigmaProtocol {
     @Override
     public SigmaProtocolTranscript generateSimulatedTranscript(CommonInput commonInput, Challenge challenge) {
         SigmaProtocolTranscript inner = innerProtocol.generateSimulatedTranscript(commonInput, challenge);
+        Representation compressedInnerTranscript = innerProtocol.compressTranscript(commonInput, inner);
         CommitmentPair commitmentAndOpening = commitmentScheme.commit(announcementToCommitmentPlaintext(inner.getAnnouncement()));
         return new SigmaProtocolTranscript(new DamgardAnnouncement(commitmentAndOpening.getCommitment()),
                 challenge,
-                new DamgardResponse(inner.getResponse(), inner.getAnnouncement(), commitmentAndOpening.getOpenValue()));
+                new DamgardResponse(inner.getResponse(), inner.getAnnouncement(), commitmentAndOpening.getOpenValue(), compressedInnerTranscript));
     }
 
     @Override
@@ -109,10 +112,9 @@ public class DamgardTechnique implements SigmaProtocol {
 
     @Override
     public DamgardResponse recreateResponse(CommonInput commonInput, Announcement announcement, Challenge challenge, Representation repr) {
-        Announcement innerAnnouncement = innerProtocol.recreateAnnouncement(commonInput, repr.obj().get("innerAnnouncement"));
-        return new DamgardResponse(innerProtocol.recreateResponse(commonInput, innerAnnouncement, challenge, repr.obj().get("innerResponse")),
-                innerAnnouncement,
-                commitmentScheme.getOpenValue(repr.obj().get("openValue")));
+        SigmaProtocolTranscript transcript = innerProtocol.decompressTranscript(commonInput, challenge, repr.obj().get("compressedTranscript"));
+        return new DamgardResponse(transcript.getResponse(), transcript.getAnnouncement(),
+                commitmentScheme.getOpenValue(repr.obj().get("openValue")), repr.obj().get("compressedTranscript"));
     }
 
     @Override
