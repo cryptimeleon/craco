@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.test;
 
-import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
+import de.upb.crypto.math.hash.UniqueByteRepresentable;
 
 public class UniqueByteRepresentableParams {
 
@@ -17,7 +17,7 @@ public class UniqueByteRepresentableParams {
     }
 
     /**
-     * Sets up test params where <code>instanceTwo</code> is a copy of <code>instanceTwo</code> such that they yield
+     * Sets up test de.upb.crypto.groupsig.params where <code>instanceTwo</code> is a copy of <code>instanceTwo</code> such that they yield
      * the same UniqueBytes.
      *
      * @param instanceOne

@@ -1,14 +1,10 @@
 package de.upb.crypto.craco.sig.sps.eq;
 
-import de.upb.crypto.craco.common.GroupElementPlainText;
-import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.common.interfaces.PlainText;
-import de.upb.crypto.craco.sig.SignatureSchemeParams;
-import de.upb.crypto.craco.sig.SignatureSchemeTester;
-import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
-import de.upb.crypto.craco.sig.interfaces.SigningKey;
-import de.upb.crypto.craco.sig.interfaces.VerificationKey;
-import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.craco.common.plaintexts.GroupElementPlainText;
+import de.upb.crypto.craco.common.plaintexts.MessageBlock;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
+import de.upb.crypto.craco.sig.*;
+import de.upb.crypto.math.structures.rings.zn.Zp;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -54,7 +50,6 @@ public class SPSEQSignatureSchemeTest {
         for (int i = 0; i < testIterations; i++) {
             SignatureSchemeTester.testSignatureSchemeSignAndVerify(spseqScheme, messageBlock, keyPair.getVerificationKey(),
                     keyPair.getSigningKey());
-
         }
     }
 
@@ -70,7 +65,7 @@ public class SPSEQSignatureSchemeTest {
             SPSEQSignature sigmaChgRep = (SPSEQSignature) spseqScheme.chgRep(sigma, mu, keyPair.getVerificationKey());
             measureTime("ChgRep");
             // change representative of message
-            MessageBlock msgChgRep= new MessageBlock(messageBlock.parallelStream().map(m -> ((GroupElementPlainText) m).get().pow(mu)).
+            MessageBlock msgChgRep= new MessageBlock(messageBlock.stream().map(m -> ((GroupElementPlainText) m).get().pow(mu)).
                     map(GroupElementPlainText::new).collect(Collectors.toList()));
             // check ChgRep
             assertTrue(spseqScheme.verify(msgChgRep, sigmaChgRep, keyPair.getVerificationKey()));

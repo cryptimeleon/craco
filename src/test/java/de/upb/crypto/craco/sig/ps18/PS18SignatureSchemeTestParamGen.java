@@ -1,9 +1,9 @@
 package de.upb.crypto.craco.sig.ps18;
 
-import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.common.RingElementPlainText;
+import de.upb.crypto.craco.common.plaintexts.MessageBlock;
+import de.upb.crypto.craco.common.plaintexts.RingElementPlainText;
+import de.upb.crypto.craco.sig.SignatureKeyPair;
 import de.upb.crypto.craco.sig.SignatureSchemeParams;
-import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
 import de.upb.crypto.craco.sig.ps.PSPublicParameters;
 import de.upb.crypto.craco.sig.ps.PSPublicParametersGen;
 
@@ -22,9 +22,8 @@ public class PS18SignatureSchemeTestParamGen {
         PSPublicParameters pp = ppGen.generatePublicParameter(securityParam, true);
         PS18SignatureScheme psScheme = new PS18SignatureScheme(pp);
 
-        SignatureKeyPair<? extends PS18VerificationKey, ? extends PS18SigningKey> keyPair =
-                psScheme.generateKeyPair(numMessages);
-        SignatureKeyPair<? extends PS18VerificationKey, ? extends PS18SigningKey> wrongKeyPair;
+        SignatureKeyPair<PS18VerificationKey, PS18SigningKey> keyPair = psScheme.generateKeyPair(numMessages);
+        SignatureKeyPair<PS18VerificationKey, PS18SigningKey> wrongKeyPair;
         do {
             wrongKeyPair = psScheme.generateKeyPair(numMessages);
         } while (wrongKeyPair.getVerificationKey().equals(keyPair.getVerificationKey())

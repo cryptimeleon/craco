@@ -1,16 +1,15 @@
 package de.upb.crypto.craco.secretsharing;
 
-import de.upb.crypto.craco.abe.accessStructure.exception.NoSatisfyingSet;
-import de.upb.crypto.craco.abe.accessStructure.exception.WrongAccessStructureException;
-import de.upb.crypto.craco.abe.interfaces.LinearSecretSharing;
-import de.upb.crypto.craco.common.interfaces.policy.Policy;
-import de.upb.crypto.craco.common.interfaces.policy.PolicyFact;
-import de.upb.crypto.craco.common.interfaces.policy.ThresholdPolicy;
+import de.upb.crypto.craco.common.policies.Policy;
+import de.upb.crypto.craco.common.policies.PolicyFact;
+import de.upb.crypto.craco.common.policies.ThresholdPolicy;
+import de.upb.crypto.craco.secretsharing.accessstructure.exceptions.NoSatisfyingSet;
+import de.upb.crypto.craco.secretsharing.accessstructure.exceptions.WrongAccessStructureException;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.StandaloneRepresentable;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
-import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.structures.rings.zn.Zp;
 
 import java.util.*;
 import java.util.stream.Collectors;

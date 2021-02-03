@@ -1,14 +1,14 @@
 package de.upb.crypto.craco.sig.bbs;
 
-import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.common.RingElementPlainText;
-import de.upb.crypto.craco.common.interfaces.PlainText;
-import de.upb.crypto.craco.sig.interfaces.*;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.craco.common.plaintexts.MessageBlock;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
+import de.upb.crypto.craco.common.plaintexts.RingElementPlainText;
+import de.upb.crypto.craco.sig.*;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.structures.zn.Zn.ZnElement;
-import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.rings.zn.Zn;
+import de.upb.crypto.math.structures.rings.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -24,7 +24,7 @@ import java.util.Objects;
  * <p>
  * [2] F. Eidens, Anonymous Credential System based on the q-Strong Diffie-Hellman Assumption 2015.
  *
- * @author Fabian Eidens
+ *
  */
 public class BBSBSignatureScheme implements StandardMultiMessageSignatureScheme {
 
@@ -82,7 +82,7 @@ public class BBSBSignatureScheme implements StandardMultiMessageSignatureScheme 
         MessageBlock messageBlock = (MessageBlock) plainText;
         BBSBSigningKey sk = (BBSBSigningKey) secretKey;
 
-        if (messageBlock.size() != sk.getNumberOfMessages()) {
+        if (messageBlock.length() != sk.getNumberOfMessages()) {
             throw new IllegalArgumentException("Not a valid block size for this scheme");
         }
 
@@ -110,7 +110,7 @@ public class BBSBSignatureScheme implements StandardMultiMessageSignatureScheme 
 
         c = c.pow(resultExponent);
 
-        ZnElement exponent = exponentX.add(sk.getExponentGamma()).inv();// 1/(x+gamma)
+        Zn.ZnElement exponent = exponentX.add(sk.getExponentGamma()).inv();// 1/(x+gamma)
 
         GroupElement signatureElementA = c.pow(exponent).compute(); // A in the paper
 

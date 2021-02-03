@@ -1,17 +1,18 @@
 package de.upb.crypto.craco.sig.ps;
 
 import de.upb.crypto.craco.commitment.pedersen.PedersenCommitmentScheme;
-import de.upb.crypto.craco.sig.interfaces.VerificationKey;
+import de.upb.crypto.craco.sig.VerificationKey;
+import de.upb.crypto.math.hash.ByteAccumulator;
+import de.upb.crypto.math.hash.UniqueByteRepresentable;
 import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
 import de.upb.crypto.math.hash.impl.ByteArrayAccumulator;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
-import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
-import de.upb.crypto.math.interfaces.structures.Group;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.structures.groups.Group;
+import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.groups.elliptic.BilinearMap;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -67,8 +68,8 @@ public class PSExtendedVerificationKey extends PSVerificationKey
     /**
      * Extended constructor for the extended verification key in the ACS (from representation).
      *
-     * @param groupG1 {@link Group} group 1 from {@link de.upb.crypto.math.pairings.generic.BilinearMap}
-     * @param groupG2 {@link Group} group 2 from {@link de.upb.crypto.math.pairings.generic.BilinearMap}
+     * @param groupG1 {@link Group} group 1 from {@link BilinearMap}
+     * @param groupG2 {@link Group} group 2 from {@link BilinearMap}
      * @param repr    {@link Representation} of {@link PSExtendedVerificationKey}
      */
     public PSExtendedVerificationKey(Group groupG1, Group groupG2, Representation repr) {

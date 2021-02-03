@@ -1,12 +1,12 @@
 package de.upb.crypto.craco.kem;
 
-import de.upb.crypto.craco.common.interfaces.CipherText;
-import de.upb.crypto.craco.common.interfaces.DecryptionKey;
-import de.upb.crypto.craco.common.interfaces.EncryptionKey;
-import de.upb.crypto.craco.common.interfaces.SymmetricKey;
+import de.upb.crypto.craco.enc.CipherText;
+import de.upb.crypto.craco.enc.DecryptionKey;
+import de.upb.crypto.craco.enc.EncryptionKey;
+import de.upb.crypto.craco.enc.SymmetricKey;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
 
 import java.util.Objects;
 
@@ -17,7 +17,7 @@ import java.util.Objects;
  * This should be used in combination with an symmetric encryption scheme to implement the standard hybrid encryption
  * technique.
  *
- * @author Denis Diemert
+ *
  */
 public abstract class SymmetricKeyKEM implements KeyEncapsulationMechanism<SymmetricKey> {
 

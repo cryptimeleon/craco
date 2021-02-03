@@ -1,19 +1,19 @@
 package de.upb.crypto.craco.kem.asym.elgamal;
 
-import de.upb.crypto.craco.common.interfaces.CipherText;
+import de.upb.crypto.craco.enc.CipherText;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalCipherText;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalEncryption;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
 
 import java.util.Objects;
 
 /**
  * This class represents ciphertexts for the ElgamalKEM ElGamal based KEM.
  *
- * @author peter.guenther
+ *
  */
 public class ElgamalKEMCiphertext implements CipherText {
 

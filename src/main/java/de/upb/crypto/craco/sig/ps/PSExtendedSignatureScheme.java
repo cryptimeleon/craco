@@ -1,14 +1,14 @@
 package de.upb.crypto.craco.sig.ps;
 
 import de.upb.crypto.craco.commitment.pedersen.PedersenCommitmentScheme;
-import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.common.RingElementPlainText;
-import de.upb.crypto.craco.common.interfaces.PlainText;
-import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
-import de.upb.crypto.math.pairings.generic.BilinearMap;
+import de.upb.crypto.craco.common.plaintexts.MessageBlock;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
+import de.upb.crypto.craco.common.plaintexts.RingElementPlainText;
+import de.upb.crypto.craco.sig.SignatureKeyPair;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.groups.elliptic.BilinearMap;
+import de.upb.crypto.math.structures.rings.zn.Zp;
 
 import java.util.Arrays;
 
@@ -133,7 +133,7 @@ public class PSExtendedSignatureScheme extends PSSignatureScheme{
     public PSSignature blindSign(PSSigningKey signingKey, PSExtendedVerificationKey verificationKey,
                                  GroupElement blindingElement, PlainText message) {
         MessageBlock messageBlock = (MessageBlock) message;
-        if (messageBlock.size() != verificationKey.getGroup1ElementsYi().length - 1) {
+        if (messageBlock.length() != verificationKey.getGroup1ElementsYi().length - 1) {
             throw new IllegalArgumentException("Expected 'message' to be one less than the number of messages of an " +
                     "ordinary signature");
         }
@@ -146,7 +146,7 @@ public class PSExtendedSignatureScheme extends PSSignatureScheme{
         GroupElement sigma1 = g1.pow(u).compute();
         final Zp.ZpElement signingKeyX = signingKey.getExponentX();
         GroupElement sigma2 = g1.pow(signingKeyX).op(blindingElement);
-        for (int i = 0; i < messageBlock.size(); ++i) {
+        for (int i = 0; i < messageBlock.length(); ++i) {
             final GroupElement group1YiElement = verificationKey.getGroup1ElementsYi()[i + 1];
             RingElementPlainText ringElement = (RingElementPlainText) messageBlock.get(i);
             Zp.ZpElement zpMessageElement = (Zp.ZpElement) ringElement.getRingElement();

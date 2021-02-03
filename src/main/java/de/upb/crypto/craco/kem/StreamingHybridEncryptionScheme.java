@@ -1,10 +1,10 @@
 package de.upb.crypto.craco.kem;
 
-import de.upb.crypto.craco.common.interfaces.*;
-import de.upb.crypto.craco.kem.KeyEncapsulationMechanism.KeyAndCiphertext;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
+import de.upb.crypto.craco.enc.*;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
 import de.upb.crypto.math.serialization.converter.JSONConverter;
 
 import java.io.*;
@@ -61,7 +61,7 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
 
     @Override
     public CipherText encrypt(PlainText plainText, EncryptionKey publicKey) {
-        KeyAndCiphertext<SymmetricKey> keyAndCiphertext = kem.encaps(publicKey);
+        KeyEncapsulationMechanism.KeyAndCiphertext<SymmetricKey> keyAndCiphertext = kem.encaps(publicKey);
         return new HybridCipherText(symmetricScheme
                 .encrypt(plainText, keyAndCiphertext.key), keyAndCiphertext.encapsulatedKey);
     }
@@ -100,7 +100,7 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
     @Override
     public InputStream encrypt(InputStream in, EncryptionKey publicKey) throws IOException {
         //Generate symmetric key and encapsulate it
-        KeyAndCiphertext<SymmetricKey> keyAndCiphertext = kem.encaps(publicKey);
+        KeyEncapsulationMechanism.KeyAndCiphertext<SymmetricKey> keyAndCiphertext = kem.encaps(publicKey);
 
         //Serialize the encapsulated key
         byte[] encapsulatedKey = new JSONConverter().serialize(keyAndCiphertext.encapsulatedKey.getRepresentation())
@@ -117,9 +117,9 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
     }
 
     @Override
-    public OutputStream encrypt(OutputStream out, EncryptionKey publicKey) throws IOException {
+    public OutputStream createEncryptor(OutputStream out, EncryptionKey publicKey) throws IOException {
         //Generate symmetric key and encapsulate it
-        KeyAndCiphertext<SymmetricKey> keyAndCiphertext = kem.encaps(publicKey);
+        KeyEncapsulationMechanism.KeyAndCiphertext<SymmetricKey> keyAndCiphertext = kem.encaps(publicKey);
 
         //Serialize the encapsulated key
         byte[] encapsulatedKey = new JSONConverter().serialize(keyAndCiphertext.encapsulatedKey.getRepresentation())
@@ -134,7 +134,7 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
         out.write(encapsulatedKey);
 
         //Return resulting stream that symmetrically encrypts any input and writes the ciphertext to out
-        return symmetricScheme.encrypt(out, keyAndCiphertext.key);
+        return symmetricScheme.createEncryptor(out, keyAndCiphertext.key);
     }
 
     @Override
@@ -172,7 +172,7 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
     }
 
     @Override
-    public OutputStream decrypt(OutputStream out, DecryptionKey privateKey) {
+    public OutputStream createDecryptor(OutputStream out, DecryptionKey privateKey) {
         return new OutputStream() {
             int byteOffset = 0;
             byte[] keyLenBytes = new byte[4];
@@ -196,7 +196,7 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
 
                         //decaps the encapsulated key
                         SymmetricKey symmetricKey = kem.decaps(encapsulatedKey, privateKey);
-                        decryptedOut = symmetricScheme.decrypt(out, symmetricKey);
+                        decryptedOut = symmetricScheme.createDecryptor(out, symmetricKey);
                     }
                 } else { //we're done reading the encapsulation part and are now getting the symmetric scheme's
                     // ciphertext

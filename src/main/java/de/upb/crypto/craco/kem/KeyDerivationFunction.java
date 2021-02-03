@@ -7,7 +7,7 @@ import de.upb.crypto.math.serialization.StandaloneRepresentable;
  * (typically a symmetric key).
  *
  * @param <T> type of the resulting derived key
- * @author Jan
+ *
  */
 public interface KeyDerivationFunction<T> extends StandaloneRepresentable {
     T deriveKey(KeyMaterial material);

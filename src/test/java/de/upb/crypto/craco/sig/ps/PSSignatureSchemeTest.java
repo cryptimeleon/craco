@@ -1,11 +1,7 @@
 package de.upb.crypto.craco.sig.ps;
 
-import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.sig.SignatureSchemeParams;
-import de.upb.crypto.craco.sig.SignatureSchemeTester;
-import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
-import de.upb.crypto.craco.sig.interfaces.SigningKey;
-import de.upb.crypto.craco.sig.interfaces.VerificationKey;
+import de.upb.crypto.craco.common.plaintexts.MessageBlock;
+import de.upb.crypto.craco.sig.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * JUnit test for the Pointcheval Sanders signature scheme.
  *
- * @author Fynn Dallmeier
+ *
  */
 
 public class PSSignatureSchemeTest {

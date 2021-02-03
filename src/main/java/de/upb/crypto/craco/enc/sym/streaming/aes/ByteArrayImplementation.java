@@ -1,18 +1,21 @@
 package de.upb.crypto.craco.enc.sym.streaming.aes;
 
-import de.upb.crypto.craco.common.interfaces.*;
-import de.upb.crypto.craco.common.interfaces.pe.CiphertextIndex;
-import de.upb.crypto.craco.common.interfaces.pe.KeyIndex;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
+import de.upb.crypto.craco.common.predicate.CiphertextIndex;
+import de.upb.crypto.craco.common.predicate.KeyIndex;
+import de.upb.crypto.craco.enc.CipherText;
+import de.upb.crypto.craco.enc.DecryptionKey;
+import de.upb.crypto.craco.enc.EncryptionKey;
+import de.upb.crypto.craco.enc.SymmetricKey;
 import de.upb.crypto.craco.prf.PrfImage;
 import de.upb.crypto.craco.prf.PrfKey;
 import de.upb.crypto.craco.prf.PrfPreimage;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
-import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
-import de.upb.crypto.math.random.interfaces.RandomGenerator;
-import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
+import de.upb.crypto.math.hash.ByteAccumulator;
+import de.upb.crypto.math.hash.UniqueByteRepresentable;
+import de.upb.crypto.math.random.RandomGenerator;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
 
 import java.util.Arrays;
 
@@ -20,7 +23,7 @@ import java.util.Arrays;
  * A simple implementation of an representable byte array. This byte array can
  * be a plain text or a cipher text or an encryption key and/or a decryption key
  *
- * @author Mirko Jürgens
+ *
  */
 public class ByteArrayImplementation implements PlainText, CipherText, DecryptionKey, EncryptionKey, SymmetricKey,
         KeyIndex, CiphertextIndex, PrfKey, PrfPreimage, PrfImage, UniqueByteRepresentable {
@@ -42,8 +45,7 @@ public class ByteArrayImplementation implements PlainText, CipherText, Decryptio
      * @param numberBytes number of random bytes / length of resulting ByteArrayImplementation
      */
     public static ByteArrayImplementation fromRandom(int numberBytes) {
-        RandomGenerator rng = RandomGeneratorSupplier.getRnd();
-        return new ByteArrayImplementation(rng.getRandomByteArray(numberBytes));
+        return new ByteArrayImplementation(RandomGenerator.getRandomBytes(numberBytes));
     }
 
     public byte[] getData() {

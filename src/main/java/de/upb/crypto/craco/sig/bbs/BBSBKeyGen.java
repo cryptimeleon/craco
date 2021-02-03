@@ -1,14 +1,14 @@
 package de.upb.crypto.craco.sig.bbs;
 
-import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
-import de.upb.crypto.math.pairings.generic.BilinearGroup;
-import de.upb.crypto.math.pairings.type1.supersingular.SupersingularBilinearGroup;
-import de.upb.crypto.math.structures.zn.HashIntoZn;
+import de.upb.crypto.math.structures.groups.counting.CountingBilinearGroup;
+import de.upb.crypto.math.structures.groups.elliptic.BilinearGroup;
+import de.upb.crypto.math.structures.groups.elliptic.type1.supersingular.SupersingularBilinearGroup;
+import de.upb.crypto.math.structures.rings.zn.HashIntoZn;
 
 /**
  * Does the key generation for the BBS-B signature scheme respectively organization in the anonymous credential system
  *
- * @author Fabian Eidens
+ *
  */
 public class BBSBKeyGen {
     private BBSBPublicParameter pp;

@@ -1,9 +1,9 @@
 package de.upb.crypto.craco.sig.ps;
 
-import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.common.RingElementPlainText;
+import de.upb.crypto.craco.common.plaintexts.MessageBlock;
+import de.upb.crypto.craco.common.plaintexts.RingElementPlainText;
+import de.upb.crypto.craco.sig.SignatureKeyPair;
 import de.upb.crypto.craco.sig.SignatureSchemeParams;
-import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
 
 /**
  * Generates an instance of the {@link SignatureSchemeParams} for the {@link PSSignatureScheme}.

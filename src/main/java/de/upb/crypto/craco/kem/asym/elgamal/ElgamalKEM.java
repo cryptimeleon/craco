@@ -1,20 +1,20 @@
 package de.upb.crypto.craco.kem.asym.elgamal;
 
-import de.upb.crypto.craco.common.interfaces.*;
+import de.upb.crypto.craco.enc.*;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalCipherText;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalEncryption;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPlainText;
 import de.upb.crypto.craco.enc.asym.elgamal.ElgamalPrivateKey;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
-import de.upb.crypto.craco.kem.AsymmetricKEM;
+import de.upb.crypto.craco.kem.asym.AsymmetricKEM;
+import de.upb.crypto.math.hash.HashFunction;
 import de.upb.crypto.math.hash.impl.ByteArrayAccumulator;
-import de.upb.crypto.math.interfaces.hash.HashFunction;
-import de.upb.crypto.math.interfaces.structures.Group;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
-import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
+import de.upb.crypto.math.random.RandomGenerator;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.structures.groups.Group;
+import de.upb.crypto.math.structures.groups.GroupElement;
 
 import java.math.BigInteger;
 import java.util.Objects;
@@ -61,7 +61,7 @@ import java.util.Objects;
  * This implementation uses de.upb.crypto.craco.enc.asym.elgamal for Elgamal
  * Encryption
  *
- * @author peter.guenther
+ *
  */
 
 
@@ -151,7 +151,7 @@ public class ElgamalKEM implements AsymmetricKEM<SymmetricKey> {
     public KeyAndCiphertextAndNonce encaps_internal(EncryptionKey pk) {
         HashFunction md = messageDigest;
 
-        byte[] random = RandomGeneratorSupplier.getRnd().getRandomByteArray(md.getOutputLength());
+        byte[] random = RandomGenerator.getRandomBytes(md.getOutputLength());
 
         /*
          * pick random message R and encode as plaintext
@@ -163,8 +163,6 @@ public class ElgamalKEM implements AsymmetricKEM<SymmetricKey> {
          *
          * compute H2(R)
          */
-
-
         ByteArrayImplementation r = new ByteArrayImplementation(md.hash(R));
 
         /* convert random tape to symmetric key k */
