@@ -6,6 +6,7 @@ import de.upb.crypto.craco.common.plaintexts.RingElementPlainText;
 import de.upb.crypto.craco.sig.*;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.rings.cartesian.RingElementVector;
 import de.upb.crypto.math.structures.rings.zn.Zn;
 import de.upb.crypto.math.structures.rings.zn.Zp;
 import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
@@ -14,7 +15,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * Signature scheme that was originally presentet in [1] by Boneh, Boyen and Shacham. The version implemented is the
+ * Signature scheme that was originally presented in [1] by Boneh, Boyen and Shacham. The version implemented is the
  * one presented in [2] which is the extension mentioned in the original paper. The result is a block signature scheme.
  * <p>
  * Bilinear map type: 2
@@ -207,16 +208,8 @@ public class BBSBSignatureScheme implements StandardMultiMessageSignatureScheme 
 
     protected MessageBlock mapToPlaintext(byte[] bytes, int messageBlockLength) {
         //Result will be a vector (zp.injectiveValueOf(bytes), 0, ..., 0)
-        Zp zp = pp.getZp();
-        RingElementPlainText zero = new RingElementPlainText(zp.getZeroElement());
-
-        RingElementPlainText[] msgBlock = new RingElementPlainText[messageBlockLength];
-        msgBlock[0] = new RingElementPlainText(zp.injectiveValueOf(bytes));
-        for (int i = 1; i < msgBlock.length; i++) {
-            msgBlock[i] = zero;
-        }
-
-        return new MessageBlock(msgBlock);
+        return new RingElementVector(pp.getZp().injectiveValueOf(bytes)).pad(pp.getZp().getZeroElement(), messageBlockLength)
+                .map(RingElementPlainText::new, MessageBlock::new);
     }
 
     public BBSBPublicParameter getPublicParameters() {

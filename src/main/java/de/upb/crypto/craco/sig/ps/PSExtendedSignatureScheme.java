@@ -7,6 +7,7 @@ import de.upb.crypto.craco.common.plaintexts.RingElementPlainText;
 import de.upb.crypto.craco.sig.SignatureKeyPair;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.groups.cartesian.GroupElementVector;
 import de.upb.crypto.math.structures.groups.elliptic.BilinearMap;
 import de.upb.crypto.math.structures.rings.zn.Zp;
 
@@ -60,8 +61,7 @@ public class PSExtendedSignatureScheme extends PSSignatureScheme{
      * {@link PSSigningKey} for a {@link PSExtendedSignatureScheme}.
      */
     @Override
-    public SignatureKeyPair<? extends PSExtendedVerificationKey, ? extends PSSigningKey> generateKeyPair(
-            int numberOfMessages) {
+    public SignatureKeyPair<PSExtendedVerificationKey, PSSigningKey> generateKeyPair(int numberOfMessages) {
         // Generate a normal key pair for a Pointcheval Sanders signature scheme
         SignatureKeyPair<? extends PSVerificationKey, ? extends PSSigningKey> shortKey =
                 super.generateKeyPair(numberOfMessages);
@@ -69,8 +69,7 @@ public class PSExtendedSignatureScheme extends PSSignatureScheme{
         // g for enabling optional blinding/unblinding; g must not be the neutral element
         GroupElement group1ElementG = getPp().getBilinearMap().getG1().getGenerator();
         // Y_i enabling optional blinding/unblinding
-        GroupElement[] group1ElementsYi = Arrays.stream(shortKey.getSigningKey().getExponentsYi())
-                .map(y -> group1ElementG.pow(y).compute()).toArray(GroupElement[]::new);
+        GroupElementVector group1ElementsYi = group1ElementG.pow(shortKey.getSigningKey().getExponentsYi());
 
         // Set the extended verification key for a Pointcheval Sanders signature scheme
         final PSVerificationKey shortVerificationKey = shortKey.getVerificationKey();
@@ -79,8 +78,7 @@ public class PSExtendedSignatureScheme extends PSSignatureScheme{
                 shortVerificationKey.getGroup2ElementTildeX(), shortVerificationKey.getGroup2ElementsTildeYi());
 
         // Return a new key pair containing the new extended Verification key for a Pointcheval Sanders signature scheme
-        return new SignatureKeyPair<PSExtendedVerificationKey, PSSigningKey>(extendedVerificationKey,
-                shortKey.getSigningKey());
+        return new SignatureKeyPair<>(extendedVerificationKey, shortKey.getSigningKey());
     }
 
     /**
@@ -94,82 +92,5 @@ public class PSExtendedSignatureScheme extends PSSignatureScheme{
         final BilinearMap bilinearMap = super.getPp().getBilinearMap();
         // Constructor for using the extended Verification key (enabling optional blinding/unblinding)
         return new PSExtendedVerificationKey(bilinearMap.getG1(), bilinearMap.getG2(), repr);
-    }
-
-    /**
-     * Randomizes a signature based on the given randomness.
-     *
-     * @param signature The signature which should be randomized
-     * @param random    A uniformly random picked element used to randomize the signature.
-     *                  This element is needed to prove the actual knowledge of the signature.
-     * @return Randomized variant of the original signature
-     */
-    public PSSignature randomizeExistingSignature(PSSignature signature, Zp.ZpElement random) {
-        // u is an unit from ZP
-        Zp.ZpElement u = getPp().getZp().getUniformlyRandomUnit();
-
-        GroupElement sigma1 = signature.getGroup1ElementSigma1();
-        GroupElement sigma2 = signature.getGroup1ElementSigma2();
-
-        // Calculate the randomized signature (o_1', o_2') = ((o_1)^u,(o_2 (o_1)^r)^u)
-        GroupElement sigma1prime = sigma1.pow(u).compute();
-        GroupElement sigma2prime = sigma2.op(sigma1.pow(random)).pow(u).compute();
-
-        return new PSSignature(sigma1prime, sigma2prime);
-    }
-
-    /**
-     * Generates a blinded signature where the blindingElement is used as the first message element, followed by an
-     * usual list of {@link PlainText} elements
-     *
-     * @param signingKey      The {@link PSSigningKey}
-     * @param verificationKey The {@link PSExtendedVerificationKey}
-     * @param blindingElement The element which contains the randomness in the format of
-     *                        <code>group1ElementG.pow(blindingRandomness).op(Y0.pow(valueToBlind))</code>
-     * @param message         The messages which should be signed in addition to the blinded value
-     * @return A blinded {@link PSSignature} which can be unblinded using
-     * {@link PSExtendedSignatureScheme#unblindSignature(PSSignature, Zp.ZpElement)}
-     */
-    public PSSignature blindSign(PSSigningKey signingKey, PSExtendedVerificationKey verificationKey,
-                                 GroupElement blindingElement, PlainText message) {
-        MessageBlock messageBlock = (MessageBlock) message;
-        if (messageBlock.length() != verificationKey.getGroup1ElementsYi().length - 1) {
-            throw new IllegalArgumentException("Expected 'message' to be one less than the number of messages of an " +
-                    "ordinary signature");
-        }
-
-        Zp zp = getPp().getZp();
-        Zp.ZpElement u = zp.getUniformlyRandomElement();
-
-        // Calculating the signature
-        final GroupElement g1 = verificationKey.getGroup1ElementG();
-        GroupElement sigma1 = g1.pow(u).compute();
-        final Zp.ZpElement signingKeyX = signingKey.getExponentX();
-        GroupElement sigma2 = g1.pow(signingKeyX).op(blindingElement);
-        for (int i = 0; i < messageBlock.length(); ++i) {
-            final GroupElement group1YiElement = verificationKey.getGroup1ElementsYi()[i + 1];
-            RingElementPlainText ringElement = (RingElementPlainText) messageBlock.get(i);
-            Zp.ZpElement zpMessageElement = (Zp.ZpElement) ringElement.getRingElement();
-            sigma2 = sigma2.op(group1YiElement.pow(zpMessageElement));
-        }
-        sigma2 = sigma2.pow(u);
-        return new PSSignature(sigma1, sigma2.compute());
-    }
-
-    /**
-     * Unblinds a signature which was previously blinded using
-     * {@link PSExtendedSignatureScheme#blindSign(PSSigningKey, PSExtendedVerificationKey, GroupElement, PlainText)}
-     *
-     * @param signature          The blinded {@link PSSignature}
-     * @param blindingRandomness The <code>blindingRandomness</code> of the
-     *                           <code>group1ElementG.pow(blindingRandomness).op(Y0.pow(valueToBlind))</code> element
-     *                           which was used for blinding
-     * @return An unblinded {@link PSSignature}
-     */
-    public PSSignature unblindSignature(PSSignature signature, Zp.ZpElement blindingRandomness) {
-        final GroupElement sigma1 = signature.getGroup1ElementSigma1();
-        final GroupElement sigma2 = signature.getGroup1ElementSigma2();
-        final GroupElement unblindedSigma2 = sigma2.op(sigma1.pow(blindingRandomness).inv());
-        return new PSSignature(sigma1, unblindedSigma2.compute());
     }
 }

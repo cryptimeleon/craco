@@ -6,6 +6,7 @@ import de.upb.crypto.math.serialization.annotations.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.Represented;
 import de.upb.crypto.math.structures.groups.Group;
 import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.groups.cartesian.GroupElementVector;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -33,11 +34,17 @@ public class PSVerificationKey implements VerificationKey {
     /**
      * \tilde{Y}_1, ..., \tilde{Y}_n \in G_2 in paper.
      */
-    @Represented(restorer = "[G2]")
-    protected GroupElement[] group2ElementsTildeYi;
+    @Represented(restorer = "G2")
+    protected GroupElementVector group2ElementsTildeYi;
 
-    public PSVerificationKey() {
-        super();
+    public PSVerificationKey(GroupElement group2ElementTildeG, GroupElement group2ElementTildeX, GroupElementVector group2ElementsTildeYi) {
+        this.group2ElementTildeG = group2ElementTildeG;
+        this.group2ElementTildeX = group2ElementTildeX;
+        this.group2ElementsTildeYi = group2ElementsTildeYi;
+    }
+
+    protected PSVerificationKey() {
+        //Constructor to enable ReprUtil to do its work.
     }
 
     public PSVerificationKey(Group groupG2, Representation repr) {
@@ -53,28 +60,16 @@ public class PSVerificationKey implements VerificationKey {
         return group2ElementTildeG;
     }
 
-    public void setGroup2ElementTildeG(GroupElement group2ElementTildeG) {
-        this.group2ElementTildeG = group2ElementTildeG;
-    }
-
     public GroupElement getGroup2ElementTildeX() {
         return group2ElementTildeX;
     }
 
-    public void setGroup2ElementTildeX(GroupElement group2ElementTildeX) {
-        this.group2ElementTildeX = group2ElementTildeX;
-    }
-
-    public GroupElement[] getGroup2ElementsTildeYi() {
+    public GroupElementVector getGroup2ElementsTildeYi() {
         return group2ElementsTildeYi;
     }
 
-    public void setGroup2ElementsTildeYi(GroupElement[] group2ElementsTildeYi) {
-        this.group2ElementsTildeYi = group2ElementsTildeYi;
-    }
-
     public int getNumberOfMessages() {
-        return group2ElementsTildeYi.length;
+        return group2ElementsTildeYi.length();
     }
 
     @Override
@@ -84,13 +79,11 @@ public class PSVerificationKey implements VerificationKey {
         PSVerificationKey that = (PSVerificationKey) o;
         return Objects.equals(group2ElementTildeG, that.group2ElementTildeG) &&
                 Objects.equals(group2ElementTildeX, that.group2ElementTildeX) &&
-                Arrays.equals(group2ElementsTildeYi, that.group2ElementsTildeYi);
+                Objects.equals(group2ElementsTildeYi, that.group2ElementsTildeYi);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(group2ElementTildeG, group2ElementTildeX);
-        result = 31 * result + Arrays.hashCode(group2ElementsTildeYi);
-        return result;
+        return Objects.hash(group2ElementTildeX);
     }
 }

@@ -261,16 +261,8 @@ public class PS18SignatureScheme implements SignatureScheme {
 
     protected MessageBlock mapToPlaintext(byte[] bytes, int messageBlockLength) {
         //Result will be a vector (zp.injectiveValueOf(bytes), 0, ..., 0)
-        Zp zp = pp.getZp();
-        RingElementPlainText zero = new RingElementPlainText(zp.getZeroElement());
-
-        RingElementPlainText[] msgBlock = new RingElementPlainText[messageBlockLength];
-        msgBlock[0] = new RingElementPlainText(zp.injectiveValueOf(bytes));
-        for (int i = 1; i < msgBlock.length; i++) {
-            msgBlock[i] = zero;
-        }
-
-        return new MessageBlock(msgBlock);
+        return new RingElementVector(pp.getZp().injectiveValueOf(bytes)).pad(pp.getZp().getZeroElement(), messageBlockLength)
+                .map(RingElementPlainText::new, MessageBlock::new);
     }
 
     @Override

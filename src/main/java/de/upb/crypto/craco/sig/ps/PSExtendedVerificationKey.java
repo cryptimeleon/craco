@@ -1,6 +1,7 @@
 package de.upb.crypto.craco.sig.ps;
 
 import de.upb.crypto.craco.commitment.pedersen.PedersenCommitmentScheme;
+import de.upb.crypto.craco.protocols.CommonInput;
 import de.upb.crypto.craco.sig.VerificationKey;
 import de.upb.crypto.math.hash.ByteAccumulator;
 import de.upb.crypto.math.hash.UniqueByteRepresentable;
@@ -12,9 +13,9 @@ import de.upb.crypto.math.serialization.annotations.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.Represented;
 import de.upb.crypto.math.structures.groups.Group;
 import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.groups.cartesian.GroupElementVector;
 import de.upb.crypto.math.structures.groups.elliptic.BilinearMap;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 
@@ -32,7 +33,7 @@ import java.util.Objects;
  * message without the signer knowing the content of the message.
  */
 public class PSExtendedVerificationKey extends PSVerificationKey
-        implements VerificationKey, UniqueByteRepresentable {
+        implements VerificationKey, UniqueByteRepresentable, CommonInput {
 
     // Added parameters to enable blindly signing messages in combination with the Pedersen commitment scheme
     // g for enabling optional blinding/unblinding
@@ -42,8 +43,8 @@ public class PSExtendedVerificationKey extends PSVerificationKey
 
     // Y_i for enabling optional blinding/unblinding
     @UniqueByteRepresented
-    @Represented(restorer = "[G1]")
-    private GroupElement[] group1ElementsYi;
+    @Represented(restorer = "G1")
+    private GroupElementVector group1ElementsYi;
 
     /**
      * Extended constructor for the extended verification key in the ACS allowing direct instantiation.
@@ -54,15 +55,16 @@ public class PSExtendedVerificationKey extends PSVerificationKey
      * @param group2ElementTildeX   {@link GroupElement} x_Tilde from {@link Group} 1
      * @param group2ElementsTildeYi Array of {@link GroupElement} containing  Y_i_Tilde from {@link Group} 2
      */
-    public PSExtendedVerificationKey(GroupElement group1Element, GroupElement[] group1ElementsYi,
+    public PSExtendedVerificationKey(GroupElement group1Element, GroupElementVector group1ElementsYi,
                                      GroupElement group2ElementTildeG, GroupElement group2ElementTildeX,
-                                     GroupElement[] group2ElementsTildeYi) {
+                                     GroupElementVector group2ElementsTildeYi) {
+        super(group2ElementTildeG, group2ElementTildeX, group2ElementsTildeYi);
+        this.group1ElementG = group1Element;
+        this.group1ElementsYi = group1ElementsYi;
+    }
+
+    private PSExtendedVerificationKey() {
         super();
-        setGroup1ElementG(group1Element);
-        setGroup1ElementsYi(group1ElementsYi);
-        setGroup2ElementTildeG(group2ElementTildeG);
-        setGroup2ElementTildeX(group2ElementTildeX);
-        setGroup2ElementsTildeYi(group2ElementsTildeYi);
     }
 
     /**
@@ -73,7 +75,6 @@ public class PSExtendedVerificationKey extends PSVerificationKey
      * @param repr    {@link Representation} of {@link PSExtendedVerificationKey}
      */
     public PSExtendedVerificationKey(Group groupG1, Group groupG2, Representation repr) {
-        super();
         new ReprUtil(this).register(groupG1, "G1").register(groupG2, "G2").deserialize(repr);
     }
 
@@ -86,16 +87,8 @@ public class PSExtendedVerificationKey extends PSVerificationKey
         return group1ElementG;
     }
 
-    public void setGroup1ElementG(GroupElement group1ElementG) {
-        this.group1ElementG = group1ElementG;
-    }
-
-    public GroupElement[] getGroup1ElementsYi() {
+    public GroupElementVector getGroup1ElementsYi() {
         return group1ElementsYi;
-    }
-
-    public void setGroup1ElementsYi(GroupElement[] group1ElementsYi) {
-        this.group1ElementsYi = group1ElementsYi;
     }
 
     @Override
@@ -105,14 +98,12 @@ public class PSExtendedVerificationKey extends PSVerificationKey
         if (!super.equals(o)) return false;
         PSExtendedVerificationKey that = (PSExtendedVerificationKey) o;
         return Objects.equals(group1ElementG, that.group1ElementG) &&
-                Arrays.equals(group1ElementsYi, that.group1ElementsYi);
+                Objects.equals(group1ElementsYi, that.group1ElementsYi);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(super.hashCode(), group1ElementG);
-        result = 31 * result + Arrays.hashCode(group1ElementsYi);
-        return result;
+        return Objects.hash(super.hashCode(), group1ElementG);
     }
 
     @Override
