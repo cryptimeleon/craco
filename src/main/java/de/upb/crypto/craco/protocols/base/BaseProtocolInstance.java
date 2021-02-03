@@ -10,13 +10,13 @@ import java.util.HashMap;
 public abstract class BaseProtocolInstance implements TwoPartyProtocolInstance {
     static final String HIGH_LEVEL_PROT_MSGS = "high_level_prot_msgs";
 
-    private BaseProtocol protocol;
-    private String role;
-    protected int round = 0;
+    private final BaseProtocol protocol;
+    private final String role;
+    private int round = 0;
     private HashMap<String, TwoPartyProtocolInstance> newSubprotocolInstances = new HashMap<>();
-    private HashMap<String, TwoPartyProtocolInstance> runningSubprotocolInstances = new HashMap<>();
+    private final HashMap<String, TwoPartyProtocolInstance> runningSubprotocolInstances = new HashMap<>();
     private HashMap<String, Representation> valuesToSendNext = new HashMap<>();
-    private HashMap<String, Representation> valuesReceived = new HashMap<>();
+    private final HashMap<String, Representation> valuesReceived = new HashMap<>();
     private boolean highLevelWantsTerminate = false;
 
     public BaseProtocolInstance(BaseProtocol protocol, String role) {
@@ -55,9 +55,11 @@ public abstract class BaseProtocolInstance implements TwoPartyProtocolInstance {
         ObjectRepresentation toSend = new ObjectRepresentation(); //what to send this round.
 
         //High-level protocol receiving (send()/receive() methods)
-        received.obj().get(HIGH_LEVEL_PROT_MSGS).obj().forEach(e -> {
-            valuesReceived.putIfAbsent(e.getKey(), e.getValue()); //don't allow sender to overwrite unretrieved values in the valuesReceived map.
-        });
+        if (received != null) {
+            received.obj().get(HIGH_LEVEL_PROT_MSGS).obj().forEach(e -> {
+                valuesReceived.putIfAbsent(e.getKey(), e.getValue()); //don't allow sender to overwrite unretrieved values in the valuesReceived map.
+            });
+        }
 
         //Advance subprotocols
         runningSubprotocolInstances.forEach( (name, instance) -> {

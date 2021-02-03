@@ -13,7 +13,7 @@ public interface InteractiveArgument extends TwoPartyProtocol {
 
     @Override
     default String[] getRoleNames() {
-        return new String[]{"prover", "verifier"};
+        return new String[]{PROVER_ROLE, VERIFIER_ROLE};
     }
 
     @Override

@@ -1,5 +1,7 @@
 package de.upb.crypto.craco.protocols.arguments.damgardtechnique;
 
+import de.upb.crypto.craco.commitment.HashThenCommitCommitmentScheme;
+import de.upb.crypto.craco.commitment.pedersen.PedersenCommitmentScheme;
 import de.upb.crypto.craco.common.interfaces.PlainText;
 import de.upb.crypto.craco.protocols.CommonInput;
 import de.upb.crypto.craco.protocols.SecretInput;
@@ -7,9 +9,12 @@ import de.upb.crypto.craco.protocols.arguments.sigma.*;
 import de.upb.crypto.craco.commitment.interfaces.CommitmentPair;
 import de.upb.crypto.craco.commitment.interfaces.CommitmentScheme;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
+import de.upb.crypto.math.hash.impl.VariableOutputLengthHashFunction;
+import de.upb.crypto.math.interfaces.structures.Group;
 import de.upb.crypto.math.serialization.Representation;
 
 import java.math.BigInteger;
+import java.util.Collections;
 
 /**
  * This class provides Damgard's Technique. Damgard's Technique is a construction to improve Sigma-Protocols in order to
@@ -33,7 +38,7 @@ public class DamgardTechnique implements SigmaProtocol {
 
     /**
      *
-     * @param innerProtocol
+     * @param innerProtocol the sigma protocol to transform
      * @param commitmentScheme a commitment scheme for arbitrary bit strings (ByteArrayImplementation)
      */
     public DamgardTechnique(SigmaProtocol innerProtocol, CommitmentScheme commitmentScheme) {
@@ -93,7 +98,7 @@ public class DamgardTechnique implements SigmaProtocol {
     }
 
     @Override
-    public Announcement recreateAnnouncement(CommonInput commonInput, Representation repr) {
+    public DamgardAnnouncement recreateAnnouncement(CommonInput commonInput, Representation repr) {
         return new DamgardAnnouncement(repr, commitmentScheme);
     }
 
@@ -122,5 +127,12 @@ public class DamgardTechnique implements SigmaProtocol {
 
     protected PlainText announcementToCommitmentPlaintext(Announcement innerAnnouncement) {
         return new ByteArrayImplementation(innerAnnouncement.getUniqueByteRepresentation());
+    }
+
+    public static CommitmentScheme generateCommitmentScheme(Group group) {
+        return new HashThenCommitCommitmentScheme(
+                new PedersenCommitmentScheme(group, 1),
+                new VariableOutputLengthHashFunction((group.size().bitLength()-1)/8)
+        );
     }
 }

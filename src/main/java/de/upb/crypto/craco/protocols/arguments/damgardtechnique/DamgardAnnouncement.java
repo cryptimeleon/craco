@@ -1,13 +1,12 @@
 package de.upb.crypto.craco.protocols.arguments.damgardtechnique;
 
-import de.upb.crypto.craco.protocols.arguments.sigma.Announcement;
 import de.upb.crypto.craco.commitment.interfaces.Commitment;
 import de.upb.crypto.craco.commitment.interfaces.CommitmentScheme;
+import de.upb.crypto.craco.protocols.arguments.sigma.Announcement;
 import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
 import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.AnnotatedRepresentationUtil;
 import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.v2.Represented;
 
@@ -46,7 +45,7 @@ class DamgardAnnouncement implements Announcement {
      */
     @Override
     public Representation getRepresentation() {
-        return AnnotatedRepresentationUtil.putAnnotatedRepresentation(this);
+        return ReprUtil.serialize(this);
     }
 
     /**

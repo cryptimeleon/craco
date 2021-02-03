@@ -58,7 +58,7 @@ public class PS18SignatureScheme implements SignatureScheme {
 
         // Precompute for bases in multi-exponentiation
         group2ElementTildeX.precomputePow();
-        group2ElementsTildeYi.map(g -> g.precomputePow());
+        group2ElementsTildeYi.precomputePow();
 
         // Construct secret signing key
         PS18SigningKey sk = new PS18SigningKey(exponentX, exponentsYi);
