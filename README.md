@@ -15,15 +15,10 @@ The constructions provided are:
     * Pointcheval's & Sanders' short randomizable signature scheme [PS16]
 * **Encryption schemes**:
     * ElGamal
-    * Attribute-based:
-        * Waters' ciphertext-policy attribute-based encryption scheme [Wat11]
-        * Goyal et al.'s key-policy attribute-based encryption scheme [GPSW06]
-    * Identity-based:
-        * Fuzzy identity-based encryption [SW05]
-        * Identity based encryption from the Weil pairing [BF01]
 * **Key derivation functions (KDF)**:
     * Implementation based on the Leftover-Hash-Lemma
-* **Key encapsulation mechanisms (KEM)**: We implemented several KEMs based on the encryption schemes implemented in this library. CRACO provides KEMs for [Wat11], [GPSW06], [SW05] and ElGamal. 
+* **Key encapsulation mechanisms (KEM)**: 
+    * ElGamal
 * **Secret sharing schemes**:
     * Shamir's secret sharing scheme [Sha79] and its tree extension
 
