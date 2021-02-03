@@ -19,12 +19,9 @@ public class StreamingAESParams {
 
         StreamingGCMAESPacketMode GCMAESPacket = new StreamingGCMAESPacketMode();
 
-        /*StreamingEncryptionSchemeParams[] toReturn = {new StreamingEncryptionSchemeParams(CBCAES, CBCkp),
+        StreamingEncryptionSchemeParams[] toReturn = {new StreamingEncryptionSchemeParams(CBCAES, CBCkp),
                 new StreamingEncryptionSchemeParams(GCMAES, GCMkp),
-                new StreamingEncryptionSchemeParams(GCMAESPacket, GCMkp)};*/
-        StreamingEncryptionSchemeParams[] toReturn = {
-                new StreamingEncryptionSchemeParams(CBCAES, CBCkp),
-        };
+                new StreamingEncryptionSchemeParams(GCMAESPacket, GCMkp)};
         return toReturn;
     }
 }
