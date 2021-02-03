@@ -4,6 +4,7 @@ import de.upb.crypto.craco.commitment.Commitment;
 import de.upb.crypto.math.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
 import de.upb.crypto.math.structures.groups.GroupElement;
 
 import java.util.Objects;
@@ -21,9 +22,7 @@ public class PedersenCommitment implements Commitment {
 
     @Override
     public Representation getRepresentation() {
-        return new ReprUtil(this)
-                .register(commitment.getStructure(), "G")
-                .serialize();
+        return commitment.getRepresentation();
     }
 
     @Override

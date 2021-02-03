@@ -2,8 +2,8 @@ package de.upb.crypto.craco.protocols.arguments.damgardtechnique;
 
 import de.upb.crypto.craco.protocols.arguments.sigma.Announcement;
 import de.upb.crypto.craco.protocols.arguments.sigma.Response;
-import de.upb.crypto.craco.commitment.interfaces.OpenValue;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
+import de.upb.crypto.craco.commitment.OpenValue;
+import de.upb.crypto.math.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 

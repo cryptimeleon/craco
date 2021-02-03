@@ -1,6 +1,6 @@
 package de.upb.crypto.craco.protocols;
 
-import de.upb.crypto.craco.commitment.interfaces.CommitmentScheme;
+import de.upb.crypto.craco.commitment.CommitmentScheme;
 import de.upb.crypto.craco.protocols.arguments.damgardtechnique.DamgardTechnique;
 import de.upb.crypto.craco.protocols.arguments.sigma.instance.SigmaProtocolInstance;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.DelegateProtocol;
@@ -9,15 +9,14 @@ import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.SendThenDelegateFra
 import de.upb.crypto.craco.protocols.base.BaseProtocol;
 import de.upb.crypto.craco.protocols.base.BaseProtocolInstance;
 import de.upb.crypto.math.expressions.exponent.ExponentExpr;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
-import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
-import de.upb.crypto.math.pairings.generic.BilinearGroup;
-import de.upb.crypto.math.pairings.type3.bn.BarretoNaehrigBilinearGroup;
+import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.groups.cartesian.GroupElementVector;
+import de.upb.crypto.math.structures.groups.counting.CountingBilinearGroup;
+import de.upb.crypto.math.structures.groups.elliptic.BilinearGroup;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.cartesian.ExponentExpressionVector;
-import de.upb.crypto.math.structures.cartesian.GroupElementVector;
-import de.upb.crypto.math.structures.cartesian.RingElementVector;
-import de.upb.crypto.math.structures.zn.Zn;
+import de.upb.crypto.math.structures.rings.cartesian.RingElementVector;
+import de.upb.crypto.math.structures.rings.zn.Zn;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;

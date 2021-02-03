@@ -9,13 +9,14 @@ import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.SendThenDelegateFra
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.setmembership.SetMembershipPublicParameters;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.setmembership.SmallerThanPowerFragment;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrZnVariable;
-import de.upb.crypto.math.interfaces.structures.Group;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
-import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
-import de.upb.crypto.math.pairings.counting.CountingGroup;
-import de.upb.crypto.math.pairings.generic.BilinearGroup;
+import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.groups.counting.CountingGroup;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.structures.zn.Zn;
+import de.upb.crypto.math.structures.groups.Group;
+import de.upb.crypto.math.structures.groups.counting.CountingBilinearGroup;
+import de.upb.crypto.math.structures.groups.elliptic.BilinearGroup;
+
+import de.upb.crypto.math.structures.rings.zn.Zn;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;

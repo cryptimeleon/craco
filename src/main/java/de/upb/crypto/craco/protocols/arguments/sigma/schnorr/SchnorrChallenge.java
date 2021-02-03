@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.protocols.arguments.sigma.schnorr;
 
 import de.upb.crypto.craco.protocols.arguments.sigma.Challenge;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
-import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
+import de.upb.crypto.math.hash.ByteAccumulator;
+import de.upb.crypto.math.random.RandomGenerator;
 import de.upb.crypto.math.serialization.BigIntegerRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 
@@ -36,7 +36,7 @@ public class SchnorrChallenge implements Challenge {
     }
 
     public static SchnorrChallenge random(BigInteger challengeSpaceSize) {
-        return new SchnorrChallenge(RandomGeneratorSupplier.getRnd().getRandomElement(challengeSpaceSize));
+        return new SchnorrChallenge(RandomGenerator.getRandomNumber(challengeSpaceSize));
     }
 
     @Override

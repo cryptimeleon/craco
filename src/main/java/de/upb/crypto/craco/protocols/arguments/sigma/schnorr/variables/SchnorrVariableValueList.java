@@ -2,7 +2,7 @@ package de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables;
 
 import de.upb.crypto.craco.protocols.arguments.sigma.AnnouncementSecret;
 import de.upb.crypto.craco.protocols.arguments.sigma.Response;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
+import de.upb.crypto.math.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.ListRepresentation;
 import de.upb.crypto.math.serialization.Representable;
 import de.upb.crypto.math.serialization.Representation;

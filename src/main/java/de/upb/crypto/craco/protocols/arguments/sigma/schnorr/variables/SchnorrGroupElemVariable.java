@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables;
 
 import de.upb.crypto.math.expressions.group.GroupVariableExpr;
-import de.upb.crypto.math.interfaces.structures.Group;
+import de.upb.crypto.math.structures.groups.Group;
 import de.upb.crypto.math.serialization.Representation;
 
 public class SchnorrGroupElemVariable extends SchnorrVariable implements GroupVariableExpr {

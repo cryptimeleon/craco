@@ -1,16 +1,16 @@
 package de.upb.crypto.craco.protocols.arguments.damgardtechnique;
 
-import de.upb.crypto.craco.commitment.HashThenCommitCommitmentScheme;
+import de.upb.crypto.craco.commitment.hashthencommit.HashThenCommitCommitmentScheme;
 import de.upb.crypto.craco.commitment.pedersen.PedersenCommitmentScheme;
-import de.upb.crypto.craco.common.interfaces.PlainText;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
 import de.upb.crypto.craco.protocols.CommonInput;
 import de.upb.crypto.craco.protocols.SecretInput;
 import de.upb.crypto.craco.protocols.arguments.sigma.*;
-import de.upb.crypto.craco.commitment.interfaces.CommitmentPair;
-import de.upb.crypto.craco.commitment.interfaces.CommitmentScheme;
+import de.upb.crypto.craco.commitment.CommitmentPair;
+import de.upb.crypto.craco.commitment.CommitmentScheme;
 import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
 import de.upb.crypto.math.hash.impl.VariableOutputLengthHashFunction;
-import de.upb.crypto.math.interfaces.structures.Group;
+import de.upb.crypto.math.structures.groups.Group;
 import de.upb.crypto.math.serialization.Representation;
 
 import java.math.BigInteger;

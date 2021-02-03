@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables;
 
 import de.upb.crypto.math.expressions.group.GroupElementExpression;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.hash.ByteAccumulator;
+import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
 
 import java.math.BigInteger;

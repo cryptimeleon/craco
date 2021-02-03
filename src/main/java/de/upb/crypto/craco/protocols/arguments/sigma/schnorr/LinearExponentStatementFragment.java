@@ -10,10 +10,10 @@ import de.upb.crypto.math.expressions.VariableExpression;
 import de.upb.crypto.math.expressions.bool.ExponentEqualityExpr;
 import de.upb.crypto.math.expressions.exponent.ExponentExpr;
 import de.upb.crypto.math.expressions.exponent.ExponentSumExpr;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.hash.ByteAccumulator;
+import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.structures.zn.Zn;
+import de.upb.crypto.math.structures.rings.zn.Zn;
 
 /**
  * Ensures that a equation on exponents (that can be written as) {@code linearExpression(variables) = publicConstant}

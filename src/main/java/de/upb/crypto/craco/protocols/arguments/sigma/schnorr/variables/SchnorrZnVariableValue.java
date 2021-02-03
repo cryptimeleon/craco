@@ -1,9 +1,9 @@
 package de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables;
 
 import de.upb.crypto.math.expressions.Expression;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
+import de.upb.crypto.math.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.structures.zn.Zn;
+import de.upb.crypto.math.structures.rings.zn.Zn;
 
 import java.math.BigInteger;
 import java.util.Objects;

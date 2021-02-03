@@ -5,9 +5,9 @@ import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.SendThenDelegateFra
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrVariableAssignment;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrZnVariable;
 import de.upb.crypto.math.expressions.exponent.ExponentExpr;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.structures.zn.Zn;
+import de.upb.crypto.math.structures.rings.zn.Zn;
 
 /**
  * A fragment to prove that a given variable is in a set of allowed values.

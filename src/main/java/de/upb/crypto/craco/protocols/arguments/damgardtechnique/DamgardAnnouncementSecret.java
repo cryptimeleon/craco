@@ -2,7 +2,7 @@ package de.upb.crypto.craco.protocols.arguments.damgardtechnique;
 
 import de.upb.crypto.craco.protocols.arguments.sigma.Announcement;
 import de.upb.crypto.craco.protocols.arguments.sigma.AnnouncementSecret;
-import de.upb.crypto.craco.commitment.interfaces.CommitmentPair;
+import de.upb.crypto.craco.commitment.CommitmentPair;
 
 public class DamgardAnnouncementSecret implements AnnouncementSecret {
     final AnnouncementSecret innerAnnouncementSecret;

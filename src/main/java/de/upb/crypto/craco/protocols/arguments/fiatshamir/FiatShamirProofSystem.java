@@ -6,7 +6,7 @@ import de.upb.crypto.craco.protocols.arguments.sigma.*;
 import de.upb.crypto.math.hash.impl.ByteArrayAccumulator;
 import de.upb.crypto.math.hash.impl.HashAccumulator;
 import de.upb.crypto.math.hash.impl.VariableOutputLengthHashFunction;
-import de.upb.crypto.math.interfaces.hash.HashFunction;
+import de.upb.crypto.math.hash.HashFunction;
 
 public class FiatShamirProofSystem {
     private final SigmaProtocol protocol;

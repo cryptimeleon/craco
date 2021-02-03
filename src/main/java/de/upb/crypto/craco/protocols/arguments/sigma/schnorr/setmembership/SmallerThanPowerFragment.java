@@ -6,9 +6,9 @@ import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrVa
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrZnVariable;
 import de.upb.crypto.math.expressions.exponent.ExponentEmptyExpr;
 import de.upb.crypto.math.expressions.exponent.ExponentExpr;
-import de.upb.crypto.math.pairings.generic.BilinearGroup;
-import de.upb.crypto.math.structures.integers.IntegerRing;
-import de.upb.crypto.math.structures.zn.Zn;
+import de.upb.crypto.math.structures.groups.elliptic.BilinearGroup;
+import de.upb.crypto.math.structures.rings.integers.IntegerRing;
+import de.upb.crypto.math.structures.rings.zn.Zn;
 
 import java.math.BigInteger;
 import java.util.stream.Collectors;

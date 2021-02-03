@@ -2,7 +2,7 @@ package de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables;
 
 import de.upb.crypto.math.expressions.exponent.ExponentVariableExpr;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.structures.zn.Zn;
+import de.upb.crypto.math.structures.rings.zn.Zn;
 
 public class SchnorrZnVariable extends SchnorrVariable implements ExponentVariableExpr {
     public final Zn zn;

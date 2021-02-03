@@ -1,14 +1,14 @@
 package de.upb.crypto.craco.protocols.arguments.damgardtechnique;
 
-import de.upb.crypto.craco.commitment.interfaces.Commitment;
-import de.upb.crypto.craco.commitment.interfaces.CommitmentScheme;
+import de.upb.crypto.craco.commitment.Commitment;
+import de.upb.crypto.craco.commitment.CommitmentScheme;
 import de.upb.crypto.craco.protocols.arguments.sigma.Announcement;
 import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
+import de.upb.crypto.math.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
 
 /**
  * The DamgardAnnouncement is the commitment of an announcement of the original Sigma-Protocol
