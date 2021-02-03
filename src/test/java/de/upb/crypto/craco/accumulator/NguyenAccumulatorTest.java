@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.accumulator;
 
-import de.upb.crypto.craco.accumulators.nguyen.*;
-import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.craco.accumulator.nguyen.*;
+import de.upb.crypto.math.structures.rings.zn.Zp;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,7 +9,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.*;
 
 

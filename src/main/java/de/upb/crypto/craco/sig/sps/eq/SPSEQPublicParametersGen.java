@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.sig.sps.eq;
 
-import de.upb.crypto.math.pairings.counting.CountingBilinearGroup;
-import de.upb.crypto.math.pairings.generic.BilinearGroup;
-import de.upb.crypto.math.pairings.type3.bn.BarretoNaehrigBilinearGroup;
+import de.upb.crypto.math.structures.groups.counting.CountingBilinearGroup;
+import de.upb.crypto.math.structures.groups.elliptic.BilinearGroup;
+import de.upb.crypto.math.structures.groups.elliptic.type3.bn.BarretoNaehrigBilinearGroup;
 
 public class SPSEQPublicParametersGen {
     /**

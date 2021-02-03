@@ -1,17 +1,17 @@
 package de.upb.crypto.craco.sig.ps18;
 
-import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.common.RingElementPlainText;
-import de.upb.crypto.craco.common.interfaces.PlainText;
-import de.upb.crypto.craco.sig.interfaces.Signature;
-import de.upb.crypto.craco.sig.interfaces.SigningKey;
-import de.upb.crypto.craco.sig.interfaces.VerificationKey;
+import de.upb.crypto.craco.common.plaintexts.MessageBlock;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
+import de.upb.crypto.craco.common.plaintexts.RingElementPlainText;
+import de.upb.crypto.craco.sig.Signature;
+import de.upb.crypto.craco.sig.SigningKey;
+import de.upb.crypto.craco.sig.VerificationKey;
 import de.upb.crypto.craco.sig.ps.PSPublicParameters;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.structures.zn.HashIntoZp;
-import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.rings.zn.HashIntoZp;
+import de.upb.crypto.math.structures.rings.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
 /**
  * This class implements the signature scheme from Pointcheval and Sanders 2018 in
@@ -20,7 +20,7 @@ import de.upb.crypto.math.structures.zn.Zp.ZpElement;
  * However, the reduction adversary has to also guess in which random oracle
  * query the right message is, so the reduction loses a poly factor in success probability.
  *
- * @author Raphael Heitjohann
+ *
  */
 public class PS18ROMSignatureScheme extends PS18SignatureScheme {
 
@@ -49,7 +49,7 @@ public class PS18ROMSignatureScheme extends PS18SignatureScheme {
         MessageBlock messageBlock = (MessageBlock) plainText;
         PS18SigningKey sk = (PS18SigningKey) secretKey;
 
-        if (messageBlock.size() != sk.getNumberOfMessages()) {
+        if (messageBlock.length() != sk.getNumberOfMessages()) {
             throw new IllegalArgumentException("Message length does not match length " +
                     "supported by signing key.");
         }

@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.kem;
 
-
-import de.upb.crypto.craco.common.interfaces.*;
-import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
+import de.upb.crypto.craco.enc.*;
+import de.upb.crypto.math.hash.UniqueByteRepresentable;
 import de.upb.crypto.math.serialization.Representation;
 
 /**

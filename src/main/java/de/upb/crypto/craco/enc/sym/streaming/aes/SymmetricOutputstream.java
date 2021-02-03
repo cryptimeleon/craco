@@ -35,7 +35,6 @@ abstract class SymmetricOutputstream extends OutputStream {
             // CipherOutputStream now.
             decryptedOut.write(b);
         }
-
     }
 
     protected abstract void setupOutputStream();
@@ -44,7 +43,6 @@ abstract class SymmetricOutputstream extends OutputStream {
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-
         if (byteOffset < ivLengthInBytes)
             for (int i = off; i < off + len; i++) {
                 write(b[i]);

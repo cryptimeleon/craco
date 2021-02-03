@@ -1,11 +1,11 @@
 package de.upb.crypto.craco.sig.ps18;
 
-import de.upb.crypto.craco.sig.interfaces.Signature;
-import de.upb.crypto.math.interfaces.structures.Group;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.craco.sig.Signature;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.structures.groups.Group;
+import de.upb.crypto.math.structures.groups.GroupElement;
 
 import java.util.Objects;
 
@@ -13,7 +13,7 @@ import java.util.Objects;
  * Class for a signature of the Pointcheval Sanders 2018 (Section 4.3) signature scheme
  * extended in the Random Oracle Model to reduce signature size.
  *
- * @author Raphael Heitjohann
+ *
  */
 public class PS18ROMSignature implements Signature {
     /**

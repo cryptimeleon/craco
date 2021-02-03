@@ -1,20 +1,20 @@
 package de.upb.crypto.craco.sig.bbs;
 
-import de.upb.crypto.craco.sig.interfaces.Signature;
-import de.upb.crypto.math.interfaces.structures.Group;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.craco.sig.Signature;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
-import de.upb.crypto.math.structures.zn.Zn;
-import de.upb.crypto.math.structures.zn.Zn.ZnElement;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.structures.groups.Group;
+import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.rings.zn.Zn;
+import de.upb.crypto.math.structures.rings.zn.Zn.ZnElement;
 
 import java.util.Objects;
 
 /**
  * Class for a signature of the BBS-A and BBS-B signature scheme.
  *
- * @author Fabian Eidens
+ *
  */
 public class BBSABSignature implements Signature {
 

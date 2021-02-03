@@ -1,20 +1,16 @@
 package de.upb.crypto.craco.sig.sps.eq;
 
-import de.upb.crypto.craco.common.GroupElementPlainText;
-import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.common.interfaces.PlainText;
-import de.upb.crypto.craco.sig.interfaces.StructurePreservingSignatureEQScheme;
-import de.upb.crypto.craco.sig.interfaces.Signature;
-import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
-import de.upb.crypto.craco.sig.interfaces.SigningKey;
-import de.upb.crypto.craco.sig.interfaces.VerificationKey;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.craco.common.plaintexts.GroupElementPlainText;
+import de.upb.crypto.craco.common.plaintexts.MessageBlock;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
+import de.upb.crypto.craco.sig.*;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
-import de.upb.crypto.math.structures.zn.Zn;
-import de.upb.crypto.math.structures.zn.Zp;
-import de.upb.crypto.math.structures.zn.Zp.ZpElement;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.rings.zn.Zn;
+import de.upb.crypto.math.structures.rings.zn.Zp;
+import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -32,7 +28,7 @@ import java.util.stream.IntStream;
  * and Constant-Size Anonymous Credentials", in Cryptology ePrint Archive, Report
  * 2014/944, 2014.
  *
- * @author Fabian Eidens
+ *
  */
 
 public class SPSEQSignatureScheme implements StructurePreservingSignatureEQScheme {
@@ -102,12 +98,12 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
 
         SPSEQSigningKey sk = (SPSEQSigningKey) secretKey;
 
-        if (messageBlock.size() != sk.getNumberOfMessages()) {
+        if (messageBlock.length() != sk.getNumberOfMessages()) {
             throw new IllegalArgumentException("Not a valid block size for this scheme. Has to be "
-                    + sk.getNumberOfMessages() + ", but it is" + messageBlock.size());
+                    + sk.getNumberOfMessages() + ", but it is" + messageBlock.length());
         }
-        if (!(messageBlock.size() > 1)) {
-            throw new IllegalArgumentException("Number of messages l has to be greater 1, but it is: " + messageBlock.size());
+        if (!(messageBlock.length() > 1)) {
+            throw new IllegalArgumentException("Number of messages l has to be greater 1, but it is: " + messageBlock.length());
         }
 
 
@@ -241,7 +237,7 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
         // apply pow(mu) to every message element: M_i^{mu}
         return new MessageBlock(
                 ((MessageBlock) plainText)
-                        .parallelStream()
+                        .stream()
                         .map(m -> ((GroupElementPlainText) m).get().pow(mu).compute())
                         .map(GroupElementPlainText::new)
                         .collect(Collectors.toList())

@@ -1,7 +1,7 @@
 package de.upb.crypto.craco.kem;
 
-import de.upb.crypto.math.interfaces.hash.ByteAccumulator;
-import de.upb.crypto.math.interfaces.hash.UniqueByteRepresentable;
+import de.upb.crypto.math.hash.ByteAccumulator;
+import de.upb.crypto.math.hash.UniqueByteRepresentable;
 
 import java.util.Objects;
 
@@ -9,7 +9,7 @@ import java.util.Objects;
  * The most basic implementation of a {@link KeyMaterial} based on a {@link UniqueByteRepresentable}.
  * It is extracted from a source of randomness with a well defined amount of min-entropy.
  *
- * @author Jan, refactoring: Mirko Jürgens
+ *
  */
 public class UniqueByteKeyMaterial implements KeyMaterial {
 

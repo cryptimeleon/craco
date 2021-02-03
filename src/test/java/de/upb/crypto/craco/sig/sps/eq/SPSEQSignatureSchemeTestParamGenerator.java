@@ -1,29 +1,23 @@
 package de.upb.crypto.craco.sig.sps.eq;
 
-import de.upb.crypto.craco.common.GroupElementPlainText;
-import de.upb.crypto.craco.common.MessageBlock;
+import de.upb.crypto.craco.common.plaintexts.GroupElementPlainText;
+import de.upb.crypto.craco.common.plaintexts.MessageBlock;
+import de.upb.crypto.craco.sig.SignatureKeyPair;
 import de.upb.crypto.craco.sig.SignatureSchemeParams;
-import de.upb.crypto.craco.sig.interfaces.SignatureKeyPair;
 
 /**
  * Generates an instance of the {@link SignatureSchemeParams} for the {@link SPSEQSignatureScheme}.
  */
 public class SPSEQSignatureSchemeTestParamGenerator {
-    static long timerStart = 0;
-
     public static SignatureSchemeParams generateParams(int securityParam, int numMessages) {
         // setup scheme
-        measureTime(null);
         SPSEQPublicParametersGen ppSetup = new SPSEQPublicParametersGen();
-        SPSEQPublicParameters pp = ppSetup.generatePublicParameter(securityParam, false);
-        measureTime("Setup");
+        SPSEQPublicParameters pp = ppSetup.generatePublicParameter(securityParam, true);
         SPSEQSignatureScheme spseqScheme = new SPSEQSignatureScheme(pp);
 
         // generate two different key pairs to test
-        measureTime(null);
         SignatureKeyPair<? extends SPSEQVerificationKey, ? extends SPSEQSigningKey> keyPair = spseqScheme.generateKeyPair(
                 numMessages);
-        measureTime("KeyGen");
         SignatureKeyPair<? extends SPSEQVerificationKey, ? extends SPSEQSigningKey> wrongKeyPair;
         do {
             wrongKeyPair = spseqScheme.generateKeyPair(numMessages);
@@ -46,16 +40,5 @@ public class SPSEQSignatureSchemeTestParamGenerator {
         MessageBlock wrongMessageBlock = new MessageBlock(wrongMessages);
 
         return new SignatureSchemeParams(spseqScheme, pp, messageBlock, wrongMessageBlock, keyPair, wrongKeyPair);
-    }
-
-
-    protected static void measureTime(String str) {
-        if (timerStart == 0) {
-            timerStart = System.currentTimeMillis();
-        } else {
-            long end = System.currentTimeMillis();
-            System.out.println(str + ": " + ((end - timerStart) / 1000) + "s, " + ((end - timerStart) % 1000) + "ms");
-            timerStart = 0;
-        }
     }
 }

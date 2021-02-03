@@ -1,20 +1,20 @@
 package de.upb.crypto.craco.enc.asym.elgamal;
 
-import de.upb.crypto.craco.common.interfaces.DecryptionKey;
-import de.upb.crypto.math.interfaces.structures.Group;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
+import de.upb.crypto.craco.enc.DecryptionKey;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
-import de.upb.crypto.math.structures.zn.Zn;
-import de.upb.crypto.math.structures.zn.Zn.ZnElement;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.structures.groups.Group;
+import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.rings.zn.Zn;
+import de.upb.crypto.math.structures.rings.zn.Zn.ZnElement;
 
 import java.util.Objects;
 
 /**
  * An elgamal private key.
  *
- * @author Mirko Jürgens
+ *
  */
 public class ElgamalPrivateKey implements DecryptionKey {
 

@@ -1,18 +1,18 @@
 package de.upb.crypto.craco.sig.ps18;
 
-import de.upb.crypto.craco.common.MessageBlock;
-import de.upb.crypto.craco.common.RingElementPlainText;
-import de.upb.crypto.craco.common.interfaces.PlainText;
-import de.upb.crypto.craco.sig.interfaces.*;
+import de.upb.crypto.craco.common.plaintexts.MessageBlock;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
+import de.upb.crypto.craco.common.plaintexts.RingElementPlainText;
+import de.upb.crypto.craco.sig.*;
 import de.upb.crypto.craco.sig.ps.PSPublicParameters;
-import de.upb.crypto.math.interfaces.structures.Group;
-import de.upb.crypto.math.interfaces.structures.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
-import de.upb.crypto.math.serialization.annotations.v2.ReprUtil;
-import de.upb.crypto.math.serialization.annotations.v2.Represented;
-import de.upb.crypto.math.structures.cartesian.GroupElementVector;
-import de.upb.crypto.math.structures.cartesian.RingElementVector;
-import de.upb.crypto.math.structures.zn.Zp;
+import de.upb.crypto.math.serialization.annotations.ReprUtil;
+import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.structures.groups.Group;
+import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.groups.cartesian.GroupElementVector;
+import de.upb.crypto.math.structures.rings.cartesian.RingElementVector;
+import de.upb.crypto.math.structures.rings.zn.Zp;
 
 import java.util.Objects;
 import java.util.stream.IntStream;
@@ -35,7 +35,7 @@ public class PS18SignatureScheme implements SignatureScheme {
         return ReprUtil.serialize(this);
     }
 
-    public SignatureKeyPair<? extends PS18VerificationKey, ? extends PS18SigningKey>
+    public SignatureKeyPair<PS18VerificationKey, PS18SigningKey>
     generateKeyPair(int numberOfMessages) {
         // get exponent field and store group2 for shorter usage
         Group group2 = pp.getBilinearMap().getG2();
@@ -90,7 +90,7 @@ public class PS18SignatureScheme implements SignatureScheme {
         MessageBlock messageBlock = (MessageBlock) plainText;
         PS18SigningKey sk = (PS18SigningKey) secretKey;
 
-        if (messageBlock.size() != sk.getNumberOfMessages()) {
+        if (messageBlock.length() != sk.getNumberOfMessages()) {
             throw new IllegalArgumentException("Message length does not match length " +
                     "supported by signing key.");
         }

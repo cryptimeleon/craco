@@ -1,8 +1,8 @@
 package de.upb.crypto.craco.enc.sym.streaming.aes;
 
-import de.upb.crypto.craco.common.interfaces.*;
-import de.upb.crypto.math.random.interfaces.RandomGenerator;
-import de.upb.crypto.math.random.interfaces.RandomGeneratorSupplier;
+import de.upb.crypto.craco.common.plaintexts.PlainText;
+import de.upb.crypto.craco.enc.*;
+import de.upb.crypto.math.random.RandomGenerator;
 import de.upb.crypto.math.serialization.BigIntegerRepresentation;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
@@ -36,7 +36,7 @@ import java.util.Arrays;
  * decrypted ciphertext will be written when you finished writing your cipher
  * text (and close the stream).
  *
- * @author Mirko Jürgens
+ *
  */
 public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
     public static final int DEFAULT_PACKET_SIZE = 5 * 1024;
@@ -49,7 +49,7 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
 
     private final int tagLength = 128; // in bit, needed for GCM
 
-    private final byte[] initialVector = new byte[initialVectorLength / 8];
+    private byte[] initialVector = new byte[initialVectorLength / 8];
 
     private final String transformation = "AES/GCM/PKCS5Padding";
     
@@ -364,7 +364,7 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
      * a packet.
      */
     @Override
-    public OutputStream encrypt(OutputStream out, EncryptionKey publicKey) throws IOException {
+    public OutputStream createEncryptor(OutputStream out, EncryptionKey publicKey) throws IOException {
         if (!(publicKey instanceof ByteArrayImplementation))
             throw new IllegalArgumentException("Not a valid symmetric key for this scheme");
         ByteArrayImplementation symmetricKey = (ByteArrayImplementation) publicKey;
@@ -667,7 +667,7 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
      * a packet.
      */
     @Override
-    public OutputStream decrypt(OutputStream out, DecryptionKey privateKey) throws IOException {
+    public OutputStream createDecryptor(OutputStream out, DecryptionKey privateKey) throws IOException {
         if (!(privateKey instanceof ByteArrayImplementation))
             throw new IllegalArgumentException("Not a valid symmetric key for this scheme");
         // setting up the scheme
@@ -827,10 +827,7 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
     }
 
     private void createRandomIV() {
-        RandomGenerator gen = RandomGeneratorSupplier.getRnd();
-        for (int i = 0; i < initialVectorLength / 8; i++) {
-            initialVector[i] = gen.getRandomElement(BigInteger.valueOf(256)).byteValue();
-        }
+        initialVector = RandomGenerator.getRandomBytes(initialVectorLength / 8);
     }
 
     /**
@@ -840,13 +837,7 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
      * @return the representable symmetric key
      */
     public SymmetricKey generateSymmetricKey() {
-        RandomGenerator gen = RandomGeneratorSupplier.getRnd();
-        // since every entry stores 8 bits we need 1/8 of the bit-length.
-        byte[] result = new byte[symmetricKeyLength / 8];
-        for (int i = 0; i < symmetricKeyLength / 8; i++) {
-            result[i] = gen.getRandomElement(BigInteger.valueOf(256)).byteValue();
-        }
-        return new ByteArrayImplementation(result);
+        return new ByteArrayImplementation(RandomGenerator.getRandomBytes(symmetricKeyLength / 8));
     }
 
     @Override

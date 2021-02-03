@@ -56,16 +56,34 @@ dependencies {
 test {
     useJUnitPlatform()
     maxParallelForks 4
-    //we want display the following test events
+    // we want to display the following test events
     testLogging {
         events "PASSED", "STARTED", "FAILED", "SKIPPED"
     }
+    // a collection to track failed tests
+    ext.failedTests = []
+
+    afterTest { descriptor, result ->
+        if (result.resultType == TestResult.ResultType.FAILURE) {
+            String failedTest = "${descriptor.className}::${descriptor.name}"
+            logger.debug("Adding " + failedTest + " to failedTests...")
+            failedTests << [failedTest]
+        }
+    }
+
     afterSuite { desc, result ->
         if (!desc.parent) { // will match the outermost suite
             def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
             def startItem = '|  ', endItem = '  |'
             def repeatLength = startItem.length() + output.length() + endItem.length()
             println('\n' + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength))
+            // logs each failed test
+            if (!failedTests.empty) {
+                logger.lifecycle("Failed tests:")
+                failedTests.each { failedTest ->
+                    logger.lifecycle("${failedTest}")
+                }
+            }
         }
     }
 }
@@ -81,8 +99,15 @@ task javadocLatex(type: Javadoc) {
     options.header = "<script type\"text/javascript&\" src=\"" +
             "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?" +
             "config=TeX-MML-AM_CHTML\"></script>"
+    // reduce javadoc linting
+    options.addBooleanOption('Xdoclint:none', true)
 }
 
+java {
+    registerFeature("tests") {
+        usingSourceSet(sourceSets.test)
+    }
+}
 
 publishing {
     publications {
