@@ -104,16 +104,16 @@ public class StreamingEncryptionSchemeTest {
             ByteArrayOutputStream cipherOut = new ByteArrayOutputStream();
             ByteArrayOutputStream plainOut = new ByteArrayOutputStream();
             // let encryptingOut write the encrypted bytes to cipherOut
+            // important to close the encrypting output stream before decrypting else not all will be written out
             try (OutputStream encryptingOut = encryptionScheme.createEncryptor(cipherOut, keyPair.getPk())) {
                 encryptingOut.write(randomBytes);
-                System.out.println("Testing the createDecryptor(OutputStream plainOut, DecryptionKey sk) for "
-                        + encryptionScheme.getClass().getName());
-                // let decryptingOut write the decrypted bytes to plainOut
-                try (OutputStream decryptingOut = encryptionScheme.createDecryptor(plainOut, keyPair.getSk())) {
-                    decryptingOut.write(cipherOut.toByteArray());
-                }
             }
-
+            System.out.println("Testing the createDecryptor(OutputStream plainOut, DecryptionKey sk) for "
+                    + encryptionScheme.getClass().getName());
+            // let decryptingOut write the decrypted bytes to plainOut
+            try (OutputStream decryptingOut = encryptionScheme.createDecryptor(plainOut, keyPair.getSk())) {
+                decryptingOut.write(cipherOut.toByteArray());
+            }
             System.out.println("Asserting the results...");
             assertArrayEquals(randomBytes, plainOut.toByteArray());
         } catch (IOException e) {
