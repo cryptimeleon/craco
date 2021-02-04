@@ -1,10 +1,37 @@
-[![Build Status](https://travis-ci.com/upbcuk/upb.crypto.craco.svg?branch=master)](https://travis-ci.com/upbcuk/upb.crypto.craco)
-## upb.crypto.craco
-**WARNING: this library is meant to be used for prototyping and as a research tool *only*. It has not been sufficiently vetted to use in production.**
+![Build Status](https://github.com/upbcuk/upb.crypto.craco/workflows/Java%20CI/badge.svg)
+## Craco
 
-CRACO (CRyptogrAphic COnstructions) is a library providing cryptographic construction mainly focused on attribute-based schemes.
-The library is build upon the math library [upb.crypto.math](https://github.com/upbcuk/upb.crypto.math).
+Craco (CRyptogrAphic COnstructions) is a Java library providing implementations of various cryptographic primitives and low-level constructions. This includes primitives such as commitment schemes, signature schemes, and much more.
 
+The goal of Craco is to provide common cryptographic schemes for usage in more high-level protocols as well as to offer facilities for improving the process of implementing more low-level schemes such as signature and encryption schemes.
+
+Craco also includes mathematical building blocks as provided by the [Math library](https://github.com/upbcuk/upb.crypto.craco).
+
+
+## Security Disclaimer
+**WARNING: This library is meant to be used for prototyping and as a research tool *only*. It has not been sufficiently vetted for use in security-critical production environments. All implementations are to be considered experimental.**
+
+## Table of Contents
+Add this last
+
+## How to Install
+- java 8 library obtainable via maven central (once its actually up there)
+
+### Maven
+- How maven dependency configuration should look like
+
+### Gradle
+- How to add it to build.gradle
+
+## Versioning
+Craco adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## Changelog
+The changelog can be found [here](https://github.com/upbcuk/upb.crypto.craco/blob/master/CHANGELOG.md).
+
+## Features
+
+### Implemented Schemes
 The constructions provided are:
 
 * **Accumulators**:
@@ -13,84 +40,46 @@ The constructions provided are:
     * Pedersen's commitment scheme [Ped92]
 * **Digital signature schemes**:
     * Pointcheval's & Sanders' short randomizable signature scheme [PS16]
+    * An extension of Boneh's, Boyen's and Shacham's signature scheme from [Eid15]
+    * Pointcheval's & Sanders' modified short randomizable signature scheme (with and without ROM) [PS18]
+    * Fuchsbauer's, Hanser's and Slamanig's structure-preserving signature scheme on equivalence classes [FHS14]
 * **Encryption schemes**:
     * ElGamal
-* **Key derivation functions (KDF)**:
-    * Implementation based on the Leftover-Hash-Lemma
+    * Streaming AES Encryption using CBC and GCM modes of operation
 * **Key encapsulation mechanisms (KEM)**: 
     * ElGamal
 * **Secret sharing schemes**:
     * Shamir's secret sharing scheme [Sha79] and its tree extension
+    
+### ABE, ABE-KEM and Group Signatures
+Craco does not provide such high-level constructions.
+
+You can find our attribute-based encryption schemes and key encapsulation mechanisms [here](https://github.com/upbcuk/upb.crypto.predenc).
+
+Group signatures can be found [here](https://github.com/upbcuk/upb.crypto.groupsig).
+    
+## Documentation
+
+We have a documentation page for our combined libraries [here](https://upbcuk.github.io/).
 
 ## Example Code
 
-As a starting point, we give code examples for common tasks using this library.
+- Include example here or link to one in the docs?
+- We do not have a tutorial specific to Craco in the docs.
 
-#### Attribute-Based Encryption
+## Dependencies
 
-The following example code illustrates the usage of [Wat11] ABE scheme. 
-It also applies to any other ABE scheme.
+Craco relies on the following dependencies:
 
-```java
-/*
- * Generate algorithm parameters:
- * 80 = security level, 5 = the maximum number of attributes in a key, 
- * 5 = maximum number of leaf-node attributes in a policy,
- * usage of Water's hash function = false,
- * debug mode = false
- */
-ABECPWat11Setup setup = new ABECPWat11Setup();
-ABECPWat11PublicParameters pp = setup.doKeyGen(80, 5, 5, false, false);
+- [upb.crypto.math](https://github.com/upbcuk/upb.crypto.math) version 2.0.0 for mathematical foundations
+- [Reflections](https://github.com/ronmamo/reflections) version 0.9.10 for testing (maybe update the version?)
+- [JUnit](https://junit.org/junit5/) versions 4.12 and 5 for testing
 
-// set up the encryption scheme using pp
-PredicateEncryptionScheme enc = new ABECPWat11(setup.getPublicParameters());
-
-// get master secret key for the decryption key generation
-MasterSecret masterSecret = setup.getMasterSecret();
-
-/* Key generation */
-
-/* Generate a policy for the encryption key (CipherTextIndex)
- * 
- * ((A,B)'1 ,(B, C, D)'2)'2 := (A + B) * (CD + DE + CE)
- */
-ThresholdPolicy leftNode = new ThresholdPolicy(1, new StringAttribute("A"), new StringAttribute("B"));
-ThresholdPolicy rightNode = new ThresholdPolicy(2, new StringAttribute("C"), new StringAttribute("D"), new StringAttribute("E"));
-CiphertextIndex ciphertextIndex = new ThresholdPolicy(2, leftNode, rightNode);
-
-// Generate encryption key using the policy
-EncryptionKey encryptionKey = predicateEncryptionScheme.generateEncryptionKey(ciphertextIndex);
-
-// Generate a KeyIndex for the decryption key, here: {A, B, C, D}
-KeyIndex keyIndex = new SetOfAttributes(new StringAttribute("A"),  new StringAttribute("C"), new StringAttribute("D"));
-
-// Generate decryption key using master secret key and key index
-DecryptionKey decryptionKey = predicateEncryptionScheme.generateDecryptionKey(masterSecret, keyIndex);
-
-
-/* Encrypting an random element */
-
-// Sample random group element
-GroupElement randomElement = publicParameters.getGroupGT().getUniformlyRandomElement();
-PlainText plainText = new GroupElementPlainText(randomElement);
-
-// Encrypt it
-CipherText cipherText = predicateEncryptionScheme.encrypt(plainText, encryptionKey);
-
-// Decrypt it
-PlainText decryptedPlainText = predicateEncryptionScheme.decrypt(cipherText, decryptionKey);
-
-```
-
-The example above is a ciphertext-policy ABE scheme. That is, we encrypt a ciphertext under a policy and equip the decryption key with a set of attributes.
-If you want to use a key-policy ABE scheme like [GPSW06] this would be done the other way around, i.e. we equip the ciphertext with a set of attributes and the decryption key with a policy.
-To be precise the decryption key's `KeyIndex` then is a policy and the `CiphertextIndex` a set of attributes.
+## How to Contribute
+Our documentation page includes [information for contributors](https://upbcuk.github.io/contributors/contributing.html).
+This includes information on the build process.
 
 ## References
-
-[BF01] Dan Boneh and Matt Franklin. "Identity-Based Encryption from the Weil Pairing". In: Advances in Cryptology — CRYPTO 2001. CRYPTO 2001. Ed. by Joe Kilian. Vol. 2139. Lecture Notes in Computer Science.  Springer, Berlin, Heidelberg, August 2001, pp. 213-229.
-
-[GPSW06] Vipul Goyal, Omkant Pandey, Amit Sahai, and Brent Waters. "Attribute-based encryption for fine-grained access control of encrypted data". In: ACM Conference on Computer and Communications Security. ACM, 2006, pages 89–98.
 
 [Ngu05] Lan Nguyen. “Accumulators from Bilinear Pairings and Applications”. In: Topics
 in Cryptology – CT-RSA 2005. Ed. by Alfred Menezes. Vol. 3376. Lecture Notes in
@@ -107,10 +96,6 @@ Computer Science. Springer, Heidelberg, February 2016, pp. 111–126.
 
 [Sha79] Adi Shamir. “How to Share a Secret”. In: Communications of the Association for
 Computing Machinery 22.11 (November 1979), pp. 612–613.
-
-[Wat11] Brent Waters. Ciphertext-policy attribute-based encryption: An
-expressive, efficient, and provably secure realization. In Public Key
-Cryptography. Springer, 2011, pp. 53–70.
 
 ## Notes
 
