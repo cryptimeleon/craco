@@ -14,7 +14,7 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 /**
- * Holds an ordered list of SchnorrVariableValues.
+ * Holds an ordered list of {@link SchnorrVariableValue}s.
  */
 public class SchnorrVariableValueList implements SchnorrVariableAssignment, AnnouncementSecret, Response {
     private final LinkedHashMap<SchnorrVariable, SchnorrVariableValue> variableValues;
@@ -39,8 +39,8 @@ public class SchnorrVariableValueList implements SchnorrVariableAssignment, Anno
     }
 
     /**
-     * Creates the list by ordering the given values lexicographically by their name
-     * @param nameValueMap variableName -> variableValue
+     * Creates the list by ordering the given values lexicographically by their name.
+     * @param nameValueMap a map mapping variable names to their variable values
      */
     public SchnorrVariableValueList(Map<String, SchnorrVariableValue> nameValueMap) {
         this(nameValueMap.entrySet().stream()

@@ -5,7 +5,7 @@ import de.upb.crypto.craco.protocols.SecretInput;
 import de.upb.crypto.craco.protocols.TwoPartyProtocol;
 
 /**
- * An argument, i.e. a two-party protocol with roles "prover" and "verifier"
+ * An argument, meaning a two-party protocol with roles "prover" and "verifier".
  */
 public interface InteractiveArgument extends TwoPartyProtocol {
     String PROVER_ROLE = "prover";

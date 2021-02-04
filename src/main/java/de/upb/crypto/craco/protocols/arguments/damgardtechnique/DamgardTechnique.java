@@ -19,13 +19,15 @@ import java.math.BigInteger;
  * This class provides Damgard's Technique. Damgard's Technique is a construction to improve Sigma-Protocols in order to
  * provide security against concurrent adversaries. The resulting protocol is a 'Concurrent black-box zero knowledge
  * three-way interactive argument of knowledge'.
+ * <p>
  * Damgard's Technique is applied on a given Sigma-Protocol. A given commitment scheme is used to achieve the security
  * improvement by changing the original given Sigma-Protocol in the following way:
- * <p>
- * 1.) Instead of sending the announcement the protocol sends the commitment of the announcement.
- * 2.) The last message additionally contains the original announcement and the verify-value of the commitment of the
+ * <ol>
+ * <li> Instead of sending the announcement the protocol sends the commitment of the announcement.
+ * <li> The last message additionally contains the original announcement and the verify-value of the commitment of the
  * announcement. These information are then used in the verify to check validity of the commitment as well as the
  * original verification from the Sigma-Protocol.
+ * </ol>
  * <p>
  * The result of Damgard's Technique is a 'Concurrent black-box zero knowledge three-way interactive argument of
  * knowledge'.

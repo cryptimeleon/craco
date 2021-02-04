@@ -9,8 +9,9 @@ import de.upb.crypto.math.serialization.Representation;
 
 /**
  * A transcript contains the messages exchanged during the execution of a three way protocol.
- * These are announcement, challenge and response. Announcement and Response are send by the Prover to the Verifier, the
- * challenge from the Verifier to the Prover.
+ * <p>
+ * These are announcement, challenge and response. Announcement and Response are sent by the Prover to the Verifier,
+ * the challenge from the Verifier to the Prover.
  */
 public class SigmaProtocolTranscript implements Representable {
     protected Announcement announcement;

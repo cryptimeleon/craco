@@ -2,6 +2,9 @@ package de.upb.crypto.craco.protocols.base;
 
 import de.upb.crypto.craco.protocols.TwoPartyProtocol;
 
+/**
+ * A minimal implementation of {@link TwoPartyProtocol}.
+ */
 public abstract class BaseProtocol implements TwoPartyProtocol {
     protected String firstMessageRole;
     protected String otherRole;

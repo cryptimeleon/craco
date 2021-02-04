@@ -19,8 +19,10 @@ public class SetMembershipFragment extends SendThenDelegateFragment {
     /**
      * Instantiates the fragment.
      *
-     * @param pp public parameters to use (implicitly defines the set for which membership is proven, see {@link SetMembershipPublicParameters}).
-     * @param member an expression whose value shall be in the set. In the easiest case, this is a {@link SchnorrZnVariable}, but it can be any linear combination of {@link SchnorrZnVariable}s.
+     * @param pp public parameters to use (implicitly defines the set for which membership is proven, 
+     *           see {@link SetMembershipPublicParameters}).
+     * @param member an expression whose value shall be in the set. In the easiest case, this is a {@link SchnorrZnVariable}, 
+     *               but it can be any linear combination of {@link SchnorrZnVariable}s
      */
     public SetMembershipFragment(SetMembershipPublicParameters pp, ExponentExpr member) {
         this.pp = pp;

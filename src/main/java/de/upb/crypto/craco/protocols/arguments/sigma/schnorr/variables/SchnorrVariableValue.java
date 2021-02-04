@@ -8,7 +8,7 @@ import java.math.BigInteger;
 
 public interface SchnorrVariableValue extends Representable, UniqueByteRepresentable {
     /**
-     * Returns a VariableValue that is factor*this + summand
+     * Returns a {@code SchnorrVariableValue} that is \(\text{factor} * \text{this} + \text{summand}\).
      */
     SchnorrVariableValue evalLinear(BigInteger factor, SchnorrVariableValue summand);
 

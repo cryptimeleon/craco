@@ -10,7 +10,7 @@ import de.upb.crypto.math.serialization.Representation;
 import java.util.Objects;
 
 /**
- * The DamgardResponse is used in Damgard's Technique. It consists of the commitment of an announcement, the
+ * The {@code DamgardResponse} is used in Damgard's Technique. It consists of the commitment of an announcement, the
  * verify-value of the announcement and the original announcement.
  */
 class DamgardResponse implements Response {
@@ -21,13 +21,14 @@ class DamgardResponse implements Response {
     private final OpenValue openValue;
 
     /**
-     * Constructor for a DamgardResponse
+     * Constructor for a {@code DamgardResponse}.
      *
      * @param innerResponse response of the original protocol
-     * @param innerAnnouncement     uncommitted, original announcement of inner protocol
-     * @param openValue             openvalue for committed announcement
+     * @param innerAnnouncement uncommitted, original announcement of inner protocol
+     * @param openValue openvalue for committed announcement
      */
-    public DamgardResponse(Response innerResponse, Announcement innerAnnouncement, OpenValue openValue, Representation compressedTranscript) {
+    public DamgardResponse(Response innerResponse, Announcement innerAnnouncement, OpenValue openValue,
+                           Representation compressedTranscript) {
         this.innerResponse = innerResponse;
         this.innerAnnouncement = innerAnnouncement;
         this.openValue = openValue;

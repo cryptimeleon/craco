@@ -35,26 +35,27 @@ import java.math.BigInteger;
 public interface SigmaProtocol extends InteractiveArgument {
     /**
      * Used by the prover to generate a secret value that will be input for future method calls.
+     * <p>
      * For example, for an implementation of the original Schnorr protocol, the announcement secret would be a random exponent r.
      *
-     * @param commonInput input to the overall protocol that both prover and verifier use.
-     * @param secretInput input to the overall protocol that only the prover gets.
-     * @return a secret (internal) value used for generating announcements and responses.
+     * @param commonInput input to the overall protocol that both prover and verifier use
+     * @param secretInput input to the overall protocol that only the prover gets
+     * @return a secret (internal) value used for generating announcements and responses
      */
     AnnouncementSecret generateAnnouncementSecret(CommonInput commonInput, SecretInput secretInput);
 
     /**
-     * Used by the prover to generate an announcement (the first message sent in the protocol)
+     * Used by the prover to generate an announcement (the first message sent in the protocol).
      */
     Announcement generateAnnouncement(CommonInput commonInput, SecretInput secretInput, AnnouncementSecret announcementSecret);
 
     /**
-     * Used by the verifier to generate a challenge (the second message in the protocol)
+     * Used by the verifier to generate a challenge (the second message in the protocol).
      */
     Challenge generateChallenge(CommonInput commonInput);
 
     /**
-     * Used by the prover to generate a response (the third and last message sent in the protocol)
+     * Used by the prover to generate a response (the third and last message sent in the protocol).
      */
     Response generateResponse(CommonInput commonInput, SecretInput secretInput, Announcement announcement, AnnouncementSecret announcementSecret, Challenge challenge);
 
@@ -73,6 +74,7 @@ public interface SigmaProtocol extends InteractiveArgument {
 
     /**
      * Returns a compressed (shorter) version of the given transcript.
+     * <p>
      * Useful for {@link de.upb.crypto.craco.protocols.arguments.fiatshamir.FiatShamirProofSystem}.
      * Compressed transcript does not necessarily contain the challenge (see {@link SigmaProtocol#decompressTranscript(CommonInput, Challenge, Representation)})
      */
@@ -81,8 +83,8 @@ public interface SigmaProtocol extends InteractiveArgument {
     }
 
     /**
-     * Decompressed a transcript compressed with {@link SigmaProtocol#compressTranscript(CommonInput, SigmaProtocolTranscript)}
-     * 
+     * Decompresses a transcript compressed with {@link SigmaProtocol#compressTranscript(CommonInput, SigmaProtocolTranscript)}
+     * <p>
      * The guarantee is that if a transcript is valid, then compressing and decompressing yields the same transcript.
      * Additionally, any transcript output by this method is valid (i.e. {@link SigmaProtocol#checkTranscript(CommonInput, SigmaProtocolTranscript)} returns true).
      *
@@ -109,13 +111,14 @@ public interface SigmaProtocol extends InteractiveArgument {
 
     /**
      * Creates a challenge from the given {@code byte[]}.
+     * <p>
      * For byte arrays of length {@code floor(log8(getChallengeSpaceSize(commonInput)))},
      * this mapping should be injective almost everywhere (i.e. almost all images have only one primage).
      */
     Challenge createChallengeFromBytes(CommonInput commonInput, byte[] bytes);
 
     /**
-     * Returns the number of possible values returned by generateChallenge(commonInput).
+     * Returns the number of possible values returned by {@code generateChallenge(commonInput)}.
      */
     BigInteger getChallengeSpaceSize();
 

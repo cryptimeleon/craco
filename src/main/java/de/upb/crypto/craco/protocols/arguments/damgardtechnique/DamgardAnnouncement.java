@@ -11,7 +11,7 @@ import de.upb.crypto.math.serialization.annotations.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.Represented;
 
 /**
- * The DamgardAnnouncement is the commitment of an announcement of the original Sigma-Protocol
+ * The {@code DamgardAnnouncement} is the commitment of an announcement of the original Sigma-Protocol.
  */
 class DamgardAnnouncement implements Announcement {
 
@@ -20,14 +20,20 @@ class DamgardAnnouncement implements Announcement {
     private Commitment commitmentValue;
 
     /**
-     * Constructor for DamgardAnnouncement
+     * Constructor for {@code DamgardAnnouncement}.
      *
-     * @param commitmentValue commitvalue for announcements from Damgard's Technique
+     * @param commitmentValue commitment value for announcements from Damgard's Technique
      */
     public DamgardAnnouncement(Commitment commitmentValue) {
         this.commitmentValue = commitmentValue;
     }
 
+    /**
+     * Recreates the {@code DamgardAnnouncement} from the given {@code Representation}.
+     *
+     * @param representation the representation to restore the announcement from
+     * @param commitmentScheme the involved commitment scheme
+     */
     public DamgardAnnouncement(Representation representation, CommitmentScheme commitmentScheme) {
         new ReprUtil(this).register(commitmentScheme, "com").deserialize(representation);
     }
@@ -38,9 +44,9 @@ class DamgardAnnouncement implements Announcement {
 
 
     /**
-     * The representation of this object. Used for serialization
+     * Returns a {@code Representation} of this announcement.
      *
-     * @return a Representation or null if the representedTypeName suffices to instantiate an equal object again
+     * @return a {@code Representation} or null if the type alone suffices to instantiate an equal object
      * @see Representation
      */
     @Override
@@ -49,8 +55,9 @@ class DamgardAnnouncement implements Announcement {
     }
 
     /**
-     * Updates the ByteAccumulator with the bytes from this class. The input to the accumulators update function should
-     * be an injective (with respect to a given domain) byte encoding of this object.
+     * Updates the {@code ByteAccumulator} with the bytes from this class.
+     * The input to the accumulators update function should be an injective
+     * (with respect to a given domain) byte encoding of this object.
      *
      * @param accumulator the given accumulator
      */

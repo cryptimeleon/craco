@@ -7,6 +7,9 @@ import de.upb.crypto.math.serialization.Representation;
 
 import java.util.HashMap;
 
+/**
+ * A minimal {@link TwoPartyProtocolInstance} implementation that allows for subprotocol execution.
+ */
 public abstract class BaseProtocolInstance implements TwoPartyProtocolInstance {
     static final String HIGH_LEVEL_PROT_MSGS = "high_level_prot_msgs";
 
