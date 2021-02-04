@@ -242,7 +242,7 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
 
         @Override
         public Representation getRepresentation() {
-            return new ObjectRepresentation();
+            return null;
         }
 
         @Override

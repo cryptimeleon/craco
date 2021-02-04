@@ -23,7 +23,7 @@ public interface Response extends Representable, UniqueByteRepresentable {
 
         @Override
         public Representation getRepresentation() {
-            return new ObjectRepresentation();
+            return null;
         }
     }
 }

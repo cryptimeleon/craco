@@ -3,10 +3,10 @@ package de.upb.crypto.craco.protocols.arguments.fiatshamir;
 import de.upb.crypto.craco.protocols.CommonInput;
 import de.upb.crypto.craco.protocols.SecretInput;
 import de.upb.crypto.craco.protocols.arguments.sigma.*;
-import de.upb.crypto.math.hash.impl.ByteArrayAccumulator;
-import de.upb.crypto.math.hash.impl.HashAccumulator;
-import de.upb.crypto.math.hash.impl.VariableOutputLengthHashFunction;
 import de.upb.crypto.math.hash.HashFunction;
+import de.upb.crypto.math.hash.impl.ByteArrayAccumulator;
+import de.upb.crypto.math.hash.impl.VariableOutputLengthHashFunction;
+import de.upb.crypto.math.serialization.Representation;
 
 public class FiatShamirProofSystem {
     private final SigmaProtocol protocol;
@@ -18,7 +18,7 @@ public class FiatShamirProofSystem {
     }
 
     public FiatShamirProofSystem(SigmaProtocol protocol) {
-        this(protocol, new VariableOutputLengthHashFunction(protocol.getChallengeSpaceSize().bitLength()));
+        this(protocol, new VariableOutputLengthHashFunction((protocol.getChallengeSpaceSize().bitLength()-1)/8));
     }
 
     public FiatShamirProof createProof(CommonInput commonInput, SecretInput secretInput, byte[] additionalData) {
@@ -48,5 +48,9 @@ public class FiatShamirProofSystem {
         acc.escapeAndSeparate(announcement);
         acc.append(additionalData);
         return protocol.createChallengeFromBytes(commonInput, hash.hash(acc.extractBytes()));
+    }
+
+    public FiatShamirProof recreateProof(CommonInput commonInput, Representation repr) {
+        return new FiatShamirProof(repr.obj().get("transcript"), protocol.recreateChallenge(commonInput, repr.obj().get("challenge")));
     }
 }
