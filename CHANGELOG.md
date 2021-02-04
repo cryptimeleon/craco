@@ -6,6 +6,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Pointcheval & Sanders' modified signature schemes from [PS18]
+- Fuchsbauer, Hanser'and Slamanig's structure-preserving signature scheme on equivalence classes [FHS14]
+
+### Changed
+- Reordered many packages to improve organization
+- Updated Gradle to version 6.4
+
+### Fixed
+
+### Removed
+- ABE and ABE-KEM schemes as they have been moved to the [Predenc library](https://github.com/upbcuk/upb.crypto.predenc)
+- Log4j dependency
+- Json-simple dependency
+- Key derivation functions
+
+## [1.1.0] - 2019-01-11
+
+### Added
 - Initial release
 
-[Unreleased]: https://github.com/upbcuk/upb.crypto.craco
+[Unreleased]: https://github.com/upbcuk/upb.crypto.craco/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/upbcuk/upb.crypto.craco/releases/tag/v1.1.0

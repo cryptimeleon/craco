@@ -39,10 +39,10 @@ The constructions provided are:
 * **Commitment schemes**:
     * Pedersen's commitment scheme [Ped92]
 * **Digital signature schemes**:
-    * Pointcheval's & Sanders' short randomizable signature scheme [PS16]
-    * An extension of Boneh's, Boyen's and Shacham's signature scheme from [Eid15]
-    * Pointcheval's & Sanders' modified short randomizable signature scheme (with and without ROM) [PS18]
-    * Fuchsbauer's, Hanser's and Slamanig's structure-preserving signature scheme on equivalence classes [FHS14]
+    * Pointcheval & Sanders' short randomizable signature scheme [PS16]
+    * An extension of Boneh, Boyen and Shacham's signature scheme from [Eid15]
+    * Pointcheval & Sanders' modified short randomizable signature scheme (with and without ROM) [PS18]
+    * Fuchsbauer, Hanser and Slamanig's structure-preserving signature scheme on equivalence classes [FHS14]
 * **Encryption schemes**:
     * ElGamal
     * Streaming AES Encryption using CBC and GCM modes of operation
