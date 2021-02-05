@@ -7,6 +7,7 @@ import de.upb.crypto.craco.protocols.arguments.InteractiveArgumentInstance;
 import de.upb.crypto.craco.protocols.arguments.sigma.instance.SigmaProtocolInstance;
 import de.upb.crypto.craco.protocols.arguments.sigma.instance.SigmaProtocolProverInstance;
 import de.upb.crypto.craco.protocols.arguments.sigma.instance.SigmaProtocolVerifierInstance;
+import de.upb.crypto.math.expressions.bool.BooleanExpression;
 import de.upb.crypto.math.serialization.ObjectRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 
@@ -60,12 +61,22 @@ public interface SigmaProtocol extends InteractiveArgument {
     Response generateResponse(CommonInput commonInput, SecretInput secretInput, Announcement announcement, AnnouncementSecret announcementSecret, Challenge challenge);
 
     /**
-     * Used by the verifier to checks whether the given transcript is accepting.
+     * Used by the verifier to check whether the given transcript is accepting.
      */
-    boolean checkTranscript(CommonInput commonInput, Announcement announcement, Challenge challenge, Response response);
+    default boolean checkTranscript(CommonInput commonInput, Announcement announcement, Challenge challenge, Response response) {
+        return checkTranscriptAsExpression(commonInput, announcement, challenge, response).evaluateLazy().getResult();
+    }
 
     /**
-     * Used by the verifier to checks whether the given transcript is accepting.
+     * Used by the verifier to check whether the given transcript is accepting.
+     * The result is a BooleanExpression, which makes it easier to provide optimization for composed protocols.
+     *
+     * @return a BooleanExpression without variables that evaluates to true (for accepting transcripts) or false.
+     */
+    BooleanExpression checkTranscriptAsExpression(CommonInput commonInput, Announcement announcement, Challenge challenge, Response response);
+
+    /**
+     * Used by the verifier to check whether the given transcript is accepting.
      * @see SigmaProtocol#checkTranscript(CommonInput, Announcement, Challenge, Response)
      */
     default boolean checkTranscript(CommonInput commonInput, SigmaProtocolTranscript transcript) {

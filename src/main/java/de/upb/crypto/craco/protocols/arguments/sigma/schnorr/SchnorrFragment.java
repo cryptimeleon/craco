@@ -3,6 +3,7 @@ package de.upb.crypto.craco.protocols.arguments.sigma.schnorr;
 import de.upb.crypto.craco.protocols.CommonInput;
 import de.upb.crypto.craco.protocols.arguments.sigma.*;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrVariableAssignment;
+import de.upb.crypto.math.expressions.bool.BooleanExpression;
 import de.upb.crypto.math.serialization.ListRepresentation;
 import de.upb.crypto.math.serialization.Representation;
 
@@ -95,8 +96,9 @@ public interface SchnorrFragment {
 
     /**
      * Checks whether the fragment's transcript with the addition of externalResponse is accepting.
+     * @return an expression (without variables) that evaluates to true if the transcript is accepting or to false otherwise.
      */
-    boolean checkTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse);
+    BooleanExpression checkTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse);
 
     /**
      * Generates a simulated transcript.

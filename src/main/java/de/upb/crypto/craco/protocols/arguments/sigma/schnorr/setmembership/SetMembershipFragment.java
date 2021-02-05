@@ -4,6 +4,7 @@ import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.LinearStatementFrag
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.SendThenDelegateFragment;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrVariableAssignment;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrZnVariable;
+import de.upb.crypto.math.expressions.bool.BooleanExpression;
 import de.upb.crypto.math.expressions.exponent.ExponentExpr;
 import de.upb.crypto.math.structures.groups.GroupElement;
 import de.upb.crypto.math.serialization.Representation;
@@ -76,7 +77,7 @@ public class SetMembershipFragment extends SendThenDelegateFragment {
     }
 
     @Override
-    protected boolean provideAdditionalCheck(SendFirstValue sendFirstValue) {
-        return !((AlgebraicSendFirstValue) sendFirstValue).getGroupElement(0).isNeutralElement();
+    protected BooleanExpression provideAdditionalCheck(SendFirstValue sendFirstValue) {
+        return BooleanExpression.valueOf(!((AlgebraicSendFirstValue) sendFirstValue).getGroupElement(0).isNeutralElement());
     }
 }

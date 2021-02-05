@@ -9,6 +9,7 @@ import de.upb.crypto.craco.enc.sym.streaming.aes.ByteArrayImplementation;
 import de.upb.crypto.craco.protocols.CommonInput;
 import de.upb.crypto.craco.protocols.SecretInput;
 import de.upb.crypto.craco.protocols.arguments.sigma.*;
+import de.upb.crypto.math.expressions.bool.BooleanExpression;
 import de.upb.crypto.math.hash.impl.VariableOutputLengthHashFunction;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.structures.groups.Group;
@@ -79,14 +80,14 @@ public class DamgardTechnique implements SigmaProtocol {
     }
 
     @Override
-    public boolean checkTranscript(CommonInput commonInput, Announcement announcement, Challenge challenge, Response response) {
+    public BooleanExpression checkTranscriptAsExpression(CommonInput commonInput, Announcement announcement, Challenge challenge, Response response) {
         if (!commitmentScheme.verify(((DamgardAnnouncement) announcement).getCommitment(),
                 ((DamgardResponse) response).getOpenValue(),
                 announcementToCommitmentPlaintext(((DamgardResponse) response).getInnerAnnouncement()))) {
-            return false;
+            return BooleanExpression.FALSE;
         }
 
-        return innerProtocol.checkTranscript(commonInput,
+        return innerProtocol.checkTranscriptAsExpression(commonInput,
                 ((DamgardResponse) response).getInnerAnnouncement(),
                 challenge,
                 ((DamgardResponse) response).getInnerResponse());

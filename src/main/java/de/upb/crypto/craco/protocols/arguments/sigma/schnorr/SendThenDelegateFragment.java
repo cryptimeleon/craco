@@ -1,7 +1,10 @@
 package de.upb.crypto.craco.protocols.arguments.sigma.schnorr;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import de.upb.crypto.craco.protocols.arguments.sigma.*;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.*;
+import de.upb.crypto.math.expressions.bool.BoolEmptyExpr;
+import de.upb.crypto.math.expressions.bool.BooleanExpression;
 import de.upb.crypto.math.hash.annotations.AnnotatedUbrUtil;
 import de.upb.crypto.math.hash.annotations.UniqueByteRepresented;
 import de.upb.crypto.math.hash.ByteAccumulator;
@@ -84,7 +87,7 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
     /**
      * Runs an additional check on the sendFirstValue when the verifier checks a transcript.
      */
-    protected abstract boolean provideAdditionalCheck(SendFirstValue sendFirstValue);
+    protected abstract BooleanExpression provideAdditionalCheck(SendFirstValue sendFirstValue);
 
     @Override
     public AnnouncementSecret generateAnnouncementSecret(SchnorrVariableAssignment externalWitnesses) {
@@ -139,34 +142,27 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
     }
 
     @Override
-    public boolean checkTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
+    public BooleanExpression checkTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
         SendFirstValue sendFirstValue = ((SendThenDelegateAnnouncement) announcement).sendFirstValue;
         SubprotocolSpec subprotocolSpec = ((SendThenDelegateAnnouncement) announcement).subprotocolSpec;
 
+        BooleanExpression checkResult = BooleanExpression.TRUE;
+
         //Check that subprotocols accept
-        try {
-            subprotocolSpec.forEachProtocol((name, subprotocol) -> {
-                if (!subprotocol.checkTranscript(
-                            ((SendThenDelegateAnnouncement) announcement).subprotocolAnnouncements.get(name),
-                            challenge,
-                            ((SendThenDelegateResponse) response).subprotocolResponses.get(name),
-                            ((SendThenDelegateResponse) response).variableResponses.fallbackTo(externalResponse)
-                        )
-                ) {
-                    throw new RuntimeException("Subprotocol " + name + " does not accept its subtranscript");
-                }
-            });
-        } catch (RuntimeException e) {
-            System.err.println(e.getMessage());
-            return false;
-        }
+        Map<String, BooleanExpression> subprotocolChecks = subprotocolSpec.mapSubprotocols((name, subprotocol) -> subprotocol.checkTranscript(
+                ((SendThenDelegateAnnouncement) announcement).subprotocolAnnouncements.get(name),
+                challenge,
+                ((SendThenDelegateResponse) response).subprotocolResponses.get(name),
+                ((SendThenDelegateResponse) response).variableResponses.fallbackTo(externalResponse)
+                )
+        );
+        for (BooleanExpression subprotocolResult : subprotocolChecks.values())
+            checkResult = checkResult.and(subprotocolResult);
 
         //Check additionalCheck on sendFirstValue
-        if (!provideAdditionalCheck(sendFirstValue)) {
-            System.err.println("Additional check on the sendFirstValue of "+this.getClass().getName()+" fails");
-            return false;
-        }
-        return true;
+        checkResult = checkResult.and(provideAdditionalCheck(sendFirstValue));
+
+        return checkResult;
     }
 
     @Override
@@ -664,6 +660,8 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
     @Override
     public SigmaProtocolTranscript decompressTranscript(Representation compressedTranscript, SchnorrChallenge challenge, SchnorrVariableAssignment externalResponse) throws IllegalArgumentException {
         SendFirstValue sendFirstValue = recreateSendFirstValue(compressedTranscript.list().get(0));
+        if (!provideAdditionalCheck(sendFirstValue).evaluate())
+            throw new IllegalArgumentException("Cannot decompress transcript because its sendFirstValue is invalid");
         SubprotocolSpec spec = provideSubprotocolSpec(sendFirstValue, new SubprotocolSpecBuilder());
 
         SchnorrVariableValueList variableResponses = new SchnorrVariableValueList(spec.getOrderedListOfVariables(), compressedTranscript.list().get(1));

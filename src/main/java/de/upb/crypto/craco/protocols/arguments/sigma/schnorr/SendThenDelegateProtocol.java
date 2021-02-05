@@ -4,6 +4,7 @@ import de.upb.crypto.craco.protocols.CommonInput;
 import de.upb.crypto.craco.protocols.SecretInput;
 import de.upb.crypto.craco.protocols.arguments.sigma.*;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrVariableAssignment;
+import de.upb.crypto.math.expressions.bool.BooleanExpression;
 import de.upb.crypto.math.hash.ByteAccumulator;
 import de.upb.crypto.math.serialization.ListRepresentation;
 import de.upb.crypto.math.serialization.Representation;
@@ -46,7 +47,7 @@ public abstract class SendThenDelegateProtocol implements SigmaProtocol {
     /**
      * @see SendThenDelegateFragment#provideAdditionalCheck(SendThenDelegateFragment.SendFirstValue)
      */
-    protected abstract boolean provideAdditionalCheck(CommonInput commonInput, SendThenDelegateFragment.SendFirstValue sendFirstValue);
+    protected abstract BooleanExpression provideAdditionalCheck(CommonInput commonInput, SendThenDelegateFragment.SendFirstValue sendFirstValue);
 
     @Override
     public abstract BigInteger getChallengeSpaceSize();
@@ -82,7 +83,7 @@ public abstract class SendThenDelegateProtocol implements SigmaProtocol {
     }
 
     @Override
-    public boolean checkTranscript(CommonInput commonInput, Announcement announcement, Challenge challenge, Response response) {
+    public BooleanExpression checkTranscriptAsExpression(CommonInput commonInput, Announcement announcement, Challenge challenge, Response response) {
         return ((SchnorrAnnouncement) announcement).fragment.checkTranscript(((SchnorrAnnouncement) announcement).fragmentAnnouncement, (SchnorrChallenge) challenge, response, SchnorrVariableAssignment.EMPTY);
     }
 
@@ -172,7 +173,7 @@ public abstract class SendThenDelegateProtocol implements SigmaProtocol {
         }
 
         @Override
-        protected boolean provideAdditionalCheck(SendFirstValue sendFirstValue) {
+        protected BooleanExpression provideAdditionalCheck(SendFirstValue sendFirstValue) {
             return SendThenDelegateProtocol.this.provideAdditionalCheck(commonInput, sendFirstValue);
         }
     }

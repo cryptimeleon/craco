@@ -1,6 +1,7 @@
 package de.upb.crypto.craco.protocols.arguments.sigma.schnorr;
 
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrVariableAssignment;
+import de.upb.crypto.math.expressions.bool.BooleanExpression;
 import de.upb.crypto.math.serialization.Representation;
 
 /**
@@ -46,7 +47,7 @@ public abstract class DelegateFragment extends SendThenDelegateFragment {
     protected abstract SubprotocolSpec provideSubprotocolSpec(SubprotocolSpecBuilder builder);
 
     @Override
-    protected boolean provideAdditionalCheck(SendFirstValue sendFirstValue) {
-        return true;
+    protected BooleanExpression provideAdditionalCheck(SendFirstValue sendFirstValue) {
+        return BooleanExpression.TRUE;
     }
 }

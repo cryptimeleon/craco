@@ -7,6 +7,7 @@ import de.upb.crypto.craco.protocols.arguments.sigma.SigmaProtocolTranscript;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrVariable;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrVariableAssignment;
 import de.upb.crypto.math.expressions.VariableExpression;
+import de.upb.crypto.math.expressions.bool.BooleanExpression;
 import de.upb.crypto.math.expressions.bool.ExponentEqualityExpr;
 import de.upb.crypto.math.expressions.exponent.ExponentExpr;
 import de.upb.crypto.math.expressions.exponent.ExponentSumExpr;
@@ -78,11 +79,11 @@ public class LinearExponentStatementFragment implements SchnorrFragment {
     }
 
     @Override
-    public boolean checkTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
+    public BooleanExpression checkTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
         //Check homomorphicPart(response) = announcement + c * target (additive group notation)
         Zn.ZnElement evaluatedResponse = homomorphicPart.evaluate(zn, externalResponse);
 
-        return evaluatedResponse.equals(((LinearExponentStatementAnnouncement) announcement).announcement.add(target.mul(challenge.getChallenge())));
+        return BooleanExpression.valueOf(evaluatedResponse.equals(((LinearExponentStatementAnnouncement) announcement).announcement.add(target.mul(challenge.getChallenge()))));
     }
 
     @Override

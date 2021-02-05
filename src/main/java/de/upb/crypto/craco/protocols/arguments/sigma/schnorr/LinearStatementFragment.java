@@ -4,6 +4,7 @@ import de.upb.crypto.craco.protocols.arguments.sigma.*;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrVariable;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrVariableAssignment;
 import de.upb.crypto.math.expressions.VariableExpression;
+import de.upb.crypto.math.expressions.bool.BooleanExpression;
 import de.upb.crypto.math.expressions.bool.GroupEqualityExpr;
 import de.upb.crypto.math.expressions.group.GroupElementExpression;
 import de.upb.crypto.math.expressions.group.GroupOpExpr;
@@ -63,7 +64,7 @@ public class LinearStatementFragment implements SchnorrFragment {
     public Announcement generateAnnouncement(SchnorrVariableAssignment externalWitnesses, AnnouncementSecret announcementSecret, SchnorrVariableAssignment externalRandom) {
         //Evaluate homomorphicPart with respect random variable assignements from the AnnouncementSecret and the random assignments coming from the outside.
         return new LinearStatementAnnouncement(
-                homomorphicPart.evaluate(externalRandom)
+                homomorphicPart.evaluate(externalRandom).compute()
         );
     }
 
@@ -73,17 +74,15 @@ public class LinearStatementFragment implements SchnorrFragment {
     }
 
     @Override
-    public boolean checkTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
+    public BooleanExpression checkTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
         //Check homomorphicPart(response) = announcement + c * target (additive group notation)
-        GroupElement evaluatedResponse = homomorphicPart.evaluate(externalResponse);
-
-        return evaluatedResponse.equals(((LinearStatementAnnouncement) announcement).announcement.op(target.pow(challenge.getChallenge())));
+        return homomorphicPart.substitute(externalResponse).isEqualTo(((LinearStatementAnnouncement) announcement).announcement.op(target.pow(challenge.getChallenge())));
     }
 
     @Override
     public SigmaProtocolTranscript generateSimulatedTranscript(SchnorrChallenge challenge, SchnorrVariableAssignment externalRandomResponse) {
         //Take externalRandomResponse, set annoncement to the unique value that makes the transcript valid.
-        GroupElement announcement = homomorphicPart.evaluate(externalRandomResponse).op(target.pow(challenge.getChallenge().negate()));
+        GroupElement announcement = homomorphicPart.evaluate(externalRandomResponse).op(target.pow(challenge.getChallenge().negate())).compute();
 
         return new SigmaProtocolTranscript(new LinearStatementAnnouncement(announcement), challenge, Response.EMPTY);
     }
