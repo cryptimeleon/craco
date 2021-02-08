@@ -8,8 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Pointcheval & Sanders' modified signature schemes from [PS18]
-- Fuchsbauer, Hanser'and Slamanig's structure-preserving signature scheme on equivalence classes [FHS14]
+- Pointcheval & Sanders' signature schemes from "Reassessing Security of Randomizable Signatures", 2018
+- Fuchsbauer, Hanser and Slamanig's signature scheme from "Structure-Preserving Signatures on Equivalence Classes and Constant-Size Anonymous Credentials", 2014
 
 ### Changed
 - Reordered many packages to improve organization
@@ -22,6 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Log4j dependency
 - Json-simple dependency
 - Key derivation functions
+- `ByteArrayQueue` and `Triple` classes (not used)
+- `interaction` package (not used)
+- `PrimeFieldPolynomial` and `SecureRandomGenerator` classes (replaced by other functionality)
+- `WatersHash` class (moved to Predenc project) and `LagrangeUtil` class (moved to Math project)
+- Author tags
 
 ## [1.1.0] - 2019-01-11
 
