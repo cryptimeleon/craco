@@ -15,7 +15,7 @@ See [here](https://upbcuk.github.io/getting-started/installation.html) for an in
 Craco adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Changelog
-The changelog can be found [here](https://github.com/upbcuk/upb.crypto.craco/blob/master/CHANGELOG.md).
+The changelog can be found [here](CHANGELOG.md).
 
 ## Features
 
@@ -27,7 +27,7 @@ We have a documentation page for our combined libraries [here](https://upbcuk.gi
 
 ## Dependencies
 
-See [here](https://upbcuk.github.io/contributors/dependencies.html) for a detailed list of dependencies.
+See the `dependencies` section of this project's [Gradle build configuration](build.gradle) for a detailed list of dependencies.
 
 ## How to Contribute
 Our documentation page includes [information for contributors](https://upbcuk.github.io/contributors/contributing.html).
