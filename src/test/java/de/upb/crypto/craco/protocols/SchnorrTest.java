@@ -11,6 +11,7 @@ import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.LinearStatementFrag
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.SendThenDelegateFragment;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.setmembership.SetMembershipPublicParameters;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.setmembership.SmallerThanPowerFragment;
+import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.setmembership.TwoSidedRangeProof;
 import de.upb.crypto.craco.protocols.arguments.sigma.schnorr.variables.SchnorrZnVariable;
 import de.upb.crypto.math.random.RandomGenerator;
 import de.upb.crypto.math.structures.groups.GroupElement;
@@ -132,8 +133,11 @@ public class SchnorrTest {
                 //Can open commitment
                 builder.addSubprotocol("commitment open", new LinearStatementFragment(g.pow(mVar).op(h.pow(rVar)).isEqualTo(C)));
 
-                //m is smaller than 2^5
-                builder.addSubprotocol("range", new SmallerThanPowerFragment(mVar, 2, 5, setMembershipPublicParameters));
+                //m in [13, 60]
+                builder.addSubprotocol("twoSidedRange", new TwoSidedRangeProof(mVar, 13, 23, setMembershipPublicParameters));
+
+                //m smaller than 2^5
+                builder.addSubprotocol("oneSidedRange", new SmallerThanPowerFragment(mVar, 2, 5, setMembershipPublicParameters));
 
                 return builder.build();
             }
