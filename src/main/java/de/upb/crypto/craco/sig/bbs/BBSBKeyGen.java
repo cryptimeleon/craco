@@ -36,7 +36,7 @@ public class BBSBKeyGen {
     }
 
     public BBSBPublicParameter doKeyGen(BilinearGroup group) {
-        pp = new BBSBPublicParameter(group, (HashIntoZn) group.getHashIntoZGroupExponent());
+        pp = new BBSBPublicParameter(group, group.getHashIntoZGroupExponent());
         pp.setG2(pp.getGroupG1().getUniformlyRandomElement());
         pp.setG1(pp.getGroupHom().apply(pp.getG2()));
 

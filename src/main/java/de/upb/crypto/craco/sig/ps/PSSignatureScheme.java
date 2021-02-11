@@ -9,6 +9,9 @@ import de.upb.crypto.math.serialization.annotations.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.Represented;
 import de.upb.crypto.math.structures.groups.Group;
 import de.upb.crypto.math.structures.groups.GroupElement;
+import de.upb.crypto.math.structures.groups.cartesian.GroupElementVector;
+import de.upb.crypto.math.structures.rings.cartesian.RingElementVector;
+import de.upb.crypto.math.structures.rings.zn.Zn;
 import de.upb.crypto.math.structures.rings.zn.Zp;
 import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
@@ -37,10 +40,6 @@ public class PSSignatureScheme implements StandardMultiMessageSignatureScheme {
     @Represented
     protected PSPublicParameters pp;
 
-    protected PSSignatureScheme() {
-        super();
-    }
-
     public PSSignatureScheme(PSPublicParameters pp) {
         super();
         this.pp = pp;
@@ -61,26 +60,18 @@ public class PSSignatureScheme implements StandardMultiMessageSignatureScheme {
         // x in paper
         ZpElement exponentX = zp.getUniformlyRandomElement();
         // y_i's in paper
-        ZpElement[] exponentsYi = IntStream.range(0, numberOfMessages).mapToObj(a -> zp.getUniformlyRandomElement())
-                .toArray(ZpElement[]::new);
+        RingElementVector exponentsYi = zp.getUniformlyRandomElements(numberOfMessages);
 
         // \tilde{X} in paper
         GroupElement group2ElementX = group2ElementTildeG.pow(exponentX).compute();
         // \tilde{Y_i}'s in paper
-        GroupElement[] group2ElementsYi =
-                Arrays.stream(exponentsYi).map(y -> group2ElementTildeG.pow(y).compute()).toArray(GroupElement[]::new);
+        GroupElementVector group2ElementsYi = group2ElementTildeG.pow(exponentsYi);
 
         // Set secret key (signing key)
-        PSSigningKey sk = new PSSigningKey();
-        sk.setExponentX(exponentX);
-        sk.setExponentsYi(exponentsYi);
+        PSSigningKey sk = new PSSigningKey(exponentX, exponentsYi);
 
         // Set public key ( verification key)
-        PSVerificationKey pk = new PSVerificationKey();
-        pk.setGroup2ElementTildeG(group2ElementTildeG);
-        pk.setGroup2ElementTildeX(group2ElementX);
-        pk.setGroup2ElementsTildeYi(group2ElementsYi);
-
+        PSVerificationKey pk = new PSVerificationKey(group2ElementTildeG, group2ElementX, group2ElementsYi);
         return new SignatureKeyPair<>(pk, sk);
     }
 
@@ -108,21 +99,10 @@ public class PSSignatureScheme implements StandardMultiMessageSignatureScheme {
         GroupElement group1ElementH = pp.getBilinearMap().getG1().getUniformlyRandomNonNeutral().compute();
 
         // compute resultExponent = x + y_i * m_i
-        ZpElement resultExponent = pp.getZp().getZeroElement();
-
-        //2.8; mirkoj: fixed the use of resultExponent.add
-        resultExponent = resultExponent.add(sk.getExponentX());
-
-        for (int i = 0; i < sk.getNumberOfMessages(); i++) {
-            if (!(messageBlock.get(i) instanceof RingElementPlainText)
-                    || messageBlock.get(i) == null
-                    || !((RingElementPlainText) messageBlock.get(i)).getRingElement().getStructure()
-                    .equals(pp.getZp())) {
-                throw new IllegalArgumentException("Not a valid plain text for this scheme");
-            }
-            resultExponent = resultExponent.add(sk.getExponentsYi()[i]
-                    .mul((ZpElement) ((RingElementPlainText) messageBlock.get(i)).getRingElement()));
-        }
+        ZpElement resultExponent = sk.getExponentX().add(
+                ((MessageBlock) plainText).map(pt -> ((RingElementPlainText) pt).getRingElement(), RingElementVector::new)
+                .innerProduct(sk.getExponentsYi())
+        );
 
         // second element of signature, sigma_2 in paper
         GroupElement group1ElementSigma2 = group1ElementH.pow(resultExponent.getInteger()).compute();
@@ -161,15 +141,9 @@ public class PSSignatureScheme implements StandardMultiMessageSignatureScheme {
         rightHandSide = pp.getBilinearMap().apply(sigma.getGroup1ElementSigma2(), pk.getGroup2ElementTildeG());
 
         // Compute left hand side of verification equation
-        GroupElement group2Elem =
-                pp.getBilinearMap().getG2().getNeutralElement(); // group2Elem = \tilde(X) * prod \tilde(Y)_j^{m_j}
-        //2.8 mirkoj: fixed the use of GroupElment.op
-        group2Elem = group2Elem.op(pk.getGroup2ElementTildeX());
-
-        for (int i = 0; i < pk.getNumberOfMessages(); i++) {
-            group2Elem = group2Elem.op(pk.getGroup2ElementsTildeYi()[i]
-                    .pow((ZpElement) ((RingElementPlainText) messageBlock.get(i)).getRingElement()));
-        }
+        GroupElement group2Elem = pk.getGroup2ElementTildeX().op(
+                pk.getGroup2ElementsTildeYi().innerProduct(messageBlock.map(pt -> ((RingElementPlainText) pt).getRingElement(), RingElementVector::new))
+        ); // group2Elem = \tilde(X) * prod \tilde(Y)_j^{m_j}
 
         leftHandSide = pp.getBilinearMap().apply(sigma.getGroup1ElementSigma1(), group2Elem);
 
@@ -242,15 +216,7 @@ public class PSSignatureScheme implements StandardMultiMessageSignatureScheme {
 
     protected MessageBlock mapToPlaintext(byte[] bytes, int messageBlockLength) {
         //Result will be a vector (zp.injectiveValueOf(bytes), 0, ..., 0)
-        Zp zp = pp.getZp();
-        RingElementPlainText zero = new RingElementPlainText(zp.getZeroElement());
-
-        RingElementPlainText[] msgBlock = new RingElementPlainText[messageBlockLength];
-        msgBlock[0] = new RingElementPlainText(zp.injectiveValueOf(bytes));
-        for (int i = 1; i < msgBlock.length; i++) {
-            msgBlock[i] = zero;
-        }
-
-        return new MessageBlock(msgBlock);
+        return new RingElementVector(pp.getZp().injectiveValueOf(bytes)).pad(pp.getZp().getZeroElement(), messageBlockLength)
+                .map(RingElementPlainText::new, MessageBlock::new);
     }
 }

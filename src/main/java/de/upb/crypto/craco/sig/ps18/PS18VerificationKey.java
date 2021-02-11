@@ -57,24 +57,12 @@ public class PS18VerificationKey implements VerificationKey {
         return group2ElementTildeG;
     }
 
-    public void setGroup2ElementTildeG(GroupElement group2ElementTildeG) {
-        this.group2ElementTildeG = group2ElementTildeG;
-    }
-
     public GroupElement getGroup2ElementTildeX() {
         return group2ElementTildeX;
     }
 
-    public void setGroup2ElementTildeX(GroupElement group2ElementTildeX) {
-        this.group2ElementTildeX = group2ElementTildeX;
-    }
-
     public GroupElementVector getGroup2ElementsTildeYi() {
         return group2ElementsTildeYi;
-    }
-
-    public void setGroup2ElementsTildeYi(GroupElementVector group2ElementsTildeYi) {
-        this.group2ElementsTildeYi = group2ElementsTildeYi;
     }
 
     public int getNumberOfMessages() {

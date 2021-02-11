@@ -53,16 +53,8 @@ public class PS18SigningKey implements SigningKey {
         return exponentX;
     }
 
-    public void setExponentX(ZpElement exponentX) {
-        this.exponentX = exponentX;
-    }
-
     public RingElementVector getExponentsYi() {
         return exponentsYi;
-    }
-
-    public void setExponentsYi(RingElementVector exponentsYi) {
-        this.exponentsYi = exponentsYi;
     }
 
     public int getNumberOfMessages() {

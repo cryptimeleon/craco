@@ -53,7 +53,7 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
     }
 
     @Override
-    public SignatureKeyPair<? extends SPSEQVerificationKey, ? extends SPSEQSigningKey> generateKeyPair(int numberOfMessages) {
+    public SignatureKeyPair<SPSEQVerificationKey, SPSEQSigningKey> generateKeyPair(int numberOfMessages) {
         // Do actual key generation (cf. KeyGen algorithm)
         Zp zp = pp.getZp();
         GroupElement group2ElementTildeG = pp.getGroup2ElementHatP();

@@ -21,18 +21,18 @@ public class ElgamalParams {
         Zp zp = new Zp(BigInteger.valueOf(72973));
         Group zpGroup = zp.asUnitGroup();
 
-        EncryptionScheme elgamalScheme = new ElgamalEncryption(zpGroup);
+        ElgamalEncryption elgamalScheme = new ElgamalEncryption(zpGroup);
 
         Supplier<PlainText> supplier = () -> ((PlainText) new ElgamalPlainText(zpGroup.getUniformlyRandomElement()));
 
-        KeyPair validKeyPair = ((ElgamalEncryption) elgamalScheme).generateKeyPair();
+        KeyPair validKeyPair = elgamalScheme.generateKeyPair();
 
         ElgamalPublicKey validPK = (ElgamalPublicKey) validKeyPair.getPk();
         ElgamalPrivateKey validSK = (ElgamalPrivateKey) validKeyPair.getSk();
 
-        Zn expZn = new Zn(BigInteger.valueOf(72972));
-        ZnElement pow = validSK.getA().isOne() ? expZn.createZnElement(BigInteger.valueOf(5)) :
-                expZn.createZnElement(BigInteger.valueOf(1));
+        Zn expZn = zpGroup.getZn();
+        ZnElement pow = validSK.getA().isOne() ? expZn.valueOf(5) :
+                expZn.valueOf(1);
         ElgamalPrivateKey invalidSK = new ElgamalPrivateKey(zpGroup, validSK.getG(), pow);
         KeyPair invalidKeyPair = new KeyPair(validPK, invalidSK);
 

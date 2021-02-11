@@ -1,9 +1,11 @@
 package de.upb.crypto.craco.sig.ps;
 
+import de.upb.crypto.craco.protocols.SecretInput;
 import de.upb.crypto.craco.sig.SigningKey;
 import de.upb.crypto.math.serialization.Representation;
 import de.upb.crypto.math.serialization.annotations.ReprUtil;
 import de.upb.crypto.math.serialization.annotations.Represented;
+import de.upb.crypto.math.structures.rings.cartesian.RingElementVector;
 import de.upb.crypto.math.structures.rings.zn.Zp;
 import de.upb.crypto.math.structures.rings.zn.Zp.ZpElement;
 
@@ -16,7 +18,7 @@ import java.util.Objects;
  *
  */
 
-public class PSSigningKey implements SigningKey {
+public class PSSigningKey implements SigningKey, SecretInput {
 
     /**
      * x \in Z_p in paper.
@@ -27,11 +29,12 @@ public class PSSigningKey implements SigningKey {
     /**
      * y_1, ... , y_n \in Z_p in paper.
      */
-    @Represented(restorer = "[Zp]")
-    protected ZpElement[] exponentsYi;
+    @Represented(restorer = "Zp")
+    protected RingElementVector exponentsYi;
 
-    public PSSigningKey() {
-        super();
+    public PSSigningKey(ZpElement exponentX, RingElementVector exponentsYi) {
+        this.exponentX = exponentX;
+        this.exponentsYi = exponentsYi;
     }
 
     public PSSigningKey(Representation repr, Zp zp) {
@@ -47,20 +50,12 @@ public class PSSigningKey implements SigningKey {
         return exponentX;
     }
 
-    public void setExponentX(ZpElement exponentX) {
-        this.exponentX = exponentX;
-    }
-
-    public ZpElement[] getExponentsYi() {
+    public RingElementVector getExponentsYi() {
         return exponentsYi;
     }
 
-    public void setExponentsYi(ZpElement[] exponentsYi) {
-        this.exponentsYi = exponentsYi;
-    }
-
     public int getNumberOfMessages() {
-        return exponentsYi.length;
+        return exponentsYi.length();
     }
 
     @Override
@@ -69,13 +64,13 @@ public class PSSigningKey implements SigningKey {
         if (o == null || getClass() != o.getClass()) return false;
         PSSigningKey that = (PSSigningKey) o;
         return Objects.equals(exponentX, that.exponentX) &&
-                Arrays.equals(exponentsYi, that.exponentsYi);
+                exponentsYi.equals(that.exponentsYi);
     }
 
     @Override
     public int hashCode() {
         int result = Objects.hash(exponentX);
-        result = 31 * result + Arrays.hashCode(exponentsYi);
+        result = 31 * result + exponentsYi.hashCode();
         return result;
     }
 }

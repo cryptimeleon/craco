@@ -58,7 +58,7 @@ public class PS18SignatureScheme implements SignatureScheme {
 
         // Precompute for bases in multi-exponentiation
         group2ElementTildeX.precomputePow();
-        group2ElementsTildeYi.map(x -> x.precomputePow()); // don't replace with lambda; doesn't work cause double match
+        group2ElementsTildeYi.precomputePow();
 
         // Construct secret signing key
         PS18SigningKey sk = new PS18SigningKey(exponentX, exponentsYi);
@@ -261,16 +261,8 @@ public class PS18SignatureScheme implements SignatureScheme {
 
     protected MessageBlock mapToPlaintext(byte[] bytes, int messageBlockLength) {
         //Result will be a vector (zp.injectiveValueOf(bytes), 0, ..., 0)
-        Zp zp = pp.getZp();
-        RingElementPlainText zero = new RingElementPlainText(zp.getZeroElement());
-
-        RingElementPlainText[] msgBlock = new RingElementPlainText[messageBlockLength];
-        msgBlock[0] = new RingElementPlainText(zp.injectiveValueOf(bytes));
-        for (int i = 1; i < msgBlock.length; i++) {
-            msgBlock[i] = zero;
-        }
-
-        return new MessageBlock(msgBlock);
+        return new RingElementVector(pp.getZp().injectiveValueOf(bytes)).pad(pp.getZp().getZeroElement(), messageBlockLength)
+                .map(RingElementPlainText::new, MessageBlock::new);
     }
 
     @Override

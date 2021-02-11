@@ -55,24 +55,12 @@ public class PS18Signature implements Signature {
 
     public ZpElement getExponentPrimeM() { return exponentPrimeM; }
 
-    public void setExponentPrimeM(ZpElement exponentPrimeM) {
-        this.exponentPrimeM = exponentPrimeM;
-    }
-
     public GroupElement getGroup1ElementSigma1() {
         return group1ElementSigma1;
     }
 
-    public void setGroup1ElementSigma1(GroupElement group1ElementSigma1) {
-        this.group1ElementSigma1 = group1ElementSigma1;
-    }
-
     public GroupElement getGroup1ElementSigma2() {
         return group1ElementSigma2;
-    }
-
-    public void setGroup1ElementSigma2(GroupElement group1ElementSigma2) {
-        this.group1ElementSigma2 = group1ElementSigma2;
     }
 
     @Override

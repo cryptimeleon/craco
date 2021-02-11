@@ -50,6 +50,10 @@ public class PSPublicParameters implements PublicParameters {
         return bilinearGroup.getBilinearMap();
     }
 
+    public BilinearGroup getBilinearGroup() {
+        return bilinearGroup;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(bilinearGroup);
