@@ -8,7 +8,7 @@ def msgPrefix = rootProject.name + " settings: "
 
 // do specific snapshot dependency resolution for snapshot builds
 if (!Boolean.valueOf(System.getProperty("disablesnapshot"))) {
-    def compositeLibraries = ["upb.crypto.math"]
+    def compositeLibraries = ["org.cryptimeleon.math"]
     for (String lib : compositeLibraries) {
         def libPrefix = "dependency " + lib
         def libPath = file("../" + lib).getPath()
@@ -20,7 +20,7 @@ if (!Boolean.valueOf(System.getProperty("disablesnapshot"))) {
             cloned = false
         } else {
             println(msgPrefix + libPrefix + ": Local repository does not exist. Cloning to " + libPath + ".")
-            grgitLib = Grgit.clone(dir: libPath, uri: "https://github.com/upbcuk/" + lib + ".git")
+            grgitLib = Grgit.clone(dir: libPath, uri: "https://github.com/cryptimeleon/" + lib + ".git")
             cloned = true
         }
         def grgitThis = Grgit.open(dir: rootProject.projectDir)
