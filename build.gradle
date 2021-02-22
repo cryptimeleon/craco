@@ -4,8 +4,8 @@ plugins {
     id 'maven-publish'
 }
 
-group = 'de.upb.crypto'
-version = '2.0.0' + (Boolean.valueOf(System.getProperty("disablesnapshot")) ? "" : "-SNAPSHOT")
+group = 'org.cryptimeleon'
+version = '1.0.0' + (Boolean.valueOf(System.getProperty("disablesnapshot")) ? "" : "-SNAPSHOT")
 
 
 description = """"""
@@ -29,17 +29,11 @@ repositories {
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api group: 'de.upb.crypto', name: 'math', version: '2.0.0' + (Boolean.valueOf(System.getProperty("disablesnapshot")) ? "" : "-SNAPSHOT")
+    api group: 'org.cryptimeleon', name: 'math', version: '1.0.0' + (Boolean.valueOf(System.getProperty("disablesnapshot")) ? "" : "-SNAPSHOT")
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation group: 'org.reflections', name: 'reflections', version: '0.9.10'
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 
-    //testImplementation group: 'de.upb.crypto', name: 'mclwrap', version: '0.0.3' + (Boolean.valueOf(System.getProperty("disablesnapshot")) ? "" : "-SNAPSHOT")
-    //implementation group: 'de.upb.crypto', name: 'ecceleratewrap', version: '1.0.0-SNAPSHOT'
-    //implementation group: 'iaik', name: 'eccelerate', version:'1.0.0'
-    //implementation group: 'iaik', name: 'jce_full', version:'1.0.0'
-    // For tests
-    //testImplementation group: 'de.upb.crypto', name: 'math', version:'1.0.0-SNAPSHOT', classifier: 'tests'
     testCompileOnly(
             'junit:junit:4.12'
     )
