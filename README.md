@@ -8,6 +8,17 @@ The goal of Craco is to provide common cryptographic schemes for usage in more h
 ## Security Disclaimer
 **WARNING: This library is meant to be used for prototyping and as a research tool *only*. It has not been sufficiently vetted for use in security-critical production environments. All implementations are to be considered experimental.**
 
+## Table Of Contents
+
+* [Features Overview](#features)
+* [Quickstart Guide](#quickstart)
+    * [Maven Installation](#installation-with-maven)
+    * [Gradle Installation](#installation-with-gradle)
+    * [Tutorials](#tutorials)
+* [Miscellaneous Information](#miscellaneous-information)
+* [Authors](#authors)
+* [References](#references)
+
 ## Features
 
 Craco implements interfaces and test classes for basic cryptographic primitives such as commitment schemes, encryption schemes, and more.
