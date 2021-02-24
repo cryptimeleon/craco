@@ -83,30 +83,16 @@ Therefore, we recommend you go through our [short Math tutorial](https://cryptim
 We also provide walkthroughs where we show you how to implement a pairing-based signature scheme [here](https://cryptimeleon.github.io/getting-started/pairing-tutorial.html) as well as a simple cryptographic protocol [here](https://cryptimeleon.github.io/getting-started/protocols-tutorial.html).
 The latter uses Craco's protocol capabilities.
 
-## Documentation
+## Miscellaneous Information
 
-Our official documentation page can be found [here](https://cryptimeleon.github.io/).
+- Official Documentation can be found [here](https://cryptimeleon.github.io/).
+    - The *For Contributors* area includes information on how to contribute.
+- Craco adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+- The changelog can be found [here](CHANGELOG.md).
+- Craco is licensed under Apache License 2.0, see [LICENCE file](LICENSE)
 
-## Versioning
-Craco adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## Changelog
-The changelog can be found [here](CHANGELOG.md).
-
-## Dependencies
-
-See the `dependencies` section of this project's [Gradle build configuration](build.gradle) for a detailed list of dependencies.
-
-## How to Contribute
-Our documentation page includes [information for contributors](https://cryptimeleon.github.io/contributors/contributing.html).
-This includes information on the build process.
-
-## Notes
-
+## Authors
 The library was implemented at Paderborn University in the research group ["Codes und Cryptography"](https://cs.uni-paderborn.de/en/cuk/).
-
-## Licence
-Apache License 2.0, see LICENCE file.
 
 ## References
 
