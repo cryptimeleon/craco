@@ -8,10 +8,9 @@ The goal of Craco is to provide common cryptographic schemes for usage in more h
 ## Security Disclaimer
 **WARNING: This library is meant to be used for prototyping and as a research tool *only*. It has not been sufficiently vetted for use in security-critical production environments. All implementations are to be considered experimental.**
 
-
 ## Features
 
-Craco implements interfaces and tests for basic cryptographic primitives such as commitment schemes, encryption schemes, and more.
+Craco implements interfaces and test classes for basic cryptographic primitives such as commitment schemes, encryption schemes, and more.
 
 We also implement a number of such schemes.
 
@@ -75,8 +74,7 @@ We also provide walkthroughs where we show you how to implement a pairing-based 
 
 ## Documentation
 
-Our official documentation page can be found [here](https://cryptimeleon.github.io/). 
-Keep in mind that the documentation is written for all the Cryptimeleon libraries.
+Our official documentation page can be found [here](https://cryptimeleon.github.io/).
 
 ## Versioning
 Craco adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
