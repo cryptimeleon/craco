@@ -1,7 +1,7 @@
 ![Build Status](https://github.com/upbcuk/upb.crypto.craco/workflows/Java%20CI/badge.svg)
 ## Craco
 
-Craco (CRyptogrAphic COnstructions) is a Java library providing implementations of various cryptographic primitives and low-level constructions. This includes primitives such as commitment schemes, signature schemes, and much more.
+Craco (CRyptogrAphic COnstructions) is a Java library providing implementations of various cryptographic primitives and low-level constructions. This includes primitives such as commitment schemes, signature schemes, facilities for implementing multi-party protocols, and much more.
 
 The goal of Craco is to provide common cryptographic schemes for usage in more high-level protocols as well as to offer facilities for improving the process of implementing more low-level schemes such as signature and encryption schemes.
 
@@ -12,10 +12,8 @@ The goal of Craco is to provide common cryptographic schemes for usage in more h
 
 Craco implements interfaces and test classes for basic cryptographic primitives such as commitment schemes, encryption schemes, and more.
 
-We also implement a number of such schemes.
-
 ### Implemented Schemes
-The constructions provided are:
+The constructions we implement are:
 
 * **Accumulators**:
     * Nguyen's dynamic accumulator [Ngu05]
@@ -33,6 +31,17 @@ The constructions provided are:
     * ElGamal
 * **Secret sharing schemes**:
     * Shamir's secret sharing scheme [Sha79] and its tree extension
+    
+### Protocols
+
+Craco also includes interfaces and basic classes useful for implementing cryptographic protocols.
+Part of this are facilities for easy implementation of Sigma protocols.
+
+Furthermore, it includes:
+
+* A Fiat-Shamir transformation implementation
+* A Schnorr protocol implementation
+* An implementation of Damgård's technique used to improve Sigma protocols
 
 ## Quickstart
 
@@ -71,6 +80,7 @@ Craco is very much connected with our [Math library](https://github.com/cryptime
 Therefore, we recommend you go through our [short Math tutorial](https://cryptimeleon.github.io/getting-started/5-minute-tutorial.html) to get started.
 
 We also provide walkthroughs where we show you how to implement a pairing-based signature scheme [here](https://cryptimeleon.github.io/getting-started/pairing-tutorial.html) as well as a simple cryptographic protocol [here](https://cryptimeleon.github.io/getting-started/protocols-tutorial.html).
+The latter uses Craco's protocol capabilities.
 
 ## Documentation
 
@@ -96,3 +106,17 @@ The library was implemented at Paderborn University in the research group ["Code
 
 ## Licence
 Apache License 2.0, see LICENCE file.
+
+## References
+
+[HS14] Christian Hanser and Daniel Slamanig. "Structure-Preserving Signatures on Equivalence Classes and Their Application to Anonymous Credentials." In: Advances in Cryptology – ASIACRYPT 2014. Springer Berlin Heidelberg, pp 491–511.
+
+[Ngu05] Lan Nguyen. “Accumulators from Bilinear Pairings and Applications”. In: Topics in Cryptology – CT-RSA 2005. Ed. by Alfred Menezes. Vol. 3376. Lecture Notes in Computer Science. Springer, Heidelberg, February 2005, pp. 275–292.
+
+[Ped92] Torben P. Pedersen. “Non-Interactive and Information-Theoretic Secure Verifiable Secret Sharing”. In: Advances in Cryptology – CRYPTO’91. Ed. by Joan Feigenbaum. Vol. 576. Lecture Notes in Computer Science. Springer, Heidelberg, August 1992, pp. 129–140.
+
+[PS16] David Pointcheval and Olivier Sanders. “Short Randomizable Signatures”. In: Topics in Cryptology – CT-RSA 2016. Ed. by Kazue Sako. Vol. 9610. Lecture Notes in Computer Science. Springer, Heidelberg, February 2016, pp. 111–126.
+
+[PS18] David Pointcheval and Olivier Sanders. "Reassessing Security of Randomizable Signatures". In: Topic in Cryptology - CT-RSA 2018. Ed. by Nigel P. Smart. Springer International Publishing, 2018, pp 319-338.
+
+[Sha79] Adi Shamir. “How to Share a Secret”. In: Communications of the Association for Computing Machinery 22.11 (November 1979), pp. 612–613.
