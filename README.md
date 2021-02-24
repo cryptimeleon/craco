@@ -89,7 +89,7 @@ The latter uses Craco's protocol capabilities.
     - The *For Contributors* area includes information on how to contribute.
 - Craco adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - The changelog can be found [here](CHANGELOG.md).
-- Craco is licensed under Apache License 2.0, see [LICENCE file](LICENSE)
+- Craco is licensed under Apache License 2.0, see [LICENSE file](LICENSE).
 
 ## Authors
 The library was implemented at Paderborn University in the research group ["Codes und Cryptography"](https://cs.uni-paderborn.de/en/cuk/).
