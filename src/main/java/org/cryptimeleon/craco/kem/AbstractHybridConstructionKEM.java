@@ -67,17 +67,17 @@ public abstract class AbstractHybridConstructionKEM implements KeyEncapsulationM
     }
 
     @Override
-    public CipherText getEncapsulatedKey(Representation repr) {
-        return scheme.getCipherText(repr);
+    public CipherText restoreEncapsulatedKey(Representation repr) {
+        return scheme.restoreCipherText(repr);
     }
 
     @Override
-    public EncryptionKey getEncapsulationKey(Representation repr) {
-        return scheme.getEncryptionKey(repr);
+    public EncryptionKey restoreEncapsulationKey(Representation repr) {
+        return scheme.restoreEncryptionKey(repr);
     }
 
     @Override
-    public DecryptionKey getDecapsulationKey(Representation repr) {
-        return scheme.getDecryptionKey(repr);
+    public DecryptionKey restoreDecapsulationKey(Representation repr) {
+        return scheme.restoreDecryptionKey(repr);
     }
 }

@@ -19,7 +19,7 @@ public class NguyenDigest implements AccumulatorDigest {
     }
 
     public NguyenDigest(Representation repr, Group group) {
-        this.digest = group.getElement(repr);
+        this.digest = group.restoreElement(repr);
     }
 
     public GroupElement getDigest() {

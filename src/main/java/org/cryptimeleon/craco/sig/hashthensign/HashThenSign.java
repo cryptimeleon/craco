@@ -94,23 +94,23 @@ public class HashThenSign implements SignatureScheme {
     }
 
     @Override
-    public PlainText getPlainText(Representation repr) {
+    public PlainText restorePlainText(Representation repr) {
         return new ByteArrayImplementation(repr);
     }
 
     @Override
-    public Signature getSignature(Representation repr) {
-        return encapsulatedScheme.getSignature(repr);
+    public Signature restoreSignature(Representation repr) {
+        return encapsulatedScheme.restoreSignature(repr);
     }
 
     @Override
-    public SigningKey getSigningKey(Representation repr) {
-        return encapsulatedScheme.getSigningKey(repr);
+    public SigningKey restoreSigningKey(Representation repr) {
+        return encapsulatedScheme.restoreSigningKey(repr);
     }
 
     @Override
-    public VerificationKey getVerificationKey(Representation repr) {
-        return encapsulatedScheme.getVerificationKey(repr);
+    public VerificationKey restoreVerificationKey(Representation repr) {
+        return encapsulatedScheme.restoreVerificationKey(repr);
     }
 
     @Override

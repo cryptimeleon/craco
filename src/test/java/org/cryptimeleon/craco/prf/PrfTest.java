@@ -36,13 +36,13 @@ public class PrfTest {
     @Test
     public void testSerialization() {
         PrfKey k = prf.generateKey();
-        assertEquals(k, prf.getKey(k.getRepresentation()));
+        assertEquals(k, prf.restoreKey(k.getRepresentation()));
 
         PrfPreimage x = preimageSupplier.get();
-        assertEquals(x, prf.getPreimage(x.getRepresentation()));
+        assertEquals(x, prf.restorePreimage(x.getRepresentation()));
 
         PrfImage y = prf.evaluate(k, x);
-        assertEquals(y, prf.getImage(y.getRepresentation()));
+        assertEquals(y, prf.restoreImage(y.getRepresentation()));
     }
 
     @Parameters(name = "Test: {0}") // add (name="Test: {0}") for jUnit 4.12+ to print ring's name to test

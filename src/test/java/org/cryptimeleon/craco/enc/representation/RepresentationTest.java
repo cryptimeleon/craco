@@ -45,13 +45,13 @@ public class RepresentationTest {
         assertEquals(scheme, toCompare);
         //testing the representations of the scheme
         System.out.println("Testing the deserialization of an EncryptionKey...");
-        assertEquals(encryptionKey, scheme.getEncryptionKey(encryptionKey.getRepresentation()));
+        assertEquals(encryptionKey, scheme.restoreEncryptionKey(encryptionKey.getRepresentation()));
         System.out.println("Testing the deserialization of a DecryptionKey...");
-        assertEquals(decryptionKey, scheme.getDecryptionKey(decryptionKey.getRepresentation()));
+        assertEquals(decryptionKey, scheme.restoreDecryptionKey(decryptionKey.getRepresentation()));
         System.out.println("Testing the deserialization of a PlainText...");
-        assertEquals(plainText, scheme.getPlainText(plainText.getRepresentation()));
+        assertEquals(plainText, scheme.restorePlainText(plainText.getRepresentation()));
         System.out.println("Testing the deserialization of a CipherText...");
-        assertEquals(cipherText, scheme.getCipherText(cipherText.getRepresentation()));
+        assertEquals(cipherText, scheme.restoreCipherText(cipherText.getRepresentation()));
     }
 
     @Parameters(name = "{index}: {0}")

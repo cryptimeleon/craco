@@ -153,22 +153,22 @@ public class PSSignatureScheme implements StandardMultiMessageSignatureScheme {
     }
 
     @Override
-    public MessageBlock getPlainText(Representation repr) {
+    public MessageBlock restorePlainText(Representation repr) {
         return new MessageBlock(repr, RingElementPlainText::new);
     }
 
     @Override
-    public PSSignature getSignature(Representation repr) {
+    public PSSignature restoreSignature(Representation repr) {
         return new PSSignature(repr, this.pp.getBilinearMap().getG1());
     }
 
     @Override
-    public PSSigningKey getSigningKey(Representation repr) {
+    public PSSigningKey restoreSigningKey(Representation repr) {
         return new PSSigningKey(repr, this.pp.getZp());
     }
 
     @Override
-    public PSVerificationKey getVerificationKey(Representation repr) {
+    public PSVerificationKey restoreVerificationKey(Representation repr) {
         return new PSVerificationKey(this.pp.getBilinearMap().getG2(), repr);
     }
 

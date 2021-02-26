@@ -24,15 +24,15 @@ public abstract class SchnorrVariable implements RepresentationRestorer, Variabl
     }
 
     public abstract SchnorrVariableValue generateRandomValue();
-    public abstract SchnorrVariableValue recreateValue(Representation repr);
+    public abstract SchnorrVariableValue restoreValue(Representation repr);
 
     @Override
-    public Object recreateFromRepresentation(Type type, Representation repr) {
+    public Object restoreFromRepresentation(Type type, Representation repr) {
         if (!(type instanceof Class))
             throw new IllegalArgumentException("Cannot recreate "+type.getTypeName());
 
         if (SchnorrVariableValue.class.isAssignableFrom((Class) type))
-            return recreateValue(repr);
+            return restoreValue(repr);
 
         throw new IllegalArgumentException("Cannot recreate "+type.getTypeName());
     }

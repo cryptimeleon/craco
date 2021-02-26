@@ -117,7 +117,7 @@ public class DamgardTechnique implements SigmaProtocol {
     public DamgardResponse recreateResponse(CommonInput commonInput, Announcement announcement, Challenge challenge, Representation repr) {
         SigmaProtocolTranscript transcript = innerProtocol.decompressTranscript(commonInput, challenge, repr.obj().get("compressedTranscript"));
         return new DamgardResponse(transcript.getResponse(), transcript.getAnnouncement(),
-                commitmentScheme.getOpenValue(repr.obj().get("openValue")), repr.obj().get("compressedTranscript"));
+                commitmentScheme.restoreOpenValue(repr.obj().get("openValue")), repr.obj().get("compressedTranscript"));
     }
 
     @Override

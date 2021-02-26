@@ -85,7 +85,7 @@ public interface AccumulatorScheme<AccumulatedType extends Representable> extend
     AccumulatedType restoreAccumulatedValue(Representation repr);
 
     @Override
-    default Object recreateFromRepresentation(Type type, Representation repr) throws IllegalArgumentException {
+    default Object restoreFromRepresentation(Type type, Representation repr) throws IllegalArgumentException {
         if (type instanceof Class && AccumulatorWitness.class.isAssignableFrom((Class) type))
             return restoreWitness(repr);
         if (type instanceof Class && AccumulatorDigest.class.isAssignableFrom((Class) type))

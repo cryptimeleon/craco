@@ -75,24 +75,24 @@ public abstract class SymmetricKeyKEM implements KeyEncapsulationMechanism<Symme
      * {@inheritDoc}
      */
     @Override
-    public CipherText getEncapsulatedKey(Representation repr) {
-        return kem.getEncapsulatedKey(repr);
+    public CipherText restoreEncapsulatedKey(Representation repr) {
+        return kem.restoreEncapsulatedKey(repr);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public EncryptionKey getEncapsulationKey(Representation repr) {
-        return kem.getEncapsulationKey(repr);
+    public EncryptionKey restoreEncapsulationKey(Representation repr) {
+        return kem.restoreEncapsulationKey(repr);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public DecryptionKey getDecapsulationKey(Representation repr) {
-        return kem.getDecapsulationKey(repr);
+    public DecryptionKey restoreDecapsulationKey(Representation repr) {
+        return kem.restoreDecapsulationKey(repr);
     }
 
     public KeyEncapsulationMechanism<? extends KeyMaterial> getKem() {

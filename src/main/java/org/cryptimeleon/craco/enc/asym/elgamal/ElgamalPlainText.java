@@ -24,7 +24,7 @@ public class ElgamalPlainText implements PlainText, UniqueByteRepresentable {
     private GroupElement plaintext;
 
     public ElgamalPlainText(Representation representation, Group group) {
-        plaintext = group.getElement(representation);
+        plaintext = group.restoreElement(representation);
     }
 
     public ElgamalPlainText(GroupElement plaintext) {

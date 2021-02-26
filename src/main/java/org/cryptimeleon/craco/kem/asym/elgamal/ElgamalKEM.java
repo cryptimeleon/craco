@@ -270,18 +270,18 @@ public class ElgamalKEM implements AsymmetricKEM<SymmetricKey> {
     }
 
     @Override
-    public ElgamalKEMCiphertext getEncapsulatedKey(Representation repr) {
+    public ElgamalKEMCiphertext restoreEncapsulatedKey(Representation repr) {
         return new ElgamalKEMCiphertext(repr, encryptionScheme);
     }
 
     @Override
-    public EncryptionKey getEncapsulationKey(Representation repr) {
-        return this.encryptionScheme.getEncryptionKey(repr);
+    public EncryptionKey restoreEncapsulationKey(Representation repr) {
+        return this.encryptionScheme.restoreEncryptionKey(repr);
     }
 
     @Override
-    public ElgamalPrivateKey getDecapsulationKey(Representation repr) {
-        return this.encryptionScheme.getDecryptionKey(repr);
+    public ElgamalPrivateKey restoreDecapsulationKey(Representation repr) {
+        return this.encryptionScheme.restoreDecryptionKey(repr);
     }
 
     public ElgamalEncryption getEncryptionScheme() {

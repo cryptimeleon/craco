@@ -171,7 +171,7 @@ public class NguyenAccumulatorScheme implements AccumulatorScheme<Zn.ZnElement>,
 
     @Override
     public Zn.ZnElement restoreAccumulatedValue(Representation repr) {
-        return bilinearGroup.getZn().getElement(repr);
+        return bilinearGroup.getZn().restoreElement(repr);
     }
 
     @Override

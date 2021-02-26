@@ -91,7 +91,7 @@ public class LinearStatementFragment implements SchnorrFragment {
 
     @Override
     public Announcement recreateAnnouncement(Representation repr) {
-        return new LinearStatementAnnouncement(target.getStructure().getElement(repr));
+        return new LinearStatementAnnouncement(target.getStructure().restoreElement(repr));
     }
 
     @Override

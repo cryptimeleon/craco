@@ -94,13 +94,13 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
     }
 
     @Override
-    public Commitment getCommitment(Representation repr) {
-        return encapsulatedScheme.getCommitment(repr);
+    public Commitment restoreCommitment(Representation repr) {
+        return encapsulatedScheme.restoreCommitment(repr);
     }
 
     @Override
-    public OpenValue getOpenValue(Representation repr) {
-        return encapsulatedScheme.getOpenValue(repr);
+    public OpenValue restoreOpenValue(Representation repr) {
+        return encapsulatedScheme.restoreOpenValue(repr);
     }
 
     @Override
