@@ -1,6 +1,6 @@
 package org.cryptimeleon.craco.kem.asym;
 
-import org.cryptimeleon.craco.enc.KeyPair;
+import org.cryptimeleon.craco.enc.EncryptionKeyPair;
 import org.cryptimeleon.craco.kem.KeyEncapsulationMechanism;
 
 /**
@@ -13,5 +13,5 @@ import org.cryptimeleon.craco.kem.KeyEncapsulationMechanism;
  */
 public interface AsymmetricKEM<T> extends KeyEncapsulationMechanism<T> {
 
-    KeyPair generateKeyPair();
+    EncryptionKeyPair generateKeyPair();
 }

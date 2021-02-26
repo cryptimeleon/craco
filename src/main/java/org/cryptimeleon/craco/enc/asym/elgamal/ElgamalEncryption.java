@@ -120,7 +120,7 @@ public class ElgamalEncryption implements AsymmetricEncryptionScheme {
      * @return A pair of a private key and the corresponding public key.
      */
     @Override
-    public KeyPair generateKeyPair() {
+    public EncryptionKeyPair generateKeyPair() {
         BigInteger sizeG = groupG.size();
         //choose a random element 'a' \in {0, ..., sizeG}
         Zn zn_random = new Zn(sizeG);
@@ -137,7 +137,7 @@ public class ElgamalEncryption implements AsymmetricEncryptionScheme {
         //generate the public key (g, h)
         EncryptionKey publicKey = privateKey.getPublicKey();
 
-        return new KeyPair(publicKey, privateKey);
+        return new EncryptionKeyPair(publicKey, privateKey);
     }
 
     @Override

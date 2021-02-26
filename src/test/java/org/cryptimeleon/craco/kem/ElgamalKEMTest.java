@@ -1,6 +1,6 @@
 package org.cryptimeleon.craco.kem;
 
-import org.cryptimeleon.craco.enc.KeyPair;
+import org.cryptimeleon.craco.enc.EncryptionKeyPair;
 import org.cryptimeleon.craco.enc.SymmetricKey;
 import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalPrivateKey;
 import org.cryptimeleon.craco.enc.sym.streaming.aes.ByteArrayImplementation;
@@ -48,7 +48,7 @@ public class ElgamalKEMTest {
         kem = new ElgamalKEM(zpStar, md);
 
 
-        KeyPair keypair = kem.generateKeyPair();
+        EncryptionKeyPair keypair = kem.generateKeyPair();
 
         sk = (ElgamalPrivateKey) keypair.getSk();
 

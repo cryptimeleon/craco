@@ -261,7 +261,7 @@ public class ElgamalKEM implements AsymmetricKEM<SymmetricKey> {
     }
 
     @Override
-    public KeyPair generateKeyPair() {
+    public EncryptionKeyPair generateKeyPair() {
         return encryptionScheme.generateKeyPair();
     }
 

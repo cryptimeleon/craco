@@ -107,7 +107,7 @@ public class TestData implements Representable {
         group = new Zp(BigInteger.valueOf(13)).asAdditiveGroup();
         element = group.getNeutralElement();
         encryptionScheme = new ElgamalEncryption(group);
-        KeyPair kp = ((ElgamalEncryption) encryptionScheme).generateKeyPair();
+        EncryptionKeyPair kp = ((ElgamalEncryption) encryptionScheme).generateKeyPair();
         encryptionKey = kp.getPk();
         decryptionKey = kp.getSk();
         map = new LinkedHashMap<>();

@@ -10,9 +10,9 @@ public class TestParams {
 
     protected Supplier<PlainText> plainTextSupplier;
 
-    protected KeyPair validKeyPair;
+    protected EncryptionKeyPair validKeyPair;
 
-    protected KeyPair invalidKeyPair;
+    protected EncryptionKeyPair invalidKeyPair;
 
     /**
      * Test parameters
@@ -20,8 +20,8 @@ public class TestParams {
      * @param largeScheme        the encryption scheme to test
      * @param abeCPLargeSupplier a supplier for (possibly random) plaintexts to encrypt and decrypt
      */
-    public TestParams(EncryptionScheme largeScheme, Supplier<PlainText> abeCPLargeSupplier, KeyPair validKeyPair,
-                      KeyPair invalidKeyPair) {
+    public TestParams(EncryptionScheme largeScheme, Supplier<PlainText> abeCPLargeSupplier, EncryptionKeyPair validKeyPair,
+                      EncryptionKeyPair invalidKeyPair) {
         this.encryptionScheme = largeScheme;
         this.plainTextSupplier = abeCPLargeSupplier;
         this.validKeyPair = validKeyPair;

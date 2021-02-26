@@ -22,9 +22,9 @@ public class EncryptionSchemeTest {
 
     private EncryptionScheme encryptionScheme;
 
-    private KeyPair validKeyPair;
+    private EncryptionKeyPair validKeyPair;
 
-    private KeyPair invalidKeyPair;
+    private EncryptionKeyPair invalidKeyPair;
 
     public EncryptionSchemeTest(TestParams params) {
         this.encryptionScheme = params.encryptionScheme;

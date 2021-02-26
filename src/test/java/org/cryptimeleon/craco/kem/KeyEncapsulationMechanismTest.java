@@ -2,7 +2,7 @@ package org.cryptimeleon.craco.kem;
 
 import org.cryptimeleon.craco.enc.DecryptionKey;
 import org.cryptimeleon.craco.enc.EncryptionKey;
-import org.cryptimeleon.craco.enc.KeyPair;
+import org.cryptimeleon.craco.enc.EncryptionKeyPair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -25,8 +25,8 @@ import static org.junit.Assert.assertTrue;
 public class KeyEncapsulationMechanismTest {
     // type parameter intentionally left out to reuse the test for all kind of KEMs
     private KeyEncapsulationMechanism kem;
-    private KeyPair validKeyPair;
-    private KeyPair invalidKeyPair;
+    private EncryptionKeyPair validKeyPair;
+    private EncryptionKeyPair invalidKeyPair;
 
     public KeyEncapsulationMechanismTest(KeyEncapsulationMechanismTestParams params) {
         this.kem = params.kem;
