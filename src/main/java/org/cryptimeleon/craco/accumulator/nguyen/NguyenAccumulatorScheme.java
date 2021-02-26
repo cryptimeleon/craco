@@ -24,8 +24,9 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
- * An implementation of the Nguyen accumulator (https://eprint.iacr.org/2005/123). <br>
- * To instantiate, let a trusted party run {@link #setup(BilinearGroup, int)}, then disseminate the {@linkplain Representation} of the resulting {@linkplain NguyenAccumulatorScheme} to other parties.
+ * An implementation of the <a href="https://eprint.iacr.org/2005/123">Nguyen accumulator</a>. <br>
+ * To instantiate, let a trusted party run {@link #setup(BilinearGroup, int)}, then disseminate 
+ * the {@linkplain Representation} of the resulting {@linkplain NguyenAccumulatorScheme} to other parties.
  */
 public class NguyenAccumulatorScheme implements AccumulatorScheme<Zn.ZnElement>, UniqueByteRepresentable {
     @Represented

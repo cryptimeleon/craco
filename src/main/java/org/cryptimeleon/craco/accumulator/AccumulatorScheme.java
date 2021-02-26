@@ -11,14 +11,14 @@ import java.util.Collection;
 import java.util.HashSet;
 
 /**
- * An accumulator scheme, i.e. essentially a hash function that takes a set of values and creates a short digest for this set.
+ * An accumulator scheme is essentially a hash function that takes a set of values and creates a short digest for this set.
  * One can compute witnesses for elements included in the digest, which enables fast verification of set membership.
  * @param <AccumulatedType> the type of values that can be accumulated with this scheme.
  */
 public interface AccumulatorScheme<AccumulatedType extends Representable> extends StandaloneRepresentable, RepresentationRestorer {
 
     /**
-     * Creates the accumulator for the given set of values (essentially a collision-resistant hash of setOfValues)
+     * Creates the accumulator for the given set of values (essentially a collision-resistant hash of {@code setOfValues}).
      */
     AccumulatorDigest createDigest(Collection<? extends AccumulatedType> setOfValues);
 
@@ -31,12 +31,13 @@ public interface AccumulatorScheme<AccumulatedType extends Representable> extend
     AccumulatorWitness createWitness(AccumulatorDigest digest, Collection<? extends AccumulatedType> setOfAccumulatedValues, AccumulatedType valueToComputeWitnessFor);
 
     /**
-     * Verifies that the given singleValue is indeed part of the accumulated set.
+     * Verifies that the given {@code singleValue} is indeed part of the accumulated set.
      */
     boolean verify(AccumulatorDigest accumulatorDigest, AccumulatedType singleValue, AccumulatorWitness witnessForSingleValue);
 
     /**
-     * Given an accumulator for setOfValues, computes an accumulator for setOfValues ∪ {additionalValue}.
+     * Given an accumulator for {@code setOfValues}, computes an accumulator for
+     * {@code setOfValues union {additionalValue}}.
      */
     default AccumulatorDigest insert(AccumulatorDigest digest, Collection<? extends AccumulatedType> setOfValues, AccumulatedType additionalValue) {
         HashSet<AccumulatedType> newValues = new HashSet<>(setOfValues);
@@ -45,7 +46,7 @@ public interface AccumulatorScheme<AccumulatedType extends Representable> extend
     }
 
     /**
-     * Given an accumulator for setOfValues, computes an accumulator for setOfValues \ {additionalValue}.
+     * Given an accumulator for {@code setOfValues}, computes an accumulator for {@code setOfValues \ {additionalValue}}.
      */
     default AccumulatorDigest delete(AccumulatorDigest digest, Collection<? extends AccumulatedType> setOfValues, AccumulatedType valueToDelete) {
         HashSet<AccumulatedType> newValues = new HashSet<>(setOfValues);
@@ -54,16 +55,19 @@ public interface AccumulatorScheme<AccumulatedType extends Representable> extend
     }
 
     /**
-     * Updates a set membership witness w.r.t. accumulator changes.
-     * Equivalent to recomputing a witness using {@link AccumulatorScheme#createWitness(AccumulatorDigest, Collection, Representable)}, but this method may be more efficient.
+     * Updates a set membership witness with regard to accumulator changes.
+     * Equivalent to recomputing a witness using {@link AccumulatorScheme#createWitness(AccumulatorDigest, Collection, Representable)},
+     * but this method may be more efficient.
      *
      * @param oldDigest the "old" digest
      * @param newDigest the "new" digest
-     * @param oldAccumulatedSet the set accumulated in oldDigest
-     * @param newAccumulatedSet the set accumulated in newDigest
-     * @param valueToComputeWitnessFor the value (present in oldDigest and in newDigest) for which a witness shall be computed.
-     * @param oldWitnessToBeUpdated a witness for valueToComputeWitnessFor being part of oldDigest
-     * @return a witness for valueToComputeWitnessFor being part of newDigest (same as {@code createWitness(newAccumulatedSet, valueToComputeWitnessFor)})
+     * @param oldAccumulatedSet the set accumulated in {@code oldDigest}
+     * @param newAccumulatedSet the set accumulated in {@code newDigest}
+     * @param valueToComputeWitnessFor the value (present in {@code oldDigest} and in {@code newDigest})
+     *                                 for which a witness shall be computed
+     * @param oldWitnessToBeUpdated a witness for {@code valueToComputeWitnessFor} being part of {@code oldDigest}
+     * @return a witness for {@code valueToComputeWitnessFor} being part of {@code newDigest}
+     *         (same as {@code createWitness(newAccumulatedSet, valueToComputeWitnessFor)})
      */
     default AccumulatorWitness updateWitness(AccumulatorDigest oldDigest, AccumulatorDigest newDigest,
                                              Collection<? extends AccumulatedType> oldAccumulatedSet, Collection<? extends AccumulatedType> newAccumulatedSet,
