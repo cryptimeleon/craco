@@ -1,5 +1,6 @@
 package org.cryptimeleon.craco.enc.sym.streaming.aes;
 
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.common.utils.StreamUtil;
 import org.cryptimeleon.craco.enc.*;

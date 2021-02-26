@@ -5,7 +5,7 @@ import org.cryptimeleon.craco.enc.*;
 import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalCipherText;
 import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalEncryption;
 import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalPrivateKey;
-import org.cryptimeleon.craco.enc.sym.streaming.aes.ByteArrayImplementation;
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.craco.kem.asym.AsymmetricKEM;
 import org.cryptimeleon.math.hash.HashFunction;
 import org.cryptimeleon.math.hash.impl.ByteArrayAccumulator;

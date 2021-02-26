@@ -1,7 +1,7 @@
 package org.cryptimeleon.craco.kem;
 
 import org.cryptimeleon.craco.enc.SymmetricKey;
-import org.cryptimeleon.craco.enc.sym.streaming.aes.ByteArrayImplementation;
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.math.hash.HashFunction;
 import org.cryptimeleon.math.hash.impl.SHA256HashFunction;
 import org.cryptimeleon.math.serialization.Representation;

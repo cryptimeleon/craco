@@ -1,7 +1,7 @@
 package org.cryptimeleon.craco.sig.hashthensign;
 
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
-import org.cryptimeleon.craco.enc.sym.streaming.aes.ByteArrayImplementation;
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.craco.sig.Signature;
 import org.cryptimeleon.craco.sig.SignatureScheme;
 import org.cryptimeleon.craco.sig.SigningKey;

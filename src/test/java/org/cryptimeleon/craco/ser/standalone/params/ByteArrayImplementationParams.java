@@ -1,6 +1,6 @@
 package org.cryptimeleon.craco.ser.standalone.params;
 
-import org.cryptimeleon.craco.enc.sym.streaming.aes.ByteArrayImplementation;
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.craco.ser.standalone.StandaloneTestParams;
 
 public class ByteArrayImplementationParams {

@@ -3,7 +3,7 @@ package org.cryptimeleon.craco.kem;
 import org.cryptimeleon.craco.enc.EncryptionKeyPair;
 import org.cryptimeleon.craco.enc.SymmetricKey;
 import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalPrivateKey;
-import org.cryptimeleon.craco.enc.sym.streaming.aes.ByteArrayImplementation;
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.craco.kem.KeyEncapsulationMechanism.KeyAndCiphertext;
 import org.cryptimeleon.craco.kem.asym.elgamal.ElgamalKEM;
 import org.cryptimeleon.craco.kem.asym.elgamal.ElgamalKEMCiphertext;

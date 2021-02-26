@@ -5,7 +5,7 @@ import org.cryptimeleon.craco.commitment.CommitmentPair;
 import org.cryptimeleon.craco.commitment.CommitmentScheme;
 import org.cryptimeleon.craco.commitment.OpenValue;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
-import org.cryptimeleon.craco.enc.sym.streaming.aes.ByteArrayImplementation;
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.math.hash.HashFunction;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;

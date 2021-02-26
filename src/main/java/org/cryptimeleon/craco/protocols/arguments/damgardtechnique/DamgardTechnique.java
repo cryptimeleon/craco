@@ -5,7 +5,7 @@ import org.cryptimeleon.craco.commitment.CommitmentScheme;
 import org.cryptimeleon.craco.commitment.hashthencommit.HashThenCommitCommitmentScheme;
 import org.cryptimeleon.craco.commitment.pedersen.PedersenCommitmentScheme;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
-import org.cryptimeleon.craco.enc.sym.streaming.aes.ByteArrayImplementation;
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.craco.protocols.CommonInput;
 import org.cryptimeleon.craco.protocols.SecretInput;
 import org.cryptimeleon.craco.protocols.arguments.sigma.*;

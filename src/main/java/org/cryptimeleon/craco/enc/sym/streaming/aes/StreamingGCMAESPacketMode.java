@@ -1,5 +1,6 @@
 package org.cryptimeleon.craco.enc.sym.streaming.aes;
 
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.enc.*;
 import org.cryptimeleon.math.random.RandomGenerator;
