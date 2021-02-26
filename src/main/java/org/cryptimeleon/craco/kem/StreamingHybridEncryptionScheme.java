@@ -73,23 +73,23 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
     }
 
     @Override
-    public PlainText getPlainText(Representation repr) {
-        return symmetricScheme.getPlainText(repr);
+    public PlainText restorePlainText(Representation repr) {
+        return symmetricScheme.restorePlainText(repr);
     }
 
     @Override
-    public CipherText getCipherText(Representation repr) {
+    public CipherText restoreCipherText(Representation repr) {
         return new HybridCipherText(repr, symmetricScheme, kem);
     }
 
     @Override
-    public EncryptionKey getEncryptionKey(Representation repr) {
-        return kem.getEncapsulationKey(repr);
+    public EncryptionKey restoreEncryptionKey(Representation repr) {
+        return kem.restoreEncapsulationKey(repr);
     }
 
     @Override
-    public DecryptionKey getDecryptionKey(Representation repr) {
-        return kem.getDecapsulationKey(repr);
+    public DecryptionKey restoreDecryptionKey(Representation repr) {
+        return kem.restoreDecapsulationKey(repr);
     }
 
     @Override
@@ -162,7 +162,7 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
         if (triesLeft == 0)
             throw new IOException("couldn't read encapulated key from ciphertext");
         CipherText encapsulatedKey =
-                kem.getEncapsulatedKey(new JSONConverter().deserialize(new String(encapsulatedKeyBytes)));
+                kem.restoreEncapsulatedKey(new JSONConverter().deserialize(new String(encapsulatedKeyBytes)));
 
         //decaps the encapsulated key
         SymmetricKey symmetricKey = kem.decaps(encapsulatedKey, privateKey);
@@ -191,7 +191,7 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
                 } else if (byteOffset < 4 + keyLen) { //we're still getting encapsulatedKeyBytes
                     encapsulatedKeyBytes[byteOffset - 4] = (byte) b;
                     if (byteOffset == 4 + keyLen - 1) { //last byte of encapsulated key read
-                        CipherText encapsulatedKey = kem.getEncapsulatedKey(new JSONConverter()
+                        CipherText encapsulatedKey = kem.restoreEncapsulatedKey(new JSONConverter()
                                 .deserialize(new String(encapsulatedKeyBytes)));
 
                         //decaps the encapsulated key

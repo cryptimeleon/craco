@@ -21,7 +21,7 @@ public class RingElementPlainText implements PlainText {
 
     public RingElementPlainText(Representation repr) {
         Ring ring = (Ring) repr.obj().get("ring").repr().recreateRepresentable();
-        this.element = ring.getElement(repr.obj().get("elem"));
+        this.element = ring.restoreElement(repr.obj().get("elem"));
     }
 
     /**

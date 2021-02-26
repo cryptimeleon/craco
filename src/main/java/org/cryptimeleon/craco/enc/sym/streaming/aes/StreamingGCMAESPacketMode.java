@@ -121,22 +121,22 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
     }
 
     @Override
-    public PlainText getPlainText(Representation repr) {
+    public PlainText restorePlainText(Representation repr) {
         return new ByteArrayImplementation(repr);
     }
 
     @Override
-    public CipherText getCipherText(Representation repr) {
+    public CipherText restoreCipherText(Representation repr) {
         return new ByteArrayImplementation(repr);
     }
 
     @Override
-    public EncryptionKey getEncryptionKey(Representation repr) {
+    public EncryptionKey restoreEncryptionKey(Representation repr) {
         return new ByteArrayImplementation(repr);
     }
 
     @Override
-    public DecryptionKey getDecryptionKey(Representation repr) {
+    public DecryptionKey restoreDecryptionKey(Representation repr) {
         return new ByteArrayImplementation(repr);
     }
 

@@ -1,9 +1,5 @@
 package org.cryptimeleon.craco.prf;
 
-import org.cryptimeleon.craco.common.plaintexts.PlainText;
-import org.cryptimeleon.craco.enc.CipherText;
-import org.cryptimeleon.craco.enc.DecryptionKey;
-import org.cryptimeleon.craco.enc.EncryptionKey;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.StandaloneRepresentable;
 import org.cryptimeleon.math.serialization.annotations.RepresentationRestorer;
@@ -37,28 +33,28 @@ public interface PseudorandomFunction extends StandaloneRepresentable, Represent
     //below this, there are only serialization-related methods
 
     /**
-     * Recreates (deserializes) a key k from its representation.
+     * Restores a key k from its representation.
      */
-    PrfKey getKey(Representation repr);
+    PrfKey restoreKey(Representation repr);
 
     /**
-     * Recreates (deserializes) a preimage x from its representation.
+     * Restores a preimage x from its representation.
      */
-    PrfPreimage getPreimage(Representation repr);
+    PrfPreimage restorePreimage(Representation repr);
 
     /**
-     * Recreates (deserializes) an image y from its representation.
+     * Restores an image y from its representation.
      */
-    PrfImage getImage(Representation repr);
+    PrfImage restoreImage(Representation repr);
 
-    default Object recreateFromRepresentation(Type type, Representation repr) {
+    default Object restoreFromRepresentation(Type type, Representation repr) {
         if (type instanceof Class) {
             if (PrfKey.class.isAssignableFrom((Class) type)) {
-                return this.getKey(repr);
+                return this.restoreKey(repr);
             } else if (PrfPreimage.class.isAssignableFrom((Class) type)) {
-                return this.getPreimage(repr);
+                return this.restorePreimage(repr);
             } else if (PrfImage.class.isAssignableFrom((Class) type)) {
-                return this.getImage(repr);
+                return this.restoreImage(repr);
             }
         }
         throw new IllegalArgumentException("Cannot recreate object of type: " + type.getTypeName());

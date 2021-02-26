@@ -8,7 +8,7 @@ import org.cryptimeleon.math.serialization.Representation;
  * A key that is used to verify signatures.
  * <p>
  * {@code VerificationKeys} are {@link Representable} and can be
- * restored from {@link Representation} using {@link SignatureScheme#getVerificationKey(Representation)}.
+ * restored from {@link Representation} using {@link SignatureScheme#restoreVerificationKey(Representation)}.
  *
  *
  */

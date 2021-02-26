@@ -250,22 +250,22 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
     }
 
     @Override
-    public MessageBlock getPlainText(Representation repr) {
+    public MessageBlock restorePlainText(Representation repr) {
         return new MessageBlock(repr, r -> new GroupElementPlainText(r, pp.getBilinearMap().getG1()));
     }
 
     @Override
-    public SPSEQSignature getSignature(Representation repr) {
+    public SPSEQSignature restoreSignature(Representation repr) {
         return new SPSEQSignature(repr, this.pp.getBilinearMap().getG1(), this.pp.getBilinearMap().getG2());
     }
 
     @Override
-    public SPSEQSigningKey getSigningKey(Representation repr) {
+    public SPSEQSigningKey restoreSigningKey(Representation repr) {
         return new SPSEQSigningKey(repr, this.pp.getZp());
     }
 
     @Override
-    public SPSEQVerificationKey getVerificationKey(Representation repr) {
+    public SPSEQVerificationKey restoreVerificationKey(Representation repr) {
         return new SPSEQVerificationKey(this.pp.getBilinearMap().getG2(), repr);
     }
 

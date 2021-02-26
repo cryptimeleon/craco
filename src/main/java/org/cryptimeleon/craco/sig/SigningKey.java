@@ -7,7 +7,7 @@ import org.cryptimeleon.math.serialization.Representation;
  * A key that is used to generate a signature.
  * <p>
  * {@code SigningKey}s are {@link Representable} and can be restored from their {@link Representation}
- * using {@link SignatureScheme#getSigningKey(Representation)}.
+ * using {@link SignatureScheme#restoreSigningKey(Representation)}.
  *
  *
  */

@@ -115,7 +115,7 @@ public class PS18ROMSignatureScheme extends PS18SignatureScheme {
     }
 
     @Override
-    public Signature getSignature(Representation repr) {
+    public Signature restoreSignature(Representation repr) {
         return new PS18ROMSignature(repr, this.pp.getBilinearMap().getG1());
     }
 

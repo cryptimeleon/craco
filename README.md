@@ -1,125 +1,120 @@
-[![Build Status](https://travis-ci.com/upbcuk/upb.crypto.craco.svg?branch=master)](https://travis-ci.com/upbcuk/upb.crypto.craco)
-## upb.crypto.craco
-**WARNING: this library is meant to be used for prototyping and as a research tool *only*. It has not been sufficiently vetted to use in production.**
+![Build Status](https://github.com/upbcuk/upb.crypto.craco/workflows/Java%20CI/badge.svg)
+## Craco
 
-CRACO (CRyptogrAphic COnstructions) is a library providing cryptographic construction mainly focused on attribute-based schemes.
-The library is build upon the math library [upb.crypto.math](https://github.com/upbcuk/upb.crypto.math).
+Craco (CRyptogrAphic COnstructions) is a Java library providing implementations of various cryptographic primitives and low-level constructions. This includes primitives such as commitment schemes, signature schemes, facilities for implementing multi-party protocols, and much more.
 
-The constructions provided are:
+The goal of Craco is to provide common cryptographic schemes for usage in more high-level protocols as well as to offer facilities for improving the process of implementing more low-level schemes such as signature and encryption schemes.
+
+## Security Disclaimer
+**WARNING: This library is meant to be used for prototyping and as a research tool *only*. It has not been sufficiently vetted for use in security-critical production environments. All implementations are to be considered experimental.**
+
+## Table Of Contents
+
+* [Features Overview](#features)
+* [Quickstart Guide](#quickstart)
+    * [Maven Installation](#installation-with-maven)
+    * [Gradle Installation](#installation-with-gradle)
+    * [Tutorials](#tutorials)
+* [Miscellaneous Information](#miscellaneous-information)
+* [Authors](#authors)
+* [References](#references)
+
+## Features
+
+Craco implements interfaces and test classes for basic cryptographic primitives such as commitment schemes, encryption schemes, and more.
+It also includes implementations of several schemes as well as facilities for implementing multi-party protocols.
+
+### Implemented Schemes
+The constructions we implement are:
 
 * **Accumulators**:
     * Nguyen's dynamic accumulator [Ngu05]
 * **Commitment schemes**:
     * Pedersen's commitment scheme [Ped92]
 * **Digital signature schemes**:
-    * Pointcheval's & Sanders' short randomizable signature scheme [PS16]
+    * Pointcheval & Sanders' short randomizable signature scheme [PS16]
+    * An extension of Boneh, Boyen and Shacham's signature scheme from [Eid15]
+    * Pointcheval & Sanders' modified short randomizable signature scheme (with and without ROM) [PS18]
+    * Hanser and Slamanig's structure-preserving signature scheme on equivalence classes [HS14]
 * **Encryption schemes**:
     * ElGamal
-    * Attribute-based:
-        * Waters' ciphertext-policy attribute-based encryption scheme [Wat11]
-        * Goyal et al.'s key-policy attribute-based encryption scheme [GPSW06]
-    * Identity-based:
-        * Fuzzy identity-based encryption [SW05]
-        * Identity based encryption from the Weil pairing [BF01]
-* **Key derivation functions (KDF)**:
-    * Implementation based on the Leftover-Hash-Lemma
-* **Key encapsulation mechanisms (KEM)**: We implemented several KEMs based on the encryption schemes implemented in this library. CRACO provides KEMs for [Wat11], [GPSW06], [SW05] and ElGamal. 
+    * Streaming AES Encryption using CBC and GCM modes of operation
+* **Key encapsulation mechanisms (KEM)**: 
+    * ElGamal
 * **Secret sharing schemes**:
     * Shamir's secret sharing scheme [Sha79] and its tree extension
+    
+### Protocols
 
-## Example Code
+Craco also includes interfaces and basic classes useful for implementing cryptographic protocols.
+Parts of this are facilities for easy implementation of Sigma protocols.
 
-As a starting point, we give code examples for common tasks using this library.
+Furthermore, it includes:
 
-#### Attribute-Based Encryption
+* A Fiat-Shamir transformation implementation
+* A Schnorr protocol implementation
+* An implementation of Damgård's technique used to improve Sigma protocols
 
-The following example code illustrates the usage of [Wat11] ABE scheme. 
-It also applies to any other ABE scheme.
+## Quickstart
 
-```java
-/*
- * Generate algorithm parameters:
- * 80 = security level, 5 = the maximum number of attributes in a key, 
- * 5 = maximum number of leaf-node attributes in a policy,
- * usage of Water's hash function = false,
- * debug mode = false
- */
-ABECPWat11Setup setup = new ABECPWat11Setup();
-ABECPWat11PublicParameters pp = setup.doKeyGen(80, 5, 5, false, false);
+### Installation With Maven
+To add the newest Craco version as a dependency, add this to your project's POM:
 
-// set up the encryption scheme using pp
-PredicateEncryptionScheme enc = new ABECPWat11(setup.getPublicParameters());
-
-// get master secret key for the decryption key generation
-MasterSecret masterSecret = setup.getMasterSecret();
-
-/* Key generation */
-
-/* Generate a policy for the encryption key (CipherTextIndex)
- * 
- * ((A,B)'1 ,(B, C, D)'2)'2 := (A + B) * (CD + DE + CE)
- */
-ThresholdPolicy leftNode = new ThresholdPolicy(1, new StringAttribute("A"), new StringAttribute("B"));
-ThresholdPolicy rightNode = new ThresholdPolicy(2, new StringAttribute("C"), new StringAttribute("D"), new StringAttribute("E"));
-CiphertextIndex ciphertextIndex = new ThresholdPolicy(2, leftNode, rightNode);
-
-// Generate encryption key using the policy
-EncryptionKey encryptionKey = predicateEncryptionScheme.generateEncryptionKey(ciphertextIndex);
-
-// Generate a KeyIndex for the decryption key, here: {A, B, C, D}
-KeyIndex keyIndex = new SetOfAttributes(new StringAttribute("A"),  new StringAttribute("C"), new StringAttribute("D"));
-
-// Generate decryption key using master secret key and key index
-DecryptionKey decryptionKey = predicateEncryptionScheme.generateDecryptionKey(masterSecret, keyIndex);
-
-
-/* Encrypting an random element */
-
-// Sample random group element
-GroupElement randomElement = publicParameters.getGroupGT().getUniformlyRandomElement();
-PlainText plainText = new GroupElementPlainText(randomElement);
-
-// Encrypt it
-CipherText cipherText = predicateEncryptionScheme.encrypt(plainText, encryptionKey);
-
-// Decrypt it
-PlainText decryptedPlainText = predicateEncryptionScheme.decrypt(cipherText, decryptionKey);
-
+```xml
+<dependency>
+    <groupId>org.cryptimeleon</groupId>
+    <artifactId>craco</artifactId>
+    <version>1.0.0</version>
+</dependency>
 ```
 
-The example above is a ciphertext-policy ABE scheme. That is, we encrypt a ciphertext under a policy and equip the decryption key with a set of attributes.
-If you want to use a key-policy ABE scheme like [GPSW06] this would be done the other way around, i.e. we equip the ciphertext with a set of attributes and the decryption key with a policy.
-To be precise the decryption key's `KeyIndex` then is a policy and the `CiphertextIndex` a set of attributes.
+### Installation With Gradle
+
+Craco is published via Maven Central.
+Therefore, you need to add `mavenCentral()` to the `repositories` section of your project's `build.gradle` file.
+Then, add `implementation group: 'org.cryptimeleon', name: 'craco', version: '1.0.0'` to the `dependencies` section of your `build.gradle` file.
+
+For example:
+
+```groovy
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'org.cryptimeleon', name: 'craco', version: '1.0.0'
+}
+```
+
+### Tutorials
+
+Craco is very much connected with our [Math library](https://github.com/cryptimeleon/math).
+Therefore, we recommend you go through our [short Math tutorial](https://cryptimeleon.github.io/getting-started/5-minute-tutorial.html) to get started.
+
+We also provide walkthroughs where we show you how to implement a pairing-based signature scheme [here](https://cryptimeleon.github.io/getting-started/pairing-tutorial.html) as well as a simple cryptographic protocol [here](https://cryptimeleon.github.io/getting-started/protocols-tutorial.html).
+The latter uses Craco's protocol capabilities.
+
+## Miscellaneous Information
+
+- Official Documentation can be found [here](https://cryptimeleon.github.io/).
+    - The *For Contributors* area includes information on how to contribute.
+- Craco adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+- The changelog can be found [here](CHANGELOG.md).
+- Craco is licensed under Apache License 2.0, see [LICENSE file](LICENSE).
+
+## Authors
+The library was implemented at Paderborn University in the research group ["Codes und Cryptography"](https://cs.uni-paderborn.de/en/cuk/).
 
 ## References
 
-[BF01] Dan Boneh and Matt Franklin. "Identity-Based Encryption from the Weil Pairing". In: Advances in Cryptology — CRYPTO 2001. CRYPTO 2001. Ed. by Joe Kilian. Vol. 2139. Lecture Notes in Computer Science.  Springer, Berlin, Heidelberg, August 2001, pp. 213-229.
+[HS14] Christian Hanser and Daniel Slamanig. "Structure-Preserving Signatures on Equivalence Classes and Their Application to Anonymous Credentials." In: Advances in Cryptology – ASIACRYPT 2014. Springer Berlin Heidelberg, pp 491–511.
 
-[GPSW06] Vipul Goyal, Omkant Pandey, Amit Sahai, and Brent Waters. "Attribute-based encryption for fine-grained access control of encrypted data". In: ACM Conference on Computer and Communications Security. ACM, 2006, pages 89–98.
+[Ngu05] Lan Nguyen. “Accumulators from Bilinear Pairings and Applications”. In: Topics in Cryptology – CT-RSA 2005. Ed. by Alfred Menezes. Vol. 3376. Lecture Notes in Computer Science. Springer, Heidelberg, February 2005, pp. 275–292.
 
-[Ngu05] Lan Nguyen. “Accumulators from Bilinear Pairings and Applications”. In: Topics
-in Cryptology – CT-RSA 2005. Ed. by Alfred Menezes. Vol. 3376. Lecture Notes in
-Computer Science. Springer, Heidelberg, February 2005, pp. 275–292.
+[Ped92] Torben P. Pedersen. “Non-Interactive and Information-Theoretic Secure Verifiable Secret Sharing”. In: Advances in Cryptology – CRYPTO’91. Ed. by Joan Feigenbaum. Vol. 576. Lecture Notes in Computer Science. Springer, Heidelberg, August 1992, pp. 129–140.
 
-[Ped92] Torben P. Pedersen. “Non-Interactive and Information-Theoretic Secure Verifiable
-        Secret Sharing”. In: Advances in Cryptology – CRYPTO’91. Ed. by Joan Feigenbaum.
-        Vol. 576. Lecture Notes in Computer Science. Springer, Heidelberg, August
-        1992, pp. 129–140.
+[PS16] David Pointcheval and Olivier Sanders. “Short Randomizable Signatures”. In: Topics in Cryptology – CT-RSA 2016. Ed. by Kazue Sako. Vol. 9610. Lecture Notes in Computer Science. Springer, Heidelberg, February 2016, pp. 111–126.
 
-[PS16] David Pointcheval and Olivier Sanders. “Short Randomizable Signatures”. In: Topics
-in Cryptology – CT-RSA 2016. Ed. by Kazue Sako. Vol. 9610. Lecture Notes in
-Computer Science. Springer, Heidelberg, February 2016, pp. 111–126.
+[PS18] David Pointcheval and Olivier Sanders. "Reassessing Security of Randomizable Signatures". In: Topic in Cryptology - CT-RSA 2018. Ed. by Nigel P. Smart. Springer International Publishing, 2018, pp 319-338.
 
-[Sha79] Adi Shamir. “How to Share a Secret”. In: Communications of the Association for
-Computing Machinery 22.11 (November 1979), pp. 612–613.
-
-[Wat11] Brent Waters. Ciphertext-policy attribute-based encryption: An
-expressive, efficient, and provably secure realization. In Public Key
-Cryptography. Springer, 2011, pp. 53–70.
-
-## Notes
-
-The library was implemented at Paderborn University in the research group ["Codes und Cryptography"](https://cs.uni-paderborn.de/en/cuk/).
-
-## Licence
-Apache License 2.0, see LICENCE file.
+[Sha79] Adi Shamir. “How to Share a Secret”. In: Communications of the Association for Computing Machinery 22.11 (November 1979), pp. 612–613.

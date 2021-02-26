@@ -152,22 +152,22 @@ public class BBSBSignatureScheme implements StandardMultiMessageSignatureScheme 
     }
 
     @Override
-    public MessageBlock getPlainText(Representation repr) {
+    public MessageBlock restorePlainText(Representation repr) {
         return new MessageBlock(repr, RingElementPlainText::new);
     }
 
     @Override
-    public BBSABSignature getSignature(Representation repr) {
+    public BBSABSignature restoreSignature(Representation repr) {
         return new BBSABSignature(repr, pp.getGroupG1());
     }
 
     @Override
-    public BBSBSigningKey getSigningKey(Representation repr) {
+    public BBSBSigningKey restoreSigningKey(Representation repr) {
         return new BBSBSigningKey(repr, pp.getZp());
     }
 
     @Override
-    public BBSBVerificationKey getVerificationKey(Representation repr) {
+    public BBSBVerificationKey restoreVerificationKey(Representation repr) {
         return new BBSBVerificationKey(repr, pp.getGroupG2());
     }
 

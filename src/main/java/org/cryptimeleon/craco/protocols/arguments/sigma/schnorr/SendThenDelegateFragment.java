@@ -271,7 +271,7 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
          */
         public AlgebraicSendFirstValue(Representation repr, Structure... structures) {
             for (int i=0;i<structures.length;i++)
-                elements.add(structures[i].getElement(repr.list().get(i)));
+                elements.add(structures[i].restoreElement(repr.list().get(i)));
         }
 
         /**
