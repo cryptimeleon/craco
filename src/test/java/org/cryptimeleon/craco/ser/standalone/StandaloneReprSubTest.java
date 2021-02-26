@@ -8,6 +8,14 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Base class for testing {@link StandaloneRepresentable}s. <br>
+ *
+ * Implementing classes should write methods that instantiate a {@linkplain StandaloneRepresentable}
+ * and then call {@link #test(StandaloneRepresentable)} for it.
+ * All public (non-static) methods the implementing class declares are automatically executed at test time.
+ * When in doubt, check out some examples (e.g., {@link org.cryptimeleon.craco.ser.standalone.params.EncryptionStandaloneReprTests}).
+ */
 public abstract class StandaloneReprSubTest {
     private HashSet<Class<? extends StandaloneRepresentable>> testedClasses;
 

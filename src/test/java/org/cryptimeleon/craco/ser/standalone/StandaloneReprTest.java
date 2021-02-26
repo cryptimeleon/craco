@@ -22,6 +22,11 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+/**
+ * Tests that {@link StandaloneRepresentable} classes fulfill their contract.<br>
+ * This class mostly just gathers the classes that need testing and delegates to {@link StandaloneReprSubTest},
+ * whose task is essentially to instantiate classes so that they can be tested.
+ */
 public class StandaloneReprTest {
     protected static HashSet<Class<? extends StandaloneRepresentable>> testedClasses = new HashSet<>();
     private static final Reflections reflection = new Reflections("org.cryptimeleon.craco");
