@@ -18,7 +18,7 @@ public class SchnorrZnVariable extends SchnorrVariable implements ExponentVariab
     }
 
     @Override
-    public SchnorrZnVariableValue recreateValue(Representation repr) {
+    public SchnorrZnVariableValue restoreValue(Representation repr) {
         return new SchnorrZnVariableValue(zn.getElement(repr), this);
     }
 }

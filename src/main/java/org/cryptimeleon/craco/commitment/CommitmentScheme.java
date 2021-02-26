@@ -52,24 +52,24 @@ public interface CommitmentScheme extends StandaloneRepresentable, Representatio
      */
     PlainText mapToPlainText(byte[] bytes);
 
-    default CommitmentPair getCommitmentPair(Representation repr) {
+    default CommitmentPair restoreCommitmentPair(Representation repr) {
         return new CommitmentPair(
-                getCommitment(repr.obj().get("com")),
-                getOpenValue(repr.obj().get("open")));
+                restoreCommitment(repr.obj().get("com")),
+                restoreOpenValue(repr.obj().get("open")));
     }
 
-    Commitment getCommitment(Representation repr);
+    Commitment restoreCommitment(Representation repr);
 
-    OpenValue getOpenValue(Representation repr);
+    OpenValue restoreOpenValue(Representation repr);
 
     @Override
     default Object recreateFromRepresentation(Type type, Representation repr) {
         if (CommitmentPair.class.isAssignableFrom((Class) type))
-            return getCommitmentPair(repr);
+            return restoreCommitmentPair(repr);
         if (Commitment.class.isAssignableFrom((Class) type))
-            return getCommitment(repr);
+            return restoreCommitment(repr);
         if (OpenValue.class.isAssignableFrom((Class) type))
-            return getOpenValue(repr);
+            return restoreOpenValue(repr);
 
         throw new IllegalArgumentException("Commitment cannot recreate type "+type.getTypeName());
     }

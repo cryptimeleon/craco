@@ -50,20 +50,20 @@ public interface SignatureScheme extends StandaloneRepresentable, Representation
     Boolean verify(PlainText plainText, Signature signature, VerificationKey publicKey);
 
 
-    PlainText getPlainText(Representation repr);
+    PlainText restorePlainText(Representation repr);
 
-    Signature getSignature(Representation repr);
+    Signature restoreSignature(Representation repr);
 
-    SigningKey getSigningKey(Representation repr);
+    SigningKey restoreSigningKey(Representation repr);
 
-    VerificationKey getVerificationKey(Representation repr);
+    VerificationKey restoreVerificationKey(Representation repr);
 
     default Signature sign(Representation plainText, Representation secretKey) {
-        return sign(getPlainText(plainText), getSigningKey(secretKey));
+        return sign(restorePlainText(plainText), restoreSigningKey(secretKey));
     }
 
     default Boolean verify(Representation plainText, Representation signature, Representation publicKey) {
-        return verify(getPlainText(plainText), getSignature(signature), getVerificationKey(publicKey));
+        return verify(restorePlainText(plainText), restoreSignature(signature), restoreVerificationKey(publicKey));
     }
 
     /**
@@ -126,13 +126,13 @@ public interface SignatureScheme extends StandaloneRepresentable, Representation
     default Object recreateFromRepresentation(Type type, Representation repr) {
         if (type instanceof Class) {
             if (SigningKey.class.isAssignableFrom((Class) type)) {
-                return this.getSigningKey(repr);
+                return this.restoreSigningKey(repr);
             } else if (VerificationKey.class.isAssignableFrom((Class) type)) {
-                return this.getVerificationKey(repr);
+                return this.restoreVerificationKey(repr);
             } else if (Signature.class.isAssignableFrom((Class) type)) {
-                return this.getSignature(repr);
+                return this.restoreSignature(repr);
             } else if (PlainText.class.isAssignableFrom((Class) type)) {
-                return this.getPlainText(repr);
+                return this.restorePlainText(repr);
             }
         }
         throw new IllegalArgumentException("Cannot recreate object of type: " + type.getTypeName());

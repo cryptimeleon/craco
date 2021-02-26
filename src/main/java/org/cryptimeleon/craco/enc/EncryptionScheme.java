@@ -47,47 +47,47 @@ public interface EncryptionScheme extends StandaloneRepresentable, Representatio
      * @param repr the representation to restore the plaintext from
      * @return the plaintext corresponding to the given representation
      */
-    PlainText getPlainText(Representation repr);
+    PlainText restorePlainText(Representation repr);
 
     /**
      * Restores the ciphertext corresponding to the given representation.
      * @param repr the representation to restore the ciphertext from
      * @return the ciphertext corresponding to the given representation
      */
-    CipherText getCipherText(Representation repr);
+    CipherText restoreCipherText(Representation repr);
 
     /**
      * Restores the encryption key corresponding to the given representation.
      * @param repr the representation to restore the encryption key from
      * @return the encryption corresponding to the given representation
      */
-    EncryptionKey getEncryptionKey(Representation repr);
+    EncryptionKey restoreEncryptionKey(Representation repr);
 
     /**
      * Restores the decryption key corresponding to the given representation.
      * @param repr the representation to restore the decryption key from
      * @return the decryption key corresponding to the given representation
      */
-    DecryptionKey getDecryptionKey(Representation repr);
+    DecryptionKey restoreDecryptionKey(Representation repr);
 
     default CipherText encrypt(Representation plainText, Representation publicKey) {
-        return encrypt(getPlainText(plainText), getEncryptionKey(publicKey));
+        return encrypt(restorePlainText(plainText), restoreEncryptionKey(publicKey));
     }
 
     default PlainText decrypt(Representation cipherText, Representation privateKey) {
-        return decrypt(getCipherText(cipherText), getDecryptionKey(privateKey));
+        return decrypt(restoreCipherText(cipherText), restoreDecryptionKey(privateKey));
     }
 
     default Object recreateFromRepresentation(Type type, Representation repr) {
         if (type instanceof Class) {
             if (EncryptionKey.class.isAssignableFrom((Class) type)) {
-                return this.getEncryptionKey(repr);
+                return this.restoreEncryptionKey(repr);
             } else if (DecryptionKey.class.isAssignableFrom((Class) type)) {
-                return this.getDecryptionKey(repr);
+                return this.restoreDecryptionKey(repr);
             } else if (CipherText.class.isAssignableFrom((Class) type)) {
-                return this.getCipherText(repr);
+                return this.restoreCipherText(repr);
             } else if (PlainText.class.isAssignableFrom((Class) type)) {
-                return this.getPlainText(repr);
+                return this.restorePlainText(repr);
             }
         }
         throw new IllegalArgumentException("Cannot recreate object of type: " + type.getTypeName());

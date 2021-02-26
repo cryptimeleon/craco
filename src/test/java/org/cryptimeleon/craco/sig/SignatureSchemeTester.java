@@ -44,22 +44,22 @@ public class SignatureSchemeTester {
         // Test representations for a signature
         Signature signature = signatureScheme.sign(plainText, signingKey);
         Representation signatureRepresentation = signature.getRepresentation();
-        Signature signatureFromRepr = signatureScheme.getSignature(signatureRepresentation);
+        Signature signatureFromRepr = signatureScheme.restoreSignature(signatureRepresentation);
         assertEquals(signature, signatureFromRepr);
 
         // Test representation for a signing key
         Representation signingKeyRepresentation = signingKey.getRepresentation();
-        SigningKey signingKeyFromRepr = signatureScheme.getSigningKey(signingKeyRepresentation);
+        SigningKey signingKeyFromRepr = signatureScheme.restoreSigningKey(signingKeyRepresentation);
         assertEquals(signingKey, signingKeyFromRepr);
 
         // Test representation for a verification key
         Representation verificationKeyRepresentation = verificationKey.getRepresentation();
-        VerificationKey verificationKeyFromRepr = signatureScheme.getVerificationKey(verificationKeyRepresentation);
+        VerificationKey verificationKeyFromRepr = signatureScheme.restoreVerificationKey(verificationKeyRepresentation);
         assertEquals(verificationKey, verificationKeyFromRepr);
 
         // Test representation for a plaintext
         Representation plainTextRepresentation = plainText.getRepresentation();
-        PlainText plainTextFromRepr = signatureScheme.getPlainText(plainTextRepresentation);
+        PlainText plainTextFromRepr = signatureScheme.restorePlainText(plainTextRepresentation);
         assertEquals(plainText, plainTextFromRepr);
 
     }

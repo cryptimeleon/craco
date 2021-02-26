@@ -266,22 +266,22 @@ public class PS18SignatureScheme implements SignatureScheme {
     }
 
     @Override
-    public PlainText getPlainText(Representation repr) {
+    public PlainText restorePlainText(Representation repr) {
         return new MessageBlock(repr, RingElementPlainText::new);
     }
 
     @Override
-    public Signature getSignature(Representation repr) {
+    public Signature restoreSignature(Representation repr) {
         return new PS18Signature(repr, this.pp.getZp(), this.pp.getBilinearMap().getG1());
     }
 
     @Override
-    public SigningKey getSigningKey(Representation repr) {
+    public SigningKey restoreSigningKey(Representation repr) {
         return new PS18SigningKey(repr, this.pp.getZp());
     }
 
     @Override
-    public VerificationKey getVerificationKey(Representation repr) {
+    public VerificationKey restoreVerificationKey(Representation repr) {
         return new PS18VerificationKey(repr, this.pp.getBilinearMap().getG2());
     }
 

@@ -82,7 +82,7 @@ public class PSExtendedSignatureScheme extends PSSignatureScheme{
      * @return An extended verification key for a Pointcheval Signature Scheme
      */
     @Override
-    public PSExtendedVerificationKey getVerificationKey(Representation repr) {
+    public PSExtendedVerificationKey restoreVerificationKey(Representation repr) {
         final BilinearMap bilinearMap = super.getPp().getBilinearMap();
         // Constructor for using the extended Verification key (enabling optional blinding/unblinding)
         return new PSExtendedVerificationKey(bilinearMap.getG1(), bilinearMap.getG2(), repr);

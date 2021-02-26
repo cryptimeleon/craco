@@ -51,20 +51,20 @@ public interface KeyEncapsulationMechanism<T> extends StandaloneRepresentable, R
      */
     public T decaps(CipherText encapsulatedKey, DecryptionKey sk) throws UnqualifiedKeyException;
 
-    public CipherText getEncapsulatedKey(Representation repr);
+    public CipherText restoreEncapsulatedKey(Representation repr);
 
-    public EncryptionKey getEncapsulationKey(Representation repr);
+    public EncryptionKey restoreEncapsulationKey(Representation repr);
 
-    public DecryptionKey getDecapsulationKey(Representation repr);
+    public DecryptionKey restoreDecapsulationKey(Representation repr);
 
     default Object recreateFromRepresentation(Type type, Representation repr) {
         if (type instanceof Class) {
             if (EncryptionKey.class.isAssignableFrom((Class) type)) {
-                return this.getEncapsulationKey(repr);
+                return this.restoreEncapsulationKey(repr);
             } else if (DecryptionKey.class.isAssignableFrom((Class) type)) {
-                return this.getDecapsulationKey(repr);
+                return this.restoreDecapsulationKey(repr);
             } else if (CipherText.class.isAssignableFrom((Class) type)) {
-                return this.getEncapsulatedKey(repr);
+                return this.restoreEncapsulatedKey(repr);
             }
         }
         throw new IllegalArgumentException("Cannot recreate object of type: " + type.getTypeName());

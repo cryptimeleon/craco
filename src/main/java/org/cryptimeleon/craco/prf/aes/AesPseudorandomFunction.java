@@ -76,17 +76,17 @@ public class AesPseudorandomFunction implements PseudorandomFunction {
     }
 
     @Override
-    public PrfKey getKey(Representation repr) {
+    public PrfKey restoreKey(Representation repr) {
         return new ByteArrayImplementation(repr);
     }
 
     @Override
-    public PrfPreimage getPreimage(Representation repr) {
+    public PrfPreimage restorePreimage(Representation repr) {
         return new ByteArrayImplementation(repr);
     }
 
     @Override
-    public PrfImage getImage(Representation repr) {
+    public PrfImage restoreImage(Representation repr) {
         return new ByteArrayImplementation(repr);
     }
 

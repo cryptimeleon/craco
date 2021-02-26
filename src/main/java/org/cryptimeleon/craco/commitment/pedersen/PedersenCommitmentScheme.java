@@ -92,12 +92,12 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
     }
 
     @Override
-    public PedersenCommitment getCommitment(Representation repr) {
+    public PedersenCommitment restoreCommitment(Representation repr) {
         return new PedersenCommitment(group.getElement(repr));
     }
 
     @Override
-    public PedersenOpenValue getOpenValue(Representation repr) {
+    public PedersenOpenValue restoreOpenValue(Representation repr) {
         return new PedersenOpenValue(group.getZn().getElement(repr));
     }
 

@@ -29,7 +29,7 @@ public class SchnorrVariableValueList implements SchnorrVariableAssignment, Anno
         int i=0;
         variableValues = new LinkedHashMap<>();
         for (SchnorrVariable variable : variables) {
-            SchnorrVariableValue val = variable.recreateValue(repr.list().get(i++));
+            SchnorrVariableValue val = variable.restoreValue(repr.list().get(i++));
             variableValues.put(val.getVariable(), val);
         }
     }
