@@ -18,13 +18,6 @@ import java.util.Objects;
  *
  */
 public class ElgamalPublicKey implements EncryptionKey {
-
-    /**
-     * The group of this Elgamal-Algorithm
-     */
-    @Represented
-    private Group groupG;
-
     /**
      * The public parameter g \in groupG
      */
@@ -42,26 +35,16 @@ public class ElgamalPublicKey implements EncryptionKey {
     /**
      * Creates a new ElgamalPublic Key
      *
-     * @param groupG the group
-     * @param g      the generator of groupG
-     * @param h      the public parameter h, where h := g^a (a is the private exponent)
+     * @param g      a generator
+     * @param h      the public key h, where h := g^a (a is the private exponent)
      */
-    public ElgamalPublicKey(Group groupG, GroupElement g, GroupElement h) {
-        this.groupG = groupG;
+    public ElgamalPublicKey(GroupElement g, GroupElement h) {
         this.g = g;
         this.h = h;
     }
 
-    public ElgamalPublicKey(Representation repr) {
-        new ReprUtil(this).deserialize(repr);
-    }
-
-    public void setGroupG(Group groupG) {
-        this.groupG = groupG;
-    }
-
-    public Group getGroupG() {
-        return groupG;
+    public ElgamalPublicKey(Representation repr, Group group) {
+        new ReprUtil(this).register(group, "groupG").deserialize(repr);
     }
 
     public GroupElement getG() {
@@ -82,7 +65,6 @@ public class ElgamalPublicKey implements EncryptionKey {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((g == null) ? 0 : g.hashCode());
-        result = prime * result + ((groupG == null) ? 0 : groupG.hashCode());
         result = prime * result + ((h == null) ? 0 : h.hashCode());
         return result;
     }
@@ -97,7 +79,6 @@ public class ElgamalPublicKey implements EncryptionKey {
             return false;
         ElgamalPublicKey other = (ElgamalPublicKey) obj;
         return Objects.equals(g, other.g)
-                && Objects.equals(groupG, other.groupG)
                 && Objects.equals(h, other.h);
     }
 

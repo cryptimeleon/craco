@@ -1,9 +1,9 @@
 package org.cryptimeleon.craco.kem.asym.elgamal;
 
+import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 import org.cryptimeleon.craco.enc.*;
 import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalCipherText;
 import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalEncryption;
-import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalPlainText;
 import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalPrivateKey;
 import org.cryptimeleon.craco.enc.sym.streaming.aes.ByteArrayImplementation;
 import org.cryptimeleon.craco.kem.asym.AsymmetricKEM;
@@ -157,7 +157,7 @@ public class ElgamalKEM implements AsymmetricKEM<SymmetricKey> {
          * pick random message R and encode as plaintext
          */
         GroupElement R = this.encryptionScheme.getGroup().getUniformlyRandomElement();
-        ElgamalPlainText M = new ElgamalPlainText(R);
+        GroupElementPlainText M = new GroupElementPlainText(R);
 
         /*
          *
@@ -221,9 +221,9 @@ public class ElgamalKEM implements AsymmetricKEM<SymmetricKey> {
         /*
          * do elgamal decryption to recover R (embedded into M)
          */
-        ElgamalPlainText M = (ElgamalPlainText) encryptionScheme.decrypt(C.getElgamalCipherText(), sk);
+        GroupElementPlainText M = (GroupElementPlainText) encryptionScheme.decrypt(C.getElgamalCipherText(), sk);
 
-        GroupElement R = M.getPlaintext();
+        GroupElement R = M.get();
 
         /*
          * recover r=H(R)

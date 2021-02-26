@@ -6,7 +6,7 @@ import org.cryptimeleon.craco.enc.DecryptionKey;
 import org.cryptimeleon.craco.enc.EncryptionKey;
 import org.cryptimeleon.craco.enc.KeyPair;
 import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalEncryption;
-import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalPlainText;
+import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 import org.cryptimeleon.math.structures.groups.Group;
 import org.cryptimeleon.math.structures.rings.zn.Zp;
 
@@ -24,7 +24,7 @@ public class ElgamalParams {
         EncryptionKey validPK = validKeyPair.getPk();
         DecryptionKey validSK = validKeyPair.getSk();
 
-        PlainText plaintext = new ElgamalPlainText(zpGroup.getUniformlyRandomElement());
+        PlainText plaintext = new GroupElementPlainText(zpGroup.getUniformlyRandomElement());
         CipherText ciphertext = elgamalScheme.encrypt(plaintext, validPK);
 
         return new RepresentationTestParams(elgamalScheme, validPK, validSK, plaintext, ciphertext);

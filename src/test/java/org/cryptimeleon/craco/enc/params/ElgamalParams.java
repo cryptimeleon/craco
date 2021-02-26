@@ -4,7 +4,7 @@ import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.enc.KeyPair;
 import org.cryptimeleon.craco.enc.TestParams;
 import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalEncryption;
-import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalPlainText;
+import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalPrivateKey;
 import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalPublicKey;
 import org.cryptimeleon.math.structures.groups.Group;
@@ -22,7 +22,7 @@ public class ElgamalParams {
 
         ElgamalEncryption elgamalScheme = new ElgamalEncryption(zpGroup);
 
-        Supplier<PlainText> supplier = () -> ((PlainText) new ElgamalPlainText(zpGroup.getUniformlyRandomElement()));
+        Supplier<PlainText> supplier = () -> ((PlainText) new GroupElementPlainText(zpGroup.getUniformlyRandomElement()));
 
         KeyPair validKeyPair = elgamalScheme.generateKeyPair();
 

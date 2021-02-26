@@ -1,11 +1,11 @@
 package org.cryptimeleon.craco.test;
 
+import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.common.plaintexts.RingElementPlainText;
 import org.cryptimeleon.craco.enc.*;
 import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalEncryption;
-import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalPlainText;
 import org.cryptimeleon.craco.sig.Signature;
 import org.cryptimeleon.craco.sig.SignatureKeyPair;
 import org.cryptimeleon.craco.sig.SigningKey;
@@ -118,7 +118,7 @@ public class TestData implements Representable {
         for (int i = 0; i < 10; i++) {
             list.add(group.getUniformlyRandomElement());
         }
-        plaintext = new ElgamalPlainText(group.getUniformlyRandomElement());
+        plaintext = new GroupElementPlainText(group.getUniformlyRandomElement());
         ciphertext = encryptionScheme.encrypt(plaintext, encryptionKey);
         PSPublicParametersGen ppSetup = new PSPublicParametersGen();
         PSPublicParameters pp = ppSetup.generatePublicParameter(160, true);
