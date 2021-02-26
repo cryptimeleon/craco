@@ -25,7 +25,7 @@ public class RingElementAttribute implements Attribute {
 
     public RingElementAttribute(Representation repr) {
         Ring ring = (Ring) repr.obj().get("ring").repr().recreateRepresentable();
-        this.element = ring.getElement(repr.obj().get("elem"));
+        this.element = ring.restoreElement(repr.obj().get("elem"));
     }
 
     /**

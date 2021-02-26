@@ -30,7 +30,7 @@ public class GroupElementPlainText implements PlainText, UniqueByteRepresentable
      * @param baseGroup the group to use as restorer; should be the group that contains the group element
      */
     public GroupElementPlainText(Representation repr, Group baseGroup) {
-        p = baseGroup.getElement(repr);
+        p = baseGroup.restoreElement(repr);
     }
 
     /**

@@ -15,7 +15,7 @@ public class NguyenWitness implements AccumulatorWitness {
     }
 
     public NguyenWitness(Representation repr, Group group) {
-        this.witness = group.getElement(repr);
+        this.witness = group.restoreElement(repr);
     }
 
     public GroupElement getWitness() {

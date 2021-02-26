@@ -93,12 +93,12 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
 
     @Override
     public PedersenCommitment restoreCommitment(Representation repr) {
-        return new PedersenCommitment(group.getElement(repr));
+        return new PedersenCommitment(group.restoreElement(repr));
     }
 
     @Override
     public PedersenOpenValue restoreOpenValue(Representation repr) {
-        return new PedersenOpenValue(group.getZn().getElement(repr));
+        return new PedersenOpenValue(group.getZn().restoreElement(repr));
     }
 
     private RingElementVector plaintextToRingElementVector(PlainText plainText) {

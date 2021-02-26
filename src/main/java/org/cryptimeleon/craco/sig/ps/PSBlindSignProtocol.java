@@ -111,8 +111,8 @@ public class PSBlindSignProtocol extends BaseProtocol {
                     break;
                 case 4:
                     //Receive blinded signature, unblind, finish
-                    GroupElement sigma0 = group.getG1().getElement(receive("sigma0")); //h
-                    GroupElement sigma1 = group.getG1().getElement(receive("blindedSigma1")).op(sigma0.pow(blindingFactor.neg())); //h^{x + \sum y_i * m_i}
+                    GroupElement sigma0 = group.getG1().restoreElement(receive("sigma0")); //h
+                    GroupElement sigma1 = group.getG1().restoreElement(receive("blindedSigma1")).op(sigma0.pow(blindingFactor.neg())); //h^{x + \sum y_i * m_i}
                     resultSignature = new PSSignature(sigma0, sigma1);
                     terminate();
                     break;
@@ -124,7 +124,7 @@ public class PSBlindSignProtocol extends BaseProtocol {
             switch (round) {
                 case 1:
                     //Receive commitment, run subprotocol as verifier (internally sends Sigma protocol challenge this round)
-                    commitment = group.getG1().getElement(receive("commitment"));
+                    commitment = group.getG1().restoreElement(receive("commitment"));
                     runSubprotocolConcurrently("openingProof", openingProofInstance = new DamgardTechnique(new OpeningProof(), protocol.commitmentSchemeForDamgard).getVerifierInstance(new OpeningCommonInput(commitment)));
                     break;
                 case 3:

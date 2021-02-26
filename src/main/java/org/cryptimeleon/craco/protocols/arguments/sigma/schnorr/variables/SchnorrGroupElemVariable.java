@@ -19,6 +19,6 @@ public class SchnorrGroupElemVariable extends SchnorrVariable implements GroupVa
 
     @Override
     public SchnorrGroupElemVariableValue restoreValue(Representation repr) {
-        return new SchnorrGroupElemVariableValue(group.getElement(repr), this);
+        return new SchnorrGroupElemVariableValue(group.restoreElement(repr), this);
     }
 }
