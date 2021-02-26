@@ -57,7 +57,7 @@ public interface KeyEncapsulationMechanism<T> extends StandaloneRepresentable, R
 
     public DecryptionKey restoreDecapsulationKey(Representation repr);
 
-    default Object recreateFromRepresentation(Type type, Representation repr) {
+    default Object restoreFromRepresentation(Type type, Representation repr) {
         if (type instanceof Class) {
             if (EncryptionKey.class.isAssignableFrom((Class) type)) {
                 return this.restoreEncapsulationKey(repr);

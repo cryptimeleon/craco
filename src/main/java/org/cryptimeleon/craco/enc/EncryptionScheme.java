@@ -78,7 +78,7 @@ public interface EncryptionScheme extends StandaloneRepresentable, Representatio
         return decrypt(restoreCipherText(cipherText), restoreDecryptionKey(privateKey));
     }
 
-    default Object recreateFromRepresentation(Type type, Representation repr) {
+    default Object restoreFromRepresentation(Type type, Representation repr) {
         if (type instanceof Class) {
             if (EncryptionKey.class.isAssignableFrom((Class) type)) {
                 return this.restoreEncryptionKey(repr);

@@ -63,7 +63,7 @@ public interface CommitmentScheme extends StandaloneRepresentable, Representatio
     OpenValue restoreOpenValue(Representation repr);
 
     @Override
-    default Object recreateFromRepresentation(Type type, Representation repr) {
+    default Object restoreFromRepresentation(Type type, Representation repr) {
         if (CommitmentPair.class.isAssignableFrom((Class) type))
             return restoreCommitmentPair(repr);
         if (Commitment.class.isAssignableFrom((Class) type))

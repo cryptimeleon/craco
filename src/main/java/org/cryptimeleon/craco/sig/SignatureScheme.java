@@ -123,7 +123,7 @@ public interface SignatureScheme extends StandaloneRepresentable, Representation
     int getMaxNumberOfBytesForMapToPlaintext();
 
 
-    default Object recreateFromRepresentation(Type type, Representation repr) {
+    default Object restoreFromRepresentation(Type type, Representation repr) {
         if (type instanceof Class) {
             if (SigningKey.class.isAssignableFrom((Class) type)) {
                 return this.restoreSigningKey(repr);

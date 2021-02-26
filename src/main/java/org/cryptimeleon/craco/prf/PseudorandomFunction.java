@@ -47,7 +47,7 @@ public interface PseudorandomFunction extends StandaloneRepresentable, Represent
      */
     PrfImage restoreImage(Representation repr);
 
-    default Object recreateFromRepresentation(Type type, Representation repr) {
+    default Object restoreFromRepresentation(Type type, Representation repr) {
         if (type instanceof Class) {
             if (PrfKey.class.isAssignableFrom((Class) type)) {
                 return this.restoreKey(repr);
