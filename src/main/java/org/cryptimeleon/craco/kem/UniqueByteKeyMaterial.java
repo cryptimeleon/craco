@@ -13,8 +13,8 @@ import java.util.Objects;
  */
 public class UniqueByteKeyMaterial implements KeyMaterial {
 
-    private UniqueByteRepresentable e;
-    private int minEntropy;
+    private final UniqueByteRepresentable e;
+    private final int minEntropy;
 
     public UniqueByteKeyMaterial(UniqueByteRepresentable e, int minEntropyOfSource) {
         this.e = e;

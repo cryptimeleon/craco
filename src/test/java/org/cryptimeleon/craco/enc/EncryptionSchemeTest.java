@@ -2,7 +2,6 @@ package org.cryptimeleon.craco.enc;
 
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.enc.params.ElgamalParams;
-import org.cryptimeleon.craco.kem.UnqualifiedKeyException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -62,7 +61,7 @@ public class EncryptionSchemeTest {
             PlainText decryptedCipherText = encryptionScheme.decrypt(cipherText, sk);
             assertNotEquals(data, decryptedCipherText);
         } catch (Exception e) {
-            assertTrue(e instanceof UnqualifiedKeyException); //schemes should throw UnqualifiedKeyExceptions if the
+            assertTrue(e instanceof IllegalArgumentException); //schemes should throw IllegalArgumentException if the
             // key is not fit to decrypt.
         }
     }

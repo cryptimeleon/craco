@@ -16,9 +16,6 @@ import java.util.Objects;
  * This class can be used to generate key derivation functions that are not provably secure
  * (e.g. using {@link SHA256HashFunction} as a hash function),
  * or it can be used to generate provably secure key derivation functions.
- * For this, you have to setup a
- * TODO: Missing sentence
- *
  *
  */
 public class HashBasedKeyDerivationFunction implements KeyDerivationFunction<SymmetricKey> {

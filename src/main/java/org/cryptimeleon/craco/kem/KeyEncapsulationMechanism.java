@@ -49,7 +49,7 @@ public interface KeyEncapsulationMechanism<T> extends StandaloneRepresentable, R
      * i.e. 	if (key, encapsulatedKey) <- encaps(pk);
      * then decrypt(encapsulatedKey, sk) = key.
      */
-    public T decaps(CipherText encapsulatedKey, DecryptionKey sk) throws UnqualifiedKeyException;
+    public T decaps(CipherText encapsulatedKey, DecryptionKey sk) throws IllegalArgumentException;
 
     public CipherText restoreEncapsulatedKey(Representation repr);
 

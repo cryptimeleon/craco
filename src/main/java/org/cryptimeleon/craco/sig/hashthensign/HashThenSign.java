@@ -31,9 +31,7 @@ public class HashThenSign implements SignatureScheme {
 
     public HashThenSign(HashFunction hashFunction, SignatureScheme signatureScheme) {
         if (hashFunction.getOutputLength() > signatureScheme.getMaxNumberOfBytesForMapToPlaintext()) {
-            throw new IllegalArgumentException(
-                    "The given hash function is incompatible with the given signature scheme! The output length is " +
-                            "too large.");
+            throw new IllegalArgumentException("The given hash function is incompatible with the given signature scheme! The output length is too large.");
         }
         this.hashFunction = hashFunction;
         this.encapsulatedScheme = signatureScheme;
