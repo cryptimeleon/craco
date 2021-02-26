@@ -31,7 +31,7 @@ public class ElgamalPrivateKey implements DecryptionKey {
     private ElgamalPublicKey publicKey;
 
     public ElgamalPrivateKey(Representation repr, ElgamalEncryption scheme) {
-        new ReprUtil(this).register(scheme.groupG, "Zn").register(scheme, "Scheme").deserialize(repr);
+        new ReprUtil(this).register(scheme.getGroup().getZn(), "Zn").register(scheme, "Scheme").deserialize(repr);
     }
 
     private void init(Group groupG, GroupElement g, ZnElement a, GroupElement h) {
