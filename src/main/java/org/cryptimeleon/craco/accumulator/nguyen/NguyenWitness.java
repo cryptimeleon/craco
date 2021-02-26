@@ -2,60 +2,41 @@ package org.cryptimeleon.craco.accumulator.nguyen;
 
 import org.cryptimeleon.craco.accumulator.AccumulatorWitness;
 import org.cryptimeleon.math.serialization.Representation;
-import org.cryptimeleon.math.serialization.annotations.ReprUtil;
-import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.groups.Group;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 
 import java.util.Objects;
 
 public class NguyenWitness implements AccumulatorWitness {
-    @Represented(restorer = "group")
-    private GroupElement value;
+    private final GroupElement witness;
 
-    @Represented
-    private Group group;
-
-    public NguyenWitness(GroupElement value) {
-        this.value = value;
-        this.group = value.getStructure();
+    public NguyenWitness(GroupElement witness) {
+        this.witness = witness;
     }
 
-    public NguyenWitness(Representation repr) {
-        new ReprUtil(this).deserialize(repr);
+    public NguyenWitness(Representation repr, Group group) {
+        this.witness = group.getElement(repr);
     }
 
-    public GroupElement getValue() {
-        return value;
-    }
-
-    public void setValue(GroupElement value) {
-        this.value = value;
+    public GroupElement getWitness() {
+        return witness;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        NguyenWitness other = (NguyenWitness) o;
-        return Objects.equals(value, other.value)
-                && Objects.equals(group, other.group);
+        NguyenWitness that = (NguyenWitness) o;
+        return witness.equals(that.witness);
     }
 
     @Override
     public int hashCode() {
-        int result = value.hashCode();
-        result = 31 * result + group.hashCode();
-        return result;
-    }
-
-    @Override
-    public String getName() {
-        return "NguyenWitness-" + value;
+        return Objects.hash(witness);
     }
 
     @Override
     public Representation getRepresentation() {
-        return ReprUtil.serialize(this);
+        return witness.getRepresentation();
     }
 }
