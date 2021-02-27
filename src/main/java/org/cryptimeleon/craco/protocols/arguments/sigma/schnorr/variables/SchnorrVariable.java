@@ -29,12 +29,12 @@ public abstract class SchnorrVariable implements RepresentationRestorer, Variabl
     @Override
     public Object restoreFromRepresentation(Type type, Representation repr) {
         if (!(type instanceof Class))
-            throw new IllegalArgumentException("Cannot recreate "+type.getTypeName());
+            throw new IllegalArgumentException("Cannot restore "+type.getTypeName());
 
         if (SchnorrVariableValue.class.isAssignableFrom((Class) type))
             return restoreValue(repr);
 
-        throw new IllegalArgumentException("Cannot recreate "+type.getTypeName());
+        throw new IllegalArgumentException("Cannot restore "+type.getTypeName());
     }
 
     @Override

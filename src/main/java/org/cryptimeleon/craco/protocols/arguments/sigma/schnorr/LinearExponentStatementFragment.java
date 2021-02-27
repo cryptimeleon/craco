@@ -94,12 +94,12 @@ public class LinearExponentStatementFragment implements SchnorrFragment {
     }
 
     @Override
-    public Announcement recreateAnnouncement(Representation repr) {
+    public Announcement restoreAnnouncement(Representation repr) {
         return new LinearExponentStatementAnnouncement(zn.restoreElement(repr));
     }
 
     @Override
-    public Response recreateResponse(Announcement announcement, Representation repr) {
+    public Response restoreResponse(Announcement announcement, Representation repr) {
         return Response.EMPTY;
     }
 

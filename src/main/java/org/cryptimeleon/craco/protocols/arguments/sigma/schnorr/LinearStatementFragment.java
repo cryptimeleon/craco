@@ -90,12 +90,12 @@ public class LinearStatementFragment implements SchnorrFragment {
     }
 
     @Override
-    public Announcement recreateAnnouncement(Representation repr) {
+    public Announcement restoreAnnouncement(Representation repr) {
         return new LinearStatementAnnouncement(target.getStructure().restoreElement(repr));
     }
 
     @Override
-    public Response recreateResponse(Announcement announcement, Representation repr) {
+    public Response restoreResponse(Announcement announcement, Representation repr) {
         return Response.EMPTY;
     }
 

@@ -27,12 +27,12 @@ public class SigmaProtocolVerifierInstance extends SigmaProtocolInstance {
     public Representation nextMessage(Representation received) {
         switch (state) {
             case NOTHING: //receiving announcement
-                announcement = protocol.recreateAnnouncement(commonInput, received);
+                announcement = protocol.restoreAnnouncement(commonInput, received);
                 challenge = protocol.generateChallenge(commonInput);
                 state = State.SENT_CHALLENGE;
                 return challenge.getRepresentation();
             case SENT_CHALLENGE: //receiving response
-                response = protocol.recreateResponse(commonInput, announcement, challenge, received);
+                response = protocol.restoreResponse(commonInput, announcement, challenge, received);
                 state = State.RECEIVED_RESPONSE;
                 return null; //done
             case RECEIVED_RESPONSE:

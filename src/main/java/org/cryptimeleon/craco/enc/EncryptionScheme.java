@@ -90,6 +90,6 @@ public interface EncryptionScheme extends StandaloneRepresentable, Representatio
                 return this.restorePlainText(repr);
             }
         }
-        throw new IllegalArgumentException("Cannot recreate object of type: " + type.getTypeName());
+        throw new IllegalArgumentException("Cannot restore object of type: " + type.getTypeName());
     }
 }

@@ -5,7 +5,7 @@ import org.cryptimeleon.craco.protocols.SecretInput;
 import org.cryptimeleon.craco.protocols.TwoPartyProtocol;
 
 /**
- * An argument, meaning a two-party protocol with roles "prover" and "verifier".
+ * An argument, that is a two-party protocol with roles "prover" and "verifier".
  */
 public interface InteractiveArgument extends TwoPartyProtocol {
     String PROVER_ROLE = "prover";

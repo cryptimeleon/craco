@@ -102,7 +102,7 @@ public interface SigmaProtocol extends InteractiveArgument {
      * @throws IllegalArgumentException is the given compressedTranscript cannot be decompressed into a valid transcript.
      */
     default SigmaProtocolTranscript decompressTranscript(CommonInput commonInput, Challenge challenge, Representation compressedTranscript) throws IllegalArgumentException {
-        SigmaProtocolTranscript transcript = recreateTranscript(compressedTranscript, commonInput);
+        SigmaProtocolTranscript transcript = restoreTranscript(compressedTranscript, commonInput);
         if (!checkTranscript(commonInput, transcript) || !challenge.equals(transcript.getChallenge()))
             throw new IllegalArgumentException("Invalid transcript or challenge");
         return transcript;
@@ -113,10 +113,10 @@ public interface SigmaProtocol extends InteractiveArgument {
      */
     SigmaProtocolTranscript generateSimulatedTranscript(CommonInput commonInput, Challenge challenge);
 
-    Announcement recreateAnnouncement(CommonInput commonInput, Representation repr);
-    Challenge recreateChallenge(CommonInput commonInput, Representation repr);
-    Response recreateResponse(CommonInput commonInput, Announcement announcement, Challenge challenge, Representation repr);
-    default SigmaProtocolTranscript recreateTranscript(Representation repr, CommonInput commonInput) {
+    Announcement restoreAnnouncement(CommonInput commonInput, Representation repr);
+    Challenge restoreChallenge(CommonInput commonInput, Representation repr);
+    Response restoreResponse(CommonInput commonInput, Announcement announcement, Challenge challenge, Representation repr);
+    default SigmaProtocolTranscript restoreTranscript(Representation repr, CommonInput commonInput) {
         return new SigmaProtocolTranscript(this, commonInput, repr);
     }
 

@@ -33,7 +33,7 @@ public class SigmaProtocolProverInstance extends SigmaProtocolInstance {
                 state = State.SENT_ANNOUNCEMENT;
                 return announcement.getRepresentation();
             case SENT_ANNOUNCEMENT:
-                challenge = protocol.recreateChallenge(commonInput, received);
+                challenge = protocol.restoreChallenge(commonInput, received);
                 state = State.SENT_RESPONSE;
                 response = protocol.generateResponse(commonInput, secretInput, announcement, announcementSecret, challenge);
                 return response.getRepresentation();

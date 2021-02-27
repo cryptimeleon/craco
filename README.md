@@ -22,7 +22,7 @@ The goal of Craco is to provide common cryptographic schemes for usage in more h
 ## Features
 
 Craco implements interfaces and test classes for basic cryptographic primitives such as commitment schemes, encryption schemes, and more.
-It also includes implementations of several schemes as well as facilities for implementing multi-party protocols.
+It also includes implementations of several schemes as well as facilities for implementing two-party protocols.
 
 ### Implemented Schemes
 The constructions we implement are:
@@ -46,7 +46,7 @@ The constructions we implement are:
     
 ### Protocols
 
-Craco also includes interfaces and basic classes useful for implementing cryptographic protocols.
+Craco also includes interfaces and basic classes useful for implementing cryptographic two-party protocols.
 Parts of this are facilities for easy implementation of Sigma protocols.
 
 Furthermore, it includes:

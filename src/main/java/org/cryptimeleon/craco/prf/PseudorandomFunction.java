@@ -57,6 +57,6 @@ public interface PseudorandomFunction extends StandaloneRepresentable, Represent
                 return this.restoreImage(repr);
             }
         }
-        throw new IllegalArgumentException("Cannot recreate object of type: " + type.getTypeName());
+        throw new IllegalArgumentException("Cannot restore object of type: " + type.getTypeName());
     }
 }

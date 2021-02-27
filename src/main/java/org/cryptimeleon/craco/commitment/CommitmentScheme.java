@@ -71,6 +71,6 @@ public interface CommitmentScheme extends StandaloneRepresentable, Representatio
         if (OpenValue.class.isAssignableFrom((Class) type))
             return restoreOpenValue(repr);
 
-        throw new IllegalArgumentException("Commitment cannot recreate type "+type.getTypeName());
+        throw new IllegalArgumentException("Commitment cannot restore type "+type.getTypeName());
     }
 }

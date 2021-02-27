@@ -51,7 +51,7 @@ public class SetMembershipFragment extends SendThenDelegateFragment {
     }
 
     @Override
-    protected SendFirstValue recreateSendFirstValue(Representation repr) {
+    protected SendFirstValue restoreSendFirstValue(Representation repr) {
         return new AlgebraicSendFirstValue(repr, pp.bilinearGroup.getG1());
     }
 
