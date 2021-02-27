@@ -1,6 +1,6 @@
 package org.cryptimeleon.craco.prf.aes;
 
-import org.cryptimeleon.craco.enc.sym.streaming.aes.ByteArrayImplementation;
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.craco.prf.PrfImage;
 import org.cryptimeleon.craco.prf.PrfKey;
 import org.cryptimeleon.craco.prf.PrfPreimage;

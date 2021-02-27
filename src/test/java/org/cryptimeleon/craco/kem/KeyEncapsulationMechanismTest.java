@@ -2,7 +2,7 @@ package org.cryptimeleon.craco.kem;
 
 import org.cryptimeleon.craco.enc.DecryptionKey;
 import org.cryptimeleon.craco.enc.EncryptionKey;
-import org.cryptimeleon.craco.enc.KeyPair;
+import org.cryptimeleon.craco.enc.EncryptionKeyPair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * A generic test for {@link KeyEncapsulationMechanism}. It tests the scheme for valid key pair, i.e. containing a
  * secret key that satisfies the public keys policy, and a invalid key pair. Scheme and keys to test are defined by a
- * parameter class, e.g. {@link ABECPWat11KEMParams}.
+ * parameter class.
  *
  *
  */
@@ -25,8 +25,8 @@ import static org.junit.Assert.assertTrue;
 public class KeyEncapsulationMechanismTest {
     // type parameter intentionally left out to reuse the test for all kind of KEMs
     private KeyEncapsulationMechanism kem;
-    private KeyPair validKeyPair;
-    private KeyPair invalidKeyPair;
+    private EncryptionKeyPair validKeyPair;
+    private EncryptionKeyPair invalidKeyPair;
 
     public KeyEncapsulationMechanismTest(KeyEncapsulationMechanismTestParams params) {
         this.kem = params.kem;
@@ -67,7 +67,7 @@ public class KeyEncapsulationMechanismTest {
             Object key = kem.decaps(keyAndCiphertext.encapsulatedKey, sk);
             assertFalse(key.equals(keyAndCiphertext.key));
         } catch (Exception e) {
-            assertTrue(e instanceof UnqualifiedKeyException); // schemes should throw UnqualifiedKeyExceptions if the
+            assertTrue(e instanceof IllegalArgumentException); // schemes should throw IllegalArgumentException if the
             // key is not fit to decrypt.
         }
 

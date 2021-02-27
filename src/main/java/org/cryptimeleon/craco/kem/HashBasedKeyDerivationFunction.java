@@ -1,7 +1,7 @@
 package org.cryptimeleon.craco.kem;
 
 import org.cryptimeleon.craco.enc.SymmetricKey;
-import org.cryptimeleon.craco.enc.sym.streaming.aes.ByteArrayImplementation;
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.math.hash.HashFunction;
 import org.cryptimeleon.math.hash.impl.SHA256HashFunction;
 import org.cryptimeleon.math.serialization.Representation;
@@ -16,9 +16,6 @@ import java.util.Objects;
  * This class can be used to generate key derivation functions that are not provably secure
  * (e.g. using {@link SHA256HashFunction} as a hash function),
  * or it can be used to generate provably secure key derivation functions.
- * For this, you have to setup a
- * TODO: Missing sentence
- *
  *
  */
 public class HashBasedKeyDerivationFunction implements KeyDerivationFunction<SymmetricKey> {

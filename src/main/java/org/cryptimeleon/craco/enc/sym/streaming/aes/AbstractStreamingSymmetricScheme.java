@@ -1,12 +1,9 @@
 package org.cryptimeleon.craco.enc.sym.streaming.aes;
 
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.common.utils.StreamUtil;
 import org.cryptimeleon.craco.enc.*;
-import org.cryptimeleon.craco.enc.exceptions.BadIVException;
-import org.cryptimeleon.craco.enc.exceptions.DecryptionFailedException;
-import org.cryptimeleon.craco.enc.exceptions.EncryptionFailedException;
-import org.cryptimeleon.craco.enc.exceptions.IllegalKeyException;
 import org.cryptimeleon.math.random.RandomGenerator;
 import org.cryptimeleon.math.serialization.BigIntegerRepresentation;
 import org.cryptimeleon.math.serialization.Representation;
@@ -31,17 +28,17 @@ abstract class AbstractStreamingSymmetricScheme implements StreamingEncryptionSc
 
     private static final String INVALID_SYMMETRIC_KEY = "Not a valid symmetric key for this scheme";
 
-    private static String ENC_INVALID_TRANSFORMATION = "The encryption failed because the used transformation "
+    private static final String ENC_INVALID_TRANSFORMATION = "The encryption failed because the used transformation "
             + " is invalid.";
 
-    private static String UNQUALIFIED_KEY_LENGTH = "The given key-length is not valid for this AES instance";
+    private static final String UNQUALIFIED_KEY_LENGTH = "The given key-length is not valid for this AES instance";
 
-    private static String ENC_INVALID_KEY = "The encryption failed because the used key is invalid.";
+    private static final String ENC_INVALID_KEY = "The encryption failed because the used key is invalid.";
 
-    private static String DEC_INVALID_TRANSFORMATION = "The decryption failed because the used transformation "
+    private static final String DEC_INVALID_TRANSFORMATION = "The decryption failed because the used transformation "
             + " is invalid.";
 
-    private static String DEC_INVALID_KEY = "The decryption failed because the used key is invalid.";
+    private static final String DEC_INVALID_KEY = "The decryption failed because the used key is invalid.";
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -51,7 +48,7 @@ abstract class AbstractStreamingSymmetricScheme implements StreamingEncryptionSc
 
     protected byte[] initialVector;
 
-    private String transformation;
+    private final String transformation;
 
     public AbstractStreamingSymmetricScheme(String transformation, int initialVectorLength) {
         this(transformation, initialVectorLength, 128);
@@ -87,9 +84,9 @@ abstract class AbstractStreamingSymmetricScheme implements StreamingEncryptionSc
             CipherInputStream cis = new CipherInputStream(in, cipher);
             return new SequenceInputStream(ivStream, cis);
         } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
-            throw new EncryptionFailedException(e, ENC_INVALID_TRANSFORMATION);
+            throw new IllegalArgumentException(ENC_INVALID_TRANSFORMATION, e);
         } catch (InvalidKeyException e) {
-            throw new EncryptionFailedException(e, ENC_INVALID_KEY);
+            throw new IllegalArgumentException(ENC_INVALID_KEY, e);
         }
     }
 
@@ -104,7 +101,7 @@ abstract class AbstractStreamingSymmetricScheme implements StreamingEncryptionSc
             int amount = in.read(initialVector, 0, initialVectorLength / 8);
             // check if the correct amount of bytes were read
             if (amount != initialVectorLength / 8)
-                throw new DecryptionFailedException(IO_IV, new BadIVException());
+                throw new IllegalArgumentException(IO_IV);
             // Get the cipher
             Cipher cipher = Cipher.getInstance(transformation);
             // Get the cipher
@@ -112,9 +109,9 @@ abstract class AbstractStreamingSymmetricScheme implements StreamingEncryptionSc
 
             return new CipherInputStream(in, cipher);
         } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
-            throw new DecryptionFailedException(DEC_INVALID_TRANSFORMATION, e);
+            throw new IllegalArgumentException(DEC_INVALID_TRANSFORMATION, e);
         } catch (InvalidKeyException e) {
-            throw new DecryptionFailedException(DEC_INVALID_KEY, e);
+            throw new IllegalArgumentException(DEC_INVALID_KEY, e);
         }
     }
 
@@ -128,7 +125,7 @@ abstract class AbstractStreamingSymmetricScheme implements StreamingEncryptionSc
             ByteArrayImplementation updatedSymmetricKey = new ByteArrayImplementation(keyData);
             return updatedSymmetricKey;
         } else {
-            throw new IllegalKeyException(UNQUALIFIED_KEY_LENGTH);
+            throw new IllegalArgumentException(UNQUALIFIED_KEY_LENGTH);
         }
 
     }
@@ -149,9 +146,9 @@ abstract class AbstractStreamingSymmetricScheme implements StreamingEncryptionSc
 
             return new CipherOutputStream(out, cipher);
         } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
-            throw new EncryptionFailedException(e, ENC_INVALID_TRANSFORMATION);
+            throw new IllegalArgumentException(ENC_INVALID_TRANSFORMATION, e);
         } catch (InvalidKeyException e) {
-            throw new EncryptionFailedException(e, ENC_INVALID_KEY);
+            throw new IllegalArgumentException(ENC_INVALID_KEY, e);
         }
     }
 
@@ -192,7 +189,7 @@ abstract class AbstractStreamingSymmetricScheme implements StreamingEncryptionSc
         int amount = cipherTextIn.read(initialVector, 0, initialVectorLength / 8);
         // check if the correct amount of bytes were read
         if (amount != initialVectorLength / 8)
-            throw new DecryptionFailedException(IO_IV, new BadIVException());
+            throw new IllegalArgumentException(IO_IV);
         // start the decryption process
         streamHelper(cipherTextIn, plainTextOut, symmetricKey, Cipher.DECRYPT_MODE);
     }
@@ -215,7 +212,7 @@ abstract class AbstractStreamingSymmetricScheme implements StreamingEncryptionSc
             cipherOut.flush();
             cipherOut.close();
         } catch (IOException e) {
-            throw new EncryptionFailedException(e, e.getLocalizedMessage());
+            throw new RuntimeException(e);
         }
         return new ByteArrayImplementation(cipherBytesOut.toByteArray());
     }
@@ -239,7 +236,7 @@ abstract class AbstractStreamingSymmetricScheme implements StreamingEncryptionSc
             plainOut.close();
 
         } catch (IOException e) {
-            throw new DecryptionFailedException(e, e.getLocalizedMessage());
+            throw new RuntimeException(e);
         }
         return new ByteArrayImplementation(plainBytesOut.toByteArray());
     }
@@ -283,14 +280,14 @@ abstract class AbstractStreamingSymmetricScheme implements StreamingEncryptionSc
 
         } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
             if (mode == Cipher.ENCRYPT_MODE)
-                throw new EncryptionFailedException(e, ENC_INVALID_TRANSFORMATION);
+                throw new IllegalArgumentException(ENC_INVALID_TRANSFORMATION, e);
             else
-                throw new DecryptionFailedException(DEC_INVALID_TRANSFORMATION, e);
+                throw new IllegalArgumentException(DEC_INVALID_TRANSFORMATION, e);
         } catch (InvalidKeyException e) {
             if (mode == Cipher.DECRYPT_MODE)
-                throw new DecryptionFailedException(DEC_INVALID_KEY, e);
+                throw new IllegalArgumentException(DEC_INVALID_KEY, e);
             else
-                throw new EncryptionFailedException(e, ENC_INVALID_KEY);
+                throw new IllegalArgumentException(ENC_INVALID_KEY, e);
 
         } finally {
             if (cipherIn != null)
@@ -389,9 +386,9 @@ abstract class AbstractStreamingSymmetricScheme implements StreamingEncryptionSc
 
                 decryptedOut = new CipherOutputStream(out, cipher);
             } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
-                throw new DecryptionFailedException(DEC_INVALID_TRANSFORMATION, e);
+                throw new IllegalArgumentException(DEC_INVALID_TRANSFORMATION, e);
             } catch (InvalidKeyException e) {
-                throw new DecryptionFailedException(DEC_INVALID_KEY, e);
+                throw new IllegalArgumentException(DEC_INVALID_KEY, e);
             }
         }
 

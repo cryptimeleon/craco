@@ -1,6 +1,6 @@
 package org.cryptimeleon.craco.sig.hashthensign;
 
-import org.cryptimeleon.craco.enc.sym.streaming.aes.ByteArrayImplementation;
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.craco.sig.*;
 import org.cryptimeleon.craco.sig.hashthensign.params.BBSHTSParams;
 import org.cryptimeleon.craco.sig.hashthensign.params.HashThenSignParams;

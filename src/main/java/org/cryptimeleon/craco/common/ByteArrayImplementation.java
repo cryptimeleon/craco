@@ -1,4 +1,4 @@
-package org.cryptimeleon.craco.enc.sym.streaming.aes;
+package org.cryptimeleon.craco.common;
 
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.common.predicate.CiphertextIndex;

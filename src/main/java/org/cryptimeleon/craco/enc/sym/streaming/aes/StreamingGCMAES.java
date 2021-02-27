@@ -1,5 +1,6 @@
 package org.cryptimeleon.craco.enc.sym.streaming.aes;
 
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.math.serialization.Representation;
 
 import javax.crypto.Cipher;

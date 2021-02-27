@@ -1,7 +1,7 @@
 package org.cryptimeleon.craco.enc.streaming;
 
 import org.cryptimeleon.craco.common.utils.StreamUtil;
-import org.cryptimeleon.craco.enc.KeyPair;
+import org.cryptimeleon.craco.enc.EncryptionKeyPair;
 import org.cryptimeleon.craco.enc.StreamingEncryptionScheme;
 import org.cryptimeleon.craco.enc.streaming.params.StreamingAESParams;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class StreamingEncryptionSchemeTest {
 
     private StreamingEncryptionScheme encryptionScheme;
 
-    private KeyPair keyPair;
+    private EncryptionKeyPair keyPair;
 
     public StreamingEncryptionSchemeTest(StreamingEncryptionSchemeParams params) {
         this.encryptionScheme = params.getEncryptionScheme();

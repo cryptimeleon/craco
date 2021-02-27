@@ -5,18 +5,18 @@ package org.cryptimeleon.craco.enc;
  *
  *
  */
-public class KeyPair {
+public class EncryptionKeyPair {
 
     private EncryptionKey pk;
     private DecryptionKey sk;
 
-    public KeyPair(EncryptionKey pk, DecryptionKey sk) {
+    public EncryptionKeyPair(EncryptionKey pk, DecryptionKey sk) {
         super();
         this.pk = pk;
         this.sk = sk;
     }
 
-    public KeyPair() {
+    public EncryptionKeyPair() {
 
     }
 
@@ -53,7 +53,7 @@ public class KeyPair {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        KeyPair other = (KeyPair) obj;
+        EncryptionKeyPair other = (EncryptionKeyPair) obj;
         if (pk == null) {
             if (other.pk != null)
                 return false;

@@ -3,7 +3,7 @@ package org.cryptimeleon.craco.kem.asym.elgamal;
 import org.cryptimeleon.craco.enc.CipherText;
 import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalCipherText;
 import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalEncryption;
-import org.cryptimeleon.craco.enc.sym.streaming.aes.ByteArrayImplementation;
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;

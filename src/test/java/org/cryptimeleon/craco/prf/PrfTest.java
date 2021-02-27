@@ -1,6 +1,6 @@
 package org.cryptimeleon.craco.prf;
 
-import org.cryptimeleon.craco.enc.sym.streaming.aes.ByteArrayImplementation;
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.craco.prf.aes.AesPseudorandomFunction;
 import org.junit.Test;
 import org.junit.runner.RunWith;

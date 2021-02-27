@@ -1,6 +1,6 @@
 package org.cryptimeleon.craco.enc.streaming.params;
 
-import org.cryptimeleon.craco.enc.KeyPair;
+import org.cryptimeleon.craco.enc.EncryptionKeyPair;
 import org.cryptimeleon.craco.enc.SymmetricKey;
 import org.cryptimeleon.craco.enc.streaming.StreamingEncryptionSchemeParams;
 import org.cryptimeleon.craco.enc.sym.streaming.aes.StreamingCBCAES;
@@ -12,10 +12,10 @@ public class StreamingAESParams {
     public static StreamingEncryptionSchemeParams[] getParams() {
         StreamingGCMAES GCMAES = new StreamingGCMAES();
         SymmetricKey GCMkey = GCMAES.generateSymmetricKey();
-        KeyPair GCMkp = new KeyPair(GCMkey, GCMkey);
+        EncryptionKeyPair GCMkp = new EncryptionKeyPair(GCMkey, GCMkey);
         StreamingCBCAES CBCAES = new StreamingCBCAES();
         SymmetricKey CBCkey = CBCAES.generateSymmetricKey();
-        KeyPair CBCkp = new KeyPair(CBCkey, CBCkey);
+        EncryptionKeyPair CBCkp = new EncryptionKeyPair(CBCkey, CBCkey);
 
         StreamingGCMAESPacketMode GCMAESPacket = new StreamingGCMAESPacketMode();
 

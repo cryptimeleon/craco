@@ -1,5 +1,6 @@
 package org.cryptimeleon.craco.enc.asym.elgamal;
 
+import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.enc.*;
 import org.cryptimeleon.math.serialization.Representation;
@@ -81,10 +82,10 @@ public class ElgamalEncryption implements AsymmetricEncryptionScheme {
             throw new IllegalArgumentException("The arguments must not be null.");
         if (!(publicKey instanceof ElgamalPublicKey))
             throw new IllegalArgumentException("The specified public key is invalid.");
-        if (!(plainText instanceof ElgamalPlainText))
+        if (!(plainText instanceof GroupElementPlainText))
             throw new IllegalArgumentException("The specified plaintext is invalid.");
 
-        GroupElement groupElementPlaintext = ((ElgamalPlainText) plainText).getPlaintext();
+        GroupElement groupElementPlaintext = ((GroupElementPlainText) plainText).get();
         GroupElement g = ((ElgamalPublicKey) publicKey).getG();
         GroupElement h = ((ElgamalPublicKey) publicKey).getH();
 
@@ -110,7 +111,7 @@ public class ElgamalEncryption implements AsymmetricEncryptionScheme {
         ZnElement a = ((ElgamalPrivateKey) privateKey).getA();
         GroupElement u = cpCipherText.getC1().pow(a);
         GroupElement m = u.inv().op(cpCipherText.getC2());
-        return new ElgamalPlainText(m.compute());
+        return new GroupElementPlainText(m.compute());
     }
 
     /**
@@ -119,7 +120,7 @@ public class ElgamalEncryption implements AsymmetricEncryptionScheme {
      * @return A pair of a private key and the corresponding public key.
      */
     @Override
-    public KeyPair generateKeyPair() {
+    public EncryptionKeyPair generateKeyPair() {
         BigInteger sizeG = groupG.size();
         //choose a random element 'a' \in {0, ..., sizeG}
         Zn zn_random = new Zn(sizeG);
@@ -136,12 +137,12 @@ public class ElgamalEncryption implements AsymmetricEncryptionScheme {
         //generate the public key (g, h)
         EncryptionKey publicKey = privateKey.getPublicKey();
 
-        return new KeyPair(publicKey, privateKey);
+        return new EncryptionKeyPair(publicKey, privateKey);
     }
 
     @Override
     public PlainText restorePlainText(Representation repr) {
-        return new ElgamalPlainText(repr, groupG);
+        return new GroupElementPlainText(repr, groupG);
     }
 
     @Override
@@ -151,12 +152,12 @@ public class ElgamalEncryption implements AsymmetricEncryptionScheme {
 
     @Override
     public ElgamalPublicKey restoreEncryptionKey(Representation repr) {
-        return new ElgamalPublicKey(repr);
+        return new ElgamalPublicKey(repr, groupG);
     }
 
     @Override
     public ElgamalPrivateKey restoreDecryptionKey(Representation repr) {
-        return new ElgamalPrivateKey(repr, groupG.getZn(), this);
+        return new ElgamalPrivateKey(repr, this);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package org.cryptimeleon.craco.sig.hashthensign;
 
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
-import org.cryptimeleon.craco.enc.sym.streaming.aes.ByteArrayImplementation;
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.craco.sig.Signature;
 import org.cryptimeleon.craco.sig.SignatureScheme;
 import org.cryptimeleon.craco.sig.SigningKey;
@@ -31,9 +31,7 @@ public class HashThenSign implements SignatureScheme {
 
     public HashThenSign(HashFunction hashFunction, SignatureScheme signatureScheme) {
         if (hashFunction.getOutputLength() > signatureScheme.getMaxNumberOfBytesForMapToPlaintext()) {
-            throw new IllegalArgumentException(
-                    "The given hash function is incompatible with the given signature scheme! The output length is " +
-                            "too large.");
+            throw new IllegalArgumentException("The given hash function is incompatible with the given signature scheme! The output length is too large.");
         }
         this.hashFunction = hashFunction;
         this.encapsulatedScheme = signatureScheme;
