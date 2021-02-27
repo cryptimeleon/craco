@@ -24,7 +24,7 @@ public class StreamingHybridEncryptionScheme implements StreamingEncryptionSchem
     @Represented
     private KeyEncapsulationMechanism<SymmetricKey> kem;
 
-    public class HybridCipherText implements CipherText {
+    public static class HybridCipherText implements CipherText {
 
         @Represented(restorer = "Scheme")
         private CipherText ciphertext;
