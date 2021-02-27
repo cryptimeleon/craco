@@ -4,7 +4,7 @@ import org.cryptimeleon.craco.enc.asym.elgamal.ElgamalEncryption;
 import org.cryptimeleon.craco.enc.sym.streaming.aes.StreamingCBCAES;
 import org.cryptimeleon.craco.kem.StreamingHybridEncryptionScheme;
 import org.cryptimeleon.craco.kem.asym.elgamal.ElgamalKEM;
-import org.cryptimeleon.craco.ser.standalone.StandaloneReprSubTest;
+import org.cryptimeleon.math.serialization.standalone.StandaloneReprSubTest;
 import org.cryptimeleon.math.hash.impl.SHA256HashFunction;
 import org.cryptimeleon.math.structures.groups.Group;
 import org.cryptimeleon.math.structures.groups.counting.CountingGroup;

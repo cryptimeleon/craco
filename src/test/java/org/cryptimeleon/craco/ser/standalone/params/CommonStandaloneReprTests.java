@@ -7,7 +7,7 @@ import org.cryptimeleon.craco.common.policies.ThresholdPolicy;
 import org.cryptimeleon.craco.secretsharing.SecretSharingSchemeProvider;
 import org.cryptimeleon.craco.secretsharing.ThresholdTreeSecretSharing;
 import org.cryptimeleon.craco.secretsharing.shamir.ShamirSecretSharingSchemeProvider;
-import org.cryptimeleon.craco.ser.standalone.StandaloneReprSubTest;
+import org.cryptimeleon.math.serialization.standalone.StandaloneReprSubTest;
 import org.cryptimeleon.math.structures.rings.zn.Zp;
 
 import java.math.BigInteger;

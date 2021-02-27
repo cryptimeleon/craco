@@ -25,8 +25,11 @@ repositories {
 
 
 dependencies {
+
+    def mathVersion = '1.0.0' + (Boolean.valueOf(System.getProperty("disablesnapshot")) ? "" : "-SNAPSHOT")
+
     // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api group: 'org.cryptimeleon', name: 'math', version: '1.0.0' + (Boolean.valueOf(System.getProperty("disablesnapshot")) ? "" : "-SNAPSHOT")
+    api group: 'org.cryptimeleon', name: 'math', version: mathVersion
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation group: 'org.reflections', name: 'reflections', version: '0.9.10'
 
@@ -37,6 +40,11 @@ dependencies {
             'org.junit.jupiter:junit-jupiter-api:5.1.0',
             'org.junit.jupiter:junit-jupiter-params:5.1.0'
     )
+    testImplementation(group: 'org.cryptimeleon', name: 'math', version: mathVersion) {
+        capabilities {
+            requireCapability("org.cryptimeleon:math-tests")
+        }
+    }
     testRuntimeOnly(
             'org.junit.jupiter:junit-jupiter-engine:5.1.0',
             'org.junit.vintage:junit-vintage-engine:5.1.0'
