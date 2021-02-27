@@ -32,7 +32,7 @@ public abstract class SendThenDelegateProtocol implements SigmaProtocol {
      * @see SendThenDelegateFragment#provideProverSpec(SchnorrVariableAssignment, SendThenDelegateFragment.ProverSpecBuilder)
      */
     protected abstract SendThenDelegateFragment.ProverSpec provideProverSpec(CommonInput commonInput, SecretInput secretInput, SendThenDelegateFragment.ProverSpecBuilder builder);
-    protected abstract SendThenDelegateFragment.SendFirstValue recreateSendFirstValue(CommonInput commonInput, Representation repr);
+    protected abstract SendThenDelegateFragment.SendFirstValue restoreSendFirstValue(CommonInput commonInput, Representation repr);
 
     /**
      * @see SendThenDelegateFragment#simulateSendFirstValue()
@@ -94,19 +94,19 @@ public abstract class SendThenDelegateProtocol implements SigmaProtocol {
     }
 
     @Override
-    public Announcement recreateAnnouncement(CommonInput commonInput, Representation repr) {
+    public Announcement restoreAnnouncement(CommonInput commonInput, Representation repr) {
         TopLevelSchnorrFragment fragment = new TopLevelSchnorrFragment(commonInput);
-        return new SchnorrAnnouncement(fragment, fragment.recreateAnnouncement(repr));
+        return new SchnorrAnnouncement(fragment, fragment.restoreAnnouncement(repr));
     }
 
     @Override
-    public Challenge recreateChallenge(CommonInput commonInput, Representation repr) {
+    public Challenge restoreChallenge(CommonInput commonInput, Representation repr) {
         return new SchnorrChallenge(repr);
     }
 
     @Override
-    public Response recreateResponse(CommonInput commonInput, Announcement announcement, Challenge challenge, Representation repr) {
-        return ((SchnorrAnnouncement) announcement).fragment.recreateResponse(((SchnorrAnnouncement) announcement).fragmentAnnouncement, repr);
+    public Response restoreResponse(CommonInput commonInput, Announcement announcement, Challenge challenge, Representation repr) {
+        return ((SchnorrAnnouncement) announcement).fragment.restoreResponse(((SchnorrAnnouncement) announcement).fragmentAnnouncement, repr);
     }
 
     private static class SchnorrAnnouncementSecret implements AnnouncementSecret {
@@ -158,8 +158,8 @@ public abstract class SendThenDelegateProtocol implements SigmaProtocol {
         }
 
         @Override
-        protected SendFirstValue recreateSendFirstValue(Representation repr) {
-            return SendThenDelegateProtocol.this.recreateSendFirstValue(commonInput, repr);
+        protected SendFirstValue restoreSendFirstValue(Representation repr) {
+            return SendThenDelegateProtocol.this.restoreSendFirstValue(commonInput, repr);
         }
 
         @Override

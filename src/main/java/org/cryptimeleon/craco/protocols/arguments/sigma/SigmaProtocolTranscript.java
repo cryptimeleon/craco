@@ -25,15 +25,15 @@ public class SigmaProtocolTranscript implements Representable {
     }
 
     public SigmaProtocolTranscript(SigmaProtocol protocol, CommonInput commonInput, Representation repr) {
-        announcement = protocol.recreateAnnouncement(commonInput, repr.obj().get("a"));
-        challenge = protocol.recreateChallenge(commonInput, repr.obj().get("c"));
-        response = protocol.recreateResponse(commonInput, announcement, challenge, repr.obj().get("r"));
+        announcement = protocol.restoreAnnouncement(commonInput, repr.obj().get("a"));
+        challenge = protocol.restoreChallenge(commonInput, repr.obj().get("c"));
+        response = protocol.restoreResponse(commonInput, announcement, challenge, repr.obj().get("r"));
     }
 
     public SigmaProtocolTranscript(SchnorrFragment fragment, Representation repr) {
-        announcement = fragment.recreateAnnouncement(repr.obj().get("a"));
+        announcement = fragment.restoreAnnouncement(repr.obj().get("a"));
         challenge = new SchnorrChallenge(repr.obj().get("c"));
-        response = fragment.recreateResponse(announcement, repr.obj().get("r"));
+        response = fragment.restoreResponse(announcement, repr.obj().get("r"));
     }
 
     public Announcement getAnnouncement() {

@@ -56,12 +56,12 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
     protected abstract ProverSpec provideProverSpec(SchnorrVariableAssignment externalWitnesses, ProverSpecBuilder builder);
 
     /**
-     * Restores a sendFirstValue from {@link Representation}
+     * Restores a {@code SendFirstValue} from {@link Representation}
      */
-    protected abstract SendFirstValue recreateSendFirstValue(Representation repr);
+    protected abstract SendFirstValue restoreSendFirstValue(Representation repr);
 
     /**
-     * Returns a random SendFirstValue with the same probability distribution as an honest prover would generate.
+     * Returns a random {@code SendFirstValue} with the same probability distribution as an honest prover would generate.
      */
     protected abstract SendFirstValue simulateSendFirstValue();
 
@@ -191,20 +191,20 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
     }
 
     @Override
-    public Announcement recreateAnnouncement(Representation repr) {
-        SendFirstValue sendFirstValue = recreateSendFirstValue(repr.list().get(0));
+    public Announcement restoreAnnouncement(Representation repr) {
+        SendFirstValue sendFirstValue = restoreSendFirstValue(repr.list().get(0));
         SubprotocolSpec subprotocolSpec = provideSubprotocolSpec(sendFirstValue, new SubprotocolSpecBuilder());
         HashMap<String, Announcement> subprotocolAnnouncements = new HashMap<>();
         List<Map.Entry<String, SchnorrFragment>> subprotocolList = subprotocolSpec.getOrderedListOfSubprotocolsAndNames();
 
         for (int i=0;i<subprotocolList.size();i++)
-            subprotocolAnnouncements.put(subprotocolList.get(i).getKey(), subprotocolList.get(i).getValue().recreateAnnouncement(repr.list().get(i+1)));
+            subprotocolAnnouncements.put(subprotocolList.get(i).getKey(), subprotocolList.get(i).getValue().restoreAnnouncement(repr.list().get(i+1)));
 
         return new SendThenDelegateAnnouncement(subprotocolSpec, subprotocolAnnouncements, sendFirstValue);
     }
 
     @Override
-    public Response recreateResponse(Announcement announcement, Representation repr) {
+    public Response restoreResponse(Announcement announcement, Representation repr) {
         SubprotocolSpec subprotocolSpec = ((SendThenDelegateAnnouncement) announcement).subprotocolSpec;
 
         SchnorrVariableValueList variableResponses = new SchnorrVariableValueList(subprotocolSpec.getOrderedListOfVariables(), repr.list().get(0));
@@ -215,7 +215,7 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
         for (int i=0;i<subprotocols.size();i++) {
             String name = subprotocols.get(i).getKey();
             SchnorrFragment subprotocol = subprotocols.get(i).getValue();
-            subprotocolResponses.put(name, subprotocol.recreateResponse(((SendThenDelegateAnnouncement) announcement).subprotocolAnnouncements.get(name), repr.list().get(i+1)));
+            subprotocolResponses.put(name, subprotocol.restoreResponse(((SendThenDelegateAnnouncement) announcement).subprotocolAnnouncements.get(name), repr.list().get(i+1)));
         }
 
         return new SendThenDelegateResponse(subprotocolResponses, variableResponses);
@@ -267,7 +267,8 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
         /**
          * Recreates the SendFirstValue from representation.
          * @param repr the representation returned by {@link AlgebraicSendFirstValue#getRepresentation()}
-         * @param structures the structures to use to recreate the sent elements (same order as in the {@link AlgebraicSendFirstValue(Element...)} constructor)
+         * @param structures the structures to use to restore the sent elements
+         *                   (same order as in the {@link AlgebraicSendFirstValue(Element...)} constructor)
          */
         public AlgebraicSendFirstValue(Representation repr, Structure... structures) {
             for (int i=0;i<structures.length;i++)
@@ -657,7 +658,7 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
 
     @Override
     public SigmaProtocolTranscript decompressTranscript(Representation compressedTranscript, SchnorrChallenge challenge, SchnorrVariableAssignment externalResponse) throws IllegalArgumentException {
-        SendFirstValue sendFirstValue = recreateSendFirstValue(compressedTranscript.list().get(0));
+        SendFirstValue sendFirstValue = restoreSendFirstValue(compressedTranscript.list().get(0));
         if (!provideAdditionalCheck(sendFirstValue).evaluate())
             throw new IllegalArgumentException("Cannot decompress transcript because its sendFirstValue is invalid");
         SubprotocolSpec spec = provideSubprotocolSpec(sendFirstValue, new SubprotocolSpecBuilder());

@@ -76,12 +76,24 @@ public interface AccumulatorScheme<AccumulatedType extends Representable> extend
     }
 
     /**
-     * @return Maximum number of {@link AccumulatedType}s that can be simultaneously accumulated in the Accumulator or null if unbounded
+     * Returns maximum number of {@link AccumulatedType}s that can be simultaneously accumulated in the Accumulator
+     * or null if unbounded.
      */
     Integer getMaxNumAccumulatedValues();
 
+    /**
+     * Restores an {@code AccumulatorWitness} from its representation.
+     */
     AccumulatorWitness restoreWitness(Representation repr);
+
+    /**
+     * Restores an {@code AccumulatorDigest} from its representation.
+     */
     AccumulatorDigest restoreDigest(Representation repr);
+
+    /**
+     * Restores an accumulated value of type {@code AccumulatorType} from its representation.
+     */
     AccumulatedType restoreAccumulatedValue(Representation repr);
 
     @Override

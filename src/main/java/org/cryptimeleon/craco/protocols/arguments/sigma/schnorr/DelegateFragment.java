@@ -31,7 +31,7 @@ public abstract class DelegateFragment extends SendThenDelegateFragment {
     protected abstract ProverSpec provideProverSpecWithNoSendFirst(SchnorrVariableAssignment externalWitnesses, ProverSpecBuilder builder);
 
     @Override
-    protected SendFirstValue recreateSendFirstValue(Representation repr) {
+    protected SendFirstValue restoreSendFirstValue(Representation repr) {
         return SendFirstValue.EMPTY;
     }
 

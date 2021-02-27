@@ -67,6 +67,6 @@ public interface KeyEncapsulationMechanism<T> extends StandaloneRepresentable, R
                 return this.restoreEncapsulatedKey(repr);
             }
         }
-        throw new IllegalArgumentException("Cannot recreate object of type: " + type.getTypeName());
+        throw new IllegalArgumentException("Cannot restore object of type: " + type.getTypeName());
     }
 }

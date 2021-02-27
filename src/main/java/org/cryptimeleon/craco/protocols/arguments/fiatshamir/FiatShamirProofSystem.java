@@ -50,7 +50,7 @@ public class FiatShamirProofSystem {
         return protocol.createChallengeFromBytes(commonInput, hash.hash(acc.extractBytes()));
     }
 
-    public FiatShamirProof recreateProof(CommonInput commonInput, Representation repr) {
-        return new FiatShamirProof(repr.obj().get("transcript"), protocol.recreateChallenge(commonInput, repr.obj().get("challenge")));
+    public FiatShamirProof restoreProof(CommonInput commonInput, Representation repr) {
+        return new FiatShamirProof(repr.obj().get("transcript"), protocol.restoreChallenge(commonInput, repr.obj().get("challenge")));
     }
 }

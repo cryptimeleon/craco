@@ -5,8 +5,8 @@ import org.cryptimeleon.math.serialization.StandaloneRepresentable;
 /**
  * Parameters for an execution of the standalone representable test The test
  * requires an instance of a standalone representable. Every class implementing
- * this interface should have a constructor that recreates an Representation
- * into an Object. By definition the recreated object and the provided object
+ * this interface should have a constructor that restores an Object from its Representation.
+ * By definition the restored object and the provided object
  * should be the same (i.e. equals yields true).
  *
  *

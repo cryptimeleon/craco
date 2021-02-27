@@ -25,7 +25,7 @@ public abstract class DelegateProtocol extends SendThenDelegateProtocol {
     protected abstract SendThenDelegateFragment.ProverSpec provideProverSpecWithNoSendFirst(CommonInput commonInput, SecretInput secretInput, SendThenDelegateFragment.ProverSpecBuilder builder);
 
     @Override
-    protected SendThenDelegateFragment.SendFirstValue recreateSendFirstValue(CommonInput commonInput, Representation repr) {
+    protected SendThenDelegateFragment.SendFirstValue restoreSendFirstValue(CommonInput commonInput, Representation repr) {
         return SendThenDelegateFragment.SendFirstValue.EMPTY;
     }
 

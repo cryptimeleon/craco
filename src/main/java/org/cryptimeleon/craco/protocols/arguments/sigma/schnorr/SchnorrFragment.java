@@ -130,11 +130,11 @@ public interface SchnorrFragment {
      * @throws IllegalArgumentException is the given compressedTranscript cannot be decompressed into a valid transcript.
      */
     default SigmaProtocolTranscript decompressTranscript(Representation compressedTranscript, SchnorrChallenge challenge, SchnorrVariableAssignment externalResponse) throws IllegalArgumentException {
-        Announcement announcement = recreateAnnouncement(compressedTranscript.list().get(0));
-        Response response = recreateResponse(announcement, compressedTranscript.list().get(1));
+        Announcement announcement = restoreAnnouncement(compressedTranscript.list().get(0));
+        Response response = restoreResponse(announcement, compressedTranscript.list().get(1));
         return new SigmaProtocolTranscript(announcement, challenge, response);
     }
 
-    Announcement recreateAnnouncement(Representation repr);
-    Response recreateResponse(Announcement announcement, Representation repr);
+    Announcement restoreAnnouncement(Representation repr);
+    Response restoreResponse(Announcement announcement, Representation repr);
 }
