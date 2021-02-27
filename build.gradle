@@ -37,6 +37,11 @@ dependencies {
             'org.junit.jupiter:junit-jupiter-api:5.1.0',
             'org.junit.jupiter:junit-jupiter-params:5.1.0'
     )
+    testImplementation(group: 'org.cryptimeleon', name: 'math', version:'1.0.0' + (Boolean.valueOf(System.getProperty("disablesnapshot")) ? "" : "-SNAPSHOT")) {
+        capabilities {
+            requireCapability("org.cryptimeleon:math-tests")
+        }
+    }
     testRuntimeOnly(
             'org.junit.jupiter:junit-jupiter-engine:5.1.0',
             'org.junit.vintage:junit-vintage-engine:5.1.0'

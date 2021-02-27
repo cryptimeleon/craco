@@ -1,6 +1,6 @@
 package org.cryptimeleon.craco.ser.standalone.params;
 
-import org.cryptimeleon.craco.ser.standalone.StandaloneReprSubTest;
+import org.cryptimeleon.math.serialization.standalone.StandaloneReprSubTest;
 import org.cryptimeleon.craco.sig.bbs.BBSBKeyGen;
 import org.cryptimeleon.craco.sig.bbs.BBSBPublicParameter;
 import org.cryptimeleon.craco.sig.bbs.BBSBSignatureScheme;

@@ -2,7 +2,7 @@ package org.cryptimeleon.craco.ser.standalone.params;
 
 import org.cryptimeleon.craco.commitment.hashthencommit.HashThenCommitCommitmentScheme;
 import org.cryptimeleon.craco.commitment.pedersen.PedersenCommitmentScheme;
-import org.cryptimeleon.craco.ser.standalone.StandaloneReprSubTest;
+import org.cryptimeleon.math.serialization.standalone.StandaloneReprSubTest;
 import org.cryptimeleon.math.hash.impl.SHA256HashFunction;
 import org.cryptimeleon.math.structures.rings.zn.Zn;
 
