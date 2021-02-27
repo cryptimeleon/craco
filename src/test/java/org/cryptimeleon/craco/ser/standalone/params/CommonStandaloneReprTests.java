@@ -1,9 +1,9 @@
 package org.cryptimeleon.craco.ser.standalone.params;
 
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.craco.common.attributes.*;
 import org.cryptimeleon.craco.common.policies.BooleanPolicy;
 import org.cryptimeleon.craco.common.policies.ThresholdPolicy;
-import org.cryptimeleon.craco.enc.sym.streaming.aes.ByteArrayImplementation;
 import org.cryptimeleon.craco.secretsharing.SecretSharingSchemeProvider;
 import org.cryptimeleon.craco.secretsharing.ThresholdTreeSecretSharing;
 import org.cryptimeleon.craco.secretsharing.shamir.ShamirSecretSharingSchemeProvider;
