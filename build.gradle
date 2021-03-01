@@ -1,15 +1,14 @@
 plugins {
-    // Apply the java-library plugin to add support for Java Library
     id 'java-library'
     id 'maven-publish'
     id 'signing'
 }
 
 group = 'org.cryptimeleon'
-version = '1.0.0' + (Boolean.valueOf(System.getProperty("disablesnapshot")) ? "" : "-SNAPSHOT")
+archivesBaseName = project.name
+boolean isRelease = project.hasProperty("release")
+version = '1.0.0'  + (isRelease ? "" : "-SNAPSHOT")
 
-
-description = """"""
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -82,6 +81,7 @@ test {
 
 
 task javadocLatex(type: Javadoc) {
+
     source = sourceSets.main.allJava
     classpath = sourceSets.main.runtimeClasspath
     // enable rendering of umlauts
@@ -93,6 +93,11 @@ task javadocLatex(type: Javadoc) {
             "config=TeX-MML-AM_CHTML\"></script>"
     // reduce javadoc linting
     options.addBooleanOption('Xdoclint:none', true)
+}
+
+task javadocJar(type: Jar, dependsOn: javadocLatex) {
+    from javadoc.destinationDir
+    archiveClassifier.set('javadoc')
 }
 
 java {
@@ -115,11 +120,12 @@ publishing {
                     fromResolutionResult()
                 }
             }
+            artifacts {
+                archives javadocJar, sourcesJar
+            }
+
             pom {
                 name = 'Craco'
-                description = 'Craco (CRyptogrAphic COnstructions) is a Java library providing implementations of various cryptographic primitives and low-level constructions. This includes primitives such as commitment schemes, signature schemes, and much more.\n' +
-                        '\n' +
-                        'The goal of Craco is to provide common cryptographic schemes for usage in more high-level protocols as well as to offer facilities for improving the process of implementing more low-level schemes such as signature and encryption schemes.'
                 url = 'https://cryptimeleon.org'
                 licenses {
                     license {
@@ -127,6 +133,12 @@ publishing {
                         url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
                     }
                 }
+                description = 'Craco (CRyptogrAphic COnstructions) is a Java library providing implementations ' +
+                        'of various cryptographic primitives and low-level constructions. This includes primitives ' +
+                        'such as commitment schemes, signature schemes, and much more. The goal of Craco is to ' +
+                        'provide common cryptographic schemes for usage in more high-level protocols as well as to' +
+                        ' offer facilities for improving the process of implementing more low-level schemes such ' +
+                        'as signature and encryption schemes.'
                 developers {
                     developer {
                         id = 'jbobolz'
@@ -149,7 +161,8 @@ publishing {
                     }
                 }
                 scm {
-                    connection = 'scm:git:https://github.com/cryptimeleon/craco.git'
+                    connection = 'scm:git:git://github.com/cryptimeleon/craco.git'
+                    developerConnection = 'scm:git:https://github.com/cryptimeleon/craco.git'
                     url = 'https://github.com/cryptimeleon/craco/'
                 }
             }
@@ -157,28 +170,23 @@ publishing {
     }
     repositories {
         maven {
-            // change URLs to point to your repos, e.g. http://my.org/repo
-            def releasesRepoUrl = "$buildDir/repos/releases"
-            def snapshotsRepoUrl = "$buildDir/repos/snapshots"
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-        }
-    }
-
-
-    repositories {
-        maven {
             credentials {
-                username = System.getProperty('nexus.user')
-                password = System.getProperty('nexus.key')
+                username = System.getenv("OSSRH_USERNAME")
+                password = System.getenv("OSSRH_TOKEN")
             }
-            def releasesRepoUrl = "https://nexus.cs.upb.de/repository/sfb901-releases/"
-            def snapshotsRepoUrl = "https://nexus.cs.upb.de/repository/sfb901-snapshots/"
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            name = 'OSSRH'
+            def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+            url = version.endsWith('SNAPSHOT') ? '' : releasesRepoUrl
         }
     }
+
 }
 
 signing {
+    required(project.hasProperty("release"))
+    def signingKey = findProperty("signingKey")
+    def signingPassword = findProperty("signingPassword")
+    useInMemoryPgpKeys(signingKey, signingPassword)
     sign publishing.publications.mavenJava
 }
 
