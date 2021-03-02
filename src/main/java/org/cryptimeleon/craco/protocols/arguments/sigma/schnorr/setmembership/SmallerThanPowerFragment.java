@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * A fragment to prove a statement of the form \(0 \leq \text{member} < \text{base}^\text{power}\).
+ * A fragment to prove a statement of the form \(0 \leq \text{member} &#60; \text{base}^\text{power}\).
  */
 public class SmallerThanPowerFragment extends DelegateFragment {
     protected final int base;

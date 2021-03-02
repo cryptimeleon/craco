@@ -7,7 +7,7 @@ rootProject.name = 'craco'
 def msgPrefix = rootProject.name + " settings: "
 
 // do specific snapshot dependency resolution for snapshot builds
-if (!Boolean.valueOf(System.getProperty("release"))) {
+if (!Boolean.valueOf(getProperty("release"))) {
     def compositeLibraries = ["math"]
     for (String lib : compositeLibraries) {
         def libPrefix = "dependency " + lib

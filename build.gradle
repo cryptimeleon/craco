@@ -26,7 +26,7 @@ repositories {
 
 dependencies {
 
-    def mathVersion = '1.0.0' + (Boolean.valueOf(System.getProperty("disablesnapshot")) ? "" : "-SNAPSHOT")
+    def mathVersion = '1.0.0' + (isRelease ? "" : "-SNAPSHOT")
 
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api group: 'org.cryptimeleon', name: 'math', version: mathVersion
@@ -88,7 +88,6 @@ test {
 
 
 task javadocLatex(type: Javadoc) {
-
     source = sourceSets.main.allJava
     classpath = sourceSets.main.runtimeClasspath
     // enable rendering of umlauts
@@ -99,7 +98,10 @@ task javadocLatex(type: Javadoc) {
             "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?" +
             "config=TeX-MML-AM_CHTML\"></script>"
     // reduce javadoc linting
-    options.addBooleanOption('Xdoclint:none', true)
+    //options.addBooleanOption('Xdoclint:none', true)
+    // link to math javadoc
+    options.addStringOption("link", "http://static.javadoc.io/org.cryptimeleon/math/latest/")
+    //options.addStringOption("J-Dhttp.agent=javadoc", "")
 }
 
 task javadocJar(type: Jar, dependsOn: javadocLatex) {

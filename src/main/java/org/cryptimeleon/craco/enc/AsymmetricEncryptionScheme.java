@@ -12,6 +12,7 @@ public interface AsymmetricEncryptionScheme extends EncryptionScheme {
 
     /**
      * Generates the key pair consisting of public and secret key.
+     * @return the resulting key pair
      */
     EncryptionKeyPair generateKeyPair();
 
