@@ -59,9 +59,7 @@ if (!hasProperty("release")) {
                             println(msgPrefix + libPrefix + ": Branch develop is not checked out. "
                                     + "'checkoutIfCloned' is set. Automatically checking it out.")
                             grgitLib.checkout {
-                                branch = branchThis.getName()
-                                startPoint = "origin/" + branchThis.getName()
-                                createBranch = true
+                                branch = develop
                             }
                         } else {
                             throw new GradleException(msgPrefix + libPrefix + ": Branch develop exists but is not checked out. "
