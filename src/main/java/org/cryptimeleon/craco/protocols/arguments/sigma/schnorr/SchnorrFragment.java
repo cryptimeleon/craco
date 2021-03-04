@@ -35,13 +35,11 @@ import org.cryptimeleon.math.serialization.Representation;
  * <p>
  *     Note that the second and third fragment share the same {@code w} and {@code r}. This dependency is expressed in this interface:
  *     a {@linkplain SchnorrFragment}'s trascript generation may depend on variables that are outside of its own control. We call those variables "external" variables.
- * </p>
  *
  * <p>
  *     This approach allows for easy composition of fragments that depend on (some of) the same variables.
  *     However, this also means that {@linkplain SchnorrFragment}s are basically useless by themselves because they depend on external variables.
  *     To ultimately make use of a {@linkplain SchnorrFragment} in an actual protocol, implement a {@link SendThenDelegateProtocol} and use the fragment as a subprotocol.
- * </p>
  *
  * <p>
  *     Implementing classes are usually used as follows:
@@ -62,12 +60,10 @@ import org.cryptimeleon.math.serialization.Representation;
  *         <li>Verifier checks {@code checkTranscript(A, c, R, externalResponse)}</li>
  *     </ul>
  *     using the standard (response0-response1)/(challenge0-challenge1) knowledge extractor.
- * </p>
  *
  * <p>
  *     Most {@linkplain SchnorrFragment}s will probably be implemented by extending {@link DelegateFragment} or {@link SendThenDelegateFragment}.
  *     To compose a bunch of {@linkplain SchnorrFragment}s into a {@link SigmaProtocol}, see {@link DelegateProtocol} or {@link SendThenDelegateProtocol}.
- * </p>
  */
 public interface SchnorrFragment {
     /**

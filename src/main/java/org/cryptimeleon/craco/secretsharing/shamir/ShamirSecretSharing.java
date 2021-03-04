@@ -24,7 +24,7 @@ import java.util.stream.IntStream;
  * such that \(P(0)=s\).
  * <p>
  * The shares \((i, s_i = P(i))\) correspond to data points on the polynomial therefore any set \(S\) of shares
- * with \(|S| >= t\) can be used to uniquely determine the original polynomial using interpolation and therefore
+ * with \(|S| \geq t\) can be used to uniquely determine the original polynomial using interpolation and therefore
  * reconstruct
  * the secret.
  * <p>

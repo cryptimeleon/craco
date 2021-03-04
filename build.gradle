@@ -23,10 +23,11 @@ repositories {
     jcenter()
 }
 
+def mathVersionNoSuffix = '1.0.0'
 
 dependencies {
 
-    def mathVersion = '1.0.0' + (Boolean.valueOf(System.getProperty("disablesnapshot")) ? "" : "-SNAPSHOT")
+    def mathVersion = mathVersionNoSuffix + (isRelease ? "" : "-SNAPSHOT")
 
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api group: 'org.cryptimeleon', name: 'math', version: mathVersion
@@ -88,18 +89,19 @@ test {
 
 
 task javadocLatex(type: Javadoc) {
-
     source = sourceSets.main.allJava
     classpath = sourceSets.main.runtimeClasspath
     // enable rendering of umlauts
     options.addStringOption("charset", "UTF-8")
+    // link to math javadoc
+    options.addStringOption("link", "https://javadoc.io/doc/org.cryptimeleon/math/" + mathVersionNoSuffix)
     // enable latex rendering via mathjax
     options.addBooleanOption("-allow-script-in-comments", true)
     options.header = "<script type\"text/javascript&\" src=\"" +
             "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?" +
             "config=TeX-MML-AM_CHTML\"></script>"
     // reduce javadoc linting
-    options.addBooleanOption('Xdoclint:none', true)
+    //options.addBooleanOption('Xdoclint:none', true)
 }
 
 task javadocJar(type: Jar, dependsOn: javadocLatex) {
