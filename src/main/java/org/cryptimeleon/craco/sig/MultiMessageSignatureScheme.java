@@ -42,7 +42,7 @@ public interface MultiMessageSignatureScheme extends SignatureScheme {
      * @param plainTexts plaintexts to sign
      * @return signature over the given vector of plaintexts
      */
-    default Signature sign(SigningKey secretKey, Vector<PlainText> plainTexts) {
+    default Signature sign(SigningKey secretKey, Vector<? extends PlainText> plainTexts) {
         return sign(new MessageBlock(plainTexts), secretKey);
     }
 
@@ -53,7 +53,7 @@ public interface MultiMessageSignatureScheme extends SignatureScheme {
      * @param plainTexts vector of plaintexts to verify signature for
      * @return true if verification succeeds, else false
      */
-    default Boolean verify(VerificationKey publicKey, Signature signature, Vector<PlainText> plainTexts) {
+    default Boolean verify(VerificationKey publicKey, Signature signature, Vector<? extends PlainText> plainTexts) {
         return verify(new MessageBlock(plainTexts), signature, publicKey);
     }
 }

@@ -89,7 +89,7 @@ public interface StructurePreservingSignatureEQScheme extends StandardMultiMessa
     default Signature sign(SigningKey secretKey, GroupElementVector groupElements) {
         return sign(
                 new MessageBlock(groupElements.map(
-                    (Function<GroupElement, GroupElementPlainText>) GroupElementPlainText::new
+                        (Function<GroupElement, GroupElementPlainText>) GroupElementPlainText::new
                 )),
                 secretKey
         );
