@@ -8,22 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Pointcheval & Sanders' signature schemes from "Reassessing Security of Randomizable Signatures", 2018
-- Fuchsbauer, Hanser and Slamanig's signature scheme from "Structur-Preserving Signatures on Equivalence Classes and Constant-Size Anonymous Credentials", 2014
+- Helper methods for `MultiMessageSignatureScheme` and `StructurePreservingSignatureEQScheme` to make signing and verifying multiple plaintexts less verbose
 
-### Changed
-- Reordered many packages to improve organization
-- Updated Gradle to version 6.4
+## [1.0.0] - 2021-03-01
 
-### Fixed
+Initial release
 
-### Removed
-- ABE and ABE-KEM schemes as they have been moved to the [Predenc library](https://github.com/upbcuk/upb.crypto.predenc)
-- Log4j dependency
-- Json-simple dependency
-- Key derivation functions
-- `ByteArrayQueue` and `Triple` classes (not used)
-- `interaction` package (not used)
-- `PrimeFieldPolynomial` and `SecureRandomGenerator` classes (replaced by other functionality)
-- `WatersHash` class (moved to Predenc project) and `LagrangeUtil` class (moved to Math project)
-- Author tags
+[Unreleased]: https://github.com/cryptimeleon/craco/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/cryptimeleon/craco/releases/tag/v1.0.0
