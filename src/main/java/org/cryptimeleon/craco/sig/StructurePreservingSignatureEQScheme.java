@@ -1,7 +1,6 @@
 package org.cryptimeleon.craco.sig;
 
 
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
