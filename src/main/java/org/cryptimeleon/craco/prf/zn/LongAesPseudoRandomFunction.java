@@ -11,6 +11,7 @@ import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * AES based PRF with k key length and output length of the underlying AES key length.
@@ -23,7 +24,7 @@ public class LongAesPseudoRandomFunction implements PseudorandomFunction {
     @Represented
     private AesPseudorandomFunction aesPseudorandomFunction;
     @Represented
-    private int factor;
+    private Integer factor;
     private int preimageLength; // In bytes
     private int keyLength;      // In bytes
 
@@ -90,5 +91,18 @@ public class LongAesPseudoRandomFunction implements PseudorandomFunction {
     @Override
     public Representation getRepresentation() {
         return ReprUtil.serialize(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LongAesPseudoRandomFunction that = (LongAesPseudoRandomFunction) o;
+        return factor == that.factor && preimageLength == that.preimageLength && keyLength == that.keyLength && Objects.equals(aesPseudorandomFunction, that.aesPseudorandomFunction);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(aesPseudorandomFunction, factor, preimageLength, keyLength);
     }
 }
