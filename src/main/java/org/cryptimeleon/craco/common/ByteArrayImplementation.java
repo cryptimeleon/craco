@@ -61,7 +61,7 @@ public class ByteArrayImplementation implements PlainText, CipherText, Decryptio
     public ByteArrayImplementation append(ByteArrayImplementation a) {
         byte[] result = new byte[data.length + a.getData().length];
         System.arraycopy(data, 0, result, 0, data.length);
-        System.arraycopy(a, 0, result, data.length, a.getData().length);
+        System.arraycopy(a.data, 0, result, data.length, a.getData().length);
         return new ByteArrayImplementation(result);
     }
 
