@@ -25,8 +25,8 @@ public class SmallerThanPowerFragment extends DelegateFragment {
 
     /**
      * Instantiates the fragment.
-     * @param member an expression whose value shall be between 0 and base^power. 
-     *               In the easiest case, this is a {@link SchnorrZnVariable}, but it can be any linear combination
+     * @param member an expression whose value shall be between 0 and base^power (exclusive).
+     *               In the easiest case, this is a {@link SchnorrZnVariable}, but it can be any affine linear combination
      *               of {@link SchnorrZnVariable}s.
      * @param base a number (generally the bigger this number, the bigger the public parameters but the shorter the proof)
      * @param power a number (protocol computation and communication cost is linear in this number)
@@ -49,7 +49,7 @@ public class SmallerThanPowerFragment extends DelegateFragment {
      * @param base the desired base (see constructor)
      */
     public static SetMembershipPublicParameters generatePublicParameters(BilinearGroup group, int base) {
-        return SetMembershipPublicParameters.generate(group, IntStream.range(0, base).mapToObj(BigInteger::valueOf).collect(Collectors.toSet()));
+        return SetMembershipPublicParameters.generateInterval(group, 0, base);
     }
 
     @Override

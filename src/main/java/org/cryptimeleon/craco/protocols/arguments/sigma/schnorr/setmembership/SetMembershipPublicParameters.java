@@ -10,8 +10,12 @@ import org.cryptimeleon.math.structures.groups.elliptic.BilinearGroup;
 import org.cryptimeleon.math.structures.rings.zn.Zn;
 
 import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Public parameters used for set membership proofs. Consists mostly of signatures on the values in the set. 
@@ -45,7 +49,7 @@ public class SetMembershipPublicParameters implements Representable {
         this.egg = bilinearGroup.getBilinearMap().apply(g1, g2);
     }
 
-    public static SetMembershipPublicParameters generate(BilinearGroup group, Set<BigInteger> set) {
+    public static SetMembershipPublicParameters generate(BilinearGroup group, Collection<BigInteger> set) {
         GroupElement g1 = group.getG1().getUniformlyRandomNonNeutral();
         GroupElement g2 = group.getG2().getUniformlyRandomNonNeutral();
         Zn.ZnElement sk = group.getG1().getUniformlyRandomExponent();
@@ -58,6 +62,22 @@ public class SetMembershipPublicParameters implements Representable {
         }
 
         return new SetMembershipPublicParameters(group, g1, g2, pk, signatures);
+    }
+
+    public static SetMembershipPublicParameters generate(BilinearGroup group, BigInteger... set) {
+        return generate(group, Arrays.asList(set));
+    }
+
+    public static SetMembershipPublicParameters generate(BilinearGroup group, int... set) {
+        return generate(group, Arrays.stream(set).mapToObj(BigInteger::valueOf).toArray(BigInteger[]::new));
+    }
+
+    /**
+     * Generates parameters for a set membership proof for [leftBoundInclusive, rightBoundExclusive).
+     */
+    public static SetMembershipPublicParameters generateInterval(BilinearGroup group, int leftBoundInclusive, int rightBoundExclusive) {
+        return SetMembershipPublicParameters.generate(group, IntStream.range(leftBoundInclusive, rightBoundExclusive)
+                .mapToObj(BigInteger::valueOf).collect(Collectors.toSet()));
     }
 
     @Override
