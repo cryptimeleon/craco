@@ -16,7 +16,7 @@ import java.util.Objects;
 /**
  * AES based PRF with k key length and output length of the underlying AES key length.
  * PRF_k(x) = AES_k1(x)||AES_k2(x)|..." with key k=(k1,k2,...)
- *
+ * <p>
  * This is basically a wrapper around AesPseudorandomFunction.
  **/
 public class LongAesPseudoRandomFunction implements PseudorandomFunction {
@@ -25,9 +25,8 @@ public class LongAesPseudoRandomFunction implements PseudorandomFunction {
     private AesPseudorandomFunction aesPseudorandomFunction;
     @Represented
     private Integer factor;
-    private int preimageLength; // In bytes
-    private int keyLength;      // In bytes
-
+    private int preimageLengthBytes;
+    private int keyLengthBytes;
 
     /**
      * Instantiates the PRF with an AES instance and desired factor.
@@ -47,27 +46,27 @@ public class LongAesPseudoRandomFunction implements PseudorandomFunction {
     }
 
     private void init() {
-        this.preimageLength = aesPseudorandomFunction.getKeylength() / 8;
-        this.keyLength = preimageLength * factor;
+        this.preimageLengthBytes = aesPseudorandomFunction.getKeylength() / 8;
+        this.keyLengthBytes = preimageLengthBytes * factor;
     }
 
     @Override
     public PrfKey generateKey() {
-        return ByteArrayImplementation.fromRandom(keyLength);
+        return ByteArrayImplementation.fromRandom(keyLengthBytes);
     }
 
     @Override
     public PrfImage evaluate(PrfKey k, PrfPreimage x) {
-        if (((ByteArrayImplementation) k).length() != keyLength)
+        if (((ByteArrayImplementation) k).length() != keyLengthBytes)
             throw new IllegalArgumentException("key k in the AES PRF has invalid length");
-        if (((ByteArrayImplementation) x).length() != preimageLength)
+        if (((ByteArrayImplementation) x).length() != preimageLengthBytes)
             throw new IllegalArgumentException("preimage x in the AES PRF has invalid length");
 
-        ByteArrayImplementation result = new ByteArrayImplementation(new byte[keyLength]);
+        ByteArrayImplementation result = new ByteArrayImplementation(new byte[0]);
         for (int i = 0; i <= factor; i++) {
-            ByteArrayImplementation ki = new ByteArrayImplementation(Arrays.copyOfRange(k.getUniqueByteRepresentation(), i * preimageLength, (i + 1) * preimageLength));
+            ByteArrayImplementation ki = new ByteArrayImplementation(Arrays.copyOfRange(k.getUniqueByteRepresentation(), i * preimageLengthBytes, (i + 1) * preimageLengthBytes));
             byte[] bytesToAppend = aesPseudorandomFunction.evaluate(ki, x).getUniqueByteRepresentation();
-            result.append(new ByteArrayImplementation(bytesToAppend));
+            result = result.append(new ByteArrayImplementation(bytesToAppend));
         }
         return result;
     }
@@ -93,16 +92,24 @@ public class LongAesPseudoRandomFunction implements PseudorandomFunction {
         return ReprUtil.serialize(this);
     }
 
+    public int getPreimageLengthBytes() {
+        return preimageLengthBytes;
+    }
+
+    public int getKeyLengthBytes() {
+        return keyLengthBytes;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LongAesPseudoRandomFunction that = (LongAesPseudoRandomFunction) o;
-        return factor == that.factor && preimageLength == that.preimageLength && keyLength == that.keyLength && Objects.equals(aesPseudorandomFunction, that.aesPseudorandomFunction);
+        return factor == that.factor && preimageLengthBytes == that.preimageLengthBytes && keyLengthBytes == that.keyLengthBytes && Objects.equals(aesPseudorandomFunction, that.aesPseudorandomFunction);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(aesPseudorandomFunction, factor, preimageLength, keyLength);
+        return Objects.hash(aesPseudorandomFunction, factor, preimageLengthBytes, keyLengthBytes);
     }
 }
