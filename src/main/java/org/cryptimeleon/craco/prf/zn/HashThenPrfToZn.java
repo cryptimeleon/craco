@@ -86,7 +86,7 @@ public class HashThenPrfToZn {
         // from Zn
         BigInteger[] quotientAndRemainder = new BigInteger(1, prfOutput.getData()).divideAndRemainder(p);
 
-        if (quotientAndRemainder[0].compareTo(maxQuotient) < 0) {
+        if (quotientAndRemainder[0].compareTo(maxQuotient) >= 0) {
             throw new RuntimeException("PRF output is in the reject interval!");
         }
 

@@ -1,7 +1,6 @@
 package org.cryptimeleon.craco.prf.zn;
 
 import org.cryptimeleon.craco.common.ByteArrayImplementation;
-import org.cryptimeleon.craco.prf.PrfImage;
 import org.cryptimeleon.craco.prf.PrfKey;
 import org.cryptimeleon.craco.prf.PrfPreimage;
 import org.cryptimeleon.craco.prf.PseudorandomFunction;
@@ -10,7 +9,6 @@ import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -64,8 +62,8 @@ public class LongAesPseudoRandomFunction implements PseudorandomFunction {
 
         ByteArrayImplementation result = new ByteArrayImplementation(new byte[0]);
         for (int i = 0; i < factor; i++) {
-            ByteArrayImplementation ki = ((ByteArrayImplementation) k).substring(i*preimageLengthBytes, preimageLengthBytes);
-            byte[] bytesToAppend = aesPseudorandomFunction.evaluate(ki, x).getUniqueByteRepresentation();
+            ByteArrayImplementation ki = ((ByteArrayImplementation) k).substring(i * preimageLengthBytes, preimageLengthBytes);
+            byte[] bytesToAppend = ((ByteArrayImplementation) aesPseudorandomFunction.evaluate(ki, x)).getData();
             result = result.append(new ByteArrayImplementation(bytesToAppend));
         }
         return result;
