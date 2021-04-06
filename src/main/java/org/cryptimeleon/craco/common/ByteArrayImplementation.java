@@ -146,7 +146,7 @@ public class ByteArrayImplementation implements PlainText, CipherText, Decryptio
 
     @Override
     public ByteAccumulator updateAccumulator(ByteAccumulator accumulator) {
-        accumulator.escapeAndAppend(data);
+        accumulator.append(data);
         return accumulator;
     }
 }
