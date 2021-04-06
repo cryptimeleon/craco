@@ -63,7 +63,7 @@ public class LongAesPseudoRandomFunction implements PseudorandomFunction {
             throw new IllegalArgumentException("preimage x in the AES PRF has invalid length");
 
         ByteArrayImplementation result = new ByteArrayImplementation(new byte[0]);
-        for (int i = 0; i <= factor; i++) {
+        for (int i = 0; i < factor; i++) {
             ByteArrayImplementation ki = ((ByteArrayImplementation) k).substring(i*preimageLengthBytes, preimageLengthBytes);
             byte[] bytesToAppend = aesPseudorandomFunction.evaluate(ki, x).getUniqueByteRepresentation();
             result = result.append(new ByteArrayImplementation(bytesToAppend));
