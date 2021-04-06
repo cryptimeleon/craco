@@ -79,7 +79,7 @@ public class HashThenPrfToZn {
         System.arraycopy(hashOutput, 0, prfInput, 0, longAesPseudoRandomFunction.getPreimageLengthBytes());
 
         // Compute prf(hash)
-        ByteArrayImplementation prfOutput = (ByteArrayImplementation) longAesPseudoRandomFunction.evaluate(prfKey, new ByteArrayImplementation(prfInput));
+        ByteArrayImplementation prfOutput = longAesPseudoRandomFunction.evaluate(prfKey, new ByteArrayImplementation(prfInput));
 
         //Compute quotient and remainder of the prf output interpreted as a positive integer. Return remainder as
         // ZnElement if quotient is smaller than largest quotient to ensurer elements are drawn uniformly at random

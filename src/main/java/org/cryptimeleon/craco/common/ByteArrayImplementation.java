@@ -66,6 +66,19 @@ public class ByteArrayImplementation implements PlainText, CipherText, Decryptio
     }
 
     /**
+     * Returns an array containing the designated part of this byte array, meaning that
+     * {@code returned[i] = this[firstIndex+i]}.
+     * @param firstIndex first (byte) index that will be copied to the result
+     * @param length the number of bytes to be copied
+     * @return a {@linkplain ByteArrayImplementation} of length {@code length} that is a substring of this original.
+     */
+    public ByteArrayImplementation substring(int firstIndex, int length) {
+        byte[] result = new byte[length];
+        System.arraycopy(data, firstIndex, result, 0, length);
+        return new ByteArrayImplementation(result);
+    }
+
+    /**
      * Returns the length of this byte array.
      *
      * @return the length of this byte array

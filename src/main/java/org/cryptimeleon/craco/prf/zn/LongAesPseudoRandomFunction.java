@@ -51,12 +51,12 @@ public class LongAesPseudoRandomFunction implements PseudorandomFunction {
     }
 
     @Override
-    public PrfKey generateKey() {
+    public ByteArrayImplementation generateKey() {
         return ByteArrayImplementation.fromRandom(keyLengthBytes);
     }
 
     @Override
-    public PrfImage evaluate(PrfKey k, PrfPreimage x) {
+    public ByteArrayImplementation evaluate(PrfKey k, PrfPreimage x) {
         if (((ByteArrayImplementation) k).length() != keyLengthBytes)
             throw new IllegalArgumentException("key k in the AES PRF has invalid length");
         if (((ByteArrayImplementation) x).length() != preimageLengthBytes)
@@ -64,7 +64,7 @@ public class LongAesPseudoRandomFunction implements PseudorandomFunction {
 
         ByteArrayImplementation result = new ByteArrayImplementation(new byte[0]);
         for (int i = 0; i <= factor; i++) {
-            ByteArrayImplementation ki = new ByteArrayImplementation(Arrays.copyOfRange(k.getUniqueByteRepresentation(), i * preimageLengthBytes, (i + 1) * preimageLengthBytes));
+            ByteArrayImplementation ki = ((ByteArrayImplementation) k).substring(i*preimageLengthBytes, preimageLengthBytes);
             byte[] bytesToAppend = aesPseudorandomFunction.evaluate(ki, x).getUniqueByteRepresentation();
             result = result.append(new ByteArrayImplementation(bytesToAppend));
         }
@@ -73,17 +73,17 @@ public class LongAesPseudoRandomFunction implements PseudorandomFunction {
 
 
     @Override
-    public PrfKey restoreKey(Representation repr) {
+    public ByteArrayImplementation restoreKey(Representation repr) {
         return new ByteArrayImplementation(repr);
     }
 
     @Override
-    public PrfPreimage restorePreimage(Representation repr) {
+    public ByteArrayImplementation restorePreimage(Representation repr) {
         return new ByteArrayImplementation(repr);
     }
 
     @Override
-    public PrfImage restoreImage(Representation repr) {
+    public ByteArrayImplementation restoreImage(Representation repr) {
         return new ByteArrayImplementation(repr);
     }
 
@@ -105,11 +105,11 @@ public class LongAesPseudoRandomFunction implements PseudorandomFunction {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LongAesPseudoRandomFunction that = (LongAesPseudoRandomFunction) o;
-        return factor == that.factor && preimageLengthBytes == that.preimageLengthBytes && keyLengthBytes == that.keyLengthBytes && Objects.equals(aesPseudorandomFunction, that.aesPseudorandomFunction);
+        return factor.equals(that.factor) && Objects.equals(aesPseudorandomFunction, that.aesPseudorandomFunction);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(aesPseudorandomFunction, factor, preimageLengthBytes, keyLengthBytes);
+        return Objects.hash(aesPseudorandomFunction, factor);
     }
 }
