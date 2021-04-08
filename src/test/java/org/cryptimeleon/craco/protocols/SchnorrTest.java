@@ -4,6 +4,7 @@ import org.cryptimeleon.craco.protocols.arguments.damgardtechnique.DamgardTechni
 import org.cryptimeleon.craco.protocols.arguments.fiatshamir.FiatShamirProof;
 import org.cryptimeleon.craco.protocols.arguments.fiatshamir.FiatShamirProofSystem;
 import org.cryptimeleon.craco.protocols.arguments.sigma.SigmaProtocol;
+import org.cryptimeleon.craco.protocols.arguments.sigma.ZnChallengeSpace;
 import org.cryptimeleon.craco.protocols.arguments.sigma.instance.SigmaProtocolProverInstance;
 import org.cryptimeleon.craco.protocols.arguments.sigma.instance.SigmaProtocolVerifierInstance;
 import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.DelegateProtocol;
@@ -89,10 +90,9 @@ public class SchnorrTest {
             }
 
             @Override
-            public BigInteger getChallengeSpaceSize() {
-                return group.size();
+            public ZnChallengeSpace getChallengeSpace(CommonInput commonInput) {
+                return new ZnChallengeSpace(group.size());
             }
-
         };
 
         runProtocol(protocol);
@@ -113,8 +113,8 @@ public class SchnorrTest {
 
         DelegateProtocol protocol = new DelegateProtocol() {
             @Override
-            public BigInteger getChallengeSpaceSize() {
-                return bilGroup.getG1().size();
+            public ZnChallengeSpace getChallengeSpace(CommonInput commonInput) {
+                return new ZnChallengeSpace(bilGroup.getZn());
             }
 
             @Override

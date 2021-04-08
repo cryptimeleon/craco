@@ -7,5 +7,5 @@ import org.cryptimeleon.math.serialization.Representable;
  * A {@link SigmaProtocol}'s second message.
  */
 public interface Challenge extends Representable, UniqueByteRepresentable {
-
+    ChallengeSpace getChallengeSpace();
 }

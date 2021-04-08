@@ -10,15 +10,9 @@ import org.cryptimeleon.math.serialization.Representation;
 
 public class FiatShamirProofSystem {
     private final SigmaProtocol protocol;
-    private final HashFunction hash;
-
-    public FiatShamirProofSystem(SigmaProtocol protocol, HashFunction hashFunction) {
-        this.protocol = protocol;
-        this.hash = hashFunction;
-    }
 
     public FiatShamirProofSystem(SigmaProtocol protocol) {
-        this(protocol, new VariableOutputLengthHashFunction((protocol.getChallengeSpaceSize().bitLength()-1)/8));
+        this.protocol = protocol;
     }
 
     public FiatShamirProof createProof(CommonInput commonInput, SecretInput secretInput, byte[] additionalData) {
@@ -47,7 +41,7 @@ public class FiatShamirProofSystem {
         ByteArrayAccumulator acc = new ByteArrayAccumulator();
         acc.escapeAndSeparate(announcement);
         acc.append(additionalData);
-        return protocol.createChallengeFromBytes(commonInput, hash.hash(acc.extractBytes()));
+        return protocol.getChallengeSpace(commonInput).hashIntoChallengeSpace(acc.extractBytes());
     }
 
     public FiatShamirProof restoreProof(CommonInput commonInput, Representation repr) {

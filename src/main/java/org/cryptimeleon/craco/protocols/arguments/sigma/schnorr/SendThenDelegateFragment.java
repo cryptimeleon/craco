@@ -120,7 +120,7 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
     }
 
     @Override
-    public Response generateResponse(SchnorrVariableAssignment externalWitnesses, AnnouncementSecret announcementSecret, SchnorrChallenge challenge) {
+    public Response generateResponse(SchnorrVariableAssignment externalWitnesses, AnnouncementSecret announcementSecret, ZnChallenge challenge) {
         SendThenDelegateAnnouncementSecret announcementSecret1 = (SendThenDelegateAnnouncementSecret) announcementSecret;
         WitnessValues witnessValues = announcementSecret1.witnessValues;
 
@@ -140,7 +140,7 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
     }
 
     @Override
-    public BooleanExpression checkTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
+    public BooleanExpression checkTranscript(Announcement announcement, ZnChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
         SendFirstValue sendFirstValue = ((SendThenDelegateAnnouncement) announcement).sendFirstValue;
         SubprotocolSpec subprotocolSpec = ((SendThenDelegateAnnouncement) announcement).subprotocolSpec;
 
@@ -164,7 +164,7 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
     }
 
     @Override
-    public SigmaProtocolTranscript generateSimulatedTranscript(SchnorrChallenge challenge, SchnorrVariableAssignment externalRandomResponse) {
+    public SigmaProtocolTranscript generateSimulatedTranscript(ZnChallenge challenge, SchnorrVariableAssignment externalRandomResponse) {
         //Simulate sendFirstValue and set up subprotocols
         SendFirstValue sendFirstValue = simulateSendFirstValue();
         SubprotocolSpec subprotocolSpec = provideSubprotocolSpec(sendFirstValue, new SubprotocolSpecBuilder());
@@ -635,7 +635,7 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
     }
 
     @Override
-    public Representation compressTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
+    public Representation compressTranscript(Announcement announcement, ZnChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
         ListRepresentation result = new ListRepresentation(); //format: [sendFirstValue, variableResponses, [subprotocolTranscript1, subprotocolTranscript2, ...]]
 
         SendThenDelegateAnnouncement announcement1 = (SendThenDelegateAnnouncement) announcement;
@@ -657,7 +657,7 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
     }
 
     @Override
-    public SigmaProtocolTranscript decompressTranscript(Representation compressedTranscript, SchnorrChallenge challenge, SchnorrVariableAssignment externalResponse) throws IllegalArgumentException {
+    public SigmaProtocolTranscript decompressTranscript(Representation compressedTranscript, ZnChallenge challenge, SchnorrVariableAssignment externalResponse) throws IllegalArgumentException {
         SendFirstValue sendFirstValue = restoreSendFirstValue(compressedTranscript.list().get(0));
         if (!provideAdditionalCheck(sendFirstValue).evaluate())
             throw new IllegalArgumentException("Cannot decompress transcript because its sendFirstValue is invalid");
