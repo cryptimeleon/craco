@@ -31,73 +31,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-public class SchnorrTest {
-    public static Group group = new CountingGroup("test", RandomGenerator.getRandomPrime(80));
-    public static BilinearGroup bilGroup = new CountingBilinearGroup(128, BilinearGroup.Type.TYPE_3,1);
-
-    protected void runProtocol(SigmaProtocol protocol) {
-        runProtocol(protocol, CommonInput.EMPTY, SecretInput.EMPTY);
-    }
-
-    protected void runProtocol(SigmaProtocol protocol, CommonInput commonInput, SecretInput secretInput) {
-        SigmaProtocolProverInstance prover = protocol.getProverInstance(commonInput, secretInput);
-        SigmaProtocolVerifierInstance verifier = protocol.getVerifierInstance(commonInput);
-
-        Representation announcement = prover.nextMessage(null);
-        System.out.println(announcement);
-        Representation challenge = verifier.nextMessage(announcement);
-        System.out.println(challenge);
-        Representation response = prover.nextMessage(challenge);
-        System.out.println(response);
-        verifier.nextMessage(response);
-
-        assertTrue(verifier.hasTerminated());
-        assertTrue(verifier.isAccepting());
-    }
-
-    protected void runNoninteractiveProof(FiatShamirProofSystem proofSystem) {
-        runNoninteractiveProof(proofSystem, CommonInput.EMPTY, SecretInput.EMPTY);
-    }
-
-    protected void runNoninteractiveProof(FiatShamirProofSystem proofSystem, CommonInput commonInput, SecretInput secretInput) {
-        FiatShamirProof proof = proofSystem.createProof(commonInput, secretInput);
-        assertTrue(proofSystem.checkProof(commonInput, proof));
-
-        byte[] additionalData = "foo".getBytes(StandardCharsets.UTF_8);
-        proof = proofSystem.createProof(commonInput, secretInput, additionalData);
-        assertTrue(proofSystem.checkProof(commonInput, proof, additionalData));
-        assertFalse(proofSystem.checkProof(commonInput, proof, new byte[] {123}));
-    }
-
+public class SchnorrTest extends ProtocolsTest {
     @Test
     public void testBasicSchnorr() {
-        GroupElement g = group.getGenerator();
-        Zn.ZnElement x = group.getUniformlyRandomExponent();
-        GroupElement h = g.pow(x);
-
-        DelegateProtocol protocol = new DelegateProtocol() {
-            @Override
-            protected SendThenDelegateFragment.ProverSpec provideProverSpecWithNoSendFirst(CommonInput commonInput, SecretInput secretInput, SendThenDelegateFragment.ProverSpecBuilder builder) {
-                builder.putWitnessValue("x", x);
-                return builder.build();
-            }
-
-            @Override
-            protected SendThenDelegateFragment.SubprotocolSpec provideSubprotocolSpec(CommonInput commonInput, SendThenDelegateFragment.SubprotocolSpecBuilder builder) {
-                SchnorrZnVariable dlog = builder.addZnVariable("x", group.getZn());
-                builder.addSubprotocol("schnorr", new LinearStatementFragment(g.pow(dlog).isEqualTo(h)));
-                return builder.build();
-            }
-
-            @Override
-            public ZnChallengeSpace getChallengeSpace(CommonInput commonInput) {
-                return new ZnChallengeSpace(group.size());
-            }
-        };
-
-        runProtocol(protocol);
-        runProtocol(new DamgardTechnique(protocol, DamgardTechnique.generateCommitmentScheme(group)));
-        runNoninteractiveProof(new FiatShamirProofSystem(protocol));
+        runTests(getSimpleSchnorrProof(), getSimpleSchnorrProofInput(), getSimpleSchnorrProofWitness());
     }
 
     @Test
@@ -142,8 +79,6 @@ public class SchnorrTest {
             }
         };
 
-        runProtocol(protocol);
-        runProtocol(new DamgardTechnique(protocol, DamgardTechnique.generateCommitmentScheme(group)));
-        runNoninteractiveProof(new FiatShamirProofSystem(protocol));
+        runTests(protocol);
     }
 }

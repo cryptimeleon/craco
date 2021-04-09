@@ -42,4 +42,12 @@ public interface ChallengeSpace extends RepresentationRestorer {
      * If two challenge spaces are equal, then the behavior of this method is consistent.
      */
     Challenge hashIntoChallengeSpace(byte[] bytes);
+
+    /**
+     * Returns the unique challenge share2 such that {@code subtract(challengeToSplit, share2).equals(share1)}.
+     * This is akin to secret sharing.
+     * For all challengeToSplit, {@code subtract(challengeToSplit, generateRandomChallenge())} shall be distributed like {@code generateRandomChallenge()}.
+     * @throws UnsupportedOperationException if this challenge space does not support splitting challenges.
+     */
+    Challenge subtract(Challenge challengeToSplit, Challenge share1) throws UnsupportedOperationException;
 }

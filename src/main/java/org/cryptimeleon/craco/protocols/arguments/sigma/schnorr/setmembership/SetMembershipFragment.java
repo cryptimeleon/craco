@@ -1,6 +1,7 @@
 package org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.setmembership;
 
 import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.LinearStatementFragment;
+import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.SendFirstValue;
 import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.SendThenDelegateFragment;
 import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.variables.SchnorrVariableAssignment;
 import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.variables.SchnorrZnVariable;
@@ -45,24 +46,24 @@ public class SetMembershipFragment extends SendThenDelegateFragment {
 
         //Blind signature with blinding value
         GroupElement blindedSignature = signature.pow(r);
-        builder.setSendFirstValue(new AlgebraicSendFirstValue(blindedSignature));
+        builder.setSendFirstValue(new SendFirstValue.AlgebraicSendFirstValue(blindedSignature));
 
         return builder.build();
     }
 
     @Override
     protected SendFirstValue restoreSendFirstValue(Representation repr) {
-        return new AlgebraicSendFirstValue(repr, pp.bilinearGroup.getG1());
+        return new SendFirstValue.AlgebraicSendFirstValue(repr, pp.bilinearGroup.getG1());
     }
 
     @Override
     protected SendFirstValue simulateSendFirstValue() {
-        return new AlgebraicSendFirstValue(pp.bilinearGroup.getG1().getUniformlyRandomNonNeutral());
+        return new SendFirstValue.AlgebraicSendFirstValue(pp.bilinearGroup.getG1().getUniformlyRandomNonNeutral());
     }
 
     @Override
     protected SubprotocolSpec provideSubprotocolSpec(SendFirstValue sendFirstValue, SubprotocolSpecBuilder builder) {
-        GroupElement blindedSignature = ((AlgebraicSendFirstValue) sendFirstValue).getGroupElement(0);
+        GroupElement blindedSignature = ((SendFirstValue.AlgebraicSendFirstValue) sendFirstValue).getGroupElement(0);
 
         //Add proof that prover knows how to derandomize the blinded signature such that it's valid on member.
         SchnorrZnVariable signatureBlindingValue = builder.addZnVariable("r", pp.getZn()); //"prove knowledge of r"
@@ -78,6 +79,6 @@ public class SetMembershipFragment extends SendThenDelegateFragment {
 
     @Override
     protected BooleanExpression provideAdditionalCheck(SendFirstValue sendFirstValue) {
-        return BooleanExpression.valueOf(!((AlgebraicSendFirstValue) sendFirstValue).getGroupElement(0).isNeutralElement());
+        return BooleanExpression.valueOf(!((SendFirstValue.AlgebraicSendFirstValue) sendFirstValue).getGroupElement(0).isNeutralElement());
     }
 }

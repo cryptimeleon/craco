@@ -9,8 +9,6 @@ import org.cryptimeleon.math.expressions.bool.BooleanExpression;
 import org.cryptimeleon.math.hash.ByteAccumulator;
 import org.cryptimeleon.math.serialization.Representation;
 
-import java.math.BigInteger;
-
 /**
  * <p>The protocol version of {@link SendThenDelegateFragment}.</p>
  * <p>
@@ -27,27 +25,27 @@ public abstract class SendThenDelegateProtocol implements SigmaProtocol {
 
     /**
      * Run by the prover to set up (1) the sendFirstValue and
-     * (2) witness values for variables this fragment proves knowledge of itself (i.e. those specified in {@link SendThenDelegateProtocol#provideSubprotocolSpec(CommonInput, SendThenDelegateFragment.SendFirstValue, SendThenDelegateFragment.SubprotocolSpecBuilder)}).
+     * (2) witness values for variables this fragment proves knowledge of itself (i.e. those specified in {@link SendThenDelegateProtocol#provideSubprotocolSpec(CommonInput, SendFirstValue, SendThenDelegateFragment.SubprotocolSpecBuilder)}).
      *
      * @see SendThenDelegateFragment#provideProverSpec(SchnorrVariableAssignment, SendThenDelegateFragment.ProverSpecBuilder)
      */
     protected abstract SendThenDelegateFragment.ProverSpec provideProverSpec(CommonInput commonInput, SecretInput secretInput, SendThenDelegateFragment.ProverSpecBuilder builder);
-    protected abstract SendThenDelegateFragment.SendFirstValue restoreSendFirstValue(CommonInput commonInput, Representation repr);
+    protected abstract SendFirstValue restoreSendFirstValue(CommonInput commonInput, Representation repr);
 
     /**
      * @see SendThenDelegateFragment#simulateSendFirstValue()
      */
-    protected abstract SendThenDelegateFragment.SendFirstValue simulateSendFirstValue(CommonInput commonInput);
+    protected abstract SendFirstValue simulateSendFirstValue(CommonInput commonInput);
 
     /**
-     * @see SendThenDelegateFragment#provideProverSpec(SchnorrVariableAssignment, SendThenDelegateFragment.ProverSpecBuilder)
+     * @see SendThenDelegateFragment#provideSubprotocolSpec(SendFirstValue, SendThenDelegateFragment.SubprotocolSpecBuilder)
      */
-    protected abstract SendThenDelegateFragment.SubprotocolSpec provideSubprotocolSpec(CommonInput commonInput, SendThenDelegateFragment.SendFirstValue sendFirstValue, SendThenDelegateFragment.SubprotocolSpecBuilder builder);
+    protected abstract SendThenDelegateFragment.SubprotocolSpec provideSubprotocolSpec(CommonInput commonInput, SendFirstValue sendFirstValue, SendThenDelegateFragment.SubprotocolSpecBuilder builder);
 
     /**
-     * @see SendThenDelegateFragment#provideAdditionalCheck(SendThenDelegateFragment.SendFirstValue)
+     * @see SendThenDelegateFragment#provideAdditionalCheck(SendFirstValue)
      */
-    protected abstract BooleanExpression provideAdditionalCheck(CommonInput commonInput, SendThenDelegateFragment.SendFirstValue sendFirstValue);
+    protected abstract BooleanExpression provideAdditionalCheck(CommonInput commonInput, SendFirstValue sendFirstValue);
 
     @Override
     public abstract ZnChallengeSpace getChallengeSpace(CommonInput commonInput);

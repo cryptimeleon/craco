@@ -48,6 +48,11 @@ public class ZnChallengeSpace implements ChallengeSpace {
     }
 
     @Override
+    public Challenge subtract(Challenge challengeToSplit, Challenge share1) throws UnsupportedOperationException {
+        return new ZnChallenge(((ZnChallenge) challengeToSplit).challenge.sub(((ZnChallenge) share1).challenge));
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
