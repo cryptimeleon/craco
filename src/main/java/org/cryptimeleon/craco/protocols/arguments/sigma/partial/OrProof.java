@@ -1,6 +1,5 @@
 package org.cryptimeleon.craco.protocols.arguments.sigma.partial;
 
-import com.sun.tools.javac.util.List;
 import org.cryptimeleon.craco.protocols.CommonInput;
 import org.cryptimeleon.craco.protocols.SecretInput;
 import org.cryptimeleon.craco.protocols.arguments.sigma.*;
@@ -10,6 +9,8 @@ import org.cryptimeleon.math.serialization.ListRepresentation;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.structures.cartesian.Vector;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 
 public class OrProof implements SigmaProtocol {
@@ -95,7 +96,7 @@ public class OrProof implements SigmaProtocol {
     }
 
     private <T, Y extends Vector<? extends T>> Y getVector(SecretInput secretInput, T honest, T simulated, Function<List<? extends T>, Y> constructor) {
-        return ((OrProofSecretInput) secretInput).isForProtocol1 ? constructor.apply(List.of(simulated, honest)) : constructor.apply(List.of(honest, simulated));
+        return ((OrProofSecretInput) secretInput).isForProtocol1 ? constructor.apply(Arrays.asList(simulated, honest)) : constructor.apply(Arrays.asList(honest, simulated));
     }
 
     @Override
