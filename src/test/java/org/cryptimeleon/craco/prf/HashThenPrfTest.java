@@ -11,11 +11,14 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.math.BigInteger;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
 import java.util.function.Supplier;
 
+import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -26,18 +29,46 @@ public class HashThenPrfTest {
     private Zn zn;
     private HashThenPrfToZn hashThenPrfToZn;
     private Supplier<UniqueByteRepresentable> hashPreimageSupplier;
+    private String paramsString;
 
 
     public HashThenPrfTest(TestParams params) {
         zn = params.zn;
         hashThenPrfToZn = params.hashThenPrfToZn;
         hashPreimageSupplier = params.hashPreimageSupplier;
+        paramsString = params.toString();
     }
 
     @org.junit.Test
     public void testRun() {
         PrfKey k = hashThenPrfToZn.generateKey();
         assertNotNull(hashThenPrfToZn.hashThenPrfToZn(k, hashPreimageSupplier.get()));
+    }
+
+    @org.junit.Test
+    public void testVectorA() throws InterruptedException {
+        PrfKey k = hashThenPrfToZn.generateKey();
+        Instant start = Instant.now();
+        for (int i = 0; i < 50; i++) {
+            hashThenPrfToZn.hashThenPrfToZnVectorA(k, hashPreimageSupplier.get(), 1);
+            hashThenPrfToZn.hashThenPrfToZnVectorA(k, hashPreimageSupplier.get(), 7);
+            hashThenPrfToZn.hashThenPrfToZnVectorA(k, hashPreimageSupplier.get(), 13);
+        }
+        Instant end = Instant.now();
+        System.out.println("A: " + Duration.between(start, end) + " with " + paramsString);
+    }
+
+    @org.junit.Test
+    public void testVectorB() {
+        PrfKey k = hashThenPrfToZn.generateKey();
+        Instant start = Instant.now();
+        for (int i = 0; i < 50; i++) {
+            hashThenPrfToZn.hashThenPrfToZnVectorB(k, hashPreimageSupplier.get(), 1);
+            hashThenPrfToZn.hashThenPrfToZnVectorB(k, hashPreimageSupplier.get(), 7);
+            hashThenPrfToZn.hashThenPrfToZnVectorB(k, hashPreimageSupplier.get(), 13);
+        }
+        Instant end = Instant.now();
+        System.out.println("B: " + Duration.between(start, end) + " with " + paramsString);
     }
 
     // Some test configurations
