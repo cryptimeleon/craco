@@ -5,7 +5,7 @@ import org.cryptimeleon.craco.prf.PrfKey;
 import org.cryptimeleon.craco.prf.aes.AesPseudorandomFunction;
 import org.cryptimeleon.math.hash.HashFunction;
 import org.cryptimeleon.math.hash.UniqueByteRepresentable;
-import org.cryptimeleon.math.hash.impl.SHAHashAccumulator;
+import org.cryptimeleon.math.hash.impl.ByteArrayAccumulator;
 import org.cryptimeleon.math.structures.rings.zn.Zn;
 
 import java.math.BigInteger;
@@ -108,44 +108,22 @@ public class HashThenPrfToZn {
     }
 
     /**
-     * Generate pseudorandom ZnVectors of variable size
-     * Version A: Prefix
+     * Generate pseudorandom ZnVectors of variable size using unique prefixes for the vectorSize and index.
      *
-     * @param prfKey    the PRF key
-     * @param hashInput input to hash
+     * @param prfKey     the PRF key
+     * @param hashInput  input to hash
      * @param vectorSize target vector size
      * @return a pseudorandom Vector of Zn elements
      */
-    public Vector<Zn.ZnElement> hashThenPrfToZnVectorA(PrfKey prfKey, UniqueByteRepresentable hashInput, int vectorSize) {
+    public Vector<Zn.ZnElement> hashThenPrfToZnVector(PrfKey prfKey, UniqueByteRepresentable hashInput, int vectorSize) {
         Vector<Zn.ZnElement> result = new Vector<>(vectorSize);
 
         for (int i = 0; i < vectorSize; i++) {
-            SHAHashAccumulator shaHashAccumulator = new SHAHashAccumulator("SHA-" + hashFunction.getOutputLength()*8);
-            shaHashAccumulator.append(i);
-            shaHashAccumulator.append(hashInput);
-            Zn.ZnElement element = hashThenPrfToZn(prfKey, shaHashAccumulator.extractBytes());
-            result.add(i, element);
-        }
-
-        return result;
-    }
-
-    /**
-     * Generate pseudorandom ZnVectors of variable size
-     * Version B: Chain
-     *
-     * @param prfKey    the PRF key
-     * @param hashInput input to hash
-     * @param vectorSize target vector size
-     * @return a pseudorandom Vector of Zn elements
-     */
-    public Vector<Zn.ZnElement> hashThenPrfToZnVectorB(PrfKey prfKey, UniqueByteRepresentable hashInput, int vectorSize) {
-        Vector<Zn.ZnElement> result = new Vector<>(vectorSize);
-
-        Zn.ZnElement element = hashThenPrfToZn(prfKey, hashInput);
-        result.add(0, element);
-        for (int i = 1; i < vectorSize; i++) {
-            element = hashThenPrfToZn(prfKey, element);
+            ByteArrayAccumulator accumulator = new ByteArrayAccumulator();
+            accumulator.append(vectorSize); // Ensure uniqueness for each vector size, allows using the same preimage for several, different sized vectors
+            accumulator.append(i); // Index to prevent having the same output for each element
+            accumulator.append(hashInput);
+            Zn.ZnElement element = hashThenPrfToZn(prfKey, accumulator.extractBytes());
             result.add(i, element);
         }
 

@@ -46,29 +46,9 @@ public class HashThenPrfTest {
     }
 
     @org.junit.Test
-    public void testVectorA() throws InterruptedException {
+    public void testVectorA() {
         PrfKey k = hashThenPrfToZn.generateKey();
-        Instant start = Instant.now();
-        for (int i = 0; i < 50; i++) {
-            hashThenPrfToZn.hashThenPrfToZnVectorA(k, hashPreimageSupplier.get(), 1);
-            hashThenPrfToZn.hashThenPrfToZnVectorA(k, hashPreimageSupplier.get(), 7);
-            hashThenPrfToZn.hashThenPrfToZnVectorA(k, hashPreimageSupplier.get(), 13);
-        }
-        Instant end = Instant.now();
-        System.out.println("A: " + Duration.between(start, end) + " with " + paramsString);
-    }
-
-    @org.junit.Test
-    public void testVectorB() {
-        PrfKey k = hashThenPrfToZn.generateKey();
-        Instant start = Instant.now();
-        for (int i = 0; i < 50; i++) {
-            hashThenPrfToZn.hashThenPrfToZnVectorB(k, hashPreimageSupplier.get(), 1);
-            hashThenPrfToZn.hashThenPrfToZnVectorB(k, hashPreimageSupplier.get(), 7);
-            hashThenPrfToZn.hashThenPrfToZnVectorB(k, hashPreimageSupplier.get(), 13);
-        }
-        Instant end = Instant.now();
-        System.out.println("B: " + Duration.between(start, end) + " with " + paramsString);
+        assertNotNull(hashThenPrfToZn.hashThenPrfToZnVector(k, hashPreimageSupplier.get(), 13));
     }
 
     // Some test configurations
