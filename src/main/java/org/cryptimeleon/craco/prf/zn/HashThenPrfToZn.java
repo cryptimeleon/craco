@@ -105,6 +105,18 @@ public class HashThenPrfToZn implements StandaloneRepresentable {
      *
      * @param prfKey    the PRF key
      * @param hashInput input to hash
+     * @param prefix    a prefix to allow using the same preimage twice
+     * @return a pseudorandom Zn element
+     */
+    public Zn.ZnElement hashThenPrfToZn(PrfKey prfKey, UniqueByteRepresentable hashInput, String prefix) {
+        return hashThenPrfToZnVector(prfKey, hashInput, 1, prefix).get(0);
+    }
+
+    /**
+     * Hash-then-PRF to Zn.
+     *
+     * @param prfKey    the PRF key
+     * @param hashInput input to hash
      * @return a pseudorandom Zn element
      */
     public Zn.ZnElement hashThenPrfToZn(PrfKey prfKey, byte[] hashInput) {
@@ -130,19 +142,6 @@ public class HashThenPrfToZn implements StandaloneRepresentable {
         }
 
         return zn.valueOf(quotientAndRemainder[1]);
-    }
-
-
-    /**
-     * Wrapper. Generate pseudorandom ZnVectors of variable size using unique prefixes for the vectorSize and index.
-     *
-     * @param prfKey     the PRF key
-     * @param hashInput  input to hash
-     * @param vectorSize target vector size
-     * @return a pseudorandom Vector of Zn elements
-     */
-    public Vector<Zn.ZnElement> hashThenPrfToZnVector(PrfKey prfKey, UniqueByteRepresentable hashInput, int vectorSize) {
-        return hashThenPrfToZnVector(prfKey, hashInput, vectorSize, "");
     }
 
     /**
