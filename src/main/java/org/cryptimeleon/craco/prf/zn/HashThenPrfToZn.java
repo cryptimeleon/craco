@@ -22,7 +22,7 @@ import java.util.Vector;
  * <p>
  * We use a PRF that outputs bitstrings and map these to Zp as follows:
  * We divide the output interval of size 2^n (with elements in [0,2^n-1]) into a 'good' and a 'bad' interval, where the
- * good interval is [0,x*p[ with x*p<2^n chosen to be maximal and the bad interval [x*p,2^n-1].
+ * good interval is [0,x*p[ with x*p{@literal <}2^n chosen to be maximal and the bad interval [x*p,2^n-1].
  * Since x is maximal, the bad interval has size at most p-1.
  * <p>
  * To get a ZnElement, we hash, use the PRF and get some output value o.
