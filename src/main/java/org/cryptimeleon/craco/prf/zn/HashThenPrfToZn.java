@@ -20,12 +20,18 @@ import java.util.Vector;
 /**
  * Get pseudorandom Zn Elements by a hash-then-prf construction.
  * <p>
- * The main concept is to use an oversubscribed PRF in the sense that the output bitsize is hundrets of bits larger
- * than Zn Elements. We divide the output space into an accepting interval [0, k*p[ and a rejecting interval. If the
- * output of hash-then-prf is in the accepting interval, we make the remainder mod p the output Zn element, since it
- * is uniformly at random from [0, k*p[ and hence the remainder u.a.r. from Zn. We reject all results from the rejecting
- * interval. We choose the rejecting intervals size to be negligible compared to the accepting to avoid retrying
- * by using {@link LongAesPseudoRandomFunction}.
+ * We use a PRF that outputs bitstrings and map these to Zp as follows:
+ * We divide the output interval of size 2^n (with elements in [0,2^n-1]) into a 'good' and a 'bad' interval, where the
+ * good interval is [0,x*p[ with x*p<2^n chosen to be maximal and the bad interval [x*p,2^n-1].
+ * Since x is maximal, the bad interval has size at most p-1.
+ * <p>
+ * To get a ZnElement, we hash, use the PRF and get some output value o.
+ * If o is in the good interval, we output o mod p
+ * as our ZnElement. This is random for random bit strings, since the good interval's size is a multiple of p.
+ * If o is in the bad interval, we reject and throw an exception. We don't want this to happen, hence we increase the
+ * good interval by using a longer PRF, this can be influenced by the so called 'oversubscription'. Since the bad
+ * interval's size is bound by p, increasing the total interval reduces the probability of landing in the bad interval.
+ * More precisely, the reject rate is bound by (1/2)^oversubscription.
  */
 public class HashThenPrfToZn implements StandaloneRepresentable {
     @Represented
@@ -89,37 +95,41 @@ public class HashThenPrfToZn implements StandaloneRepresentable {
         return longAesPseudoRandomFunction.generateKey();
     }
 
+
     /**
-     * Hash-then-PRF to Zn.
+     * Generate pseudorandom ZnVectors of variable size using unique prefixes for the vectorSize and index.
      *
-     * @param prfKey    the PRF key
-     * @param hashInput input to hash
-     * @return a pseudorandom Zn element
+     * @param prfKey     the PRF key
+     * @param hashInput  input to hash
+     * @param vectorSize target vector size
+     * @param prefix     prefix to allow using the same vectorSize and preImage several times
+     * @return a pseudorandom Vector of Zn elements
      */
-    public Zn.ZnElement hashThenPrfToZn(PrfKey prfKey, UniqueByteRepresentable hashInput) {
-        return hashThenPrfToZn(prfKey, hashInput.getUniqueByteRepresentation());
+    public Vector<Zn.ZnElement> hashThenPrfToZnVector(PrfKey prfKey, UniqueByteRepresentable hashInput, int vectorSize, String prefix) {
+        Vector<Zn.ZnElement> result = new Vector<>(vectorSize);
+
+        for (int i = 0; i < vectorSize; i++) {
+            ByteArrayAccumulator accumulator = new ByteArrayAccumulator();
+            accumulator.append(vectorSize); // Ensure uniqueness for each vector size, allows using the same preimage for several, different sized vectors
+            accumulator.append(i); // Index to prevent having the same output for each element
+            accumulator.escapeAndSeparate(prefix); // Prefix to allow using the same preImage and vectorSize twice
+            accumulator.escapeAndAppend(hashInput);
+            Zn.ZnElement element = hashThenPrfToZn(prfKey, accumulator.extractBytes());
+            result.add(i, element);
+        }
+
+        return result;
     }
 
     /**
-     * Hash-then-PRF to Zn.
-     *
-     * @param prfKey    the PRF key
-     * @param hashInput input to hash
-     * @param prefix    a prefix to allow using the same preimage twice
-     * @return a pseudorandom Zn element
-     */
-    public Zn.ZnElement hashThenPrfToZn(PrfKey prfKey, UniqueByteRepresentable hashInput, String prefix) {
-        return hashThenPrfToZnVector(prfKey, hashInput, 1, prefix).get(0);
-    }
-
-    /**
-     * Hash-then-PRF to Zn.
+     * Main method of Hash-then-PRF to Zn.
+     * Private to avoid accidentally mixing different hashInput formats.
      *
      * @param prfKey    the PRF key
      * @param hashInput input to hash
      * @return a pseudorandom Zn element
      */
-    public Zn.ZnElement hashThenPrfToZn(PrfKey prfKey, byte[] hashInput) {
+    private Zn.ZnElement hashThenPrfToZn(PrfKey prfKey, byte[] hashInput) {
         BigInteger p = zn.getCharacteristic();
 
         // Compute hash value
@@ -144,30 +154,22 @@ public class HashThenPrfToZn implements StandaloneRepresentable {
         return zn.valueOf(quotientAndRemainder[1]);
     }
 
-    /**
-     * Generate pseudorandom ZnVectors of variable size using unique prefixes for the vectorSize and index.
-     *
-     * @param prfKey     the PRF key
-     * @param hashInput  input to hash
-     * @param vectorSize target vector size
-     * @param prefix     prefix to allow using the same vectorSize and preImage several times
-     * @return a pseudorandom Vector of Zn elements
+    /*
+     * Some wrappers with different method signatures.
      */
-    public Vector<Zn.ZnElement> hashThenPrfToZnVector(PrfKey prfKey, UniqueByteRepresentable hashInput, int vectorSize, String prefix) {
-        Vector<Zn.ZnElement> result = new Vector<>(vectorSize);
 
-        for (int i = 0; i < vectorSize; i++) {
-            ByteArrayAccumulator accumulator = new ByteArrayAccumulator();
-            accumulator.append(prefix); // Prefix to allow using the same preImage and vectorSize twice
-            accumulator.append(vectorSize); // Ensure uniqueness for each vector size, allows using the same preimage for several, different sized vectors
-            accumulator.append(i); // Index to prevent having the same output for each element
-            accumulator.append(hashInput);
-            Zn.ZnElement element = hashThenPrfToZn(prfKey, accumulator.extractBytes());
-            result.add(i, element);
-        }
-
-        return result;
+    public Vector<Zn.ZnElement> hashThenPrfToZnVector(PrfKey prfKey, UniqueByteRepresentable hashInput, int vectorSize) {
+        return hashThenPrfToZnVector(prfKey, hashInput, vectorSize, "");
     }
+
+    public Zn.ZnElement hashThenPrfToZn(PrfKey prfKey, UniqueByteRepresentable hashInput) {
+        return hashThenPrfToZnVector(prfKey, hashInput, 1, "").get(0);
+    }
+
+    public Zn.ZnElement hashThenPrfToZn(PrfKey prfKey, UniqueByteRepresentable hashInput, String prefix) {
+        return hashThenPrfToZnVector(prfKey, hashInput, 1, prefix).get(0);
+    }
+
 
     public LongAesPseudoRandomFunction getLongAesPseudoRandomFunction() {
         return longAesPseudoRandomFunction;
