@@ -28,7 +28,7 @@ public class HashThenPrfToZn {
     private final Zn zn;
     private final BigInteger p;
     private final BigInteger maxQuotient; // k from the description
-    final int OVERSUBSCRIPTION = 2; // Make accepting interval larger than rejecting interval (+rounding overhead)
+    final int OVERSUBSCRIPTION = 128; // Make accepting interval larger than rejecting interval (+rounding overhead)
 
     /**
      * @param aesKeyLength bit length of AES
