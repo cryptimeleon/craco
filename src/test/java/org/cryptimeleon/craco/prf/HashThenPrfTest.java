@@ -11,15 +11,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.math.BigInteger;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
 import java.util.function.Supplier;
 
-import static java.lang.Thread.sleep;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Tests the hash-then-prf-to-Zn construction.
@@ -46,9 +44,27 @@ public class HashThenPrfTest {
     }
 
     @org.junit.Test
-    public void testVectorA() {
+    public void testVector() {
         PrfKey k = hashThenPrfToZn.generateKey();
-        assertNotNull(hashThenPrfToZn.hashThenPrfToZnVector(k, hashPreimageSupplier.get(), 13));
+        UniqueByteRepresentable preimage = hashPreimageSupplier.get();
+
+        assertNotNull(hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 13));
+        assertFalse(Arrays.equals(
+                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 12, "preimage1").toArray(),
+                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 12, "preimage2").toArray()
+        ));
+        assertFalse(Arrays.equals(
+                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 12, "preimage2").toArray(),
+                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 12, "").toArray()
+        ));
+        assertNotEquals(
+                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 7).toArray(),
+                Arrays.copyOfRange(hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 12).toArray(), 0, 7)
+        ); // Different size vectors should have different elements
+        assertArrayEquals(
+                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 7, "samePreimage").toArray(),
+                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 7, "samePreimage").toArray()
+        );
     }
 
     // Some test configurations

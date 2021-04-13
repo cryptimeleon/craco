@@ -110,8 +110,9 @@ public class HashThenPrfToZn {
         return zn.valueOf(quotientAndRemainder[1]);
     }
 
+
     /**
-     * Generate pseudorandom ZnVectors of variable size using unique prefixes for the vectorSize and index.
+     * Wrapper. Generate pseudorandom ZnVectors of variable size using unique prefixes for the vectorSize and index.
      *
      * @param prfKey     the PRF key
      * @param hashInput  input to hash
@@ -119,10 +120,24 @@ public class HashThenPrfToZn {
      * @return a pseudorandom Vector of Zn elements
      */
     public Vector<Zn.ZnElement> hashThenPrfToZnVector(PrfKey prfKey, UniqueByteRepresentable hashInput, int vectorSize) {
+        return hashThenPrfToZnVector(prfKey, hashInput, vectorSize, "");
+    }
+
+    /**
+     * Generate pseudorandom ZnVectors of variable size using unique prefixes for the vectorSize and index.
+     *
+     * @param prfKey     the PRF key
+     * @param hashInput  input to hash
+     * @param vectorSize target vector size
+     * @param prefix     prefix to allow using the same vectorSize and preImage several times
+     * @return a pseudorandom Vector of Zn elements
+     */
+    public Vector<Zn.ZnElement> hashThenPrfToZnVector(PrfKey prfKey, UniqueByteRepresentable hashInput, int vectorSize, String prefix) {
         Vector<Zn.ZnElement> result = new Vector<>(vectorSize);
 
         for (int i = 0; i < vectorSize; i++) {
             ByteArrayAccumulator accumulator = new ByteArrayAccumulator();
+            accumulator.append(prefix); // Prefix to allow using the same preImage and vectorSize twice
             accumulator.append(vectorSize); // Ensure uniqueness for each vector size, allows using the same preimage for several, different sized vectors
             accumulator.append(i); // Index to prevent having the same output for each element
             accumulator.append(hashInput);
