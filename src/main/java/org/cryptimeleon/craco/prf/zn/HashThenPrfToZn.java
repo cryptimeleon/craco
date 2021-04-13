@@ -6,10 +6,15 @@ import org.cryptimeleon.craco.prf.aes.AesPseudorandomFunction;
 import org.cryptimeleon.math.hash.HashFunction;
 import org.cryptimeleon.math.hash.UniqueByteRepresentable;
 import org.cryptimeleon.math.hash.impl.ByteArrayAccumulator;
+import org.cryptimeleon.math.serialization.Representation;
+import org.cryptimeleon.math.serialization.StandaloneRepresentable;
+import org.cryptimeleon.math.serialization.annotations.ReprUtil;
+import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.rings.zn.Zn;
 
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Vector;
 
 /**
@@ -22,34 +27,49 @@ import java.util.Vector;
  * interval. We choose the rejecting intervals size to be negligible compared to the accepting to avoid retrying
  * by using {@link LongAesPseudoRandomFunction}.
  */
-public class HashThenPrfToZn {
-    private final LongAesPseudoRandomFunction longAesPseudoRandomFunction;
-    private final HashFunction hashFunction;
+public class HashThenPrfToZn implements StandaloneRepresentable {
+    @Represented
+    private LongAesPseudoRandomFunction longAesPseudoRandomFunction;
+    @Represented
+    private HashFunction hashFunction;
+    @Represented
+    private Zn zn;
 
-    private final Zn zn;
-    final int OVERSUBSCRIPTION = 128; // Make accepting interval larger than rejecting interval (+rounding overhead)
-
-    // Redundant parameters for ease of use
-    private final BigInteger p;
-    private final BigInteger maxQuotient; // k from the description
+    // Redundant parameter that we do not want to compute every time we use this
+    private BigInteger maxQuotient; // k from the description
 
     /**
-     * @param aesKeyLength bit length of AES
-     * @param zn           target ring
-     * @param hashFunction hash function to use, output size should be larger than AES input size
+     * Instantiate HashThenPrfToZn
+     *
+     * @param aesKeyLength     bit length of AES
+     * @param zn               target ring
+     * @param hashFunction     hash function to use, output size should be larger than AES input size
+     * @param oversubscription parameter that binds the probability of failing by (1/2)^oversubscription. Probability can be lower due to rounding
      */
-    public HashThenPrfToZn(int aesKeyLength, Zn zn, HashFunction hashFunction) {
+    public HashThenPrfToZn(int aesKeyLength, Zn zn, HashFunction hashFunction, int oversubscription) {
         if (hashFunction.getOutputLength() * 8 < aesKeyLength) {
             throw new IllegalArgumentException("Hash function output should be larger or equal to AES input size.");
         }
 
         this.hashFunction = hashFunction;
         this.zn = zn;
-        this.p = zn.getCharacteristic();
         this.longAesPseudoRandomFunction = new LongAesPseudoRandomFunction(
                 new AesPseudorandomFunction(aesKeyLength),
-                (p.bitLength() + aesKeyLength + OVERSUBSCRIPTION + 1) / aesKeyLength  // Compute number of AES instances required to get desired output bit length
+                (zn.getCharacteristic().bitLength() + aesKeyLength + oversubscription + 1) / aesKeyLength  // Compute number of AES instances required to get desired output bit length
         );
+        this.init();
+    }
+
+    public HashThenPrfToZn(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
+        this.init();
+    }
+
+    /**
+     * Initialization of HashTHenPrfToZn.
+     */
+    private void init() {
+        BigInteger p = zn.getCharacteristic();
 
         // Compute quotient of prf output all 1s divided by p
         // We can use all remainders with quotients strictly smaller than that quotient to draw uniformly at random from Zp
@@ -88,6 +108,8 @@ public class HashThenPrfToZn {
      * @return a pseudorandom Zn element
      */
     public Zn.ZnElement hashThenPrfToZn(PrfKey prfKey, byte[] hashInput) {
+        BigInteger p = zn.getCharacteristic();
+
         // Compute hash value
         byte[] hashOutput = hashFunction.hash(hashInput);
 
@@ -156,4 +178,21 @@ public class HashThenPrfToZn {
         return hashFunction;
     }
 
+    @Override
+    public Representation getRepresentation() {
+        return ReprUtil.serialize(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HashThenPrfToZn prfToZn = (HashThenPrfToZn) o;
+        return Objects.equals(longAesPseudoRandomFunction, prfToZn.longAesPseudoRandomFunction) && Objects.equals(hashFunction, prfToZn.hashFunction) && Objects.equals(zn, prfToZn.zn) && Objects.equals(maxQuotient, prfToZn.maxQuotient);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(longAesPseudoRandomFunction, hashFunction, zn, maxQuotient);
+    }
 }

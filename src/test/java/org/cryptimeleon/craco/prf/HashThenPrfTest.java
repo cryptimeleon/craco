@@ -24,17 +24,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  */
 @RunWith(Parameterized.class)
 public class HashThenPrfTest {
-    private Zn zn;
     private HashThenPrfToZn hashThenPrfToZn;
     private Supplier<UniqueByteRepresentable> hashPreimageSupplier;
-    private String paramsString;
 
 
     public HashThenPrfTest(TestParams params) {
-        zn = params.zn;
         hashThenPrfToZn = params.hashThenPrfToZn;
         hashPreimageSupplier = params.hashPreimageSupplier;
-        paramsString = params.toString();
     }
 
     @org.junit.Test
@@ -98,7 +94,7 @@ public class HashThenPrfTest {
             this.hashFunction = hashFunction;
             this.hashPreimageSupplier = hashPreimageSupplier;
             this.zn = new Zn(new BigInteger(znBitLength, 64, new Random()));
-            this.hashThenPrfToZn = new HashThenPrfToZn(aesKeyLength, zn, hashFunction);
+            this.hashThenPrfToZn = new HashThenPrfToZn(aesKeyLength, zn, hashFunction, 128);
             this.znBitLength = znBitLength;
         }
 
