@@ -25,10 +25,13 @@ import java.util.Vector;
 public class HashThenPrfToZn {
     private final LongAesPseudoRandomFunction longAesPseudoRandomFunction;
     private final HashFunction hashFunction;
+
     private final Zn zn;
+    final int OVERSUBSCRIPTION = 128; // Make accepting interval larger than rejecting interval (+rounding overhead)
+
+    // Redundant parameters for ease of use
     private final BigInteger p;
     private final BigInteger maxQuotient; // k from the description
-    final int OVERSUBSCRIPTION = 128; // Make accepting interval larger than rejecting interval (+rounding overhead)
 
     /**
      * @param aesKeyLength bit length of AES
@@ -129,4 +132,13 @@ public class HashThenPrfToZn {
 
         return result;
     }
+
+    public LongAesPseudoRandomFunction getLongAesPseudoRandomFunction() {
+        return longAesPseudoRandomFunction;
+    }
+
+    public HashFunction getHashFunction() {
+        return hashFunction;
+    }
+
 }
