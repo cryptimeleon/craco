@@ -10,12 +10,13 @@ import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.StandaloneRepresentable;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
+import org.cryptimeleon.math.structures.rings.RingElement;
+import org.cryptimeleon.math.structures.rings.cartesian.RingElementVector;
 import org.cryptimeleon.math.structures.rings.zn.Zn;
 
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Vector;
 
 /**
  * Get pseudorandom Zn Elements by a hash-then-prf construction.
@@ -42,7 +43,7 @@ public class HashThenPrfToZn implements StandaloneRepresentable {
     private Zn zn;
 
     // Redundant parameter that we do not want to compute every time we use this
-    private BigInteger maxQuotient; // k from the description
+    private BigInteger maxQuotient; // x from the description
 
     /**
      * Instantiate HashThenPrfToZn
@@ -105,8 +106,8 @@ public class HashThenPrfToZn implements StandaloneRepresentable {
      * @param prefix     prefix to allow using the same vectorSize and preImage several times
      * @return a pseudorandom Vector of Zn elements
      */
-    public Vector<Zn.ZnElement> hashThenPrfToZnVector(PrfKey prfKey, UniqueByteRepresentable hashInput, int vectorSize, String prefix) {
-        Vector<Zn.ZnElement> result = new Vector<>(vectorSize);
+    public RingElementVector hashThenPrfToZnVector(PrfKey prfKey, UniqueByteRepresentable hashInput, int vectorSize, String prefix) {
+        RingElement[] result = new RingElement[vectorSize];
 
         for (int i = 0; i < vectorSize; i++) {
             ByteArrayAccumulator accumulator = new ByteArrayAccumulator();
@@ -115,10 +116,10 @@ public class HashThenPrfToZn implements StandaloneRepresentable {
             accumulator.escapeAndSeparate(prefix); // Prefix to allow using the same preImage and vectorSize twice
             accumulator.escapeAndAppend(hashInput);
             Zn.ZnElement element = hashThenPrfToZn(prfKey, accumulator.extractBytes());
-            result.add(i, element);
+            result[i] = element;
         }
 
-        return result;
+        return new RingElementVector(result);
     }
 
     /**
@@ -158,16 +159,16 @@ public class HashThenPrfToZn implements StandaloneRepresentable {
      * Some wrappers with different method signatures.
      */
 
-    public Vector<Zn.ZnElement> hashThenPrfToZnVector(PrfKey prfKey, UniqueByteRepresentable hashInput, int vectorSize) {
+    public RingElementVector hashThenPrfToZnVector(PrfKey prfKey, UniqueByteRepresentable hashInput, int vectorSize) {
         return hashThenPrfToZnVector(prfKey, hashInput, vectorSize, "");
     }
 
     public Zn.ZnElement hashThenPrfToZn(PrfKey prfKey, UniqueByteRepresentable hashInput) {
-        return hashThenPrfToZnVector(prfKey, hashInput, 1, "").get(0);
+        return (Zn.ZnElement) hashThenPrfToZnVector(prfKey, hashInput, 1, "").get(0);
     }
 
     public Zn.ZnElement hashThenPrfToZn(PrfKey prfKey, UniqueByteRepresentable hashInput, String prefix) {
-        return hashThenPrfToZnVector(prfKey, hashInput, 1, prefix).get(0);
+        return (Zn.ZnElement) hashThenPrfToZnVector(prfKey, hashInput, 1, prefix).get(0);
     }
 
 

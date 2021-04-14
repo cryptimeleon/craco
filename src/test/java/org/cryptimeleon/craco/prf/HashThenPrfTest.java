@@ -46,20 +46,20 @@ public class HashThenPrfTest {
 
         assertNotNull(hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 13));
         assertFalse(Arrays.equals(
-                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 12, "preimage1").toArray(),
-                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 12, "preimage2").toArray()
+                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 12, "preimage1").stream().toArray(),
+                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 12, "preimage2").stream().toArray()
         ));
         assertFalse(Arrays.equals(
-                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 12, "preimage2").toArray(),
-                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 12, "").toArray()
+                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 12, "preimage2").stream().toArray(),
+                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 12, "").stream().toArray()
         ));
         assertNotEquals(
-                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 7).toArray(),
-                Arrays.copyOfRange(hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 12).toArray(), 0, 7)
+                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 7).stream().toArray(),
+                Arrays.copyOfRange(hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 12).stream().toArray(), 0, 7)
         ); // Different size vectors should have different elements
         assertArrayEquals(
-                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 7, "samePreimage").toArray(),
-                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 7, "samePreimage").toArray()
+                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 7, "samePreimage").stream().toArray(),
+                hashThenPrfToZn.hashThenPrfToZnVector(k, preimage, 7, "samePreimage").stream().toArray()
         );
     }
 
