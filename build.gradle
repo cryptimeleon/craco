@@ -16,6 +16,9 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+tasks.withType(Javadoc) {
+      options.addBooleanOption('Xdoclint:none', true)
+}
 
 repositories {
     jcenter()
