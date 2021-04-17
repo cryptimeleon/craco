@@ -23,7 +23,7 @@ repositories {
     jcenter()
 }
 
-def mathVersionNoSuffix = '1.0.0'
+def mathVersionNoSuffix = '2.0.0'
 
 dependencies {
 

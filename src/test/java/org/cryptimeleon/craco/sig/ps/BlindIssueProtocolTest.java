@@ -5,7 +5,7 @@ import org.cryptimeleon.craco.common.plaintexts.RingElementPlainText;
 import org.cryptimeleon.craco.protocols.arguments.damgardtechnique.DamgardTechnique;
 import org.cryptimeleon.craco.sig.SignatureKeyPair;
 import org.cryptimeleon.math.structures.cartesian.Vector;
-import org.cryptimeleon.math.structures.groups.counting.CountingBilinearGroup;
+import org.cryptimeleon.math.structures.groups.debug.DebugBilinearGroup;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearGroup;
 import org.cryptimeleon.math.structures.rings.zn.Zn;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ public class BlindIssueProtocolTest {
     @Test
     public void testBlindSign() {
         //Set up the signature scheme
-        BilinearGroup group = new CountingBilinearGroup(128, BilinearGroup.Type.TYPE_3);
+        BilinearGroup group = new DebugBilinearGroup(128, BilinearGroup.Type.TYPE_3);
         Zn zn = group.getZn();
         PSExtendedSignatureScheme scheme = new PSExtendedSignatureScheme(new PSPublicParameters(group));
         SignatureKeyPair<PSExtendedVerificationKey, PSSigningKey> keyPair = scheme.generateKeyPair(6);

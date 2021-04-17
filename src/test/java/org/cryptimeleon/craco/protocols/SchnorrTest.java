@@ -17,8 +17,8 @@ import org.cryptimeleon.math.random.RandomGenerator;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.structures.groups.Group;
 import org.cryptimeleon.math.structures.groups.GroupElement;
-import org.cryptimeleon.math.structures.groups.counting.CountingBilinearGroup;
-import org.cryptimeleon.math.structures.groups.counting.CountingGroup;
+import org.cryptimeleon.math.structures.groups.debug.DebugBilinearGroup;
+import org.cryptimeleon.math.structures.groups.debug.DebugGroup;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearGroup;
 import org.cryptimeleon.math.structures.rings.zn.Zn;
 import org.junit.jupiter.api.Test;
@@ -31,8 +31,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class SchnorrTest {
-    public static Group group = new CountingGroup("test", RandomGenerator.getRandomPrime(80));
-    public static BilinearGroup bilGroup = new CountingBilinearGroup(128, BilinearGroup.Type.TYPE_3,1);
+    public static Group group = new DebugGroup("test", RandomGenerator.getRandomPrime(80));
+    public static BilinearGroup bilGroup = new DebugBilinearGroup(128, BilinearGroup.Type.TYPE_3,1);
 
     protected void runProtocol(SigmaProtocol protocol) {
         runProtocol(protocol, CommonInput.EMPTY, SecretInput.EMPTY);
