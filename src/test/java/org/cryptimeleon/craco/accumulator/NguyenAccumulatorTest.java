@@ -1,7 +1,7 @@
 package org.cryptimeleon.craco.accumulator;
 
 import org.cryptimeleon.craco.accumulator.nguyen.*;
-import org.cryptimeleon.math.structures.groups.counting.CountingBilinearGroup;
+import org.cryptimeleon.math.structures.groups.debug.DebugBilinearGroup;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearGroup;
 import org.cryptimeleon.math.structures.rings.zn.Zn;
 import org.junit.Before;
@@ -31,7 +31,7 @@ public class NguyenAccumulatorTest {
     public void setup() {
         // maximum of accumulatable identities
         int numberIdentities = 100;
-        BilinearGroup group = new CountingBilinearGroup(128, BilinearGroup.Type.TYPE_3);
+        BilinearGroup group = new DebugBilinearGroup(128, BilinearGroup.Type.TYPE_3);
         scheme = NguyenAccumulatorScheme.setup(group, numberIdentities);
         zn = group.getZn();
 
