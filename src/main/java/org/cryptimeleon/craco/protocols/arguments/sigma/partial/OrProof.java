@@ -13,6 +13,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * The OR composition of two SigmaProtocols.
+ * Meaning that in order to run this protocol, the prover must have knowledge of valid secret input for one of the two (sub)protocols.
+ * <br>
+ * To use:
+ * <ol>
+ * <li>Instantiate this protocol with the two protocols to compose.</li>
+ * <li>The common input for this protocol is a {@link org.cryptimeleon.craco.protocols.CommonInput.CommonInputVector} of the subprotocols' common inputs</li>
+ * <li>The secret input for this protocol is a {@link OrProofSecretInput} (which encapsulates a witness for either the first or the second protocol)</li>
+ * </ol>
+ *
+ * Depending on your use-case, {@link ProofOfPartialKnowledge} may be more convenient for you.
+ */
 public class OrProof implements SigmaProtocol {
     public final SigmaProtocol protocol0, protocol1;
 

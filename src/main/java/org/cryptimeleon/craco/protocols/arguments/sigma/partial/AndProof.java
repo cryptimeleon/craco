@@ -7,6 +7,19 @@ import org.cryptimeleon.math.expressions.bool.BooleanExpression;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.structures.cartesian.Vector;
 
+/**
+ * The AND composition of two (or more) SigmaProtocols.
+ * Meaning that in order to run this protocol, the prover must have knowledge of valid secret input for both (sub)protocols.
+ * <br>
+ * To use:
+ * <ol>
+ * <li>Instantiate this protocol with the list of protocols to compose.</li>
+ * <li>The common input for this protocol is a {@link org.cryptimeleon.craco.protocols.CommonInput.CommonInputVector} of the subprotocols' common inputs</li>
+ * <li>The secret input for this protocol is a {@link org.cryptimeleon.craco.protocols.SecretInput.SecretInputVector} of the subprotocols' common inputs</li>
+ * </ol>
+ *
+ * Depending on your use-case, {@link ProofOfPartialKnowledge} may be more convenient for you.
+ */
 public class AndProof implements SigmaProtocol {
     public final Vector<SigmaProtocol> protocols;
 

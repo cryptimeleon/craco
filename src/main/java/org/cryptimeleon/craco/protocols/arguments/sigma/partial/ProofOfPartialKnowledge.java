@@ -13,27 +13,94 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * A Sigma Protocol that composes several subprotocols in any AND/OR tree structure [CDS94].
+ * <br>
+ * To use this class, extend it and implement its abstract methods as documented. <br>
+ * The general flow of this protocol is that first the prover generates some {@link SendFirstValue} (e.g., a Pedersen commitment to some values) that is sent alongside the first message of this Sigma protocol.
+ * From this {@link SendFirstValue}, prover and verifier set up the appropriate subprotocols and tree structure (similarly to {@link org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.SendThenDelegateFragment}).
+ * Then those subprotocols are run in a way that respects the desired AND/OR compositions.
+ *
+ * <p>
+ * [CDS94] Cramer, Ronald, Ivan Damgård, and Berry Schoenmakers. "Proofs of partial knowledge and simplified design of witness hiding protocols". CRYPTO 1994
+ * </p>
+ */
 public abstract class ProofOfPartialKnowledge implements SigmaProtocol {
-
+    /**
+     * Sets up the desired subprotocols and returns the {@link ProtocolTree} that encodes the AND/OR relations between them.
+     *
+     * Implementors should build the {@link ProtocolTree} using {@link #leaf}, {@link #and}, and {@link #or}.
+     *
+     * @param commonInput the public input to this ProofOfPartialKnowledge (can be anything appropriate for the concrete protocol implemented).
+     * @param sendFirstValue the value sent by the prover before the subprotocols start running.
+     * @return a tree of subprotocols that defines what subprotocols are composed in what way.
+     */
     protected abstract ProtocolTree provideProtocolTree(CommonInput commonInput, SendFirstValue sendFirstValue);
 
+    /**
+     * Sets up the {@link ProverSpec}.
+     * <br>
+     * Implementors shall use the provided builder to set up <br>
+     * <ol>
+     *     <li>the {@link SendFirstValue} the prover wants to send (can be {@link org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.SendFirstValue.EmptySendFirstValue}.</li>
+     *     <li>
+     *         the witnesses to use for the subprotocols. If for some subprotocol you don't have a witness, simply don't call {@link ProverSpecBuilder#putSecretInput(String, SecretInput)} for it.
+     *         <br>Obviously, you'll have to provide sufficiently many witnesses for subprotocols to satisfy the tree computed by {@link #provideProtocolTree(CommonInput, SendFirstValue)}.
+     *     </li>
+     * </ol>
+     *
+     * @param commonInput the public input to this ProofOfPartialKnowledge (can be anything appropriate for the concrete protocol implemented).
+     * @param secretInput the secret input to this ProofOfPartialKnowledge (can be anything appropriate for the concrete protocol implemented).
+     * @param builder an object to use to build the {@link ProverSpec}.
+     * @return a prover spec returned by the {@code builder}.
+     */
     protected abstract ProverSpec provideProverSpec(CommonInput commonInput, SecretInput secretInput, ProverSpecBuilder builder);
+
+    /**
+     * Restores a {@link SendFirstValue} from representation.
+     */
     protected abstract SendFirstValue restoreSendFirstValue(CommonInput commonInput, Representation repr);
+
+    /**
+     * Simulates the {@link SendFirstValue}, i.e. returns one with a distribution that indistinguishable from an honest prover's.
+     */
     protected abstract SendFirstValue simulateSendFirstValue(CommonInput commonInput);
+
+    /**
+     * Returns true if the given sendFirstValue is well-formed and valid. If the returned expression evaluates to false, the transcript containing SendFirstValue will be rejected by the verifier.
+     * Typical examples of such checks would be something like "the sent group element must not be the neutral element".
+     * <br>
+     * The implementation for this can simply be {@code return BooleanExpression.TRUE} if no additional checks are needed.
+     */
     protected abstract BooleanExpression provideAdditionalCheck(CommonInput commonInput, SendFirstValue sendFirstValue);
 
+    /**
+     * Construct a tree that contains a single subprotocol to run.
+     * @param name name of the protocol (must be unique, i.e. don't call leaf() twice with the same name in the same execution of {@link #provideProtocolTree}).
+     * @param protocol the subprotocol
+     * @param commonInput the common input for the subprotocol.
+     */
     protected final ProtocolTree leaf(String name, SigmaProtocol protocol, CommonInput commonInput) {
         return new LeafNode(protocol, name, commonInput);
     }
 
+    /**
+     * Construct a tree that AND-combines two subtrees.
+     */
     protected final ProtocolTree and(ProtocolTree protocol1, ProtocolTree protocol2) {
         return new AndNode(protocol1, protocol2);
     }
 
+    /**
+     * Construct a tree that OR-combines two subtrees.
+     */
     protected final ProtocolTree or(ProtocolTree protocol1, ProtocolTree protocol2) {
         return new OrNode(protocol1, protocol2);
     }
 
+    /**
+     * To build, use {@link #leaf}, {@link #and}, and {@link #or}.
+     */
     protected static abstract class ProtocolTree {
         protected final SigmaProtocol protocol;
 
