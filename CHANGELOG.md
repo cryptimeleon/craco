@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Helper methods for `MultiMessageSignatureScheme` and `StructurePreservingSignatureEQScheme` to make signing and verifying multiple plaintexts less verbose
+- Proofs of partial knowledge
 
 ## [1.0.0] - 2021-03-01
 
