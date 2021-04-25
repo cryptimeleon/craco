@@ -7,10 +7,10 @@ import org.cryptimeleon.craco.kem.asym.elgamal.ElgamalKEM;
 import org.cryptimeleon.math.serialization.standalone.StandaloneReprSubTest;
 import org.cryptimeleon.math.hash.impl.SHA256HashFunction;
 import org.cryptimeleon.math.structures.groups.Group;
-import org.cryptimeleon.math.structures.groups.counting.CountingGroup;
+import org.cryptimeleon.math.structures.groups.debug.DebugGroup;
 
 public class EncryptionStandaloneReprTests extends StandaloneReprSubTest {
-    Group group = new CountingGroup("testgroup", 128);
+    Group group = new DebugGroup("testgroup", 128);
     ElgamalKEM elgamalKEM = new ElgamalKEM(group, new SHA256HashFunction());
 
     public void testElGamal() {

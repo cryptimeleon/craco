@@ -1,12 +1,6 @@
 package org.cryptimeleon.craco.protocols;
 
-import org.cryptimeleon.craco.protocols.arguments.damgardtechnique.DamgardTechnique;
-import org.cryptimeleon.craco.protocols.arguments.fiatshamir.FiatShamirProof;
-import org.cryptimeleon.craco.protocols.arguments.fiatshamir.FiatShamirProofSystem;
-import org.cryptimeleon.craco.protocols.arguments.sigma.SigmaProtocol;
 import org.cryptimeleon.craco.protocols.arguments.sigma.ZnChallengeSpace;
-import org.cryptimeleon.craco.protocols.arguments.sigma.instance.SigmaProtocolProverInstance;
-import org.cryptimeleon.craco.protocols.arguments.sigma.instance.SigmaProtocolVerifierInstance;
 import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.DelegateProtocol;
 import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.LinearStatementFragment;
 import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.SendThenDelegateFragment;
@@ -14,21 +8,9 @@ import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.setmembership.Se
 import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.setmembership.SmallerThanPowerFragment;
 import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.setmembership.TwoSidedRangeProof;
 import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.variables.SchnorrZnVariable;
-import org.cryptimeleon.math.random.RandomGenerator;
-import org.cryptimeleon.math.serialization.Representation;
-import org.cryptimeleon.math.structures.groups.Group;
 import org.cryptimeleon.math.structures.groups.GroupElement;
-import org.cryptimeleon.math.structures.groups.counting.CountingBilinearGroup;
-import org.cryptimeleon.math.structures.groups.counting.CountingGroup;
-import org.cryptimeleon.math.structures.groups.elliptic.BilinearGroup;
 import org.cryptimeleon.math.structures.rings.zn.Zn;
 import org.junit.jupiter.api.Test;
-
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class SchnorrTest extends ProtocolsTest {

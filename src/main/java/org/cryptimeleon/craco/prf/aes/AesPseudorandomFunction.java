@@ -104,4 +104,8 @@ public class AesPseudorandomFunction implements PseudorandomFunction {
         AesPseudorandomFunction other = (AesPseudorandomFunction) o;
         return Objects.equals(keylength, other.keylength);
     }
+
+    public Integer getKeylength() {
+        return keylength;
+    }
 }

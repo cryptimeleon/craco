@@ -61,7 +61,20 @@ public class ByteArrayImplementation implements PlainText, CipherText, Decryptio
     public ByteArrayImplementation append(ByteArrayImplementation a) {
         byte[] result = new byte[data.length + a.getData().length];
         System.arraycopy(data, 0, result, 0, data.length);
-        System.arraycopy(a, 0, result, data.length, a.getData().length);
+        System.arraycopy(a.data, 0, result, data.length, a.getData().length);
+        return new ByteArrayImplementation(result);
+    }
+
+    /**
+     * Returns an array containing the designated part of this byte array, meaning that
+     * {@code returned[i] = this[firstIndex+i]}.
+     * @param firstIndex first (byte) index that will be copied to the result
+     * @param length the number of bytes to be copied
+     * @return a {@linkplain ByteArrayImplementation} of length {@code length} that is a substring of this original.
+     */
+    public ByteArrayImplementation substring(int firstIndex, int length) {
+        byte[] result = new byte[length];
+        System.arraycopy(data, firstIndex, result, 0, length);
         return new ByteArrayImplementation(result);
     }
 
@@ -133,7 +146,7 @@ public class ByteArrayImplementation implements PlainText, CipherText, Decryptio
 
     @Override
     public ByteAccumulator updateAccumulator(ByteAccumulator accumulator) {
-        accumulator.escapeAndAppend(data);
+        accumulator.append(data);
         return accumulator;
     }
 }

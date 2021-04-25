@@ -2,6 +2,7 @@ package org.cryptimeleon.craco.prf;
 
 import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.craco.prf.aes.AesPseudorandomFunction;
+import org.cryptimeleon.craco.prf.zn.LongAesPseudoRandomFunction;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -49,10 +50,13 @@ public class PrfTest {
     public static Collection<TestParams[]> data() {
         // AES
         AesPseudorandomFunction aes = new AesPseudorandomFunction(128);
+        // Long
+        LongAesPseudoRandomFunction longAes = new LongAesPseudoRandomFunction(aes, 7);
 
         // Collect parameters
         TestParams params[][] = new TestParams[][]{
-                {new TestParams(aes, () -> ByteArrayImplementation.fromRandom(128 / 8))}
+                {new TestParams(aes, () -> ByteArrayImplementation.fromRandom(128 / 8))},
+                {new TestParams(longAes, () -> ByteArrayImplementation.fromRandom(128 / 8))}
         };
         return Arrays.asList(params);
     }
