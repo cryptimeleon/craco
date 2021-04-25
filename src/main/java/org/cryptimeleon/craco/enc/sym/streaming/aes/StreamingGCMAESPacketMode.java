@@ -52,7 +52,7 @@ public class StreamingGCMAESPacketMode implements StreamingEncryptionScheme {
 
     private byte[] initialVector = new byte[initialVectorLength / 8];
 
-    private final String transformation = "AES/GCM/PKCS5Padding";
+    private final String transformation = "AES/GCM/NoPadding";
     
     private final int packetSize;
 
