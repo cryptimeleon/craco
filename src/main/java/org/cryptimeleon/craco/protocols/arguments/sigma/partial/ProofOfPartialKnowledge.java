@@ -45,7 +45,7 @@ public abstract class ProofOfPartialKnowledge implements SigmaProtocol {
      *     <li>the {@link SendFirstValue} the prover wants to send (can be {@link org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.SendFirstValue.EmptySendFirstValue}.</li>
      *     <li>
      *         the witnesses to use for the subprotocols. If for some subprotocol you don't have a witness, simply don't call {@link ProverSpecBuilder#putSecretInput(String, SecretInput)} for it.
-     *         <br>Obviously, you'll have to provide sufficiently many witnesses for subprotocols to satisfy the tree computed by {@link #provideProtocolTree(CommonInput, SendFirstValue)}.
+     *         <br>Obviously, you'll have to provide sufficiently many witnesses for subprotocols to satisfy the AND/OR connections of subprotocols encoded in the tree returned by {@link #provideProtocolTree(CommonInput, SendFirstValue)}.
      *     </li>
      * </ol>
      *
@@ -155,10 +155,10 @@ public abstract class ProofOfPartialKnowledge implements SigmaProtocol {
         protected SecretInput getSecretInput(Function<String, ? extends SecretInput> secretInputsForLeafs) {
             SecretInput l = lhs.getSecretInput(secretInputsForLeafs);
             if (l == null)
-                return null;
+                return null; //cannot satisfy this node
             SecretInput r = rhs.getSecretInput(secretInputsForLeafs);
             if (r == null)
-                return null;
+                return null; //cannot satisfy this node
 
             return new SecretInput.SecretInputVector(l, r);
         }
@@ -183,7 +183,7 @@ public abstract class ProofOfPartialKnowledge implements SigmaProtocol {
             SecretInput l = lhs.getSecretInput(secretInputsForLeafs);
             SecretInput r = rhs.getSecretInput(secretInputsForLeafs);
             if (l == null && r ==null)
-                return null;
+                return null; //cannot satisfy this node
 
             return l == null ? new OrProof.OrProofSecretInput(r, true) : new OrProof.OrProofSecretInput(l, false);
         }

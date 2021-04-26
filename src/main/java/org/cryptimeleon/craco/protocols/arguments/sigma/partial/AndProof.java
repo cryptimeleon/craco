@@ -48,7 +48,10 @@ public class AndProof implements SigmaProtocol {
 
     @Override
     public ChallengeSpace getChallengeSpace(CommonInput commonInput) {
-        return protocols.get(0).getChallengeSpace(((CommonInput.CommonInputVector) commonInput).get(0));
+        ChallengeSpace challengeSpace = protocols.get(0).getChallengeSpace(((CommonInput.CommonInputVector) commonInput).get(0));
+        if (protocols.stream().map(p -> p.getChallengeSpace(commonInput)).anyMatch(cs -> !cs.equals(challengeSpace)))
+            throw new IllegalStateException("Challenge spaces of subprotocols inconsistent.");
+        return challengeSpace;
     }
 
     @Override

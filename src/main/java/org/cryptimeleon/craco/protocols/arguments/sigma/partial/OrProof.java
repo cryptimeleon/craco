@@ -139,7 +139,10 @@ public class OrProof implements SigmaProtocol {
 
     @Override
     public ChallengeSpace getChallengeSpace(CommonInput commonInput) {
-        return protocol0.getChallengeSpace(((CommonInput.CommonInputVector) commonInput).get(0));
+        ChallengeSpace challengeSpace = protocol0.getChallengeSpace(((CommonInput.CommonInputVector) commonInput).get(0));
+        if (!protocol1.getChallengeSpace(((CommonInput.CommonInputVector) commonInput).get(1)).equals(challengeSpace))
+            throw new IllegalStateException("Challenge spaces of subprotocols inconsistent.");
+        return challengeSpace;
     }
 
     @Override
