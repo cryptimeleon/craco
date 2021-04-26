@@ -6,6 +6,7 @@ import org.cryptimeleon.craco.common.plaintexts.RingElementPlainText;
 import org.cryptimeleon.craco.protocols.CommonInput;
 import org.cryptimeleon.craco.protocols.SecretInput;
 import org.cryptimeleon.craco.protocols.arguments.damgardtechnique.DamgardTechnique;
+import org.cryptimeleon.craco.protocols.arguments.sigma.ZnChallengeSpace;
 import org.cryptimeleon.craco.protocols.arguments.sigma.instance.SigmaProtocolInstance;
 import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.DelegateProtocol;
 import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.LinearStatementFragment;
@@ -172,8 +173,8 @@ public class PSBlindSignProtocol extends BaseProtocol {
             }
 
             @Override
-            public BigInteger getChallengeSpaceSize() {
-                return BlindSignProtocolInstance.this.protocol.scheme.pp.getBilinearGroup().getG1().size();
+            public ZnChallengeSpace getChallengeSpace(CommonInput commonInput) {
+                return new ZnChallengeSpace(BlindSignProtocolInstance.this.protocol.scheme.pp.getBilinearGroup().getZn());
             }
         }
 

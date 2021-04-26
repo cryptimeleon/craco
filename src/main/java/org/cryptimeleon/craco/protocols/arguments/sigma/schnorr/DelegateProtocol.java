@@ -9,13 +9,13 @@ import org.cryptimeleon.math.serialization.Representation;
 
 /**
  * <p>A {@link SigmaProtocol} that sets up some (shared) variables and then runs subprotocols to prove something about these variables.</p>
- * <p>This is a a special case of a {@link SendThenDelegateProtocol} in which the {@link SendThenDelegateFragment.SendFirstValue} is empty.</p>
+ * <p>This is a a special case of a {@link SendThenDelegateProtocol} in which the {@link SendFirstValue} is empty.</p>
  */
 public abstract class DelegateProtocol extends SendThenDelegateProtocol {
 
     @Override
     protected SendThenDelegateFragment.ProverSpec provideProverSpec(CommonInput commonInput, SecretInput secretInput, SendThenDelegateFragment.ProverSpecBuilder builder) {
-        builder.setSendFirstValue(SendThenDelegateFragment.SendFirstValue.EMPTY);
+        builder.setSendFirstValue(SendFirstValue.EMPTY);
         return provideProverSpecWithNoSendFirst(commonInput, secretInput, builder);
     }
 
@@ -25,17 +25,17 @@ public abstract class DelegateProtocol extends SendThenDelegateProtocol {
     protected abstract SendThenDelegateFragment.ProverSpec provideProverSpecWithNoSendFirst(CommonInput commonInput, SecretInput secretInput, SendThenDelegateFragment.ProverSpecBuilder builder);
 
     @Override
-    protected SendThenDelegateFragment.SendFirstValue restoreSendFirstValue(CommonInput commonInput, Representation repr) {
-        return SendThenDelegateFragment.SendFirstValue.EMPTY;
+    protected SendFirstValue restoreSendFirstValue(CommonInput commonInput, Representation repr) {
+        return SendFirstValue.EMPTY;
     }
 
     @Override
-    protected SendThenDelegateFragment.SendFirstValue simulateSendFirstValue(CommonInput commonInput) {
-        return SendThenDelegateFragment.SendFirstValue.EMPTY;
+    protected SendFirstValue simulateSendFirstValue(CommonInput commonInput) {
+        return SendFirstValue.EMPTY;
     }
 
     @Override
-    protected SendThenDelegateFragment.SubprotocolSpec provideSubprotocolSpec(CommonInput commonInput, SendThenDelegateFragment.SendFirstValue sendFirstValue, SendThenDelegateFragment.SubprotocolSpecBuilder builder) {
+    protected SendThenDelegateFragment.SubprotocolSpec provideSubprotocolSpec(CommonInput commonInput, SendFirstValue sendFirstValue, SendThenDelegateFragment.SubprotocolSpecBuilder builder) {
         return provideSubprotocolSpec(commonInput, builder);
     }
 
@@ -45,7 +45,7 @@ public abstract class DelegateProtocol extends SendThenDelegateProtocol {
     protected abstract SendThenDelegateFragment.SubprotocolSpec provideSubprotocolSpec(CommonInput commonInput, SendThenDelegateFragment.SubprotocolSpecBuilder builder);
 
     @Override
-    protected BooleanExpression provideAdditionalCheck(CommonInput commonInput, SendThenDelegateFragment.SendFirstValue sendFirstValue) {
+    protected BooleanExpression provideAdditionalCheck(CommonInput commonInput, SendFirstValue sendFirstValue) {
         return BooleanExpression.TRUE;
     }
 }

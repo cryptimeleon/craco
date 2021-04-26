@@ -5,11 +5,9 @@ import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.setmembership.Se
 import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.variables.*;
 import org.cryptimeleon.math.expressions.bool.BooleanExpression;
 import org.cryptimeleon.math.hash.ByteAccumulator;
-import org.cryptimeleon.math.hash.UniqueByteRepresentable;
 import org.cryptimeleon.math.hash.annotations.AnnotatedUbrUtil;
 import org.cryptimeleon.math.hash.annotations.UniqueByteRepresented;
 import org.cryptimeleon.math.serialization.ListRepresentation;
-import org.cryptimeleon.math.serialization.Representable;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.structures.Element;
 import org.cryptimeleon.math.structures.Structure;
@@ -120,7 +118,7 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
     }
 
     @Override
-    public Response generateResponse(SchnorrVariableAssignment externalWitnesses, AnnouncementSecret announcementSecret, SchnorrChallenge challenge) {
+    public Response generateResponse(SchnorrVariableAssignment externalWitnesses, AnnouncementSecret announcementSecret, ZnChallenge challenge) {
         SendThenDelegateAnnouncementSecret announcementSecret1 = (SendThenDelegateAnnouncementSecret) announcementSecret;
         WitnessValues witnessValues = announcementSecret1.witnessValues;
 
@@ -140,7 +138,7 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
     }
 
     @Override
-    public BooleanExpression checkTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
+    public BooleanExpression checkTranscript(Announcement announcement, ZnChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
         SendFirstValue sendFirstValue = ((SendThenDelegateAnnouncement) announcement).sendFirstValue;
         SubprotocolSpec subprotocolSpec = ((SendThenDelegateAnnouncement) announcement).subprotocolSpec;
 
@@ -164,7 +162,7 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
     }
 
     @Override
-    public SigmaProtocolTranscript generateSimulatedTranscript(SchnorrChallenge challenge, SchnorrVariableAssignment externalRandomResponse) {
+    public SigmaProtocolTranscript generateSimulatedTranscript(ZnChallenge challenge, SchnorrVariableAssignment externalRandomResponse) {
         //Simulate sendFirstValue and set up subprotocols
         SendFirstValue sendFirstValue = simulateSendFirstValue();
         SubprotocolSpec subprotocolSpec = provideSubprotocolSpec(sendFirstValue, new SubprotocolSpecBuilder());
@@ -219,95 +217,6 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
         }
 
         return new SendThenDelegateResponse(subprotocolResponses, variableResponses);
-    }
-
-    public interface SendFirstValue extends Representable, UniqueByteRepresentable {
-        /**
-         * An empty value to send first
-         */
-        SendFirstValue EMPTY = new EmptySendFirstValue();
-    }
-
-    private static class EmptySendFirstValue implements SendFirstValue {
-        @Override
-        public ByteAccumulator updateAccumulator(ByteAccumulator accumulator) {
-            return accumulator;
-        }
-
-        @Override
-        public Representation getRepresentation() {
-            return null;
-        }
-
-        @Override
-        public int hashCode() {
-            return 0;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj instanceof EmptySendFirstValue;
-        }
-    }
-
-    /**
-     * A list of algebraic values ({@link Element}s) to send first.
-     */
-    public static class AlgebraicSendFirstValue implements SendFirstValue {
-        @UniqueByteRepresented
-        private final List<Element> elements = new ArrayList<>();
-
-        /**
-         * Instantiates the SendFirstValue with an ordered list of values to send.
-         */
-        public AlgebraicSendFirstValue(Element... values) {
-            elements.addAll(Arrays.asList(values));
-        }
-
-        /**
-         * Recreates the SendFirstValue from representation.
-         * @param repr the representation returned by {@link AlgebraicSendFirstValue#getRepresentation()}
-         * @param structures the structures to use to restore the sent elements
-         *                   (same order as in the {@link AlgebraicSendFirstValue(Element...)} constructor)
-         */
-        public AlgebraicSendFirstValue(Representation repr, Structure... structures) {
-            for (int i=0;i<structures.length;i++)
-                elements.add(structures[i].restoreElement(repr.list().get(i)));
-        }
-
-        /**
-         * Returns the i'th element from the list (zero-based indexing)
-         */
-        public Element getElement(int i) {
-            return elements.get(i);
-        }
-
-        /**
-         * Returns the i'th element from the list (zero-based indexing)
-         */
-        public GroupElement getGroupElement(int i) {
-            return (GroupElement) getElement(i);
-        }
-
-        /**
-         * Returns the i'th element from the list (zero-based indexing)
-         */
-        public Zn.ZnElement getZnElement(int i) {
-            return (Zn.ZnElement) getElement(i);
-        }
-
-        @Override
-        public ByteAccumulator updateAccumulator(ByteAccumulator accumulator) {
-            AnnotatedUbrUtil.autoAccumulate(accumulator,this);
-            return accumulator;
-        }
-
-        @Override
-        public Representation getRepresentation() {
-            ListRepresentation repr = new ListRepresentation();
-            elements.forEach(elem -> repr.add(elem.getRepresentation()));
-            return repr;
-        }
     }
 
     private static class SendThenDelegateAnnouncementSecret implements AnnouncementSecret {
@@ -635,7 +544,7 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
     }
 
     @Override
-    public Representation compressTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
+    public Representation compressTranscript(Announcement announcement, ZnChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
         ListRepresentation result = new ListRepresentation(); //format: [sendFirstValue, variableResponses, [subprotocolTranscript1, subprotocolTranscript2, ...]]
 
         SendThenDelegateAnnouncement announcement1 = (SendThenDelegateAnnouncement) announcement;
@@ -657,7 +566,7 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
     }
 
     @Override
-    public SigmaProtocolTranscript decompressTranscript(Representation compressedTranscript, SchnorrChallenge challenge, SchnorrVariableAssignment externalResponse) throws IllegalArgumentException {
+    public SigmaProtocolTranscript decompressTranscript(Representation compressedTranscript, ZnChallenge challenge, SchnorrVariableAssignment externalResponse) throws IllegalArgumentException {
         SendFirstValue sendFirstValue = restoreSendFirstValue(compressedTranscript.list().get(0));
         if (!provideAdditionalCheck(sendFirstValue).evaluate())
             throw new IllegalArgumentException("Cannot decompress transcript because its sendFirstValue is invalid");

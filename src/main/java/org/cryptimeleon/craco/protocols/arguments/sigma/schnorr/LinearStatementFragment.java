@@ -1,9 +1,6 @@
 package org.cryptimeleon.craco.protocols.arguments.sigma.schnorr;
 
-import org.cryptimeleon.craco.protocols.arguments.sigma.Announcement;
-import org.cryptimeleon.craco.protocols.arguments.sigma.AnnouncementSecret;
-import org.cryptimeleon.craco.protocols.arguments.sigma.Response;
-import org.cryptimeleon.craco.protocols.arguments.sigma.SigmaProtocolTranscript;
+import org.cryptimeleon.craco.protocols.arguments.sigma.*;
 import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.variables.SchnorrVariable;
 import org.cryptimeleon.craco.protocols.arguments.sigma.schnorr.variables.SchnorrVariableAssignment;
 import org.cryptimeleon.math.expressions.VariableExpression;
@@ -71,18 +68,18 @@ public class LinearStatementFragment implements SchnorrFragment {
     }
 
     @Override
-    public Response generateResponse(SchnorrVariableAssignment externalWitnesses, AnnouncementSecret announcementSecret, SchnorrChallenge challenge) {
+    public Response generateResponse(SchnorrVariableAssignment externalWitnesses, AnnouncementSecret announcementSecret, ZnChallenge challenge) {
         return Response.EMPTY;
     }
 
     @Override
-    public BooleanExpression checkTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
+    public BooleanExpression checkTranscript(Announcement announcement, ZnChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
         //Check homomorphicPart(response) = announcement + c * target (additive group notation)
         return homomorphicPart.substitute(externalResponse).isEqualTo(((LinearStatementAnnouncement) announcement).announcement.op(target.pow(challenge.getChallenge())));
     }
 
     @Override
-    public SigmaProtocolTranscript generateSimulatedTranscript(SchnorrChallenge challenge, SchnorrVariableAssignment externalRandomResponse) {
+    public SigmaProtocolTranscript generateSimulatedTranscript(ZnChallenge challenge, SchnorrVariableAssignment externalRandomResponse) {
         //Take externalRandomResponse, set annoncement to the unique value that makes the transcript valid.
         GroupElement announcement = homomorphicPart.evaluate(externalRandomResponse).op(target.pow(challenge.getChallenge().negate())).compute();
 
@@ -119,12 +116,12 @@ public class LinearStatementFragment implements SchnorrFragment {
     }
 
     @Override
-    public Representation compressTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
+    public Representation compressTranscript(Announcement announcement, ZnChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
         return response.getRepresentation(); //don't need announcement, can recompute from externalResponse later.
     }
 
     @Override
-    public SigmaProtocolTranscript decompressTranscript(Representation compressedTranscript, SchnorrChallenge challenge, SchnorrVariableAssignment externalResponse) throws IllegalArgumentException {
+    public SigmaProtocolTranscript decompressTranscript(Representation compressedTranscript, ZnChallenge challenge, SchnorrVariableAssignment externalResponse) throws IllegalArgumentException {
         return generateSimulatedTranscript(challenge, externalResponse); //provides unique acceptable value for announcement.
     }
 }
