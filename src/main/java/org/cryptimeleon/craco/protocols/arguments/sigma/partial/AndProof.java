@@ -76,7 +76,7 @@ public class AndProof implements SigmaProtocol {
 
     @Override
     public SigmaProtocolTranscript generateSimulatedTranscript(CommonInput commonInput, Challenge challenge) {
-        Vector<SigmaProtocolTranscript> transcriptVector =  protocols.map((i, protocol) -> protocol.generateSimulatedTranscript(
+        Vector<SigmaProtocolTranscript> transcriptVector = protocols.map((i, protocol) -> protocol.generateSimulatedTranscript(
                 ((CommonInput.CommonInputVector) commonInput).get(i),
                 challenge
         ));
