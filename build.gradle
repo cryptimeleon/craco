@@ -7,7 +7,7 @@ plugins {
 group = 'org.cryptimeleon'
 archivesBaseName = project.name
 boolean isRelease = project.hasProperty("release")
-version = '1.1.0'  + (isRelease ? "" : "-SNAPSHOT")
+version = '2.0.0'  + (isRelease ? "" : "-SNAPSHOT")
 
 
 sourceCompatibility = 1.8
