@@ -94,7 +94,9 @@ task javadocLatex(type: Javadoc) {
     // enable rendering of umlauts
     options.addStringOption("charset", "UTF-8")
     // link to math javadoc
-    options.addStringOption("link", "https://javadoc.io/doc/org.cryptimeleon/math/" + mathVersionNoSuffix)
+    if (isRelease) {
+        options.addStringOption("link", "https://javadoc.io/doc/org.cryptimeleon/math/" + mathVersionNoSuffix)
+    }
     // enable latex rendering via mathjax
     options.addBooleanOption("-allow-script-in-comments", true)
     options.header = "<script type\"text/javascript&\" src=\"" +
