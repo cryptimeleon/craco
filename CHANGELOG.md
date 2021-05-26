@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Streaming GCM encryption now currently uses no padding
+- Streaming GCM encryption now correctly uses no padding
 
 ## [1.0.0] - 2021-03-01
 
