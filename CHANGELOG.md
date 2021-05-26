@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Helper methods for `MultiMessageSignatureScheme` and `StructurePreservingSignatureEQScheme` to make signing and verifying multiple plaintexts less verbose
 - Added notion of a `ChallengeSpace` (change breaks old `SigmaProtocol` API)
 - Proofs of partial knowledge
+- `SPSEQSignature` now implements `UniqueByteRepresentable`
+- `LongAesPseudoRandomFunction` which uses a longer key to obtain a larger expansion factor
+- `HashThenPrfToZn` that generates pseudorandom `Zn` elements using `LongAesPseudoRandomFunction`
+
+### Fixed
+
+- Streaming GCM encryption now correctly uses no padding
 
 ## [1.0.0] - 2021-03-01
 
