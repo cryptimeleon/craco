@@ -1,4 +1,4 @@
-name: Publishing
+name: Tagget release
 
 on:
   push:
@@ -29,4 +29,5 @@ jobs:
           prerelease: false
           files: |
             LICENSE
-            build/libs/*.jar
+            build/libs/*.jar 
+        id: "automatic_releases"
