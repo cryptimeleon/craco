@@ -1,6 +1,6 @@
 package org.cryptimeleon.craco.sig.sps.eq;
 
-import org.cryptimeleon.math.structures.groups.counting.CountingBilinearGroup;
+import org.cryptimeleon.math.structures.groups.debug.DebugBilinearGroup;;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearGroup;
 import org.cryptimeleon.math.structures.groups.elliptic.type3.bn.BarretoNaehrigBilinearGroup;
 
@@ -13,7 +13,7 @@ public class SPSEQPublicParametersGen {
     public SPSEQPublicParameters generatePublicParameter(int securityParameter, boolean debugMode) {
         BilinearGroup group;
         if (debugMode) {
-            group = new CountingBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_3);
+            group = new DebugBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_3);
         } else {
             group = new BarretoNaehrigBilinearGroup(securityParameter);
         }

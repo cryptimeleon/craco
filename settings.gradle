@@ -7,7 +7,7 @@ rootProject.name = 'craco'
 def msgPrefix = rootProject.name + " settings: "
 
 // do specific snapshot dependency resolution for snapshot builds
-if (!Boolean.valueOf(System.getProperty("release"))) {
+if (!hasProperty("release")) {
     def compositeLibraries = ["math"]
     for (String lib : compositeLibraries) {
         def libPrefix = "dependency " + lib
@@ -59,9 +59,7 @@ if (!Boolean.valueOf(System.getProperty("release"))) {
                             println(msgPrefix + libPrefix + ": Branch develop is not checked out. "
                                     + "'checkoutIfCloned' is set. Automatically checking it out.")
                             grgitLib.checkout {
-                                branch = branchThis.getName()
-                                startPoint = "origin/" + branchThis.getName()
-                                createBranch = true
+                                branch = develop
                             }
                         } else {
                             throw new GradleException(msgPrefix + libPrefix + ": Branch develop exists but is not checked out. "

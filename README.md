@@ -1,4 +1,6 @@
-![Build Status](https://github.com/upbcuk/upb.crypto.craco/workflows/Java%20CI/badge.svg)
+![Build Status](https://github.com/cryptimeleon/craco/workflows/Development%20Java%20CI/badge.svg)
+![Build Status](https://github.com/cryptimeleon/craco/workflows/Main%20Java%20CI/badge.svg)
+![Build Status](https://github.com/cryptimeleon/craco/workflows/Scheduled%20Main%20Java%20CI/badge.svg)
 ## Craco
 
 Craco (CRyptogrAphic COnstructions) is a Java library providing implementations of various cryptographic primitives and low-level constructions. This includes primitives such as commitment schemes, signature schemes, facilities for implementing multi-party protocols, and much more.

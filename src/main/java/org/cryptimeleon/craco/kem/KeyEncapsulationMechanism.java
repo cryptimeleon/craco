@@ -30,32 +30,30 @@ import java.lang.reflect.Type;
  * @param <T> type of the encapsulated key
  */
 public interface KeyEncapsulationMechanism<T> extends StandaloneRepresentable, RepresentationRestorer {
-    public static class KeyAndCiphertext<T> {
+    class KeyAndCiphertext<T> {
         public T key;
         public CipherText encapsulatedKey;
     }
 
     /**
-     * Randomly chooses a key k and encrypts it
-     * w.r.t. the given pk. The result is (key, encapsulatedKey)
+     * Randomly chooses a key k and encrypts it using the given {@code pk}.
+     * The result is {@code (key, encapsulatedKey)}.
      *
      * @param pk public key used for encrypting k
      */
-    public KeyAndCiphertext<T> encaps(EncryptionKey pk);
+    KeyAndCiphertext<T> encaps(EncryptionKey pk);
 
     /**
-     * Takes an encapsulatedKey that was created by encaps()
-     * and decrypts it with sk.
-     * i.e. 	if (key, encapsulatedKey) <- encaps(pk);
-     * then decrypt(encapsulatedKey, sk) = key.
+     * Takes an encapsulated key that was created by {@code encaps()} and decrypts it with {@code sk}.
+     * That is, if {@code (key, encapsulatedKey) = encaps(pk)}, then {@code decrypt(encapsulatedKey, sk) == key}.
      */
-    public T decaps(CipherText encapsulatedKey, DecryptionKey sk) throws IllegalArgumentException;
+    T decaps(CipherText encapsulatedKey, DecryptionKey sk) throws IllegalArgumentException;
 
-    public CipherText restoreEncapsulatedKey(Representation repr);
+    CipherText restoreEncapsulatedKey(Representation repr);
 
-    public EncryptionKey restoreEncapsulationKey(Representation repr);
+    EncryptionKey restoreEncapsulationKey(Representation repr);
 
-    public DecryptionKey restoreDecapsulationKey(Representation repr);
+    DecryptionKey restoreDecapsulationKey(Representation repr);
 
     default Object restoreFromRepresentation(Type type, Representation repr) {
         if (type instanceof Class) {

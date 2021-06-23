@@ -1,6 +1,10 @@
 package org.cryptimeleon.craco.sig.sps.eq;
 
 import org.cryptimeleon.craco.sig.Signature;
+import org.cryptimeleon.math.hash.ByteAccumulator;
+import org.cryptimeleon.math.hash.UniqueByteRepresentable;
+import org.cryptimeleon.math.hash.annotations.AnnotatedUbrUtil;
+import org.cryptimeleon.math.hash.annotations.UniqueByteRepresented;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
@@ -11,27 +15,27 @@ import java.util.Objects;
 
 /**
  * Class for a signature of the SPS-EQ signature scheme.
- *
- *
  */
-
-public class SPSEQSignature implements Signature {
+public class SPSEQSignature implements Signature, UniqueByteRepresentable {
 
     /**
      * First group element of the signature in G_1.
      */
+    @UniqueByteRepresented
     @Represented(restorer = "G1")
     protected GroupElement group1ElementSigma1Z;
 
     /**
      * Second group element of the signature in G_1.
      */
+    @UniqueByteRepresented
     @Represented(restorer = "G1")
     protected GroupElement group1ElementSigma2Y;
 
     /**
      * Third group element of the signature in G_2.
      */
+    @UniqueByteRepresented
     @Represented(restorer = "G2")
     protected GroupElement group1ElementSigma3HatY;
 
@@ -93,5 +97,10 @@ public class SPSEQSignature implements Signature {
     @Override
     public int hashCode() {
         return Objects.hash(group1ElementSigma1Z, group1ElementSigma2Y, group1ElementSigma3HatY);
+    }
+
+    @Override
+    public ByteAccumulator updateAccumulator(ByteAccumulator accumulator) {
+        return AnnotatedUbrUtil.autoAccumulate(accumulator, this);
     }
 }

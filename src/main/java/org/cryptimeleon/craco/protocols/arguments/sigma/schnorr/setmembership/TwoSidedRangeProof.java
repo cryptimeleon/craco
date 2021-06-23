@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * A fragment for the statement "lowerBound <= member <= upperBound".
+ * A fragment for the statement {@code lowerBound <= member <= upperBound}.
  */
 public class TwoSidedRangeProof extends DelegateFragment {
     private final ExponentExpr member;

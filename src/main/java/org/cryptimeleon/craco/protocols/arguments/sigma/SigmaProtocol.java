@@ -53,7 +53,14 @@ public interface SigmaProtocol extends InteractiveArgument {
     /**
      * Used by the verifier to generate a challenge (the second message in the protocol).
      */
-    Challenge generateChallenge(CommonInput commonInput);
+    default Challenge generateChallenge(CommonInput commonInput) {
+        return getChallengeSpace(commonInput).generateRandomChallenge();
+    }
+
+    /**
+     * Returns the challenge space used by this protocol.
+     */
+    ChallengeSpace getChallengeSpace(CommonInput commonInput);
 
     /**
      * Used by the prover to generate a response (the third and last message sent in the protocol).
@@ -114,24 +121,13 @@ public interface SigmaProtocol extends InteractiveArgument {
     SigmaProtocolTranscript generateSimulatedTranscript(CommonInput commonInput, Challenge challenge);
 
     Announcement restoreAnnouncement(CommonInput commonInput, Representation repr);
-    Challenge restoreChallenge(CommonInput commonInput, Representation repr);
+    default Challenge restoreChallenge(CommonInput commonInput, Representation repr) {
+        return getChallengeSpace(commonInput).restoreChallenge(repr);
+    }
     Response restoreResponse(CommonInput commonInput, Announcement announcement, Challenge challenge, Representation repr);
     default SigmaProtocolTranscript restoreTranscript(Representation repr, CommonInput commonInput) {
         return new SigmaProtocolTranscript(this, commonInput, repr);
     }
-
-    /**
-     * Creates a challenge from the given {@code byte[]}.
-     * <p>
-     * For byte arrays of length {@code floor(log8(getChallengeSpaceSize(commonInput)))},
-     * this mapping should be injective almost everywhere (i.e. almost all images have only one primage).
-     */
-    Challenge createChallengeFromBytes(CommonInput commonInput, byte[] bytes);
-
-    /**
-     * Returns the number of possible values returned by {@code generateChallenge(commonInput)}.
-     */
-    BigInteger getChallengeSpaceSize();
 
     @Override
     default String getFirstMessageRole() {

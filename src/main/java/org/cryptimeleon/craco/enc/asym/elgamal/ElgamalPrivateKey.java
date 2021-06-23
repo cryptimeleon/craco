@@ -61,11 +61,12 @@ public class ElgamalPrivateKey implements DecryptionKey {
     }
 
     /**
-     * Creates a new Elgamal private-key
+     * Creates a new Elgamal private key.
      *
      * @param groupG the group
-     * @param g      a generator of the groupG
-     * @param a      the private exponent, where h := g^a
+     * @param g      a generator of the group {@code groupG}
+     * @param a      the private exponent such that \(h = g^a\)
+     * @param h      the public key \(h = g^a\)
      */
     public ElgamalPrivateKey(Group groupG, GroupElement g, ZnElement a, GroupElement h) {
         init(groupG, g, a, h);
@@ -105,7 +106,7 @@ public class ElgamalPrivateKey implements DecryptionKey {
      * Chooses a random exponent a in {0,....,n-1} and sets the private key to
      * g,a,h=g^a
      *
-     * @param groupG
+     * @param groupG the group over which ElGamal is done
      */
     public ElgamalPrivateKey(Group groupG) {
         init(groupG);

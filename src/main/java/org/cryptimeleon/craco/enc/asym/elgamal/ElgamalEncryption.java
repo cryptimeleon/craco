@@ -32,7 +32,6 @@ import java.util.Objects;
  * Decryption of c = (c_1, c_2) under private key sk = (G, g, a, h):
  * - The message is m = c_2 * c_1^{-a}
  * <p>
- * <p>
  * [1] T. Elgamal, "A public key cryptosystem and a signature scheme based on discrete logarithms," in IEEE Transactions
  * on Information Theory, vol. 31, no. 4, pp. 469-472, July 1985.
  */

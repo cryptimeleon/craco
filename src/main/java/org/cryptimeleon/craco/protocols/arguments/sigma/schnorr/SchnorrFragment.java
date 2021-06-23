@@ -35,13 +35,11 @@ import org.cryptimeleon.math.serialization.Representation;
  * <p>
  *     Note that the second and third fragment share the same {@code w} and {@code r}. This dependency is expressed in this interface:
  *     a {@linkplain SchnorrFragment}'s trascript generation may depend on variables that are outside of its own control. We call those variables "external" variables.
- * </p>
  *
  * <p>
  *     This approach allows for easy composition of fragments that depend on (some of) the same variables.
  *     However, this also means that {@linkplain SchnorrFragment}s are basically useless by themselves because they depend on external variables.
  *     To ultimately make use of a {@linkplain SchnorrFragment} in an actual protocol, implement a {@link SendThenDelegateProtocol} and use the fragment as a subprotocol.
- * </p>
  *
  * <p>
  *     Implementing classes are usually used as follows:
@@ -62,12 +60,10 @@ import org.cryptimeleon.math.serialization.Representation;
  *         <li>Verifier checks {@code checkTranscript(A, c, R, externalResponse)}</li>
  *     </ul>
  *     using the standard (response0-response1)/(challenge0-challenge1) knowledge extractor.
- * </p>
  *
  * <p>
  *     Most {@linkplain SchnorrFragment}s will probably be implemented by extending {@link DelegateFragment} or {@link SendThenDelegateFragment}.
  *     To compose a bunch of {@linkplain SchnorrFragment}s into a {@link SigmaProtocol}, see {@link DelegateProtocol} or {@link SendThenDelegateProtocol}.
- * </p>
  */
 public interface SchnorrFragment {
     /**
@@ -93,13 +89,13 @@ public interface SchnorrFragment {
      * @param challenge the challenge of a Schnorr protocol.
      * @return the response that this fragment sends (does not contain externalResponse)
      */
-    Response generateResponse(SchnorrVariableAssignment externalWitnesses, AnnouncementSecret announcementSecret, SchnorrChallenge challenge);
+    Response generateResponse(SchnorrVariableAssignment externalWitnesses, AnnouncementSecret announcementSecret, ZnChallenge challenge);
 
     /**
      * Checks whether the fragment's transcript with the addition of externalResponse is accepting.
      * @return an expression (without variables) that evaluates to true if the transcript is accepting or to false otherwise.
      */
-    BooleanExpression checkTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse);
+    BooleanExpression checkTranscript(Announcement announcement, ZnChallenge challenge, Response response, SchnorrVariableAssignment externalResponse);
 
     /**
      * Generates a simulated transcript.
@@ -107,13 +103,13 @@ public interface SchnorrFragment {
      * @param externalRandomResponse a random assignment of external variables to random values.
      * @return a transcript with the same distribution as honest executions of this fragment that contain challenge and externalRandomResponse.
      */
-    SigmaProtocolTranscript generateSimulatedTranscript(SchnorrChallenge challenge, SchnorrVariableAssignment externalRandomResponse);
+    SigmaProtocolTranscript generateSimulatedTranscript(ZnChallenge challenge, SchnorrVariableAssignment externalRandomResponse);
 
     /**
      * Returns a compressed (shorter) version of the given transcript.
      * Useful for {@link FiatShamirProofSystem}.
      */
-    default Representation compressTranscript(Announcement announcement, SchnorrChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
+    default Representation compressTranscript(Announcement announcement, ZnChallenge challenge, Response response, SchnorrVariableAssignment externalResponse) {
         ListRepresentation repr = new ListRepresentation();
         repr.add(announcement.getRepresentation());
         repr.add(response.getRepresentation());
@@ -129,7 +125,7 @@ public interface SchnorrFragment {
      *
      * @throws IllegalArgumentException is the given compressedTranscript cannot be decompressed into a valid transcript.
      */
-    default SigmaProtocolTranscript decompressTranscript(Representation compressedTranscript, SchnorrChallenge challenge, SchnorrVariableAssignment externalResponse) throws IllegalArgumentException {
+    default SigmaProtocolTranscript decompressTranscript(Representation compressedTranscript, ZnChallenge challenge, SchnorrVariableAssignment externalResponse) throws IllegalArgumentException {
         Announcement announcement = restoreAnnouncement(compressedTranscript.list().get(0));
         Response response = restoreResponse(announcement, compressedTranscript.list().get(1));
         return new SigmaProtocolTranscript(announcement, challenge, response);

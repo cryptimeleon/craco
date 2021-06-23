@@ -1,6 +1,10 @@
-name: Java CI
+name: Main Java CI
 
-on: push
+on:
+  push:
+    branches:
+      - main
+      - 'release/**'
 
 jobs:
   build:
@@ -12,4 +16,4 @@ jobs:
         with:
           java-version: 1.8
       - name: Build with Gradle
-        run: ./gradlew build -PcheckoutIfCloned=true
+        run: ./gradlew build -PcheckoutIfCloned -Prelease

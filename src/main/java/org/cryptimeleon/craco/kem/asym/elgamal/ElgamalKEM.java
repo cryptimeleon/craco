@@ -33,35 +33,42 @@ import java.util.Objects;
  * <p>
  * ElGamal:
  * <p>
- * Group G of size q, generator g, public key h=g^a, secret key a
+ * Group \(\mathbb{G}\) of size \(q\), generator \(g\), public key \(h=g^a\), secret key \(a\)
  * <p>
- * Encrypt Message R:
+ * Encrypt message \(R\):
+ * <ol>
+ * <li> Select \(s\) uniformly at random from \(\mathbb{Z}_q\)
+ * <li> Output ciphertext \(C=(R g^{as},g^s)\)
+ * </ol>
  * <p>
- * 1. select s UAR in Z_q 2. C=<R g^(as),g^s>
+ * Decrypt \(C\):
+ * <ol>
+ *  <li> Parse C as \(C=(C_1,C_2)\)
+ *  <li> Compute \(C_1 \cdot C_2^(-a)\)
+ * </ol>
  * <p>
- * Decrypt C:
+ * FOT Elgamal with KEM and \(H_1 : \mathbb{G} \times \{0,1\}^n \rightarrow \mathbb{Z}_q,
+ * H_2 : \mathbb{G} \rightarrow \{0,1\}^n\),
  * <p>
- * 1. Parse C as C=<C1,C2> 2. Compute C1*C2^(-a)
+ * Encaps \(k\):
+ * <ol>
+ *  <li> Select \(R\) uniformly at random from \(\mathbb{G}\) and \(k\) uniformly at random in \(\{0,1\}^n\),
+ *  and compute \(s=H(R,k)\) (commitment on \(R,k\))
+ *  <li> Elgamal encrypt \(R\) with random tape \(s\) to obtain \((C_1,C_2)\)
+ *  <li> One-time-pad encrypt \(k\) with \(r=H_2(R)\): \(C_3= r \oplus k\)
+ *  <li> Output \(C = (C_1, C_2, C_3)\)
+ * </ol>
  * <p>
- * <p>
- * FOT Elgamal with KEM and H1:Gx{0,1}^n->Z_q, H2:G->{0,1}^n,
- * <p>
- * Encaps k:
- * <p>
- * 1. select R UAR in G and k UAR in {0,1}^n, compute s=H(R,k) (commitment on
- * R,k) 2. Elgamal Encrypt R with random tape s to obtain C=<C1,C2> 3. OTP
- * encrypt k with r=H2(R): C2= r xor k
- * <p>
- * Decaps k: 1. Parse C=<C1,C2,C3> 2. Elgamal Decrypt <C1,C2> to obtain R' 3.
- * OTP Decrypt C3 with H2(R) to obtain k' 4. recover commitment s'=H1(R',k') 5.
- * check commitment by ElGamal encryption R' with s' and comparison with C1 a.
- * if ok, return k' b. otherwithe return fail
- * <p>
- * <p>
- * This implementation uses org.cryptimeleon.craco.enc.asym.elgamal for Elgamal
- * Encryption
- *
- *
+ * Decaps \(k\):
+ * <ol>
+ *  <li> Parse \(C=(C_1,C_2,C_3)\)
+ *  <li> Elgamal decrypt \((C_1,C_2)\) to obtain message \(R'\)
+ *  <li> One-time-pad decrypt \(C_3\) with \(H_2(R)\) to obtain \(k'\)
+ *  <li> Recover commitment \(s'=H_1(R',k')\)
+ *  <li> Check commitment by ElGamal encrypting \(R'\) with \(s'\) and comparing it with \(C_1 \cdot a\).
+ *       If ok, return \(k' \cdot b\). Otherwise return fail
+ * </ol>
+ * @see ElgamalEncryption
  */
 
 

@@ -121,13 +121,8 @@ public class DamgardTechnique implements SigmaProtocol {
     }
 
     @Override
-    public Challenge createChallengeFromBytes(CommonInput commonInput, byte[] bytes) {
-        return innerProtocol.createChallengeFromBytes(commonInput, bytes);
-    }
-
-    @Override
-    public BigInteger getChallengeSpaceSize() {
-        return innerProtocol.getChallengeSpaceSize();
+    public ChallengeSpace getChallengeSpace(CommonInput commonInput) {
+        return innerProtocol.getChallengeSpace(commonInput);
     }
 
     protected PlainText announcementToCommitmentPlaintext(Announcement innerAnnouncement) {
