@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Streaming GCM encryption now correctly uses no padding
 
+### Removed
+- PRF classes have been moved to Math
+
 ## [1.0.0] - 2021-03-01
 
 Initial release
