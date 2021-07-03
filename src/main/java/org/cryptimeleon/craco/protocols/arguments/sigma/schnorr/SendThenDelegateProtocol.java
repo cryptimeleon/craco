@@ -178,4 +178,9 @@ public abstract class SendThenDelegateProtocol implements SigmaProtocol {
         SigmaProtocolTranscript fragmentTranscript = fragment.decompressTranscript(compressedTranscript, (ZnChallenge) challenge, SchnorrVariableAssignment.EMPTY);
         return new SigmaProtocolTranscript(new SchnorrAnnouncement(fragment, fragmentTranscript.getAnnouncement()), challenge, fragmentTranscript.getResponse());
     }
+
+    @Override
+    public void debugProof(CommonInput commonInput, SecretInput secretInput) {
+        new TopLevelSchnorrFragment(commonInput, secretInput).debugFragment(SchnorrVariableAssignment.EMPTY, getChallengeSpace(commonInput));
+    }
 }

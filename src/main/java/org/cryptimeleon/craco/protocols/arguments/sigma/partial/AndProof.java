@@ -107,4 +107,15 @@ public class AndProof implements SigmaProtocol {
                 ),
             Response.ResponseVector::new);
     }
+
+    @Override
+    public void debugProof(CommonInput commonInput, SecretInput secretInput) {
+        protocols.forEach((i, protocol) -> {
+            try {
+                debugProof(((CommonInput.CommonInputVector) commonInput).get(i), ((SecretInput.SecretInputVector) secretInput).get(i));
+            } catch (RuntimeException e) {
+                throw new RuntimeException("Error in "+i+"th protocol in the AND proof", e);
+            }
+        });
+    }
 }

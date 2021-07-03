@@ -211,4 +211,16 @@ public class OrProof implements SigmaProtocol {
                         repr.list().get(i)), Response.ResponseVector::new);
         return new OrProofResponse(responses, challenge0);
     }
+
+    @Override
+    public void debugProof(CommonInput commonInput, SecretInput secretInput) {
+        try {
+            if (((OrProofSecretInput) secretInput).isForProtocol1)
+                protocol1.debugProof(((CommonInput.CommonInputVector) commonInput).get(1), ((OrProofSecretInput) secretInput).secretInput);
+            else
+                protocol0.debugProof(((CommonInput.CommonInputVector) commonInput).get(0), ((OrProofSecretInput) secretInput).secretInput);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("OR proof "+(((OrProofSecretInput) secretInput).isForProtocol1 ? "right" : "left") + " child threw error (other child wasn't asked)");
+        }
+    }
 }

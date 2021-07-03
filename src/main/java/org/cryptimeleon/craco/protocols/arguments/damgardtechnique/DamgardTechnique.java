@@ -4,8 +4,8 @@ import org.cryptimeleon.craco.commitment.CommitmentPair;
 import org.cryptimeleon.craco.commitment.CommitmentScheme;
 import org.cryptimeleon.craco.commitment.hashthencommit.HashThenCommitCommitmentScheme;
 import org.cryptimeleon.craco.commitment.pedersen.PedersenCommitmentScheme;
-import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.common.ByteArrayImplementation;
+import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.protocols.CommonInput;
 import org.cryptimeleon.craco.protocols.SecretInput;
 import org.cryptimeleon.craco.protocols.arguments.sigma.*;
@@ -13,8 +13,6 @@ import org.cryptimeleon.math.expressions.bool.BooleanExpression;
 import org.cryptimeleon.math.hash.impl.VariableOutputLengthHashFunction;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.structures.groups.Group;
-
-import java.math.BigInteger;
 
 /**
  * This class provides Damgard's Technique. Damgard's Technique is a construction to improve Sigma-Protocols in order to
@@ -134,5 +132,15 @@ public class DamgardTechnique implements SigmaProtocol {
                 new PedersenCommitmentScheme(group, 1),
                 new VariableOutputLengthHashFunction((group.size().bitLength()-1)/8)
         );
+    }
+
+    @Override
+    public void debugProof(CommonInput commonInput, SecretInput secretInput) {
+        innerProtocol.debugProof(commonInput, secretInput);
+        try {
+            SigmaProtocol.super.debugProof(commonInput, secretInput);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("No error checking the inner protocol, but something seems to be wrong running the protocol. Maybe a hashing issue.", e);
+        }
     }
 }
