@@ -124,4 +124,11 @@ public class LinearStatementFragment implements SchnorrFragment {
     public SigmaProtocolTranscript decompressTranscript(Representation compressedTranscript, ZnChallenge challenge, SchnorrVariableAssignment externalResponse) throws IllegalArgumentException {
         return generateSimulatedTranscript(challenge, externalResponse); //provides unique acceptable value for announcement.
     }
+
+    @Override
+    public void debugFragment(SchnorrVariableAssignment externalWitness, ZnChallengeSpace challengeSpace) {
+        GroupElement result = homomorphicPart.evaluate(externalWitness);
+        if (!result.equals(target))
+            throw new RuntimeException(result + " != "+target);
+    }
 }

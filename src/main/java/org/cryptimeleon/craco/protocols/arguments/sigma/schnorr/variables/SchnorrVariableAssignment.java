@@ -5,6 +5,8 @@ import org.cryptimeleon.math.expressions.Expression;
 import org.cryptimeleon.math.expressions.Substitution;
 import org.cryptimeleon.math.expressions.VariableExpression;
 
+import java.math.BigInteger;
+
 public interface SchnorrVariableAssignment extends Substitution, SecretInput {
     SchnorrVariableAssignment EMPTY = new EmptyAssignment();
 
@@ -32,4 +34,17 @@ public interface SchnorrVariableAssignment extends Substitution, SecretInput {
     default SchnorrVariableAssignment fallbackTo(SchnorrVariableAssignment fallback) {
         return new SchnorrVariableValueHierarchy(this, fallback);
     }
+
+    /**
+     * Computes this * challenge + random
+     */
+    default SchnorrVariableAssignment evalLinear(BigInteger challenge, SchnorrVariableAssignment random) {
+        return new SchnorrVariableAssignment() {
+            @Override
+            public SchnorrVariableValue getValue(SchnorrVariable variable) {
+                return SchnorrVariableAssignment.this.getValue(variable).evalLinear(challenge, random.getValue(variable));
+            }
+        };
+    }
 }
+

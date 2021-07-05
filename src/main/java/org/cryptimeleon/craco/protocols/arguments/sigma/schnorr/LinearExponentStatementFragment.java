@@ -10,6 +10,7 @@ import org.cryptimeleon.math.expressions.exponent.ExponentExpr;
 import org.cryptimeleon.math.expressions.exponent.ExponentSumExpr;
 import org.cryptimeleon.math.hash.ByteAccumulator;
 import org.cryptimeleon.math.serialization.Representation;
+import org.cryptimeleon.math.structures.groups.GroupElement;
 import org.cryptimeleon.math.structures.rings.zn.Zn;
 
 /**
@@ -127,5 +128,12 @@ public class LinearExponentStatementFragment implements SchnorrFragment {
     @Override
     public SigmaProtocolTranscript decompressTranscript(Representation compressedTranscript, ZnChallenge challenge, SchnorrVariableAssignment externalResponse) throws IllegalArgumentException {
         return generateSimulatedTranscript(challenge, externalResponse); //provides unique acceptable value for announcement.
+    }
+
+    @Override
+    public void debugFragment(SchnorrVariableAssignment externalWitness, ZnChallengeSpace challengeSpace) {
+        Zn.ZnElement result = homomorphicPart.evaluate(zn, externalWitness);
+        if (!result.equals(target))
+            throw new RuntimeException(result + " != "+target);
     }
 }

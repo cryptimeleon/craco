@@ -7,7 +7,7 @@ plugins {
 group = 'org.cryptimeleon'
 archivesBaseName = project.name
 boolean isRelease = project.hasProperty("release")
-version = '2.0.0'  + (isRelease ? "" : "-SNAPSHOT")
+version = '2.1.0'  + (isRelease ? "" : "-SNAPSHOT")
 
 
 sourceCompatibility = 1.8
@@ -20,10 +20,9 @@ tasks.withType(JavaCompile) {
 repositories {
     mavenLocal()
     mavenCentral()
-    jcenter()
 }
 
-def mathVersionNoSuffix = '2.0.0'
+def mathVersionNoSuffix = '2.1.0'
 
 dependencies {
 

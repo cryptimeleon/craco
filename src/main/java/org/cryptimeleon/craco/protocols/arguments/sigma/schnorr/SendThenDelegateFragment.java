@@ -591,4 +591,21 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
                 new SendThenDelegateResponse(subprotocolResponses, variableResponses)
                 );
     }
+
+    @Override
+    public void debugFragment(SchnorrVariableAssignment externalWitness, ZnChallengeSpace challengeSpace) {
+        ProverSpec proverSpec = provideProverSpec(externalWitness, new ProverSpecBuilder(this));
+        SubprotocolSpec subprotocolSpec = provideSubprotocolSpec(proverSpec.sendFirstValue, new SubprotocolSpecBuilder());
+
+        if (!provideAdditionalCheck(proverSpec.sendFirstValue).evaluate())
+            throw new RuntimeException("additional send first value check failed");
+
+        proverSpec.subprotocolSpec.forEachProtocol((name, fragment) -> {
+            try {
+                fragment.debugFragment(proverSpec.witnesses.fallbackTo(externalWitness), challengeSpace);
+            } catch (RuntimeException e) {
+                throw new RuntimeException("Error in subfragment "+name, e);
+            }
+        });
+    }
 }

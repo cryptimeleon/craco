@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `AdHocSchnorrProof` for easy construction of typical Schnorr proofs
+- `SigmaProtocol.debugProof(...)` for debugging failing proofs
+
 ## [2.0.0] - 2021-06-23
 
 ### Added

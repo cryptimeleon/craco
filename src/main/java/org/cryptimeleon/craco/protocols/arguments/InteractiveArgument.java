@@ -3,6 +3,8 @@ package org.cryptimeleon.craco.protocols.arguments;
 import org.cryptimeleon.craco.protocols.CommonInput;
 import org.cryptimeleon.craco.protocols.SecretInput;
 import org.cryptimeleon.craco.protocols.TwoPartyProtocol;
+import org.cryptimeleon.craco.protocols.arguments.sigma.instance.SigmaProtocolProverInstance;
+import org.cryptimeleon.craco.protocols.arguments.sigma.instance.SigmaProtocolVerifierInstance;
 
 /**
  * An argument, that is a two-party protocol with roles "prover" and "verifier".
@@ -25,5 +27,18 @@ public interface InteractiveArgument extends TwoPartyProtocol {
 
     default InteractiveArgumentInstance instantiateVerifier(CommonInput commonInput) {
         return instantiateProtocol(VERIFIER_ROLE, commonInput, null);
+    }
+
+    /**
+     * Checks if commonInput and secretInput are valid inputs for this protocol.
+     * Use for debugging.
+     * Throws an exception if something is wrong.
+     */
+    default void debugProof(CommonInput commonInput, SecretInput secretInput) {
+        InteractiveArgumentInstance prover = instantiateProver(commonInput, secretInput);
+        InteractiveArgumentInstance verifier = instantiateVerifier(commonInput);
+        runProtocolLocally(prover, verifier);
+        if (!verifier.isAccepting())
+            throw new RuntimeException(this.getClass().getName()+" proof fails, but cause is unclear.");
     }
 }
