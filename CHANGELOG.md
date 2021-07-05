@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0]
+
 ### Added
 - `AdHocSchnorrProof` for easy construction of typical Schnorr proofs
 - `SigmaProtocol.debugProof(...)` for debugging failing proofs
@@ -32,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial release
 
-[Unreleased]: https://github.com/cryptimeleon/craco/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/cryptimeleon/craco/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/cryptimeleon/craco/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/cryptimeleon/craco/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/cryptimeleon/craco/releases/tag/v1.0.0
