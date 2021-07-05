@@ -114,6 +114,8 @@ public abstract class ProofOfPartialKnowledge implements SigmaProtocol {
          * Returns null if no valid secret input is known for this node.
          */
         protected abstract SecretInput getSecretInput(Function<String, ? extends SecretInput> secretInputsForLeafs);
+
+        public abstract void debugProof(Function<String,? extends SecretInput> secretInputs);
     }
 
     private static class LeafNode extends ProtocolTree {
@@ -134,6 +136,23 @@ public abstract class ProofOfPartialKnowledge implements SigmaProtocol {
         @Override
         protected SecretInput getSecretInput(Function<String, ? extends SecretInput> secretInputsForLeafs) {
             return secretInputsForLeafs.apply(name);
+        }
+
+        @Override
+        public void debugProof(Function<String, ? extends SecretInput> secretInputs) {
+            SecretInput secretInput = secretInputs.apply(name);
+            if (secretInput == null)
+                throw new RuntimeException("No witness for "+name+" subprotocol");
+            try {
+                protocol.debugProof(commonInput, secretInput);
+            } catch (RuntimeException e) {
+                throw new RuntimeException("Error in subprotocol "+name);
+            }
+        }
+
+        @Override
+        public String toString() {
+            return name;
         }
     }
 
@@ -162,6 +181,17 @@ public abstract class ProofOfPartialKnowledge implements SigmaProtocol {
 
             return new SecretInput.SecretInputVector(l, r);
         }
+
+        @Override
+        public void debugProof(Function<String, ? extends SecretInput> secretInputs) {
+            lhs.debugProof(secretInputs);
+            rhs.debugProof(secretInputs);
+        }
+
+        @Override
+        public String toString() {
+            return "("+ lhs.toString() +" AND "+ rhs.toString() +")";
+        }
     }
 
     private static class OrNode extends ProtocolTree {
@@ -186,6 +216,23 @@ public abstract class ProofOfPartialKnowledge implements SigmaProtocol {
                 return null; //cannot satisfy this node
 
             return l == null ? new OrProof.OrProofSecretInput(r, true) : new OrProof.OrProofSecretInput(l, false);
+        }
+
+        @Override
+        public void debugProof(Function<String, ? extends SecretInput> secretInputs) {
+            SecretInput l = lhs.getSecretInput(secretInputs);
+            SecretInput r = rhs.getSecretInput(secretInputs);
+            if (l == null && r ==null)
+                throw new RuntimeException("No witness given for "+ this);
+            if (l == null)
+                lhs.debugProof(secretInputs);
+            if (r == null)
+                rhs.debugProof(secretInputs);
+        }
+
+        @Override
+        public String toString() {
+            return "("+ lhs.toString() +" OR "+ rhs.toString() +")";
         }
     }
 
@@ -353,5 +400,16 @@ public abstract class ProofOfPartialKnowledge implements SigmaProtocol {
                 challenge,
                 repr
         );
+    }
+
+    @Override
+    public void debugProof(CommonInput commonInput, SecretInput secretInput) {
+        ProverSpec proverSpec = provideProverSpec(commonInput, secretInput, new ProverSpecBuilder());
+        ProtocolTree protocolTree = provideProtocolTree(commonInput, proverSpec.sendFirstValue);
+
+        if (!provideAdditionalCheck(commonInput, proverSpec.sendFirstValue).evaluate())
+            throw new RuntimeException("Error checking the validity of sendFirstValue in "+this.getClass().getName());
+
+        protocolTree.debugProof(proverSpec.secretInputs);
     }
 }

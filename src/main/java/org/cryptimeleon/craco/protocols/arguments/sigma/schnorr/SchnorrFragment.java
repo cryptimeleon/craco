@@ -133,4 +133,22 @@ public interface SchnorrFragment {
 
     Announcement restoreAnnouncement(Representation repr);
     Response restoreResponse(Announcement announcement, Representation repr);
+
+    /**
+     * Checks if the given input is a valid witness for this fragment.
+     * Use for debugging.
+     * Throws an exception if something is wrong.
+     */
+    default void debugFragment(SchnorrVariableAssignment externalWitness, ZnChallengeSpace challengeSpace) {
+        AnnouncementSecret announcementSecret = generateAnnouncementSecret(externalWitness);
+        SchnorrVariableAssignment externalRandom = externalWitness; //well ... why not?
+        Announcement announcement = generateAnnouncement(externalWitness, announcementSecret, externalRandom);
+        ZnChallenge challenge = challengeSpace.generateRandomChallenge();
+        Response response = generateResponse(externalWitness, announcementSecret, challenge);
+
+        SchnorrVariableAssignment externalResponse = externalWitness.evalLinear(challenge.getChallenge(), externalRandom);
+
+        if (!checkTranscript(announcement, challenge, response, externalResponse).evaluate())
+            throw new RuntimeException(this.getClass().getName()+" proof fails.");
+    }
 }

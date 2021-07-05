@@ -41,7 +41,7 @@ public class SetMembershipFragment extends SendThenDelegateFragment {
 
         //Pick the right signature for memberVal
         if (!pp.signatures.containsKey(memberVal.getInteger()))
-            throw new IllegalArgumentException("Proposed member value is not actually in the set. Illegal witness.");
+            throw new IllegalArgumentException("Proposed member value "+ memberVal.getInteger() +" is not actually in the set. Illegal witness.");
         GroupElement signature = pp.signatures.get(memberVal.getInteger());
 
         //Blind signature with blinding value

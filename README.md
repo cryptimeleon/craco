@@ -37,7 +37,7 @@ The constructions we implement are:
     * Pointcheval & Sanders' short randomizable signature scheme [PS16]
     * An extension of Boneh, Boyen and Shacham's signature scheme from [Eid15]
     * Pointcheval & Sanders' modified short randomizable signature scheme (with and without ROM) [PS18]
-    * Hanser and Slamanig's structure-preserving signature scheme on equivalence classes [HS14]
+    * Fuchsbauer, Hanser and Slamanig's structure-preserving signature scheme on equivalence classes [FHS19]
 * **Encryption schemes**:
     * ElGamal
     * Streaming AES Encryption using CBC and GCM modes of operation
@@ -66,7 +66,7 @@ To add the newest Craco version as a dependency, add this to your project's POM:
 <dependency>
     <groupId>org.cryptimeleon</groupId>
     <artifactId>craco</artifactId>
-    <version>1.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 
@@ -74,7 +74,7 @@ To add the newest Craco version as a dependency, add this to your project's POM:
 
 Craco is published via Maven Central.
 Therefore, you need to add `mavenCentral()` to the `repositories` section of your project's `build.gradle` file.
-Then, add `implementation group: 'org.cryptimeleon', name: 'craco', version: '1.0.0'` to the `dependencies` section of your `build.gradle` file.
+Then, add `implementation group: 'org.cryptimeleon', name: 'craco', version: '2.1.0'` to the `dependencies` section of your `build.gradle` file.
 
 For example:
 
@@ -84,7 +84,7 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'org.cryptimeleon', name: 'craco', version: '1.0.0'
+    implementation group: 'org.cryptimeleon', name: 'craco', version: '2.1.0'
 }
 ```
 
@@ -109,7 +109,7 @@ The library was implemented at Paderborn University in the research group ["Code
 
 ## References
 
-[HS14] Christian Hanser and Daniel Slamanig. "Structure-Preserving Signatures on Equivalence Classes and Their Application to Anonymous Credentials." In: Advances in Cryptology – ASIACRYPT 2014. Springer Berlin Heidelberg, pp 491–511.
+[FHS19] Georg Fuchsbauer and Christian Hanser and Daniel Slamanig. "Structure-Preserving Signatures on Equivalence Classes and Constant-Size Anonymous Credentials". In: Journal of Cryptology, 2019. Vol. 32, pp. 498 - 546.
 
 [Ngu05] Lan Nguyen. “Accumulators from Bilinear Pairings and Applications”. In: Topics in Cryptology – CT-RSA 2005. Ed. by Alfred Menezes. Vol. 3376. Lecture Notes in Computer Science. Springer, Heidelberg, February 2005, pp. 275–292.
 
