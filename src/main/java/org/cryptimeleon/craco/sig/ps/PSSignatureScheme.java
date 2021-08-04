@@ -102,7 +102,7 @@ public class PSSignatureScheme implements StandardMultiMessageSignatureScheme {
         );
 
         // second element of signature, sigma_2 in paper
-        GroupElement group1ElementSigma2 = group1ElementH.pow(resultExponent.getInteger()).compute();
+        GroupElement group1ElementSigma2 = group1ElementH.pow(resultExponent.asInteger()).compute();
 
         return new PSSignature(group1ElementH, group1ElementSigma2);
     }

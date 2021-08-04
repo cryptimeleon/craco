@@ -192,7 +192,7 @@ public class PS18SignatureScheme implements SignatureScheme {
                 sk.getExponentsYi().get(sk.getNumberOfMessages()).mul(exponentPrimeM)
         );
         // Now we exponentiate h with the exponent and return that as sigma_2.
-        return sigma1.pow(resultExponent.getInteger());
+        return sigma1.pow(resultExponent.asInteger());
     }
 
     /**
