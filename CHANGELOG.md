@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Changed uses `Zn#getInteger()` from Math library to `RingElement#asInteger()` to address removal of the former from the Math library
+
 ## [2.1.0]
 
 ### Added

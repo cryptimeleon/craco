@@ -138,7 +138,7 @@ public class MonotoneSpanProgram extends AccessStructure {
             output = output.concat("( ");
             for (ZpElement entry : row) {
                 columnCounter++;
-                output = output.concat(String.format("%3d ", entry.getInteger().shortValue()));
+                output = output.concat(String.format("%3d ", entry.asInteger().shortValue()));
             }
 
             for (; columnCounter <= size; columnCounter++) {

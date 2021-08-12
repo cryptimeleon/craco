@@ -37,7 +37,7 @@ public class TwoSidedRangeProof extends DelegateFragment {
         this.pp = pp;
 
         this.base = pp.signatures.size();
-        BigInteger intervalSize = upperBound.getInteger().subtract(lowerBound.getInteger());
+        BigInteger intervalSize = upperBound.asInteger().subtract(lowerBound.asInteger());
         if (intervalSize.signum() < 0)
             throw new IllegalArgumentException("upper bound must be larger than lower bound");
 
@@ -47,7 +47,7 @@ public class TwoSidedRangeProof extends DelegateFragment {
 
         this.power = power;
 
-        if (lowerBound.getInteger().add(BigInteger.valueOf(base).pow(power)).compareTo(pp.getZn().size()) > 0)
+        if (lowerBound.asInteger().add(BigInteger.valueOf(base).pow(power)).compareTo(pp.getZn().size()) > 0)
             throw new IllegalArgumentException("Interval is too close to the mod p overflow boundary (i.e. numbers in the interval are too large - choose smaller numbers)");
     }
 
