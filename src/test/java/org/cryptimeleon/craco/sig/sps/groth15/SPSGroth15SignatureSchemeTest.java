@@ -36,15 +36,17 @@ public class SPSGroth15SignatureSchemeTest {
 
     @Before
     public void setUp() throws Exception {
-        for (int i = 0; i < 1; i++) {
-            SignatureSchemeParams params =
-                    SPSGroth15SignatureSchemeTestParamGenerator.generateParams(SECURITY_PARAMETER, NUM_MESSAGES);
-            this.scheme = (SPSGroth15SignatureScheme) params.getSignatureScheme();
-            this.keyPair = params.getKeyPair1();
-            this.wrongKeyPair = params.getKeyPair2();
-            this.pp = (SPSGroth15PublicParameters) params.getPublicParameters();
-            this.messageBlock = (MessageBlock) params.getMessage1();
-            this.wrongMessageBlock = (MessageBlock) params.getMessage2();
+        for (SPSGroth15PublicParametersGen.Groth15Type type : SPSGroth15PublicParametersGen.Groth15Type.values()) {
+            for (int i = 0; i < 1; i++) {
+                SignatureSchemeParams params =
+                        SPSGroth15SignatureSchemeTestParamGenerator.generateParams(SECURITY_PARAMETER, SPSGroth15PublicParametersGen.Groth15Type.type1, NUM_MESSAGES);
+                this.scheme = (SPSGroth15SignatureScheme) params.getSignatureScheme();
+                this.keyPair = params.getKeyPair1();
+                this.wrongKeyPair = params.getKeyPair2();
+                this.pp = (SPSGroth15PublicParameters) params.getPublicParameters();
+                this.messageBlock = (MessageBlock) params.getMessage1();
+                this.wrongMessageBlock = (MessageBlock) params.getMessage2();
+            }
         }
     }
 

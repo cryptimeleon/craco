@@ -12,7 +12,7 @@ public class SPSGroth15PublicParametersGen {
      * @param debugMode         Enable debug mode (Makes the PPs insecure!).
      * @return The public parameters
      */
-    public SPSGroth15PublicParameters generatePublicParameter(int securityParameter, boolean debugMode) {
+    public SPSGroth15PublicParameters generatePublicParameter(int securityParameter, Groth15Type type, boolean debugMode) {
         BilinearGroup group;
         if (debugMode) {
             group = new DebugBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_3);
@@ -20,6 +20,11 @@ public class SPSGroth15PublicParametersGen {
             group = new BarretoNaehrigBilinearGroup(securityParameter);
         }
 
-        return new SPSGroth15PublicParameters(group);
+        return new SPSGroth15PublicParameters(group, type);
+
+    }
+
+    public enum Groth15Type{
+        type1, type2;
     }
 }

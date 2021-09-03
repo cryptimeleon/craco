@@ -18,8 +18,8 @@ import java.util.stream.IntStream;
 
 /**
  * Signature scheme that was originally presented in [1] by Groth for signing matrices.
- * This is the simplified version for vectors of messages from G_1 presented in [2].
- * A version for messages in G_2 can be obtained by swapping membership of all elements.
+ * This is the simplified version for vectors of messages from G_1 or G_2 as presented in [2].
+ * A version for messages in G_2 can be obtained by swapping membership of all elements and vice versa.
  * <p>
  * Bilinear map type: 3
  * <p>
@@ -57,8 +57,7 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
     public SignatureKeyPair<SPSGroth15VerificationKey, SPSGroth15SigningKey> generateKeyPair(int numberOfMessages) {
         // Do actual key generation (cf. KeyGen algorithm)
         Zp zp = pp.getZp();
-        Group groupG1 = pp.getBilinearMap().getG1();
-        GroupElement group2ElementTildeG = pp.getGroup2ElementHatG();
+        GroupElement plaintextGroupElement = pp.getPlaintextGroupGenerator();
 
         // check if number of messages l > 0
         if (!(numberOfMessages > 0)) {
@@ -66,7 +65,7 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
         }
 
         // Y_i's in paper
-        GroupElement[] group1ElementsYi = IntStream.range(0, numberOfMessages).mapToObj(a -> groupG1.getUniformlyRandomElement())
+        GroupElement[] group1ElementsYi = IntStream.range(0, numberOfMessages).mapToObj(a -> plaintextGroupElement.getStructure().getUniformlyRandomElement())
                 .toArray(GroupElement[]::new);
 
         // Z_p element v in paper
@@ -74,8 +73,8 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
 
         // Set public key ( verification key)
         SPSGroth15VerificationKey pk = new SPSGroth15VerificationKey();
-        pk.setGroup1ElementsYi(group1ElementsYi);
-        pk.setGroup2ElementV(pp.getGroup2ElementHatG().pow(exponentV));
+        pk.setGroupElementsYi(group1ElementsYi);
+        pk.setGroupElementV(pp.getOtherGroupGenerator().pow(exponentV));
 
         // Set secret key (signing key)
         SPSGroth15SigningKey sk = new SPSGroth15SigningKey();
@@ -114,12 +113,12 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
         ZpElement exponentR = pp.getZp().getUniformlyRandomUnit();
 
         // first element of signature, \hat(R) in paper
-        GroupElement group2ElementHatR = pp.getGroup2ElementHatG().pow(exponentR);
+        GroupElement otherGroupElementR = pp.getOtherGroupGenerator().pow(exponentR);
 
-        GroupElement group1ElementS = sk.getPk().getGroup1ElementsYi()[0].op(pp.getGroup1ElementG().pow(sk.getExponentV())).pow(exponentR.inv());
+        GroupElement plaintextGroupElementS = sk.getPk().getGroupElementsYi()[0].op(pp.getPlaintextGroupGenerator().pow(sk.getExponentV())).pow(exponentR.inv());
 
         // {T_i}'s in paper
-        GroupElement[] group1ElementsTi = IntStream.range(0, messageBlock.length()).mapToObj(a -> sk.getPk().getGroup1ElementsYi()[a].pow(sk.getExponentV()).op(((GroupElementPlainText) messageBlock.get(a)).get()).pow(exponentR.inv()).compute())
+        GroupElement[] plaintextGroupElementsTi = IntStream.range(0, messageBlock.length()).mapToObj(a -> sk.getPk().getGroupElementsYi()[a].pow(sk.getExponentV()).op(((GroupElementPlainText) messageBlock.get(a)).get()).pow(exponentR.inv()).compute())
                 .toArray(GroupElement[]::new);
 
 /*        for (int i = 0; i < sk.getNumberOfMessages(); i++) {
@@ -136,11 +135,11 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
 
 
 
-        GroupElement sigmaHatR = group2ElementHatR.compute();
-        GroupElement sigmaS = group1ElementS.compute();
-        GroupElement[] sigmaTi = group1ElementsTi;
+        GroupElement sigmaHatR = otherGroupElementR.compute();
+        GroupElement sigmaS = plaintextGroupElementS.compute();
+        GroupElement[] sigmaTi = plaintextGroupElementsTi;
 
-        return new SPSGroth15Signature(group2ElementHatR, sigmaS, sigmaTi);
+        return new SPSGroth15Signature(sigmaHatR, sigmaS, sigmaTi);
     }
 
     @Override
@@ -166,26 +165,22 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
 
 
         // Check if verification equation of multi message signature scheme holds
-        // First pairing product equation
-        BilinearMap bilinearMap = pp.getBilinearMap();
-
-        GroupElement firstPPE = bilinearMap
-                .apply(sigma.getGroup1ElementSigma2S(), sigma.getGroup2ElementSigma1HatR());
-        GroupElement firstPPERHS = bilinearMap.apply(pk.getGroup1ElementsYi()[0], pp.getGroup2ElementHatG()).op(bilinearMap.apply(pp.getGroup1ElementG(), pk.group2ElementV));
+        GroupElement firstPPE = applyMap(sigma.getGroupElementSigma2S(), sigma.getGroupElementSigma1HatR());
+        GroupElement firstPPERHS = applyMap(pk.getGroupElementsYi()[0], pp.getOtherGroupGenerator()).op(applyMap(pp.getPlaintextGroupGenerator(), pk.groupElementV));
         firstPPE.compute();
         firstPPERHS.compute();
 
-        GroupElement secondPPE = bilinearMap.getGT().getNeutralElement();
+        GroupElement secondPPE = pp.getBilinearMap().getGT().getNeutralElement();
 
         for (int i = 0; i < pk.getNumberOfMessages(); i++) {
             secondPPE = secondPPE.op(
-                    bilinearMap.apply(sigma.getGroup1ElementSigma3Ti()[i], sigma.getGroup2ElementSigma1HatR()).inv()
+                    applyMap(sigma.getGroupElementSigma3Ti()[i], sigma.getGroupElementSigma1HatR()).inv()
                             .op(
-                                    bilinearMap.apply(pk.getGroup1ElementsYi()[i],pk.getGroup2ElementV())
+                                    applyMap(pk.getGroupElementsYi()[i],pk.getGroupElementV())
                                             .op(
-                                                    bilinearMap.apply(
+                                                    applyMap(
                                                             ((GroupElementPlainText) messageBlock.get(i)).get(),
-                                                            pp.getGroup2ElementHatG()
+                                                            pp.getOtherGroupGenerator()
                                                     )
                                             )
 
@@ -195,11 +190,23 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
         secondPPE.compute();
 
 
-        GroupElement neutral = bilinearMap.getGT().getNeutralElement();
+        GroupElement neutral = pp.getBilinearMap().getGT().getNeutralElement();
 
         return firstPPE.equals(firstPPERHS) && secondPPE.equals(neutral);
     }
 
+    /**
+     * Applies the bilinear map according to the type of the Groth15 SPS.
+     * @param plaintextGroupElement group element from the group where the plaintext/message is from
+     * @param otherGroupElement group element form the group where the plaintext/message is not from
+     */
+    public GroupElement applyMap(GroupElement plaintextGroupElement, GroupElement otherGroupElement){
+        if(pp.type == SPSGroth15PublicParametersGen.Groth15Type.type1){
+            return pp.getBilinearMap().apply(plaintextGroupElement, otherGroupElement);
+        }else{
+            return pp.getBilinearMap().apply(otherGroupElement, plaintextGroupElement);
+        }
+    }
 
     @Override
     public Representation getRepresentation() {
@@ -208,12 +215,12 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
 
     @Override
     public MessageBlock restorePlainText(Representation repr) {
-        return new MessageBlock(repr, r -> new GroupElementPlainText(r, pp.getBilinearMap().getG1()));
+        return new MessageBlock(repr, r -> new GroupElementPlainText(r, pp.getPlaintextGroupGenerator().getStructure()));
     }
 
     @Override
     public SPSGroth15Signature restoreSignature(Representation repr) {
-        return new SPSGroth15Signature(repr, this.pp.getBilinearMap().getG1(), this.pp.getBilinearMap().getG2());
+        return new SPSGroth15Signature(repr, this.pp.getPlaintextGroupGenerator().getStructure(), this.pp.getOtherGroupGenerator().getStructure());
     }
 
     @Override
@@ -223,7 +230,7 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
 
     @Override
     public SPSGroth15VerificationKey restoreVerificationKey(Representation repr) {
-        return new SPSGroth15VerificationKey(this.pp.getBilinearMap().getG1(), this.pp.getBilinearMap().getG2(), repr);
+        return new SPSGroth15VerificationKey(this.pp.getPlaintextGroupGenerator().getStructure(), this.pp.getOtherGroupGenerator().getStructure(), repr);
     }
 
     public SPSGroth15PublicParameters getPp() {
@@ -264,10 +271,10 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
 
         GroupElementPlainText[] msgBlock = new GroupElementPlainText[messageBlockLength];
         msgBlock[0] = new GroupElementPlainText(
-                pp.getGroup1ElementG().pow(pp.getZp().injectiveValueOf(bytes))
+                pp.getPlaintextGroupGenerator().pow(pp.getZp().injectiveValueOf(bytes))
         );
         for (int i = 1; i < msgBlock.length; i++) {
-            msgBlock[i] = new GroupElementPlainText(pp.getGroup1ElementG());
+            msgBlock[i] = new GroupElementPlainText(pp.getPlaintextGroupGenerator());
         }
 
         return new MessageBlock(msgBlock);

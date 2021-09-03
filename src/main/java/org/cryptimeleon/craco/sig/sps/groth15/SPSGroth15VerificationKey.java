@@ -19,24 +19,24 @@ import java.util.Objects;
 public class SPSGroth15VerificationKey implements VerificationKey {
 
     /**
-     * \{Y}_1, ..., {Y}_l \in G_1 in paper.
+     * \{Y}_1, ..., {Y}_l \in the same group as the plaintext in the paper.
      */
-    @Represented(restorer = "[G1]")
-    protected GroupElement[] group1ElementsYi;
+    @Represented(restorer = "[plaintextGroup]")
+    protected GroupElement[] groupElementsYi;
 
     /**
-     * V \in G_2 in paper.
+     * V \in the group where the plaintext is not from in the paper.
      */
-    @Represented(restorer = "G2")
-    protected GroupElement group2ElementV;
+    @Represented(restorer = "otherGroup")
+    protected GroupElement groupElementV;
 
 
     public SPSGroth15VerificationKey() {
         super();
     }
 
-    public SPSGroth15VerificationKey(Group groupG1, Group groupG2, Representation repr) {
-        new ReprUtil(this).register(groupG1,"G1").register(groupG2, "G2").deserialize(repr);
+    public SPSGroth15VerificationKey(Group plaintextGroup, Group otherGroup, Representation repr) {
+        new ReprUtil(this).register(plaintextGroup,"plaintextGroup").register(otherGroup, "otherGroup").deserialize(repr);
     }
 
     @Override
@@ -44,25 +44,25 @@ public class SPSGroth15VerificationKey implements VerificationKey {
         return ReprUtil.serialize(this);
     }
 
-    public GroupElement[] getGroup1ElementsYi() {
-        return group1ElementsYi;
+    public GroupElement[] getGroupElementsYi() {
+        return groupElementsYi;
     }
 
-    public void setGroup1ElementsYi(GroupElement[] group1ElementsYi) {
-        this.group1ElementsYi = group1ElementsYi;
+    public void setGroupElementsYi(GroupElement[] groupElementsYi) {
+        this.groupElementsYi = groupElementsYi;
     }
 
-    public GroupElement getGroup2ElementV() {
-        return group2ElementV;
+    public GroupElement getGroupElementV() {
+        return groupElementV;
     }
 
-    public void setGroup2ElementV(GroupElement group2ElementV) {
-        this.group2ElementV = group2ElementV;
+    public void setGroupElementV(GroupElement groupElementV) {
+        this.groupElementV = groupElementV;
     }
 
 
     public int getNumberOfMessages() {
-        return group1ElementsYi.length;
+        return groupElementsYi.length;
     }
 
 
@@ -71,12 +71,12 @@ public class SPSGroth15VerificationKey implements VerificationKey {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SPSGroth15VerificationKey that = (SPSGroth15VerificationKey) o;
-        return Arrays.equals(group1ElementsYi, that.group1ElementsYi)
-                && Objects.equals(group2ElementV, that.group2ElementV);
+        return Arrays.equals(groupElementsYi, that.groupElementsYi)
+                && Objects.equals(groupElementV, that.groupElementV);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(group1ElementsYi, group2ElementV);
+        return Objects.hash(groupElementsYi, groupElementV);
     }
 }

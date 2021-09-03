@@ -11,7 +11,6 @@ import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.groups.Group;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -24,32 +23,32 @@ public class SPSGroth15Signature implements Signature, UniqueByteRepresentable {
      * First group element of the signature in G_2.
      */
     @UniqueByteRepresented
-    @Represented(restorer = "G2")
-    protected GroupElement group2ElementSigma1HatR;
+    @Represented(restorer = "otherGroup")
+    protected GroupElement groupElementSigma1HatR;
 
     /**
      * Second group element of the signature in G_1.
      */
     @UniqueByteRepresented
-    @Represented(restorer = "G1")
-    protected GroupElement group1ElementSigma2S;
+    @Represented(restorer = "plaintextGroup")
+    protected GroupElement groupElementSigma2S;
 
     /**
      * Third group element of the signature in G_1.
      */
     @UniqueByteRepresented
-    @Represented(restorer = "[G1]")
-    protected GroupElement[] group1ElementSigma3Ti;
+    @Represented(restorer = "[plaintextGroup]")
+    protected GroupElement[] groupElementSigma3Ti;
 
-    public SPSGroth15Signature(Representation repr, Group groupG1, Group groupG2) {
-        new ReprUtil(this).register(groupG1, "G1").register(groupG2, "G2"). deserialize(repr);
+    public SPSGroth15Signature(Representation repr, Group plaintextGroup, Group otherGroup) {
+        new ReprUtil(this).register(plaintextGroup, "plaintextGroup").register(otherGroup, "otherGroup"). deserialize(repr);
     }
 
     public SPSGroth15Signature(GroupElement group2ElementSigma1HatR, GroupElement group1ElementSigma2S, GroupElement[] group1ElementSigma3Ti) {
         super();
-        this.group2ElementSigma1HatR = group2ElementSigma1HatR;
-        this.group1ElementSigma2S = group1ElementSigma2S;
-        this.group1ElementSigma3Ti = group1ElementSigma3Ti;
+        this.groupElementSigma1HatR = group2ElementSigma1HatR;
+        this.groupElementSigma2S = group1ElementSigma2S;
+        this.groupElementSigma3Ti = group1ElementSigma3Ti;
     }
 
     @Override
@@ -57,33 +56,33 @@ public class SPSGroth15Signature implements Signature, UniqueByteRepresentable {
         return ReprUtil.serialize(this);
     }
 
-    public GroupElement getGroup2ElementSigma1HatR() {
-        return group2ElementSigma1HatR;
+    public GroupElement getGroupElementSigma1HatR() {
+        return groupElementSigma1HatR;
     }
 
-    public void setGroup2ElementSigma1HatR(GroupElement group2ElementSigma1HatR) {
-        this.group2ElementSigma1HatR = group2ElementSigma1HatR;
+    public void setGroupElementSigma1HatR(GroupElement groupElementSigma1HatR) {
+        this.groupElementSigma1HatR = groupElementSigma1HatR;
     }
 
-    public GroupElement getGroup1ElementSigma2S() {
-        return group1ElementSigma2S;
+    public GroupElement getGroupElementSigma2S() {
+        return groupElementSigma2S;
     }
 
-    public void setGroup1ElementSigma2S(GroupElement group1ElementSigma2S) {
-        this.group1ElementSigma2S = group1ElementSigma2S;
+    public void setGroupElementSigma2S(GroupElement groupElementSigma2S) {
+        this.groupElementSigma2S = groupElementSigma2S;
     }
 
-    public GroupElement[] getGroup1ElementSigma3Ti() {
-        return group1ElementSigma3Ti;
+    public GroupElement[] getGroupElementSigma3Ti() {
+        return groupElementSigma3Ti;
     }
 
-    public void setGroup1ElementSigma3Ti(GroupElement[] group1ElementSigma3Ti) {
-        this.group1ElementSigma3Ti = group1ElementSigma3Ti;
+    public void setGroupElementSigma3Ti(GroupElement[] groupElementSigma3Ti) {
+        this.groupElementSigma3Ti = groupElementSigma3Ti;
     }
 
     @Override
     public String toString() {
-        return "SPSGroth15Signature [sigma_1_Hat_R=" + group2ElementSigma1HatR + ", sigma_2_S=" + group1ElementSigma2S +  ", sigma_3_T" + group1ElementSigma3Ti + "]";
+        return "SPSGroth15Signature [sigma_1_Hat_R=" + groupElementSigma1HatR + ", sigma_2_S=" + groupElementSigma2S +  ", sigma_3_T" + groupElementSigma3Ti + "]";
     }
 
     @Override
@@ -91,14 +90,14 @@ public class SPSGroth15Signature implements Signature, UniqueByteRepresentable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SPSGroth15Signature that = (SPSGroth15Signature) o;
-        return Objects.equals(group2ElementSigma1HatR, that.group2ElementSigma1HatR) &&
-                Objects.equals(group1ElementSigma2S, that.group1ElementSigma2S) &&
-                Arrays.equals(group1ElementSigma3Ti, that.group1ElementSigma3Ti);
+        return Objects.equals(groupElementSigma1HatR, that.groupElementSigma1HatR) &&
+                Objects.equals(groupElementSigma2S, that.groupElementSigma2S) &&
+                Arrays.equals(groupElementSigma3Ti, that.groupElementSigma3Ti);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(group2ElementSigma1HatR, group1ElementSigma2S, Arrays.hashCode(group1ElementSigma3Ti));
+        return Objects.hash(groupElementSigma1HatR, groupElementSigma2S, Arrays.hashCode(groupElementSigma3Ti));
     }
 
     @Override

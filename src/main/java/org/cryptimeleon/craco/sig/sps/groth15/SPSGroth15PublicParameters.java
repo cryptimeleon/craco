@@ -4,6 +4,7 @@ import org.cryptimeleon.craco.common.PublicParameters;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
+import org.cryptimeleon.math.structures.groups.Group;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearGroup;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearMap;
@@ -38,8 +39,11 @@ public class SPSGroth15PublicParameters implements PublicParameters {
     @Represented(restorer = "bilinearGroup::getG2")
     protected GroupElement group2ElementHatG;
 
+    @Represented
+    protected SPSGroth15PublicParametersGen.Groth15Type type;
 
-    public SPSGroth15PublicParameters(BilinearGroup bilinearGroup) {
+
+    public SPSGroth15PublicParameters(BilinearGroup bilinearGroup, SPSGroth15PublicParametersGen.Groth15Type type) {
         super();
         this.bilinearGroup = bilinearGroup;
         this.group1ElementG = this.bilinearGroup.getG1().getUniformlyRandomNonNeutral();
@@ -66,14 +70,6 @@ public class SPSGroth15PublicParameters implements PublicParameters {
         return bilinearGroup.getBilinearMap();
     }
 
-    public GroupElement getGroup1ElementG() {
-        return group1ElementG;
-    }
-
-    public GroupElement getGroup2ElementHatG() {
-        return group2ElementHatG;
-    }
-
     @Override
     public int hashCode() {
         return Objects.hash(bilinearGroup);
@@ -89,5 +85,23 @@ public class SPSGroth15PublicParameters implements PublicParameters {
         return Objects.equals(bilinearGroup, that.bilinearGroup)
                 && Objects.equals(group1ElementG, that.group1ElementG)
                 && Objects.equals(group2ElementHatG, that.group2ElementHatG);
+    }
+
+    public GroupElement getPlaintextGroupGenerator() {
+        if(type == SPSGroth15PublicParametersGen.Groth15Type.type1) {
+            return group1ElementG;
+        }
+        else{
+            return group2ElementHatG;
+        }
+    }
+
+    public GroupElement getOtherGroupGenerator() {
+        if(type == SPSGroth15PublicParametersGen.Groth15Type.type1) {
+            return group2ElementHatG;
+        }
+        else{
+            return group1ElementG;
+        }
     }
 }
