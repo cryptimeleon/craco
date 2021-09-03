@@ -37,7 +37,7 @@ public class SPSEQSignature implements Signature, UniqueByteRepresentable {
      */
     @UniqueByteRepresented
     @Represented(restorer = "G2")
-    protected GroupElement group1ElementSigma3HatY;
+    protected GroupElement group2ElementSigma3HatY;
 
     public SPSEQSignature(Representation repr, Group groupG1, Group groupG2) {
         new ReprUtil(this).register(groupG1, "G1").register(groupG2, "G2"). deserialize(repr);
@@ -47,7 +47,7 @@ public class SPSEQSignature implements Signature, UniqueByteRepresentable {
         super();
         this.group1ElementSigma1Z = group1ElementSigma1Z;
         this.group1ElementSigma2Y = group1ElementSigma2Y;
-        this.group1ElementSigma3HatY = group1ElementSigma3HatY;
+        this.group2ElementSigma3HatY = group1ElementSigma3HatY;
     }
 
     @Override
@@ -71,17 +71,17 @@ public class SPSEQSignature implements Signature, UniqueByteRepresentable {
         this.group1ElementSigma2Y = group1ElementSigma2Y;
     }
 
-    public GroupElement getGroup1ElementSigma3HatY() {
-        return group1ElementSigma3HatY;
+    public GroupElement getGroup2ElementSigma3HatY() {
+        return group2ElementSigma3HatY;
     }
 
-    public void setGroup1ElementSigma3HatY(GroupElement group1ElementSigma3HatY) {
-        this.group1ElementSigma3HatY = group1ElementSigma3HatY;
+    public void setGroup2ElementSigma3HatY(GroupElement group2ElementSigma3HatY) {
+        this.group2ElementSigma3HatY = group2ElementSigma3HatY;
     }
 
     @Override
     public String toString() {
-        return "SPSEQSignature [sigma_1_Z=" + group1ElementSigma1Z + ", sigma_2_Y=" + group1ElementSigma2Y +  ", sigma_3_Hat_Y" + group1ElementSigma3HatY + "]";
+        return "SPSEQSignature [sigma_1_Z=" + group1ElementSigma1Z + ", sigma_2_Y=" + group1ElementSigma2Y +  ", sigma_3_Hat_Y" + group2ElementSigma3HatY + "]";
     }
 
     @Override
@@ -91,12 +91,12 @@ public class SPSEQSignature implements Signature, UniqueByteRepresentable {
         SPSEQSignature that = (SPSEQSignature) o;
         return Objects.equals(group1ElementSigma1Z, that.group1ElementSigma1Z) &&
                 Objects.equals(group1ElementSigma2Y, that.group1ElementSigma2Y) &&
-                Objects.equals(group1ElementSigma3HatY, that.group1ElementSigma3HatY);
+                Objects.equals(group2ElementSigma3HatY, that.group2ElementSigma3HatY);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(group1ElementSigma1Z, group1ElementSigma2Y, group1ElementSigma3HatY);
+        return Objects.hash(group1ElementSigma1Z, group1ElementSigma2Y, group2ElementSigma3HatY);
     }
 
     @Override
