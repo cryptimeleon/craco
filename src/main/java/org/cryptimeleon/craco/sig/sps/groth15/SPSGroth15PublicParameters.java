@@ -23,6 +23,9 @@ import java.util.stream.IntStream;
 
 public class SPSGroth15PublicParameters implements PublicParameters {
 
+    @Represented
+    protected SPSGroth15PublicParametersGen.Groth15Type type;
+
     /**
      * The bilinear group containing map e in the paper.
       */
@@ -47,9 +50,6 @@ public class SPSGroth15PublicParameters implements PublicParameters {
     @Represented(restorer = "[plaintextGroup]")
     protected GroupElement[] groupElementsYi;
 
-    @Represented
-    protected SPSGroth15PublicParametersGen.Groth15Type type;
-
     public SPSGroth15PublicParameters(BilinearGroup bilinearGroup, SPSGroth15PublicParametersGen.Groth15Type type, int numberOfMessages) {
         super();
         this.bilinearGroup = bilinearGroup;
@@ -63,8 +63,10 @@ public class SPSGroth15PublicParameters implements PublicParameters {
                 .toArray(GroupElement[]::new);
     }
 
-    public SPSGroth15PublicParameters(Representation repr, Group plaintextGroup) {
-        new ReprUtil(this).register(plaintextGroup, "plaintextGroup").deserialize(repr);
+    public SPSGroth15PublicParameters(Representation repr) {
+        new ReprUtil(this)
+                .register(r -> type == SPSGroth15PublicParametersGen.Groth15Type.type1 ? bilinearGroup.getG1().restoreElement(r) : bilinearGroup.getG2().restoreElement(r), "plaintextGroup")
+                .deserialize(repr);
     }
 
     @Override

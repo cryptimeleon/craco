@@ -67,7 +67,7 @@ public class SPSGroth15SignatureSchemeTest {
 
         // public parameter representation test
         SPSGroth15PublicParameters ppTest;
-        ppTest = new SPSGroth15PublicParameters(pp.getRepresentation(), pp.getPlaintextGroupGenerator().getStructure());
+        ppTest = new SPSGroth15PublicParameters(pp.getRepresentation());
         assertEquals(pp, ppTest);
     }
 
