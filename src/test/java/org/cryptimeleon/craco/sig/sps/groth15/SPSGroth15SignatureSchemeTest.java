@@ -39,7 +39,7 @@ public class SPSGroth15SignatureSchemeTest {
         for (SPSGroth15PublicParametersGen.Groth15Type type : SPSGroth15PublicParametersGen.Groth15Type.values()) {
             for (int i = 0; i < 1; i++) {
                 SignatureSchemeParams params =
-                        SPSGroth15SignatureSchemeTestParamGenerator.generateParams(SECURITY_PARAMETER, SPSGroth15PublicParametersGen.Groth15Type.type1, NUM_MESSAGES);
+                        SPSGroth15SignatureSchemeTestParamGenerator.generateParams(SECURITY_PARAMETER, type, NUM_MESSAGES);
                 this.scheme = (SPSGroth15SignatureScheme) params.getSignatureScheme();
                 this.keyPair = params.getKeyPair1();
                 this.wrongKeyPair = params.getKeyPair2();
@@ -67,7 +67,7 @@ public class SPSGroth15SignatureSchemeTest {
 
         // public parameter representation test
         SPSGroth15PublicParameters ppTest;
-        ppTest = new SPSGroth15PublicParameters(pp.getRepresentation());
+        ppTest = new SPSGroth15PublicParameters(pp.getRepresentation(), pp.getPlaintextGroupGenerator().getStructure());
         assertEquals(pp, ppTest);
     }
 

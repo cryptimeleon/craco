@@ -31,13 +31,13 @@ public class SignatureStandaloneReprTests extends StandaloneReprSubTest {
     }
 
     public void testSPSGroth15() {
-        SPSGroth15PublicParameters pp = new SPSGroth15PublicParametersGen().generatePublicParameter(128, SPSGroth15PublicParametersGen.Groth15Type.type1, true);
+        SPSGroth15PublicParameters pp = new SPSGroth15PublicParametersGen().generatePublicParameter(128, SPSGroth15PublicParametersGen.Groth15Type.type1, 20, true);
         SPSGroth15SignatureScheme signatureScheme = new SPSGroth15SignatureScheme(pp);
 
         test(signatureScheme);
         test(pp);
 
-        pp = new SPSGroth15PublicParametersGen().generatePublicParameter(128, SPSGroth15PublicParametersGen.Groth15Type.type2, true);
+        pp = new SPSGroth15PublicParametersGen().generatePublicParameter(128, SPSGroth15PublicParametersGen.Groth15Type.type2, 20,true);
         signatureScheme = new SPSGroth15SignatureScheme(pp);
 
         test(signatureScheme);

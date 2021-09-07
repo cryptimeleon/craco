@@ -23,15 +23,12 @@ public class SPSGroth15SigningKey implements SigningKey {
     @Represented(restorer="Zp")
     protected ZpElement exponentV;
 
-    @Represented(restorer = "scheme::restoreVerificationKey")
-    protected SPSGroth15VerificationKey pk;
-
     public SPSGroth15SigningKey() {
         super();
     }
 
-    public SPSGroth15SigningKey(Representation repr, Zp zp, SPSGroth15SignatureScheme scheme) {
-        new ReprUtil(this).register(zp, "Zp").register(scheme, "scheme").deserialize(repr);
+    public SPSGroth15SigningKey(Representation repr, Zp zp) {
+        new ReprUtil(this).register(zp, "Zp").deserialize(repr);
     }
 
     @Override
@@ -47,29 +44,16 @@ public class SPSGroth15SigningKey implements SigningKey {
         this.exponentV = exponentV;
     }
 
-    public int getNumberOfMessages() {
-        return pk.getNumberOfMessages();
-    }
-
-    public SPSGroth15VerificationKey getPk() {
-        return pk;
-    }
-
-    public void setPk(SPSGroth15VerificationKey pk) {
-        this.pk = pk;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SPSGroth15SigningKey that = (SPSGroth15SigningKey) o;
-        return Objects.equals(exponentV, that.exponentV)
-                && Objects.equals(pk, that.pk);
+        return Objects.equals(exponentV, that.exponentV);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(exponentV, pk);
+        return Objects.hash(exponentV);
     }
 }

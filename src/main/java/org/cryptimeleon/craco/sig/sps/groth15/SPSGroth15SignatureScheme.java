@@ -57,29 +57,22 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
     public SignatureKeyPair<SPSGroth15VerificationKey, SPSGroth15SigningKey> generateKeyPair(int numberOfMessages) {
         // Do actual key generation (cf. KeyGen algorithm)
         Zp zp = pp.getZp();
-        GroupElement plaintextGroupElement = pp.getPlaintextGroupGenerator();
 
-        // check if number of messages l > 0
-        if (!(numberOfMessages > 0)) {
-            throw new IllegalArgumentException("Number of messages l has to be greater 0, but it is: " + numberOfMessages);
+        // check if number of messages is equal to the number determined by public parameters pp
+        if (!(numberOfMessages == this.pp.getNumberOfMessages())) {
+            throw new IllegalArgumentException("Number of messages l has to be the same as in public parameters, but it is: " + numberOfMessages);
         }
-
-        // Y_i's in paper
-        GroupElement[] group1ElementsYi = IntStream.range(0, numberOfMessages).mapToObj(a -> plaintextGroupElement.getStructure().getUniformlyRandomElement())
-                .toArray(GroupElement[]::new);
 
         // Z_p element v in paper
         ZpElement exponentV = zp.getUniformlyRandomElement();
 
         // Set public key ( verification key)
         SPSGroth15VerificationKey pk = new SPSGroth15VerificationKey();
-        pk.setGroupElementsYi(group1ElementsYi);
         pk.setGroupElementV(pp.getOtherGroupGenerator().pow(exponentV));
 
         // Set secret key (signing key)
         SPSGroth15SigningKey sk = new SPSGroth15SigningKey();
         sk.setExponentV(exponentV);
-        sk.setPk(pk);
 
         return new SignatureKeyPair<>(pk, sk);
     }
@@ -100,9 +93,9 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
 
         SPSGroth15SigningKey sk = (SPSGroth15SigningKey) secretKey;
 
-        if (messageBlock.length() != sk.getNumberOfMessages()) {
+        if (messageBlock.length() != pp.getNumberOfMessages()) {
             throw new IllegalArgumentException("Not a valid block size for this scheme. Has to be "
-                    + sk.getNumberOfMessages() + ", but it is" + messageBlock.length());
+                    + pp.getNumberOfMessages() + ", but it is" + messageBlock.length());
         }
         if (!(messageBlock.length() > 0)) {
             throw new IllegalArgumentException("Number of messages l has to be greater 0, but it is: " + messageBlock.length());
@@ -115,10 +108,10 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
         // first element of signature, \hat(R) in paper
         GroupElement otherGroupElementR = pp.getOtherGroupGenerator().pow(exponentR);
 
-        GroupElement plaintextGroupElementS = sk.getPk().getGroupElementsYi()[0].op(pp.getPlaintextGroupGenerator().pow(sk.getExponentV())).pow(exponentR.inv());
+        GroupElement plaintextGroupElementS = pp.getGroupElementsYi()[0].op(pp.getPlaintextGroupGenerator().pow(sk.getExponentV())).pow(exponentR.inv());
 
         // {T_i}'s in paper
-        GroupElement[] plaintextGroupElementsTi = IntStream.range(0, messageBlock.length()).mapToObj(a -> sk.getPk().getGroupElementsYi()[a].pow(sk.getExponentV()).op(((GroupElementPlainText) messageBlock.get(a)).get()).pow(exponentR.inv()).compute())
+        GroupElement[] plaintextGroupElementsTi = IntStream.range(0, messageBlock.length()).mapToObj(a -> pp.getGroupElementsYi()[a].pow(sk.getExponentV()).op(((GroupElementPlainText) messageBlock.get(a)).get()).pow(exponentR.inv()).compute())
                 .toArray(GroupElement[]::new);
 
 /*        for (int i = 0; i < sk.getNumberOfMessages(); i++) {
@@ -166,17 +159,17 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
 
         // Check if verification equation of multi message signature scheme holds
         GroupElement firstPPE = applyMap(sigma.getGroupElementSigma2S(), sigma.getGroupElementSigma1HatR());
-        GroupElement firstPPERHS = applyMap(pk.getGroupElementsYi()[0], pp.getOtherGroupGenerator()).op(applyMap(pp.getPlaintextGroupGenerator(), pk.groupElementV));
+        GroupElement firstPPERHS = applyMap(pp.getGroupElementsYi()[0], pp.getOtherGroupGenerator()).op(applyMap(pp.getPlaintextGroupGenerator(), pk.groupElementV));
         firstPPE.compute();
         firstPPERHS.compute();
 
         GroupElement secondPPE = pp.getBilinearMap().getGT().getNeutralElement();
 
-        for (int i = 0; i < pk.getNumberOfMessages(); i++) {
+        for (int i = 0; i < pp.getNumberOfMessages(); i++) {
             secondPPE = secondPPE.op(
                     applyMap(sigma.getGroupElementSigma3Ti()[i], sigma.getGroupElementSigma1HatR()).inv()
                             .op(
-                                    applyMap(pk.getGroupElementsYi()[i],pk.getGroupElementV())
+                                    applyMap(pp.getGroupElementsYi()[i],pk.getGroupElementV())
                                             .op(
                                                     applyMap(
                                                             ((GroupElementPlainText) messageBlock.get(i)).get(),
@@ -188,7 +181,6 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
             );
         }
         secondPPE.compute();
-
 
         GroupElement neutral = pp.getBilinearMap().getGT().getNeutralElement();
 
@@ -225,7 +217,7 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
 
     @Override
     public SPSGroth15SigningKey restoreSigningKey(Representation repr) {
-        return new SPSGroth15SigningKey(repr, this.pp.getZp(), this);
+        return new SPSGroth15SigningKey(repr, this.pp.getZp());
     }
 
     @Override
@@ -257,12 +249,20 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
 
     @Override
     public MessageBlock mapToPlaintext(byte[] bytes, VerificationKey pk) {
-        return mapToPlaintext(bytes, ((SPSGroth15VerificationKey) pk).getNumberOfMessages());
+        if(pp == null)
+        {
+            throw new NullPointerException("Number of messages is stored in public parameters but they are not set");
+        }
+        return mapToPlaintext(bytes, pp.getNumberOfMessages());
     }
 
     @Override
     public MessageBlock mapToPlaintext(byte[] bytes, SigningKey sk) {
-        return mapToPlaintext(bytes, ((SPSGroth15SigningKey) sk).getNumberOfMessages());
+        if(pp == null)
+        {
+            throw new NullPointerException("Number of messages is stored in public parameters but they are not set");
+        }
+        return mapToPlaintext(bytes, pp.getNumberOfMessages());
     }
 
     private MessageBlock mapToPlaintext(byte[] bytes, int messageBlockLength) {
@@ -282,7 +282,7 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
 
     @Override
     public int getMaxNumberOfBytesForMapToPlaintext() {
-        return (pp.getBilinearMap().getG1().size().bitLength() - 1) / 8;
+        return (pp.getPlaintextGroupGenerator().getStructure().size().bitLength() - 1) / 8;
     }
 
 }
