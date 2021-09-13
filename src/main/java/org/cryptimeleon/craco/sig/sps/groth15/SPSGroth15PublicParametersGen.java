@@ -20,9 +20,13 @@ public class SPSGroth15PublicParametersGen {
             group = new BarretoNaehrigBilinearGroup(securityParameter);
         }
 
-        return new SPSGroth15PublicParameters(group, type, numberOfMessages);
-
+        return generatePublicParameter(group, type, numberOfMessages);
     }
+
+    public SPSGroth15PublicParameters generatePublicParameter(BilinearGroup bilinearGroup, Groth15Type type, int numberOfMessages) {
+        return new SPSGroth15PublicParameters(bilinearGroup, type, numberOfMessages);
+    }
+
 
     public enum Groth15Type{
         type1, type2;

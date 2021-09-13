@@ -192,7 +192,7 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
      * @param plaintextGroupElement group element from the group where the plaintext/message is from
      * @param otherGroupElement group element form the group where the plaintext/message is not from
      */
-    public GroupElement applyMap(GroupElement plaintextGroupElement, GroupElement otherGroupElement){
+    GroupElement applyMap(GroupElement plaintextGroupElement, GroupElement otherGroupElement){
         if(pp.type == SPSGroth15PublicParametersGen.Groth15Type.type1){
             return pp.getBilinearMap().apply(plaintextGroupElement, otherGroupElement);
         }else{
