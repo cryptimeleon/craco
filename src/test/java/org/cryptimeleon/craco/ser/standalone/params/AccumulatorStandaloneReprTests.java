@@ -7,6 +7,6 @@ import org.cryptimeleon.math.structures.groups.elliptic.BilinearGroup;
 
 public class AccumulatorStandaloneReprTests extends StandaloneReprSubTest {
     public void accumulator() {
-        test(NguyenAccumulatorScheme.setup(new DebugBilinearGroup(128, BilinearGroup.Type.TYPE_3), 3));
+        test(NguyenAccumulatorScheme.setup(new DebugBilinearGroup(BilinearGroup.Type.TYPE_3), 3));
     }
 }

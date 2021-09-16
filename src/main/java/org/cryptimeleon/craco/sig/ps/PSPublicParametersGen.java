@@ -1,5 +1,6 @@
 package org.cryptimeleon.craco.sig.ps;
 
+import org.cryptimeleon.math.random.RandomGenerator;
 import org.cryptimeleon.math.structures.groups.debug.DebugBilinearGroup;;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearGroup;
 import org.cryptimeleon.math.structures.groups.elliptic.type3.bn.BarretoNaehrigBilinearGroup;
@@ -13,7 +14,7 @@ public class PSPublicParametersGen {
     public PSPublicParameters generatePublicParameter(int securityParameter, boolean debugMode) {
         BilinearGroup group;
         if (debugMode) {
-            group = new DebugBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_3);
+            group = new DebugBilinearGroup(RandomGenerator.getRandomPrime(securityParameter), BilinearGroup.Type.TYPE_3);
         } else {
             group = new BarretoNaehrigBilinearGroup(securityParameter);
         }
