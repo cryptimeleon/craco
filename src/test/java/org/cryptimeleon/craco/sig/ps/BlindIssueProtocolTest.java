@@ -16,7 +16,7 @@ public class BlindIssueProtocolTest {
     @Test
     public void testBlindSign() {
         //Set up the signature scheme
-        BilinearGroup group = new DebugBilinearGroup(128, BilinearGroup.Type.TYPE_3);
+        BilinearGroup group = new DebugBilinearGroup(BilinearGroup.Type.TYPE_3);
         Zn zn = group.getZn();
         PSExtendedSignatureScheme scheme = new PSExtendedSignatureScheme(new PSPublicParameters(group));
         SignatureKeyPair<PSExtendedVerificationKey, PSSigningKey> keyPair = scheme.generateKeyPair(6);

@@ -31,7 +31,7 @@ public class NguyenAccumulatorTest {
     public void setup() {
         // maximum of accumulatable identities
         int numberIdentities = 100;
-        BilinearGroup group = new DebugBilinearGroup(128, BilinearGroup.Type.TYPE_3);
+        BilinearGroup group = new DebugBilinearGroup(BilinearGroup.Type.TYPE_3);
         scheme = NguyenAccumulatorScheme.setup(group, numberIdentities);
         zn = group.getZn();
 
