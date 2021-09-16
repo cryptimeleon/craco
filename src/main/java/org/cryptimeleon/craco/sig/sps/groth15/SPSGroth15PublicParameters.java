@@ -67,7 +67,7 @@ public class SPSGroth15PublicParameters implements PublicParameters {
 
     public SPSGroth15PublicParameters(Representation repr) {
         new ReprUtil(this)
-                .register(r -> type == SPSGroth15PublicParametersGen.Groth15Type.type1 ? bilinearGroup.getG1().restoreElement(r) : bilinearGroup.getG2().restoreElement(r), "plaintextGroup")
+                .register(r -> type == SPSGroth15PublicParametersGen.Groth15Type.type1 ? bilinearGroup.getG1().restoreVector(r) : bilinearGroup.getG2().restoreVector(r), "plaintextGroup")
                 .deserialize(repr);
         precompute();
     }
