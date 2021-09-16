@@ -6,6 +6,7 @@ import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.groups.Group;
 import org.cryptimeleon.math.structures.groups.GroupElement;
+import org.cryptimeleon.math.structures.groups.cartesian.GroupElementVector;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearGroup;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearMap;
 import org.cryptimeleon.math.structures.rings.zn.Zp;
@@ -47,8 +48,8 @@ public class SPSGroth15PublicParameters implements PublicParameters {
     /**
      * \{Y}_1, ..., {Y}_l \in the same group as the plaintext in the paper.
      */
-    @Represented(restorer = "[plaintextGroup]")
-    protected GroupElement[] groupElementsYi;
+    @Represented(restorer = "plaintextGroup")
+    protected GroupElementVector groupElementsYi;
 
     public SPSGroth15PublicParameters(BilinearGroup bilinearGroup, SPSGroth15PublicParametersGen.Groth15Type type, int numberOfMessages) {
         super();
@@ -59,14 +60,22 @@ public class SPSGroth15PublicParameters implements PublicParameters {
 
         // Y_i's in paper
         GroupElement plaintextGroupElement = getPlaintextGroupGenerator();
-        this.groupElementsYi = IntStream.range(0, numberOfMessages).mapToObj(a -> plaintextGroupElement.getStructure().getUniformlyRandomElement())
-                .toArray(GroupElement[]::new);
+        this.groupElementsYi = plaintextGroupElement.getStructure().getUniformlyRandomElements(numberOfMessages);
+
+        precompute();
     }
 
     public SPSGroth15PublicParameters(Representation repr) {
         new ReprUtil(this)
                 .register(r -> type == SPSGroth15PublicParametersGen.Groth15Type.type1 ? bilinearGroup.getG1().restoreElement(r) : bilinearGroup.getG2().restoreElement(r), "plaintextGroup")
                 .deserialize(repr);
+        precompute();
+    }
+
+    private void precompute() {
+        group1ElementG.precomputePow();
+        group2ElementHatG.precomputePow();
+        groupElementsYi.precomputePow();
     }
 
     @Override
@@ -85,12 +94,8 @@ public class SPSGroth15PublicParameters implements PublicParameters {
         return bilinearGroup.getBilinearMap();
     }
 
-    public GroupElement[] getGroupElementsYi() {
+    public GroupElementVector getGroupElementsYi() {
         return groupElementsYi;
-    }
-
-    public void setGroupElementsYi(GroupElement[] groupElementsYi) {
-        this.groupElementsYi = groupElementsYi;
     }
 
     public GroupElement getPlaintextGroupGenerator() {
@@ -112,12 +117,12 @@ public class SPSGroth15PublicParameters implements PublicParameters {
     }
 
     public int getNumberOfMessages() {
-        return groupElementsYi.length;
+        return groupElementsYi.length();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(Arrays.hashCode(groupElementsYi),bilinearGroup);
+        return Objects.hash(groupElementsYi, bilinearGroup);
     }
 
     @Override
@@ -130,6 +135,6 @@ public class SPSGroth15PublicParameters implements PublicParameters {
         return Objects.equals(bilinearGroup, that.bilinearGroup)
                 && Objects.equals(group1ElementG, that.group1ElementG)
                 && Objects.equals(group2ElementHatG, that.group2ElementHatG)
-                && Arrays.equals(groupElementsYi, that.groupElementsYi);
+                && Objects.equals(groupElementsYi, that.groupElementsYi);
     }
 }

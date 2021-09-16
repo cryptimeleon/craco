@@ -9,6 +9,7 @@ import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.groups.Group;
 import org.cryptimeleon.math.structures.groups.GroupElement;
+import org.cryptimeleon.math.structures.groups.cartesian.GroupElementVector;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearMap;
 import org.cryptimeleon.math.structures.rings.zn.Zp;
 import org.cryptimeleon.math.structures.rings.zn.Zp.ZpElement;
@@ -108,31 +109,15 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
         // first element of signature, \hat(R) in paper
         GroupElement otherGroupElementR = pp.getOtherGroupGenerator().pow(exponentR);
 
-        GroupElement plaintextGroupElementS = pp.getGroupElementsYi()[0].op(pp.getPlaintextGroupGenerator().pow(sk.getExponentV())).pow(exponentR.inv());
+        GroupElement plaintextGroupElementS = pp.getGroupElementsYi().get(0).op(pp.getPlaintextGroupGenerator().pow(sk.getExponentV())).pow(exponentR.inv());
 
         // {T_i}'s in paper
-        GroupElement[] plaintextGroupElementsTi = IntStream.range(0, messageBlock.length()).mapToObj(a -> pp.getGroupElementsYi()[a].pow(sk.getExponentV()).op(((GroupElementPlainText) messageBlock.get(a)).get()).pow(exponentR.inv()).compute())
-                .toArray(GroupElement[]::new);
-
-/*        for (int i = 0; i < sk.getNumberOfMessages(); i++) {
-            if (!(messageBlock.get(i) instanceof GroupElementPlainText)
-                    || messageBlock.get(i) == null
-                    || !((GroupElementPlainText) messageBlock.get(i)).get().getStructure()
-                    .equals(pp.getBilinearMap().getG1())) {
-                throw new IllegalArgumentException("Not a valid plaintext for this scheme");
-            }
-            group1ElementHatR = group1ElementHatR.op(
-                    ((GroupElementPlainText) messageBlock.get(i)).get().pow(sk.getExponentV()[i])
-            );
-        }*/
-
-
+        GroupElementVector plaintextGroupElementsTi = pp.getGroupElementsYi().pow(sk.getExponentV()).op(messageBlock.map(pt -> ((GroupElementPlainText) pt).get())).pow(exponentR.inv()).compute();
 
         GroupElement sigmaHatR = otherGroupElementR.compute();
         GroupElement sigmaS = plaintextGroupElementS.compute();
-        GroupElement[] sigmaTi = plaintextGroupElementsTi;
 
-        return new SPSGroth15Signature(sigmaHatR, sigmaS, sigmaTi);
+        return new SPSGroth15Signature(sigmaHatR, sigmaS, plaintextGroupElementsTi);
     }
 
     @Override
@@ -159,32 +144,16 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
 
         // Check if verification equation of multi message signature scheme holds
         GroupElement firstPPE = applyMap(sigma.getGroupElementSigma2S(), sigma.getGroupElementSigma1HatR());
-        GroupElement firstPPERHS = applyMap(pp.getGroupElementsYi()[0], pp.getOtherGroupGenerator()).op(applyMap(pp.getPlaintextGroupGenerator(), pk.groupElementV));
+        GroupElement firstPPERHS = applyMap(pp.getGroupElementsYi().get(0), pp.getOtherGroupGenerator()).op(applyMap(pp.getPlaintextGroupGenerator(), pk.groupElementV));
         firstPPE.compute();
         firstPPERHS.compute();
 
-        GroupElement secondPPE = pp.getBilinearMap().getGT().getNeutralElement();
-
-        for (int i = 0; i < pp.getNumberOfMessages(); i++) {
-            secondPPE = secondPPE.op(
-                    applyMap(sigma.getGroupElementSigma3Ti()[i], sigma.getGroupElementSigma1HatR()).inv()
-                            .op(
-                                    applyMap(pp.getGroupElementsYi()[i],pk.getGroupElementV())
-                                            .op(
-                                                    applyMap(
-                                                            ((GroupElementPlainText) messageBlock.get(i)).get(),
-                                                            pp.getOtherGroupGenerator()
-                                                    )
-                                            )
-
-                            )
-            );
-        }
-        secondPPE.compute();
-
-        GroupElement neutral = pp.getBilinearMap().getGT().getNeutralElement();
-
-        return firstPPE.equals(firstPPERHS) && secondPPE.equals(neutral);
+        boolean secondPPE = sigma.getGroupElementSigma3Ti().map(ti -> applyMap(ti, sigma.getGroupElementSigma1HatR()), GroupElementVector::new)
+                .equals(
+                    pp.getGroupElementsYi().map(yi -> applyMap(yi, pk.getGroupElementV()), GroupElementVector::new)
+                    .op(messageBlock.map(mi -> applyMap(((GroupElementPlainText) mi).get(), pp.getOtherGroupGenerator()))).compute()
+                );
+        return firstPPE.equals(firstPPERHS) && secondPPE;
     }
 
     /**

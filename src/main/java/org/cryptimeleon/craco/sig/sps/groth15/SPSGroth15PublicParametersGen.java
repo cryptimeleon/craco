@@ -1,5 +1,6 @@
 package org.cryptimeleon.craco.sig.sps.groth15;
 
+import org.cryptimeleon.math.random.RandomGenerator;
 import org.cryptimeleon.math.structures.groups.debug.DebugBilinearGroup;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearGroup;
 import org.cryptimeleon.math.structures.groups.elliptic.type3.bn.BarretoNaehrigBilinearGroup;
@@ -15,7 +16,7 @@ public class SPSGroth15PublicParametersGen {
     public SPSGroth15PublicParameters generatePublicParameter(int securityParameter, Groth15Type type,int numberOfMessages , boolean debugMode) {
         BilinearGroup group;
         if (debugMode) {
-            group = new DebugBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_3);
+            group = new DebugBilinearGroup(RandomGenerator.getRandomPrime(securityParameter), BilinearGroup.Type.TYPE_3);
         } else {
             group = new BarretoNaehrigBilinearGroup(securityParameter);
         }
