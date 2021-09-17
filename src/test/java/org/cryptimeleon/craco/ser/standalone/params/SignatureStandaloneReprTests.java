@@ -1,5 +1,8 @@
 package org.cryptimeleon.craco.ser.standalone.params;
 
+import org.cryptimeleon.craco.sig.sps.groth15.SPSGroth15PublicParameters;
+import org.cryptimeleon.craco.sig.sps.groth15.SPSGroth15PublicParametersGen;
+import org.cryptimeleon.craco.sig.sps.groth15.SPSGroth15SignatureScheme;
 import org.cryptimeleon.math.serialization.standalone.StandaloneReprSubTest;
 import org.cryptimeleon.craco.sig.bbs.BBSBKeyGen;
 import org.cryptimeleon.craco.sig.bbs.BBSBPublicParameter;
@@ -22,6 +25,20 @@ public class SignatureStandaloneReprTests extends StandaloneReprSubTest {
     public void testSPSEQ() {
         SPSEQPublicParameters pp = new SPSEQPublicParametersGen().generatePublicParameter(128, true);
         SPSEQSignatureScheme signatureScheme = new SPSEQSignatureScheme(pp);
+
+        test(signatureScheme);
+        test(pp);
+    }
+
+    public void testSPSGroth15() {
+        SPSGroth15PublicParameters pp = new SPSGroth15PublicParametersGen().generatePublicParameter(128, SPSGroth15PublicParametersGen.Groth15Type.type1, 20, true);
+        SPSGroth15SignatureScheme signatureScheme = new SPSGroth15SignatureScheme(pp);
+
+        test(signatureScheme);
+        test(pp);
+
+        pp = new SPSGroth15PublicParametersGen().generatePublicParameter(128, SPSGroth15PublicParametersGen.Groth15Type.type2, 20,true);
+        signatureScheme = new SPSGroth15SignatureScheme(pp);
 
         test(signatureScheme);
         test(pp);
