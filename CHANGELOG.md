@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0]
+
+### Added
+- Added simplified version of Goth SPS from ASIACRYPT'15 `SPSGroth15SignatureScheme` (see [#85](https://github.com/cryptimeleon/craco/issues/85))
+
+### Changed
+- Changed uses `Zn#getInteger()` from Math library to `RingElement#asInteger()` to address removal of the former from the Math library
+- Moved general methods in interface `StructurePreservingSignatureEQScheme` to new interface `MultiMessageStructurePreservingSignatureScheme` to enable implementations of structure-preserving sigature schemes that are not on equivilance classes
+
 ## [2.1.0]
 
 ### Added
@@ -34,7 +43,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial release
 
-[Unreleased]: https://github.com/cryptimeleon/craco/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/cryptimeleon/craco/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/cryptimeleon/craco/compare/v2.1.0...v3.0.0
 [2.1.0]: https://github.com/cryptimeleon/craco/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/cryptimeleon/craco/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/cryptimeleon/craco/releases/tag/v1.0.0

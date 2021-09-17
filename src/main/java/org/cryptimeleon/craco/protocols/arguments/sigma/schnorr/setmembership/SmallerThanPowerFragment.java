@@ -57,7 +57,7 @@ public class SmallerThanPowerFragment extends DelegateFragment {
         Zn.ZnElement memberVal = this.member.evaluate(pp.getZn(), externalWitnesses);
 
         //Decompose memberVal into digits
-        BigInteger[] digits = IntegerRing.decomposeIntoDigits(memberVal.getInteger(), BigInteger.valueOf(base), power);
+        BigInteger[] digits = IntegerRing.decomposeIntoDigits(memberVal.asInteger(), BigInteger.valueOf(base), power);
 
         //Add digits to witnesses
         for (int i=0; i<power; i++)

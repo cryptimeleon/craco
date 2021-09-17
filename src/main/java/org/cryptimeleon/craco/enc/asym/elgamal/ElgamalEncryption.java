@@ -60,7 +60,7 @@ public class ElgamalEncryption implements AsymmetricEncryptionScheme {
         Zn zn_random = new Zn(sizeG);
         ZnElement random_zn_element = zn_random.getUniformlyRandomElement();
 
-        return this.encrypt(plainText, publicKey, random_zn_element.getInteger());
+        return this.encrypt(plainText, publicKey, random_zn_element.asInteger());
     }
 
     /**

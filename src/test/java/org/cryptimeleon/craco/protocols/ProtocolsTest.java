@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class ProtocolsTest {
     public static Group group = new DebugGroup("test", RandomGenerator.getRandomPrime(80));
-    public static BilinearGroup bilGroup = new DebugBilinearGroup(128, BilinearGroup.Type.TYPE_3,1);
+    public static BilinearGroup bilGroup = new DebugBilinearGroup(BilinearGroup.Type.TYPE_3);
     protected static final GroupElement g = group.getGenerator();
     protected static final Zn.ZnElement x = group.getUniformlyRandomExponent();
     protected static final GroupElement h = g.pow(x);

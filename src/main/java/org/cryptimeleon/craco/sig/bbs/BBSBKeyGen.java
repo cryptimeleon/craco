@@ -1,5 +1,6 @@
 package org.cryptimeleon.craco.sig.bbs;
 
+import org.cryptimeleon.math.random.RandomGenerator;
 import org.cryptimeleon.math.structures.groups.debug.DebugBilinearGroup;;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearGroup;
 import org.cryptimeleon.math.structures.groups.elliptic.type1.supersingular.SupersingularBilinearGroup;
@@ -26,7 +27,7 @@ public class BBSBKeyGen {
      */
     public BBSBPublicParameter doKeyGen(int securityParameter, boolean debugMode) {
         if (debugMode) {
-            group = new DebugBilinearGroup(securityParameter, BilinearGroup.Type.TYPE_1);
+            group = new DebugBilinearGroup(RandomGenerator.getRandomPrime(securityParameter), BilinearGroup.Type.TYPE_1);
         } else {
             group = new SupersingularBilinearGroup(securityParameter);
         }

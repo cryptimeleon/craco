@@ -153,13 +153,13 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
         SPSEQSignature sigma = (SPSEQSignature) signature;
 
         // invalid signature if sigma_2_Y == 1_{G_1} or if sigma_2_hat_Y == 1_{G_2}
-        if (sigma.getGroup1ElementSigma2Y().isNeutralElement() || sigma.getGroup1ElementSigma3HatY().isNeutralElement())
+        if (sigma.getGroup1ElementSigma2Y().isNeutralElement() || sigma.getGroup2ElementSigma3HatY().isNeutralElement())
             return false;
 
         // Check if verification equation of multi message signature scheme holds
         // First pairing product equation: e(Z,\hat{Y})^{-1} * \prod_{i \in [l]} e(M_i,\hat{X}_i) = 1_{G_T}
         GroupElement firstPPE = pp.getBilinearMap()
-                .apply(sigma.getGroup1ElementSigma1Z(), sigma.getGroup1ElementSigma3HatY())
+                .apply(sigma.getGroup1ElementSigma1Z(), sigma.getGroup2ElementSigma3HatY())
                 .inv();
         for (int i = 0; i < pk.getNumberOfMessages(); i++) {
             firstPPE = firstPPE.op(
@@ -173,7 +173,7 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
 
         // Second pairing product equation: e(P,\hat{Y})^{-1} * e(Y,\hat{P}) = 1_{G_T}
         GroupElement secondPPE = pp.getBilinearMap()
-                .apply(pp.getGroup1ElementP(), sigma.getGroup1ElementSigma3HatY())
+                .apply(pp.getGroup1ElementP(), sigma.getGroup2ElementSigma3HatY())
                 .inv();
         secondPPE = secondPPE.op(
                 pp.getBilinearMap().apply(
@@ -208,7 +208,7 @@ public class SPSEQSignatureScheme implements StructurePreservingSignatureEQSchem
         SPSEQSignature sigma = (SPSEQSignature) signature;
         GroupElement sigmaZ = sigma.getGroup1ElementSigma1Z().pow(psi.mul(mu)).compute();
         GroupElement sigmaY = sigma.getGroup1ElementSigma2Y().pow(psiInv).compute();
-        GroupElement sigmaHatY = sigma.getGroup1ElementSigma3HatY().pow(psiInv).compute();
+        GroupElement sigmaHatY = sigma.getGroup2ElementSigma3HatY().pow(psiInv).compute();
 
         return new SPSEQSignature(sigmaZ, sigmaY, sigmaHatY);
     }
