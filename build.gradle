@@ -2,12 +2,13 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'signing'
+    id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
 }
 
 group = 'org.cryptimeleon'
 archivesBaseName = project.name
 boolean isRelease = project.hasProperty("release")
-version = '3.0.0'  + (isRelease ? "" : "-SNAPSHOT")
+version = '3.0.1'  + (isRelease ? "" : "-SNAPSHOT")
 
 
 sourceCompatibility = 1.8
@@ -22,7 +23,7 @@ repositories {
     mavenCentral()
 }
 
-def mathVersionNoSuffix = '3.0.0'
+def mathVersionNoSuffix = '3.0.1'
 
 dependencies {
 
@@ -178,18 +179,15 @@ publishing {
             }
         }
     }
+}
+
+nexusPublishing {
     repositories {
-        maven {
-            credentials {
-                username = System.getenv("OSSRH_USERNAME")
-                password = System.getenv("OSSRH_TOKEN")
-            }
-            name = 'OSSRH'
-            def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-            url = version.endsWith('SNAPSHOT') ? '' : releasesRepoUrl
+        sonatype {
+            username = System.getenv("OSSRH_USERNAME")
+            password = System.getenv("OSSRH_TOKEN")
         }
     }
-
 }
 
 signing {
