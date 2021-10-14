@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'signing'
+    id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
 }
 
 group = 'org.cryptimeleon'
@@ -178,18 +179,15 @@ publishing {
             }
         }
     }
+}
+
+nexusPublishing {
     repositories {
-        maven {
-            credentials {
-                username = System.getenv("OSSRH_USERNAME")
-                password = System.getenv("OSSRH_TOKEN")
-            }
-            name = 'OSSRH'
-            def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-            url = version.endsWith('SNAPSHOT') ? '' : releasesRepoUrl
+        sonatype {
+            username = System.getenv("OSSRH_USERNAME")
+            password = System.getenv("OSSRH_TOKEN")
         }
     }
-
 }
 
 signing {
