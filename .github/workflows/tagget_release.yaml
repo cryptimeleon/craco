@@ -14,7 +14,7 @@ jobs:
         with:
           java-version: 1.8
       - name: Publish to the Maven Central Repository
-        run: ./gradlew publish -PcheckoutIfCloned -Prelease
+        run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository -PcheckoutIfCloned -Prelease
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
