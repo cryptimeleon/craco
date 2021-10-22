@@ -23,7 +23,7 @@ repositories {
     mavenCentral()
 }
 
-def mathVersionNoSuffix = '3.0.1'
+def mathVersionNoSuffix = '3.+'
 
 dependencies {
 
