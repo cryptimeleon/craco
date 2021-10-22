@@ -66,7 +66,7 @@ To add the newest Craco version as a dependency, add this to your project's POM:
 <dependency>
     <groupId>org.cryptimeleon</groupId>
     <artifactId>craco</artifactId>
-    <version>3.+</version>
+    <version>[3.0,)</version>
 </dependency>
 ```
 
