@@ -517,17 +517,20 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
 
         private WitnessValues buildWitnessValues() {
             //Populate the witnessForVariables map with znWitnesses and groupElemWitnesses (not possible earlier because user may have added variables by name before subprotocolSpec has been set up with the concrete SchnorrVariable objects)
-            znWitnesses.forEach((name, val) -> witnessesForVariables.put(name, new SchnorrZnVariableValue(val, (SchnorrZnVariable) subprotocolSpec.getVariable(name))));
-            groupElemWitnesses.forEach((name, val) -> witnessesForVariables.put(name, new SchnorrGroupElemVariableValue(val, (SchnorrGroupElemVariable) subprotocolSpec.getVariable(name))));
+            znWitnesses.forEach((name, val) -> {
+                if (!subprotocolSpec.containsVariable(name))
+                    throw new IllegalStateException("Variable "+name+" has not been registered in the subprotocol spec, but its witness has been given in the prover spec");
+                witnessesForVariables.put(name, new SchnorrZnVariableValue(val, (SchnorrZnVariable) subprotocolSpec.getVariable(name)));
+            });
+            groupElemWitnesses.forEach((name, val) -> {
+                if (!subprotocolSpec.containsVariable(name))
+                    throw new IllegalStateException("Variable "+name+" has not been registered in the subprotocol spec, but its witness has been given in the prover spec");
+                witnessesForVariables.put(name, new SchnorrGroupElemVariableValue(val, (SchnorrGroupElemVariable) subprotocolSpec.getVariable(name)));
+            });
 
             subprotocolSpec.forEachVariable((name, var) -> {
                 if (!witnessesForVariables.containsKey(name))
                     throw new IllegalStateException("Witness for " + name + "is missing");
-            });
-
-            witnessesForVariables.forEach((name, val) -> {
-                if (!subprotocolSpec.containsVariable(val.getVariable()))
-                    throw new IllegalStateException("Variable "+name+" has not registered, but its witness has been given");
             });
 
             return new WitnessValues(witnessesForVariables);
