@@ -530,7 +530,7 @@ public abstract class SendThenDelegateFragment implements SchnorrFragment {
 
             subprotocolSpec.forEachVariable((name, var) -> {
                 if (!witnessesForVariables.containsKey(name))
-                    throw new IllegalStateException("Witness for " + name + "is missing");
+                    throw new IllegalStateException("Witness for " + name + " is missing");
             });
 
             return new WitnessValues(witnessesForVariables);
