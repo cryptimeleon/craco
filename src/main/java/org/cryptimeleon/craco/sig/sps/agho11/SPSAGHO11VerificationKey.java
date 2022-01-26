@@ -32,7 +32,7 @@ public class SPSAGHO11VerificationKey implements VerificationKey {
     /**
      * V \in G_2 in the paper.
      */
-    @Represented(restorer = "[G2]")
+    @Represented(restorer = "G2")
     protected GroupElement groupElementV;
 
     /**
@@ -44,7 +44,7 @@ public class SPSAGHO11VerificationKey implements VerificationKey {
     /**
      * Z \in G_2 in the paper.
      */
-    @Represented(restorer = "[G2]")
+    @Represented(restorer = "G2")
     protected GroupElement groupElementZ;
 
 

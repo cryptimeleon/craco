@@ -22,7 +22,7 @@ public class SPSAGHO11SigningKey implements SigningKey {
     /**
      * u_1, ..., u_k_N in the paper
      */
-    @Represented(restorer = "Zp")
+    @Represented(restorer = "[Zp]")
     protected Zp.ZpElement exponentsU[];
 
     /**
@@ -34,7 +34,7 @@ public class SPSAGHO11SigningKey implements SigningKey {
     /**
      * w_1, ..., w_k_M in the paper
      */
-    @Represented(restorer = "Zp")
+    @Represented(restorer = "[Zp]")
     protected Zp.ZpElement exponentsW[];
 
     /**

@@ -39,10 +39,17 @@ public class SPSAGHO11PublicParameters implements PublicParameters {
     @Represented(restorer = "bilinearGroup::getG2")
     protected GroupElement group2ElementH;
 
+    /**
+     * The number of expected G1/G2 elements per message respectively
+     * */
+    @Represented(restorer = "[messageLengths]")
+    protected Integer[] messageLengths;
 
-    public SPSAGHO11PublicParameters(BilinearGroup bilinearGroup){
+
+    public SPSAGHO11PublicParameters(BilinearGroup bilinearGroup, Integer[] messageBlockLengths){
         super();
         this.bilinearGroup = bilinearGroup;
+        this.messageLengths = messageBlockLengths;
         this.group1ElementG = this.bilinearGroup.getG1().getUniformlyRandomNonNeutral();
         this.group2ElementH = this.bilinearGroup.getG2().getUniformlyRandomNonNeutral();
     }
@@ -73,8 +80,15 @@ public class SPSAGHO11PublicParameters implements PublicParameters {
 
     public Group getGT() {return bilinearGroup.getGT(); }
 
+    public Integer[] getMessageLengths(){ return messageLengths; }
+
     @Override
     public Representation getRepresentation() { return ReprUtil.serialize(this); }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bilinearGroup, group1ElementG, group2ElementH, messageLengths);
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -4,15 +4,19 @@ import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.sig.*;
+import org.cryptimeleon.math.serialization.ListRepresentation;
+import org.cryptimeleon.math.serialization.ObjectRepresentation;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.groups.GroupElement;
+import org.cryptimeleon.math.structures.groups.cartesian.GroupElementVector;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearMap;
 import org.cryptimeleon.math.structures.rings.zn.Zp;
 import org.cryptimeleon.math.structures.rings.zn.Zp.ZpElement;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 /**
@@ -23,7 +27,7 @@ import java.util.stream.IntStream;
  * https://www.iacr.org/archive/crypto2011/68410646/68410646.pdf
  *
  * */
-public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreservingSignatureScheme {
+public class SPSAGHO11SignatureScheme implements StandardMultiGroupMultiMessageStructurePreservingSignatureScheme {
 
     /**
      * The public parameters used by the scheme
@@ -43,22 +47,37 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
         new ReprUtil(this).deserialize(repr);
     }
 
+    @Override
+    public SignatureKeyPair<SPSAGHO11VerificationKey, SPSAGHO11SigningKey> generateKeyPair(int numberOfMessages)
+    {
+        return generateKeyPair(numberOfMessages, 2);
+    }
 
     @Override
-    public SignatureKeyPair<SPSAGHO11VerificationKey, SPSAGHO11SigningKey> generateKeyPair(int numberOfMessages) {
+    public SignatureKeyPair<SPSAGHO11VerificationKey, SPSAGHO11SigningKey> generateKeyPair(int... messageBlockLengths) {
+
         Zp zp = pp.getZp();
 
-        //TODO adapt this for 2D Message Vectors?
-        // check if number of messages is equal to the number determined by public parameters pp
-        //if (!(numberOfMessages == this.pp.getNumberOfMessages())) {
-        //    throw new IllegalArgumentException("Number of messages l has to be the same as in public parameters, but it is: " + numberOfMessages);
-        //}
+        if(!(messageBlockLengths.length == 2)){
+            throw new IllegalArgumentException(String.format(
+                    "The signature scheme AGHO11 expects to sign elements" +
+                            " on two vectors G^M, H^N, but received: {0} vectors", messageBlockLengths.length)
+            );
+        }
 
-        //TODO put actual number of messages in PPs
-        ZpElement[] exponentsU = IntStream.range(0, numberOfMessages).mapToObj(x -> zp.getUniformlyRandomNonzeroElement())
+        for (int i = 0; i < messageBlockLengths.length; i++) {
+            if(!(messageBlockLengths[i] == pp.getMessageLengths()[i])){
+                throw new IllegalArgumentException("The given messageBlockLengths do not match the public parameters");
+            }
+        }
+
+        ZpElement[] exponentsU = IntStream.range(0, messageBlockLengths[1]).mapToObj( //note that u_1 ... u_k_N
+                x -> zp.getUniformlyRandomNonzeroElement())
                 .toArray(ZpElement[]::new);
-        ZpElement[] exponentsW = IntStream.range(0, numberOfMessages).mapToObj(x -> zp.getUniformlyRandomNonzeroElement())
+        ZpElement[] exponentsW = IntStream.range(0, messageBlockLengths[0]).mapToObj( //and that w_1 ... w_k_M
+                x -> zp.getUniformlyRandomNonzeroElement())
                 .toArray(ZpElement[]::new);
+
         Zp.ZpElement exponentV = zp.getUniformlyRandomNonzeroElement();
         Zp.ZpElement exponentZ = zp.getUniformlyRandomNonzeroElement();
 
@@ -66,9 +85,11 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
         SPSAGHO11VerificationKey pk = new SPSAGHO11VerificationKey();
 
         // Calculate Vectors
-        GroupElement[] groupElementsU = Arrays.stream(exponentsU).map(x -> pp.getG1GroupGenerator().pow(x).compute())
+        GroupElement[] groupElementsU = Arrays.stream(exponentsU).map(
+                x -> pp.getG1GroupGenerator().pow(x).compute())
                 .toArray(GroupElement[]::new);
-        GroupElement[] groupElementsW = Arrays.stream(exponentsW).map(x -> pp.getG2GroupGenerator().pow(x).compute())
+        GroupElement[] groupElementsW = Arrays.stream(exponentsW).map(
+                x -> pp.getG2GroupGenerator().pow(x).compute())
                 .toArray(GroupElement[]::new);
 
         pk.setGroupElementsU(groupElementsU);
@@ -86,9 +107,23 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
     @Override
     public Signature sign(PlainText plainText, SigningKey secretKey) {
 
+        if(!(plainText instanceof MessageBlock)){
+            throw new IllegalArgumentException("Not a valid plain text for this scheme");
+        }
+
+        if(!(((MessageBlock) plainText).length() == 2)){
+            throw new IllegalArgumentException("Not a valid plain text for this scheme.");
+        }
+
+        if(!(secretKey instanceof SPSAGHO11SigningKey)){
+            throw new IllegalArgumentException("Not a valid signing key for this scheme");
+        }
+
+        //TODO check if the message structure corresponds with the pps
+
         //The scheme signs messages on G^(k_M) x H^(k_N), so we need a MessageBlock containing 2 MessageBlocks
         MessageBlock containerBlock = (MessageBlock) plainText;
-        MessageBlock messageGElements = (MessageBlock) containerBlock.get(0); //TODO this NEEDS Exception handling
+        MessageBlock messageGElements = (MessageBlock) containerBlock.get(0);
         MessageBlock messageHElements = (MessageBlock) containerBlock.get(1);
 
         int k_M = messageGElements.length();
@@ -103,23 +138,27 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
         //calculate signature components
         GroupElement sigma1R = pp.getG1GroupGenerator().pow(r).compute();
 
-        //TODO I have no idea if this is correct. Oh well...
-        GroupElement sigma2S = pp.getG1GroupGenerator().getStructure().getNeutralElement();
+        // sub is actually needed here
+        GroupElement sigma2S1 = pp.getG1GroupGenerator().pow(sk.getExponentZ().sub(r.mul(sk.getExponentV())));
+
+        GroupElement sigma2S2 = pp.getG1GroupGenerator().getStructure().getNeutralElement();
+
         for (int i = 0; i < k_M; i++) {
-            sigma2S = sigma2S.op(
+            sigma2S2 = sigma2S2.op(
                     ((GroupElementPlainText) messageGElements.get(i)).get() // M_i
-                            .pow(pp.getZp().getZeroElement().sub(sk.getExponentsW()[i])) // ^(-w_i)
+                            .pow(sk.getExponentsW()[i].neg()) // ^(-w_i)
             );
         }
-        sigma2S = sigma2S.pow(sk.getExponentZ().sub(r.mul(sk.getExponentV())));
+
+        GroupElement sigma2S = sigma2S1.op(sigma2S2);
+
         sigma2S.compute();
 
-        //TODO Also of questionable quality...
         GroupElement sigma3T = pp.getG2GroupGenerator().getStructure().getNeutralElement();
         for (int i = 0; i < k_N; i++) {
             sigma3T = sigma3T.op(
                     ((GroupElementPlainText) messageHElements.get(i)).get() // N_i
-                            .pow(pp.getZp().getZeroElement().sub(sk.getExponentsU()[i])) // ^(-u_i)
+                            .pow(sk.getExponentsU()[i].neg()) // ^(-u_i)
             );
         }
         sigma3T = sigma3T.op(pp.getG2GroupGenerator()); // * H
@@ -132,7 +171,22 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
     @Override
     public Boolean verify(PlainText plainText, Signature signature, VerificationKey publicKey) {
 
-        //TODO exception handling
+        if(!(plainText instanceof MessageBlock)){
+            throw new IllegalArgumentException("Not a valid plain text for this scheme");
+        }
+
+        if(!(((MessageBlock) plainText).length() == 2)){
+            throw new IllegalArgumentException("Not a valid plain text for this scheme.");
+        }
+
+        if(!(signature instanceof SPSAGHO11Signature)){
+            throw new IllegalArgumentException("Not a valid signature for this scheme");
+        }
+
+        if(!(publicKey instanceof SPSAGHO11VerificationKey)){
+            throw new IllegalArgumentException("Not a valid verification key for this scheme");
+        }
+
         MessageBlock containerBlock = (MessageBlock) plainText;
         MessageBlock messageGElements = (MessageBlock) containerBlock.get(0);
         MessageBlock messageHElements = (MessageBlock) containerBlock.get(1);
@@ -200,8 +254,17 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
 
     @Override
     public PlainText restorePlainText(Representation repr) {
-        //TODO this is taken from the Groth15 implementation. Not sure if it fits here
-        return new MessageBlock(repr, r -> new GroupElementPlainText(r, pp.getG1GroupGenerator().getStructure()));
+        // interpret repr as list of to message block representations (one for G1 elements and one for G2 elements)
+        ListRepresentation list = (ListRepresentation) repr;
+
+        Representation g1Elements = (Representation) list.get(0);
+        Representation g2Elements = (Representation) list.get(1);
+
+        // pull the actual group elements from the representations
+        MessageBlock g1 = new MessageBlock(g1Elements, r -> new GroupElementPlainText(r, pp.getG1GroupGenerator().getStructure()));
+        MessageBlock g2 = new MessageBlock(g2Elements, r -> new GroupElementPlainText(r, pp.getG2GroupGenerator().getStructure()));
+
+        return new MessageBlock(g1, g2);
     }
 
     @Override
@@ -225,22 +288,73 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
 
 
     @Override
-    public PlainText mapToPlaintext(byte[] bytes, VerificationKey pk) {
-        return null; //TODO
+    public MessageBlock mapToPlaintext(byte[] bytes, VerificationKey pk) {
+
+        if(pp == null){
+            throw new NullPointerException("Number of messages is stored in public parameters but they are not set");
+        }
+
+        return mapToPlaintext(bytes, pp.getMessageLengths()[0]);
     }
 
     @Override
-    public PlainText mapToPlaintext(byte[] bytes, SigningKey sk) {
-        return null; //TODO
+    public MessageBlock mapToPlaintext(byte[] bytes, SigningKey sk) {
+
+        if(pp == null){
+            throw new NullPointerException("Number of messages is stored in public parameters but they are not set");
+        }
+
+        return mapToPlaintext(bytes, pp.getMessageLengths()[0]);
+    }
+
+    private MessageBlock mapToPlaintext(byte[] bytes, int messageBlockLength){
+        // returns (P^m, P, ..., P) where m = Z_p.injectiveValueOf(bytes).
+
+        GroupElementPlainText[] msgBlock = new GroupElementPlainText[messageBlockLength];
+        msgBlock[0] = new GroupElementPlainText(
+            pp.getG1GroupGenerator().pow(pp.getZp().injectiveValueOf(bytes))
+        );
+
+        for (int i = 1; i < msgBlock.length; i++) {
+            msgBlock[i] = new GroupElementPlainText(pp.getG1GroupGenerator());
+        }
+
+        return new MessageBlock(new MessageBlock(msgBlock), new MessageBlock());
     }
 
     @Override
     public int getMaxNumberOfBytesForMapToPlaintext() {
-        return 0; //TODO
+
+        if(pp == null){
+            throw new NullPointerException("Number of messages is stored in public parameters but they are not set");
+        }
+
+        //TODO what?
+        return (pp.getG1GroupGenerator().getStructure().size().bitLength() - 1) / 8;
     }
 
     @Override
     public Representation getRepresentation() {
         return ReprUtil.serialize(this);
+    }
+
+
+    @Override
+    public int hashCode() {
+        final int prime = 41;
+        int result = 1;
+        result = prime * result + ((pp == null) ? 0 : pp.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(!(o instanceof SPSAGHO11SignatureScheme))
+            return false;
+
+        SPSAGHO11SignatureScheme other = (SPSAGHO11SignatureScheme) o;
+
+        return Objects.equals(this.pp, other.pp);
+
     }
 }
