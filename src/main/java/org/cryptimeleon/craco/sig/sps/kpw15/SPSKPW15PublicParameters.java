@@ -42,7 +42,7 @@ public class SPSKPW15PublicParameters implements PublicParameters {
      * The number of expected G_1 elements per message
      * */
     @Represented(restorer = "messageLength")
-    protected int messageLength;
+    protected Integer messageLength;
 
     public SPSKPW15PublicParameters(BilinearGroup bilinearGroup, int messageLength){
         super();

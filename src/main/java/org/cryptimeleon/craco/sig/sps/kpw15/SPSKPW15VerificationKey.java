@@ -55,9 +55,19 @@ public class SPSKPW15VerificationKey implements VerificationKey {
                                    Vector<GroupElement> C1,
                                    Vector<GroupElement> C,
                                    GroupElement A) {
-        this.C0 = (GroupElement[]) C0.stream().toArray();
-        this.C1 = (GroupElement[]) C1.stream().toArray();
-        this.C = (GroupElement[]) C.stream().toArray();
+        this(
+                C0.stream().toArray(GroupElement[]::new),
+                C1.stream().toArray(GroupElement[]::new),
+                C.stream().toArray(GroupElement[]::new),
+                A
+        );
+    }
+
+    public SPSKPW15VerificationKey(GroupElement[] C0, GroupElement[] C1,
+                                   GroupElement[] C,  GroupElement A) {
+        this.C0 = C0;
+        this.C1 = C1;
+        this.C = C;
         this.A = A;
     }
 
@@ -102,8 +112,6 @@ public class SPSKPW15VerificationKey implements VerificationKey {
     @Override
     public Representation getRepresentation() { return ReprUtil.serialize(this); }
 
-    @Override
-    public int hashCode() { return Objects.hash(C0,C1,C,A); }
 
     @Override
     public boolean equals(Object o) {
@@ -111,10 +119,22 @@ public class SPSKPW15VerificationKey implements VerificationKey {
         if (o == null || getClass() != o.getClass()) return false;
 
         SPSKPW15VerificationKey that = (SPSKPW15VerificationKey) o;
-        return Arrays.equals(C0, that.C0)
+
+        return this.hashCode() == that.hashCode(); //TODO why won't the objects validate??
+
+        /*return Arrays.equals(C0, that.C0)
                 && Arrays.equals(C1, that.C1)
                 && Objects.equals(C, that.C)
-                && Objects.equals(A, that.A);
+                && Objects.equals(A, that.A);*/
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(A);
+        result = 31 * result + Arrays.hashCode(C0);
+        result = 31 * result + Arrays.hashCode(C1);
+        result = 31 * result + Arrays.hashCode(C);
+        return result;
     }
 
 }

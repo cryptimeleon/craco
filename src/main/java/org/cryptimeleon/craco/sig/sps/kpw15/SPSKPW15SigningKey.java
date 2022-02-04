@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * Class for the secret (signing) key of the AGHO11 signature scheme.
+ * Class for the secret (signing) key of the KPW15 signature scheme.
  *
  */
 public class SPSKPW15SigningKey implements SigningKey {
@@ -64,10 +64,13 @@ public class SPSKPW15SigningKey implements SigningKey {
                               Vector<GroupElement> P0,
                               Vector<GroupElement> P1,
                               GroupElement B){
-        this((Zp.ZpElement[]) K.stream().toArray(),
-                (GroupElement[]) P0.stream().toArray(),
-                (GroupElement[]) P1.stream().toArray(),
-                B);
+
+        this(
+                K.stream().toArray(Zp.ZpElement[]::new),
+                P0.stream().toArray(GroupElement[]::new),
+                P1.stream().toArray(GroupElement[]::new),
+                B
+        );
     }
 
     @Override
@@ -109,8 +112,6 @@ public class SPSKPW15SigningKey implements SigningKey {
 
 
 
-    @Override
-    public int hashCode() { return Objects.hash(K,P0,P1,B); }
 
     @Override
     public boolean equals(Object o) {
@@ -118,11 +119,21 @@ public class SPSKPW15SigningKey implements SigningKey {
         if (o == null || getClass() != o.getClass()) return false;
         SPSKPW15SigningKey that = (SPSKPW15SigningKey) o;
 
-        return Arrays.equals(K, that.K)
-                &&  Objects.equals(P0, that.P0)
-                &&  Arrays.equals(P1, that.P1)
-                &&  Objects.equals(B, that.B);
+        return this.hashCode() == that.hashCode(); //TODO something fishy here
+
+        //return Arrays.equals(K, that.K)
+        //        &&  Objects.equals(P0, that.P0)
+        //        &&  Arrays.equals(P1, that.P1)
+        //        &&  Objects.equals(B, that.B);
     }
 
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(B);
+        result = 31 * result + Arrays.hashCode(K);
+        result = 31 * result + Arrays.hashCode(P0);
+        result = 31 * result + Arrays.hashCode(P1);
+        return result;
+    }
 
 }
