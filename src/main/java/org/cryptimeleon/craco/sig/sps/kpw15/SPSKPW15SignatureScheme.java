@@ -242,7 +242,7 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
 
 
         return evaluateFirstPPE(sigma1, sigma2, sigma3, message, C, C0, C1, pk.getA())
-                && evaluateSecondPPE(sigma2, sigma.getGroup2ElementSigma4U(), sigma3, pk.getA());
+                && evaluateSecondPPE(sigma2, sigma.getGroup2ElementSigma4U(), sigma3);
     }
 
     private boolean evaluateFirstPPE(GroupElementVector sigma1,
@@ -285,7 +285,7 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
         return ppe1lhs.equals(ppe1rhs);
     }
 
-    private boolean evaluateSecondPPE(GroupElementVector sigma2, GroupElement sigma4, GroupElementVector sigma3, GroupElement A) {
+    private boolean evaluateSecondPPE(GroupElementVector sigma2, GroupElement sigma4, GroupElementVector sigma3) {
 
         BilinearMap bMap = pp.getBilinearMap();
 
