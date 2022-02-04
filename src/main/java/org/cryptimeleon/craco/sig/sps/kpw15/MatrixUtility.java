@@ -6,6 +6,9 @@ import org.cryptimeleon.math.structures.groups.cartesian.GroupElementVector;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearMap;
 import org.cryptimeleon.math.structures.rings.zn.Zp.ZpElement;
 
+/**
+ * Performs the simple matrix operations required by the KPW15 SPS scheme.
+ * */
 public class MatrixUtility {
 
     /**
@@ -33,7 +36,7 @@ public class MatrixUtility {
         for (int r = 1; r <= rowsA; r++) {
             for (int c = 1; c <= columnsB; c++) {
 
-                ZpElement value = B[0].getStructure().getOneElement();
+                ZpElement value = B[0].getStructure().getZeroElement(); //TODO check if this is correct
 
                 for (int i = 1; i <= columnsA; i++) {
                     value = value.add(
@@ -47,19 +50,16 @@ public class MatrixUtility {
         return multiplied;
     }
 
-    public static Vector<ZpElement> matrixMul(Vector<ZpElement> A, int rowsA, int columnsA,
-                                              Vector<ZpElement> B, int rowsB, int columnsB) {
-
-        return new Vector<ZpElement>(matrixMul(A.stream().toArray(ZpElement[]::new),rowsA, columnsA,
-                A.stream().toArray(ZpElement[]::new), rowsB, columnsB));
-    }
-
+    /**
+     * Kiltz et al. define e(A,B) for two matrices as AxB.
+     * We apply the bilinear map to each row/column in order to calculate the result
+     * */
     public static GroupElementVector matrixMul( BilinearMap bMap,
                                                 GroupElementVector A, int rowsA, int columnsA,
                                                 GroupElementVector B, int rowsB, int columnsB) {
         //check if matrices can be multiplied
         if(A.length() != rowsA * columnsA || B.length() != rowsB * columnsB) {
-            throw new IllegalArgumentException("The given vectors length does not match its matrix dimensions" );
+            throw new IllegalArgumentException("The given vectors length does not match its matrix dimensions");
         }
 
         if(columnsA != rowsB) {
@@ -94,9 +94,10 @@ public class MatrixUtility {
             }
         }
 
+        //TODO test optimization
+
         return new GroupElementVector(multiplied);
     }
-
 
     /**
      * Calculate a linear index for the given matrix position

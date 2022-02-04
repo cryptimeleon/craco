@@ -11,7 +11,6 @@ import org.cryptimeleon.math.structures.cartesian.Vector;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 import org.cryptimeleon.math.structures.groups.cartesian.GroupElementVector;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearMap;
-import org.cryptimeleon.math.structures.rings.RingElement;
 import org.cryptimeleon.math.structures.rings.zn.Zp;
 import org.cryptimeleon.math.structures.rings.zn.Zp.ZpElement;
 
@@ -19,6 +18,20 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
+/**
+ * A simplified implementation of the SPS scheme originally presented in [1] by Kiltz et al.
+ * Signs a vector of n G1 group elements.
+ * <p>
+ * Bilinear map type: 3
+ * <p>
+ * [1] Kiltz, E.,Pan, J., Wee, H.:
+ * Structure-Preserving Signatures from Standard Assumptions, Revisited
+ * https://eprint.iacr.org/2015/604.pdf
+ * <p>
+ * [2] Sakai, Y., Attrapadung, N., Hanaoka, G.:
+ * Attribute-Based Signatures for Circuits from Bilinear Map
+ * https://eprint.iacr.org/2016/242.pdf
+ */
 public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingSignatureScheme {
 
     /**
@@ -193,7 +206,45 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
 
         GroupElement sigma4 = pp.getG2GroupGenerator().pow(r1).compute();
 
+        System.out.println("check sigma1: " + checkSigma1(sigma1, message, sk.getK(), r0, r1, sk.getP0(), sk.getP1()));
+
         return new SPSKPW15Signature(sigma1, sigma2, sigma3, sigma4);
+    }
+
+    private boolean checkSigma1(GroupElement[] sigma1, GroupElement[] paddedMessage, ZpElement[] K, ZpElement r0, ZpElement r1, GroupElement[] P0, GroupElement[] P1 ) {
+
+        // n = 1
+        // padded message^T (1 x 2) x K (2 x 2) -> 1 x 2
+
+        GroupElement[] lhs = new GroupElement[1 * 2];
+
+        lhs[0] = paddedMessage[0].pow(K[0]).op(paddedMessage[1].pow(K[1])).compute();
+        lhs[1] = paddedMessage[0].pow(K[2]).op(paddedMessage[1].pow(K[3])).compute();
+
+        // r0 (P0 + r1 * P1)
+
+        GroupElement[] r1P1 = new GroupElement[1 * 2];
+
+        r1P1[0] = P1[0].pow(r1).compute();
+        r1P1[1] = P1[1].pow(r1).compute();
+
+        GroupElement[] P0r1P1 = new GroupElement[2];
+
+        P0r1P1[0] = P0[0].op(r1P1[0]).compute();
+        P0r1P1[1] = P0[1].op(r1P1[1]).compute();
+
+        GroupElement[] rhs = new GroupElement[2];
+
+        rhs[0] = P0r1P1[0].pow(r0).compute();
+        rhs[1] = P0r1P1[1].pow(r0).compute();
+
+        GroupElement[] checkSig = new GroupElement[2];
+
+        checkSig[0] = lhs[0].op(rhs[0]).compute();
+        checkSig[1] = lhs[1].op(rhs[1]).compute();
+
+
+        return sigma1[0].equals(checkSig[0]) && sigma1[1].equals(checkSig[1]);
     }
 
     @Override
@@ -264,7 +315,6 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
                 sigma1, 1, 2,
                 new GroupElementVector(pp.getG2GroupGenerator(), A), 2, 1
                 ).compute();
-
 
         GroupElementVector ppe1rhs1 = MatrixUtility.matrixMul(
                 bMap,
