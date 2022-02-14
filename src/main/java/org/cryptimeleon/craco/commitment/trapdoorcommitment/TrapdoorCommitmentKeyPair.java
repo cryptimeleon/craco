@@ -1,11 +1,13 @@
-package org.cryptimeleon.craco.commitment;
+package org.cryptimeleon.craco.commitment.trapdoorcommitment;
+
+import org.cryptimeleon.craco.commitment.OpenValue;
 
 import java.util.Objects;
 
 /**
- * Holds a key pair consisting of a trapdoor key, as well as an commitment key
+ * Holds a key pair consisting of a trapdoor key, as well as a commitment key
  * */
-public class TrapdoorCommitmentKeyPair<OpenValueType extends OpenValue, TrapdoorValueType extends TrapdoorValue> {
+public class TrapdoorCommitmentKeyPair<OpenValueType extends OpenValue, TrapdoorValueType extends TrapdoorKey> {
 
     private final OpenValueType commitmentKey;
 
