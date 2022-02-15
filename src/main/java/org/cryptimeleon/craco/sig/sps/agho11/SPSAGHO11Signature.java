@@ -41,7 +41,9 @@ public class SPSAGHO11Signature implements Signature, UniqueByteRepresentable {
         new ReprUtil(this).register(groupG1, "G1").register(groupG2, "G2"). deserialize(repr);
     }
 
-    public SPSAGHO11Signature(GroupElement group1ElementSigma1R, GroupElement group1ElementSigma2S, GroupElement group2ElementSigma3T) {
+    public SPSAGHO11Signature(GroupElement group1ElementSigma1R,
+                              GroupElement group1ElementSigma2S,
+                              GroupElement group2ElementSigma3T) {
         super();
         this.group1ElementSigma1R = group1ElementSigma1R;
         this.group1ElementSigma2S = group1ElementSigma2S;
@@ -49,33 +51,17 @@ public class SPSAGHO11Signature implements Signature, UniqueByteRepresentable {
     }
 
 
-
-
     public GroupElement getGroup1ElementSigma1R() {
         return group1ElementSigma1R;
-    }
-
-    public void setGroup1ElementSigma1R(GroupElement group1ElementSigma1R) {
-        this.group1ElementSigma1R = group1ElementSigma1R;
     }
 
     public GroupElement getGroup1ElementSigma2S() {
         return group1ElementSigma2S;
     }
 
-    public void setGroup1ElementSigma2S(GroupElement group1ElementSigma2S) {
-        this.group1ElementSigma2S = group1ElementSigma2S;
-    }
-
     public GroupElement getGroup2ElementSigma3T() {
         return group2ElementSigma3T;
     }
-
-    public void setGroup2ElementSigma3T(GroupElement group2ElementSigma3T) {
-        this.group2ElementSigma3T = group2ElementSigma3T;
-    }
-
-
 
 
     @Override

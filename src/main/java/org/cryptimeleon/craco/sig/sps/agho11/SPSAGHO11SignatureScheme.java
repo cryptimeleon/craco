@@ -5,12 +5,10 @@ import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.sig.*;
 import org.cryptimeleon.math.serialization.ListRepresentation;
-import org.cryptimeleon.math.serialization.ObjectRepresentation;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.groups.GroupElement;
-import org.cryptimeleon.math.structures.groups.cartesian.GroupElementVector;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearMap;
 import org.cryptimeleon.math.structures.rings.zn.Zp;
 import org.cryptimeleon.math.structures.rings.zn.Zp.ZpElement;
@@ -20,7 +18,7 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 
 /**
- * An a of yet unfinished implementation of the scheme originally presented in
+ * An a of yet unfinished implementation of the scheme originally presented in [1]
  *
  * [1] Abe et. al.: Optimal Structure-Preserving Signatures in Asymmetric Bilinear Groups.
  * CRYPTO 2011: Advances in Cryptology – CRYPTO 2011 pp. 649-666
@@ -81,10 +79,7 @@ public class SPSAGHO11SignatureScheme implements StandardMultiGroupMultiMessageS
         Zp.ZpElement exponentV = zp.getUniformlyRandomNonzeroElement();
         Zp.ZpElement exponentZ = zp.getUniformlyRandomNonzeroElement();
 
-        // Set public key ( verification key)
-        SPSAGHO11VerificationKey pk = new SPSAGHO11VerificationKey();
-
-        // Calculate Vectors
+        // Calculate Vectors for public key
         GroupElement[] groupElementsU = Arrays.stream(exponentsU).map(
                 x -> pp.getG1GroupGenerator().pow(x).compute())
                 .toArray(GroupElement[]::new);
@@ -92,13 +87,15 @@ public class SPSAGHO11SignatureScheme implements StandardMultiGroupMultiMessageS
                 x -> pp.getG2GroupGenerator().pow(x).compute())
                 .toArray(GroupElement[]::new);
 
-        pk.setGroupElementsU(groupElementsU);
-        pk.setGroupElementsW(groupElementsW);
+        // Create public key (verification key)
+        SPSAGHO11VerificationKey pk = new SPSAGHO11VerificationKey(
+                groupElementsU,
+                pp.getG2GroupGenerator().pow(exponentV).compute(),
+                groupElementsW,
+                pp.getG2GroupGenerator().pow(exponentZ).compute()
+        );
 
-        pk.setGroupElementV(pp.getG2GroupGenerator().pow(exponentV));
-        pk.setGroupElementZ(pp.getG2GroupGenerator().pow(exponentZ));
-
-        // Set secret key (signing key)
+        // Create secret key (signing key)
         SPSAGHO11SigningKey sk = new SPSAGHO11SigningKey(exponentsU, exponentV, exponentsW, exponentZ);
 
         return new SignatureKeyPair<>(pk, sk);
@@ -107,21 +104,19 @@ public class SPSAGHO11SignatureScheme implements StandardMultiGroupMultiMessageS
     @Override
     public Signature sign(PlainText plainText, SigningKey secretKey) {
 
-        if(!(plainText instanceof MessageBlock)){
-            throw new IllegalArgumentException("Not a valid plain text for this scheme");
-        }
-
-        if(!(((MessageBlock) plainText).length() == 2)){
-            throw new IllegalArgumentException("Not a valid plain text for this scheme.");
-        }
-
         if(!(secretKey instanceof SPSAGHO11SigningKey)){
             throw new IllegalArgumentException("Not a valid signing key for this scheme");
         }
 
-        //TODO check if the message structure corresponds with the pps
+        if(!(plainText instanceof MessageBlock)){
+            throw new IllegalArgumentException("Not a valid plain text for this scheme");
+        }
 
         //The scheme signs messages on G^(k_M) x H^(k_N), so we need a MessageBlock containing 2 MessageBlocks
+        if(!(((MessageBlock) plainText).length() == 2)){
+            throw new IllegalArgumentException("Not a valid plain text for this scheme.");
+        }
+
         MessageBlock containerBlock = (MessageBlock) plainText;
         MessageBlock messageGElements = (MessageBlock) containerBlock.get(0);
         MessageBlock messageHElements = (MessageBlock) containerBlock.get(1);
@@ -150,9 +145,7 @@ public class SPSAGHO11SignatureScheme implements StandardMultiGroupMultiMessageS
             );
         }
 
-        GroupElement sigma2S = sigma2S1.op(sigma2S2);
-
-        sigma2S.compute();
+        GroupElement sigma2S = sigma2S1.op(sigma2S2).compute();
 
         GroupElement sigma3T = pp.getG2GroupGenerator().getStructure().getNeutralElement();
         for (int i = 0; i < k_N; i++) {
@@ -162,8 +155,7 @@ public class SPSAGHO11SignatureScheme implements StandardMultiGroupMultiMessageS
             );
         }
         sigma3T = sigma3T.op(pp.getG2GroupGenerator()); // * H
-        sigma3T = sigma3T.pow(r.inv()); // ^1/r
-        sigma3T.compute();
+        sigma3T = sigma3T.pow(r.inv()).compute(); // ^1/r
 
         return new SPSAGHO11Signature(sigma1R, sigma2S, sigma3T);
     }
@@ -199,19 +191,23 @@ public class SPSAGHO11SignatureScheme implements StandardMultiGroupMultiMessageS
                 && evaluateSecondPPE(messageHElements, sigma, pk);
     }
 
+    /**
+     * Checks if the given combination of message, key and signature create a valid pairing product equation
+     *      in regard to the scheme's first PPE defined in the paper.
+     */
     private boolean evaluateFirstPPE(MessageBlock messageBlock, SPSAGHO11Signature sigma, SPSAGHO11VerificationKey pk){
 
         BilinearMap bMap = pp.getBilinearMap();
 
         //left-hand side
-        GroupElement lhs1 = bMap.apply(sigma.getGroup1ElementSigma1R(), pk.getGroupElementV());
+        GroupElement lhs1 = bMap.apply(sigma.getGroup1ElementSigma1R(), pk.getGroup2ElementV());
         lhs1 = lhs1.op(bMap.apply(sigma.getGroup1ElementSigma2S(), pp.getG2GroupGenerator()));
 
         GroupElement lhs2 = pp.getGT().getNeutralElement();
 
         for (int i = 0; i < messageBlock.length(); i++) {
             lhs2 = lhs2.op(
-                    bMap.apply(((GroupElementPlainText)messageBlock.get(i)).get(), pk.getGroupElementsW()[i])
+                    bMap.apply(((GroupElementPlainText)messageBlock.get(i)).get(), pk.getGroup2ElementsW()[i])
             );
         }
 
@@ -219,13 +215,16 @@ public class SPSAGHO11SignatureScheme implements StandardMultiGroupMultiMessageS
         lhs.compute();
 
         // right-hand side
-        GroupElement rhs = bMap.apply(pp.getG1GroupGenerator(), pk.getGroupElementZ());
+        GroupElement rhs = bMap.apply(pp.getG1GroupGenerator(), pk.getGroup2ElementZ());
         rhs.compute();
-
 
         return lhs.equals(rhs);
     }
 
+    /**
+     * Checks if the given combination of message, key and signature create a valid pairing product equation
+     *      in regard to the scheme's second PPE defined in the paper.
+     */
     private boolean evaluateSecondPPE(MessageBlock messageBlock, SPSAGHO11Signature sigma, SPSAGHO11VerificationKey pk){
 
         BilinearMap bMap = pp.getBilinearMap();
@@ -237,17 +236,14 @@ public class SPSAGHO11SignatureScheme implements StandardMultiGroupMultiMessageS
 
         for (int i = 0; i < messageBlock.length(); i++) {
             lhs2 = lhs2.op(
-                    bMap.apply(pk.getGroupElementsU()[i], ((GroupElementPlainText)messageBlock.get(i)).get())
+                    bMap.apply(pk.getGroup1ElementsU()[i], ((GroupElementPlainText)messageBlock.get(i)).get())
             );
         }
 
-        GroupElement lhs = lhs1.op(lhs2);
-        lhs.compute();
+        GroupElement lhs = lhs1.op(lhs2).compute();
 
         //right-hand side
-        GroupElement rhs = bMap.apply(pp.getG1GroupGenerator(), pp.getG2GroupGenerator());
-        rhs.compute();
-
+        GroupElement rhs = bMap.apply(pp.getG1GroupGenerator(), pp.getG2GroupGenerator()).compute();
 
         return lhs.equals(rhs);
     }
@@ -261,8 +257,12 @@ public class SPSAGHO11SignatureScheme implements StandardMultiGroupMultiMessageS
         Representation g2Elements = (Representation) list.get(1);
 
         // pull the actual group elements from the representations
-        MessageBlock g1 = new MessageBlock(g1Elements, r -> new GroupElementPlainText(r, pp.getG1GroupGenerator().getStructure()));
-        MessageBlock g2 = new MessageBlock(g2Elements, r -> new GroupElementPlainText(r, pp.getG2GroupGenerator().getStructure()));
+        MessageBlock g1 = new MessageBlock(
+                g1Elements, r -> new GroupElementPlainText(r, pp.getG1GroupGenerator().getStructure())
+        );
+        MessageBlock g2 = new MessageBlock(
+                g2Elements, r -> new GroupElementPlainText(r, pp.getG2GroupGenerator().getStructure())
+        );
 
         return new MessageBlock(g1, g2);
     }
@@ -289,7 +289,6 @@ public class SPSAGHO11SignatureScheme implements StandardMultiGroupMultiMessageS
 
     @Override
     public MessageBlock mapToPlaintext(byte[] bytes, VerificationKey pk) {
-
         if(pp == null){
             throw new NullPointerException("Number of messages is stored in public parameters but they are not set");
         }
@@ -299,7 +298,6 @@ public class SPSAGHO11SignatureScheme implements StandardMultiGroupMultiMessageS
 
     @Override
     public MessageBlock mapToPlaintext(byte[] bytes, SigningKey sk) {
-
         if(pp == null){
             throw new NullPointerException("Number of messages is stored in public parameters but they are not set");
         }
@@ -329,7 +327,6 @@ public class SPSAGHO11SignatureScheme implements StandardMultiGroupMultiMessageS
             throw new NullPointerException("Number of messages is stored in public parameters but they are not set");
         }
 
-        //TODO what?
         return (pp.getG1GroupGenerator().getStructure().size().bitLength() - 1) / 8;
     }
 
@@ -357,4 +354,5 @@ public class SPSAGHO11SignatureScheme implements StandardMultiGroupMultiMessageS
         return Objects.equals(this.pp, other.pp);
 
     }
+    
 }
