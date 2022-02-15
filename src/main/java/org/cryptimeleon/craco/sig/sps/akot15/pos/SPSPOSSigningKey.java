@@ -57,12 +57,12 @@ public class SPSPOSSigningKey implements SigningKey {
         return exponentW;
     }
 
-    public void SetOneTimeKey(ZpElement oneTimeKey) {
+    public void setOneTimeKey(ZpElement oneTimeKey) {
         this.exponentA = oneTimeKey;
         this.isOTKeyValid = true;
     }
 
-    public ZpElement GetAndUseOneTimeKey() {
+    public ZpElement getAndUseOneTimeKey() {
 
         if(!isOTKeyValid) {
             throw new IllegalStateException("This one-time key has already been used.");
@@ -72,6 +72,10 @@ public class SPSPOSSigningKey implements SigningKey {
         return exponentA;
     }
 
+    //TODO this could use refactoring ()
+    public ZpElement getOneTimeKey() {
+        return exponentA;
+    }
 
 
     @Override

@@ -35,7 +35,7 @@ public interface TrapdoorCommitmentScheme extends StandaloneRepresentable, Repre
      * @return the {@link TrapdoorCommitmentKeyPair} containing the {@link OpenValue} and {@link TrapdoorKey}
      *         associated with the scheme
      * */
-    TrapdoorCommitmentKeyPair<? extends OpenValue, ? extends TrapdoorKey> generateKeyPair();
+    TrapdoorCommitmentKeyPair<? extends CommitmentKey, ? extends TrapdoorKey> generateKeyPair();
 
     /**
      * Creates a commitment to the given {@link PlainText}, using the given {@link CommitmentKey}.
