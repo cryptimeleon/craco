@@ -5,12 +5,12 @@ import org.cryptimeleon.math.hash.ByteAccumulator;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 
-public class TCAKOT15TrapdoorCommitment implements Commitment {
+public class TCAKOT15Commitment implements Commitment {
 
     //TODO Representation?
     private final GroupElement commitment;
 
-    public TCAKOT15TrapdoorCommitment(GroupElement commitment) {
+    public TCAKOT15Commitment(GroupElement commitment) {
         this.commitment = commitment;
     }
 

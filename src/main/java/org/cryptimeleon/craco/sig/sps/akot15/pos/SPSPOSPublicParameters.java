@@ -4,6 +4,7 @@ import org.cryptimeleon.craco.sig.sps.SPSPublicParameters;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
+import org.cryptimeleon.math.structures.groups.GroupElement;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearGroup;
 
 import java.util.Objects;
@@ -36,6 +37,10 @@ public class SPSPOSPublicParameters extends SPSPublicParameters {
         return ReprUtil.serialize(this);
     }
 
+
+    public void setGroup1GeneratorG(GroupElement group1ElementG) {this.group1ElementG = group1ElementG;}
+
+    public void setGroup2GeneratorH(GroupElement group2ElementH) {this.group2ElementH = group2ElementH;}
 
     @Override
     public boolean equals(Object o) {

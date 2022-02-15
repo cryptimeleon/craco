@@ -48,12 +48,12 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
         SignatureKeyPair<SPSPOSVerificationKey,SPSPOSSigningKey> keyPair = new SignatureKeyPair<>(vk, sk);
 
         // Set up initial one-time key
-        UpdateOneTimeKey(keyPair);
+        updateOneTimeKey(keyPair);
 
         return keyPair;
     }
 
-    public void UpdateOneTimeKey(SignatureKeyPair<SPSPOSVerificationKey, SPSPOSSigningKey> keyPair) {
+    public void updateOneTimeKey(SignatureKeyPair<SPSPOSVerificationKey, SPSPOSSigningKey> keyPair) {
 
         //pick randomness
         ZpElement exponentA = pp.getZp().getUniformlyRandomElement();
@@ -61,7 +61,7 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
         //put into keys
 
-        keyPair.getSigningKey().SetOneTimeKey(exponentA);
+        keyPair.getSigningKey().setOneTimeKey(exponentA);
         keyPair.getVerificationKey().SetOneTimeKey(group1ElementA);
     }
 
@@ -88,7 +88,7 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
         GroupElement group1ElementSigmaZ = pp.getG2GroupGenerator().pow(exponentZeta).compute();
 
         // calculate exponent of the left side of R
-        ZpElement lhsExponent = sk.GetAndUseOneTimeKey();
+        ZpElement lhsExponent = sk.getAndUseOneTimeKey();
         lhsExponent = lhsExponent.sub(exponentZeta.mul(sk.getExponentW()));
 
         GroupElement group1ElementSigmaR = pp.getG2GroupGenerator().pow(lhsExponent);
