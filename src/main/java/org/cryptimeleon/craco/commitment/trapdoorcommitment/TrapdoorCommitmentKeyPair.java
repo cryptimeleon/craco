@@ -7,13 +7,13 @@ import java.util.Objects;
 /**
  * Holds a key pair consisting of a trapdoor key, as well as a commitment key
  * */
-public class TrapdoorCommitmentKeyPair<OpenValueType extends OpenValue, TrapdoorValueType extends TrapdoorKey> {
+public class TrapdoorCommitmentKeyPair<CommitmentKeyType extends CommitmentKey, TrapdoorValueType extends TrapdoorKey> {
 
-    private final OpenValueType commitmentKey;
+    private final CommitmentKeyType commitmentKey;
 
     private final TrapdoorValueType trapdoorKey;
 
-    public TrapdoorCommitmentKeyPair(OpenValueType openValue, TrapdoorValueType trapdoorValue) {
+    public TrapdoorCommitmentKeyPair(CommitmentKeyType openValue, TrapdoorValueType trapdoorValue) {
         commitmentKey = openValue;
         trapdoorKey = trapdoorValue;
     }
