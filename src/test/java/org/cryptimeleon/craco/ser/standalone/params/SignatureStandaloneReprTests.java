@@ -51,7 +51,7 @@ public class SignatureStandaloneReprTests extends StandaloneReprSubTest {
     }
 
     public void testSPSAGHO11() {
-        SPSAGHO11PublicParameters pp = new SPSAGHO11PublicParametersGen().generatePublicParameter(128, true, new Integer[]{20, 20});
+        SPSAGHO11PublicParameters pp = new SPSAGHO11PublicParametersGen().generatePublicParameters(128, true, new Integer[]{20, 20});
         SPSAGHO11SignatureScheme scheme = new SPSAGHO11SignatureScheme(pp);
 
         test(scheme);

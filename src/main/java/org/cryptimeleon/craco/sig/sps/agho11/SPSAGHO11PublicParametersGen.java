@@ -13,7 +13,7 @@ public class SPSAGHO11PublicParametersGen {
      * @param messageBlockLengths The k_M and k_N the instance is expected to sign
      * @return The public parameters for the AGHO11 SPS scheme
      */
-    public SPSAGHO11PublicParameters generatePublicParameter(int securityParameter, boolean debugMode, Integer[] messageBlockLengths) {
+    public static SPSAGHO11PublicParameters generatePublicParameters(int securityParameter, boolean debugMode, Integer[] messageBlockLengths) {
         BilinearGroup group;
         if (debugMode) {
             group = new DebugBilinearGroup(RandomGenerator.getRandomPrime(securityParameter), BilinearGroup.Type.TYPE_3);

@@ -44,8 +44,6 @@ public class SPSAGHO11SigningKey implements SigningKey {
     protected Zp.ZpElement exponentZ;
 
 
-
-
     public SPSAGHO11SigningKey() { super(); }
 
     public SPSAGHO11SigningKey(Representation representation, Zp zp){
@@ -60,15 +58,6 @@ public class SPSAGHO11SigningKey implements SigningKey {
         this.exponentsW = exponentsW;
         this.exponentZ = exponentZ;
     }
-
-
-
-    @Override
-    public Representation getRepresentation() {
-        return ReprUtil.serialize(this);
-    }
-
-
 
 
     public Zp.ZpElement[] getExponentsU() {
@@ -88,24 +77,10 @@ public class SPSAGHO11SigningKey implements SigningKey {
     }
 
 
-    public void setExponentsU(Zp.ZpElement[] exponentsU) {
-        this.exponentsU = exponentsU;
+    @Override
+    public Representation getRepresentation() {
+        return ReprUtil.serialize(this);
     }
-
-    public void setExponentV(Zp.ZpElement exponentV) {
-        this.exponentV = exponentV;
-    }
-
-    public void setExponentsW(Zp.ZpElement[] exponentsW) {
-        this.exponentsW = exponentsW;
-    }
-
-    public void setExponentZ(Zp.ZpElement exponentZ) {
-        this.exponentZ = exponentZ;
-    }
-
-
-
 
     @Override
     public boolean equals(Object o) {

@@ -59,8 +59,6 @@ public class SPSAGHO11PublicParameters implements PublicParameters {
     }
 
 
-
-
     /**
      * Returns the group Zp (where p is the group order of G1, G2, and GT)
      */
@@ -68,10 +66,16 @@ public class SPSAGHO11PublicParameters implements PublicParameters {
         return new Zp(bilinearGroup.getG1().size());
     }
 
+    /**
+     * Get the generator of group G_1
+     */
     public GroupElement getG1GroupGenerator(){
         return group1ElementG;
     }
 
+    /**
+     * Get the generator of group G_2
+     */
     public GroupElement getG2GroupGenerator(){
         return group2ElementH;
     }
@@ -81,6 +85,7 @@ public class SPSAGHO11PublicParameters implements PublicParameters {
     public Group getGT() {return bilinearGroup.getGT(); }
 
     public Integer[] getMessageLengths(){ return messageLengths; }
+
 
     @Override
     public Representation getRepresentation() { return ReprUtil.serialize(this); }
