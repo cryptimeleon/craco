@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 
 /**
- * An a of yet unfinished implementation of the scheme originally presented in [1]
+ * An implementation of the scheme originally presented in [1]
  *
  * [1] Abe et. al.: Optimal Structure-Preserving Signatures in Asymmetric Bilinear Groups.
  * CRYPTO 2011: Advances in Cryptology – CRYPTO 2011 pp. 649-666
