@@ -25,7 +25,7 @@ import java.util.stream.IntStream;
  * https://www.iacr.org/archive/crypto2011/68410646/68410646.pdf
  *
  * */
-public class SPSAGHO11SignatureScheme implements StandardMultiGroupMultiMessageStructurePreservingSignatureScheme {
+public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreservingSignatureScheme {
 
     /**
      * The public parameters used by the scheme
@@ -45,13 +45,19 @@ public class SPSAGHO11SignatureScheme implements StandardMultiGroupMultiMessageS
         new ReprUtil(this).deserialize(repr);
     }
 
+
     @Override
     public SignatureKeyPair<SPSAGHO11VerificationKey, SPSAGHO11SigningKey> generateKeyPair(int numberOfMessages)
     {
         return generateKeyPair(numberOfMessages, 2);
     }
 
-    @Override
+    /**
+     * Generates a key pair for signing n blocks of messages with {@code  messageBlockLengths}
+     * with each signature.
+     *
+     * @param messageBlockLengths the length of the individual MessageBlocks this scheme accepts as input.
+     */
     public SignatureKeyPair<SPSAGHO11VerificationKey, SPSAGHO11SigningKey> generateKeyPair(int... messageBlockLengths) {
 
         Zp zp = pp.getZp();
