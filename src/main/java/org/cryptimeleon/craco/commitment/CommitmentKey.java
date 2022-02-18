@@ -1,4 +1,4 @@
-package org.cryptimeleon.craco.commitment.trapdoorcommitment;
+package org.cryptimeleon.craco.commitment;
 
 import org.cryptimeleon.math.hash.UniqueByteRepresentable;
 import org.cryptimeleon.math.serialization.Representable;

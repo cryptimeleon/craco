@@ -27,7 +27,10 @@ public class SPSPOSPublicParameters extends SPSPublicParameters {
 
     public SPSPOSPublicParameters(Representation repr) { super(repr); }
 
-
+    public void setGH(GroupElement G, GroupElement H) {
+        this.group1ElementG = G;
+        this.group2ElementH = H;
+    }
 
 
     public Integer getMessageLength(){ return numberOfMessages; }

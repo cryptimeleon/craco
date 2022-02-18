@@ -1,0 +1,67 @@
+package org.cryptimeleon.craco.sig.sps.akot15.tcgamma;
+
+import org.cryptimeleon.craco.commitment.CommitmentPair;
+import org.cryptimeleon.craco.commitment.CommitmentSchemeTester;
+import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
+import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
+import org.cryptimeleon.craco.common.plaintexts.RingElementPlainText;
+import org.cryptimeleon.craco.sig.sps.akot15.tc.TCAKOT15PublicParameters;
+import org.cryptimeleon.craco.sig.sps.akot15.tc.TrapdoorCommitmentTestParameters;
+import org.junit.Before;
+import org.junit.Test;
+
+public class TCGAKOT15CommitmentSchemeTests {
+
+    private final int SECURITY_PARAMETER = 128;
+    private final int MESSAGE_LENGTH = 1;
+
+
+    TCGAKOT15TestParameters params;
+
+
+    @Before
+    public void generateParameters() {
+        params = TCGAKOT15CommitmentSchemeTestParameterGenerator.generateParameters(SECURITY_PARAMETER, MESSAGE_LENGTH);
+    }
+
+    @Test
+    public void testCommitAndVerify() {
+        CommitmentSchemeTester.testCommitmentSchemeVerify(params.getScheme(), params.getPlainText());
+    }
+
+    @Test
+    public void testCommitAndVerifyWithGroupElementMessage() {
+
+        GroupElementPlainText[] gePlainText = ((MessageBlock)params.getPlainText()).stream().map
+                (
+                        x -> new GroupElementPlainText(((TCGAKOT15PublicParameters)params.getPublicParameters()).getG1GroupGenerator().pow(((RingElementPlainText)x).getRingElement()).compute())
+                        ).toArray(GroupElementPlainText[]::new);
+
+
+        MessageBlock groupElementPlainText = new MessageBlock(gePlainText);
+
+
+        CommitmentPair com = params.getScheme().commit(params.getPlainText());
+
+        params.getScheme().verify(com.getCommitment(), com.getOpenValue(), groupElementPlainText);
+    }
+
+
+    @Test
+    public void testNegativeWrongCommitAndVerify() {
+        CommitmentSchemeTester.testCommitmentSchemeVerifyWithWrongMessages(params.getScheme(), params.getPlainText(), params.getWrongPlainText());
+    }
+
+    //TODO uncomment these when a fix for the InjectiveValueOf function is available
+
+    //@Test
+    //public void testMapToPlainTest() {
+    //    CommitmentSchemeTester.testCommitmentSchemeMapToPlaintext(params.getScheme(), params.getPlainText());
+    //}
+
+    //@Test
+    //public void testNegativeMapToPlainTest() {
+    //    CommitmentSchemeTester.testCommitmentSchemeMapToPlainTextWithWrongMessages(params.getScheme(), params.getPlainText(), params.getWrongPlainText());
+    //}
+
+}

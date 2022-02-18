@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
 
 public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSignatureScheme {
 
-    protected SPSPOSPublicParameters pp;
+    public SPSPOSPublicParameters pp; //TODO not public
 
     public SPSPOSSignatureScheme(SPSPOSPublicParameters pp) {
         super();
@@ -68,6 +68,17 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
     @Override
     public SPSPOSSignature sign(PlainText plainText, SigningKey secretKey) {
 
+        if(!(secretKey instanceof SPSPOSSigningKey)){
+            throw new IllegalArgumentException("Not a valid signing key for this scheme");
+        }
+
+        SPSPOSSigningKey sk = (SPSPOSSigningKey) secretKey;
+
+        return sign(plainText, sk, sk.getOneTimeKey());
+    }
+
+    public SPSPOSSignature sign(PlainText plainText, SigningKey secretKey, ZpElement oneTimeKey) {
+
         if(!(plainText instanceof MessageBlock)){
             throw new IllegalArgumentException("Not a valid plain text for this scheme");
         }
@@ -88,7 +99,7 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
         GroupElement group1ElementSigmaZ = pp.getG2GroupGenerator().pow(exponentZeta).compute();
 
         // calculate exponent of the left side of R
-        ZpElement lhsExponent = sk.getAndUseOneTimeKey();
+        ZpElement lhsExponent = oneTimeKey;
         lhsExponent = lhsExponent.sub(exponentZeta.mul(sk.getExponentW()));
 
         GroupElement group1ElementSigmaR = pp.getG2GroupGenerator().pow(lhsExponent);
@@ -106,6 +117,17 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
     @Override
     public Boolean verify(PlainText plainText, Signature signature, VerificationKey publicKey) {
+
+        if(!(publicKey instanceof SPSPOSVerificationKey)){
+            throw new IllegalArgumentException("Not a valid signing key for this scheme");
+        }
+
+        SPSPOSVerificationKey vk = (SPSPOSVerificationKey) publicKey;
+
+        return verify(plainText, signature, publicKey, vk.getOneTimeKey());
+    }
+
+    public Boolean verify(PlainText plainText, Signature signature, VerificationKey publicKey, GroupElement oneTimeVerificationKey) {
 
         if(!(plainText instanceof MessageBlock)){
             throw new IllegalArgumentException("Not a valid plain text for this scheme");
@@ -131,8 +153,8 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
         //check PPE
 
-        //this should throw an exception if the OT key was already used
-        GroupElement ppelhs = bMap.apply(vk.getAndUseOneTimeKey(), pp.getG2GroupGenerator()).compute();
+        //this should throw an exception if the OT key was already used TODO check that
+        GroupElement ppelhs = bMap.apply(oneTimeVerificationKey, pp.getG2GroupGenerator()).compute();
 
         GroupElement pperhs = bMap.apply(vk.getGroup1ElementW(), sigma.getGroup2ElementZ());
         pperhs = pperhs.op(bMap.apply(pp.getG1GroupGenerator(), sigma.getGroup2ElementR()));

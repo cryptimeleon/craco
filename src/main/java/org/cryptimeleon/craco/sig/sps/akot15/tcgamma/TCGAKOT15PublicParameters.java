@@ -1,7 +1,6 @@
-package org.cryptimeleon.craco.sig.sps.akot15.tc;
+package org.cryptimeleon.craco.sig.sps.akot15.tcgamma;
 
 import org.cryptimeleon.craco.common.PublicParameters;
-import org.cryptimeleon.craco.sig.sps.SPSPublicParameters;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
@@ -12,7 +11,7 @@ import org.cryptimeleon.math.structures.rings.zn.Zp;
 
 import java.util.Objects;
 
-public class TCAKOT15PublicParameters implements PublicParameters {
+public class TCGAKOT15PublicParameters implements PublicParameters {
 
     /**
      * The bilinear group containing map e in the paper.
@@ -35,15 +34,21 @@ public class TCAKOT15PublicParameters implements PublicParameters {
     @Represented
     protected Integer messageLength;
 
-    public TCAKOT15PublicParameters(BilinearGroup bilinearGroup, Integer messageLength) {
+    public TCGAKOT15PublicParameters(BilinearGroup bilinearGroup, int messageLength) {
         super();
         this.bilinearGroup = bilinearGroup;
         this.messageLength = messageLength;
+
         this.group1ElementG = this.bilinearGroup.getG1().getUniformlyRandomNonNeutral();
         this.group2ElementH = this.bilinearGroup.getG2().getUniformlyRandomNonNeutral();
     }
 
-    public TCAKOT15PublicParameters(Representation repr) {
+    public void setGH(GroupElement G, GroupElement H) {
+        this.group1ElementG = G;
+        this.group2ElementH = H;
+    }
+
+    public TCGAKOT15PublicParameters(Representation repr) {
         new ReprUtil(this).deserialize(repr);
     }
 
@@ -64,19 +69,16 @@ public class TCAKOT15PublicParameters implements PublicParameters {
 
     public BilinearMap getBilinearMap(){ return bilinearGroup.getBilinearMap(); }
 
-    public int getMessageLength() { return messageLength; }
-
-    public void setGH(GroupElement G, GroupElement H) {
-        this.group1ElementG = G;
-        this.group2ElementH = H;
+    public Integer getMessageLength() {
+        return messageLength;
     }
 
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TCAKOT15PublicParameters)) return false;
-        TCAKOT15PublicParameters that = (TCAKOT15PublicParameters) o;
+        if (!(o instanceof TCGAKOT15PublicParameters)) return false;
+        TCGAKOT15PublicParameters that = (TCGAKOT15PublicParameters) o;
         return Objects.equals(bilinearGroup, that.bilinearGroup) && Objects.equals(group1ElementG, that.group1ElementG) && Objects.equals(group2ElementH, that.group2ElementH);
     }
 
