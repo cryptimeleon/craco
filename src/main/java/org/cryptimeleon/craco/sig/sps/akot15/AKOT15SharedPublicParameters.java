@@ -39,6 +39,11 @@ public class AKOT15SharedPublicParameters implements PublicParameters, Cloneable
     @Represented
     protected Integer messageLength;
 
+
+    public AKOT15SharedPublicParameters() {
+        super();
+    }
+
     public AKOT15SharedPublicParameters(BilinearGroup bilinearGroup, int messageLength) {
         super();
         this.bilinearGroup = bilinearGroup;
@@ -48,7 +53,7 @@ public class AKOT15SharedPublicParameters implements PublicParameters, Cloneable
         this.group2ElementH = this.bilinearGroup.getG2().getUniformlyRandomNonNeutral();
     }
 
-    private AKOT15SharedPublicParameters(BilinearGroup bilinearGroup,
+    public AKOT15SharedPublicParameters(BilinearGroup bilinearGroup,
                                          int messageLength,
                                          GroupElement group1ElementG,
                                          GroupElement group2ElementH) {
@@ -80,6 +85,10 @@ public class AKOT15SharedPublicParameters implements PublicParameters, Cloneable
         return group2ElementH;
     }
 
+
+    public BilinearGroup getBilinearGroup() {
+        return bilinearGroup;
+    }
 
     public BilinearMap getBilinearMap(){ return bilinearGroup.getBilinearMap(); }
 
@@ -119,4 +128,5 @@ public class AKOT15SharedPublicParameters implements PublicParameters, Cloneable
 
         return clone;
     }
+
 }

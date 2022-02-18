@@ -1,6 +1,6 @@
 package org.cryptimeleon.craco.sig.sps.akot15.xsig;
 
-import org.cryptimeleon.craco.common.PublicParameters;
+import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
@@ -13,29 +13,7 @@ import org.cryptimeleon.math.structures.rings.zn.Zp.ZpElement;
 
 import java.util.Objects;
 
-public class SPSXSIGPublicParameters implements PublicParameters {
-
-    @Represented
-    private BilinearGroup bilinearGroup; // G1 x G2 -> GT
-
-    /**
-     * G_1 \in G_1 in paper.
-     */
-    @Represented(restorer = "bilinearGroup::getG1")
-    protected GroupElement group1ElementG;
-
-    /**
-     * G_2 \in G_2 in paper.
-     */
-    @Represented(restorer = "bilinearGroup::getG2")
-    protected GroupElement group2ElementH;
-
-    /**
-     * The number of expected G1/G2 elements per message respectively
-     * */
-    @Represented(restorer = "messageLength")
-    protected Integer messageLength;
-
+public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
 
     @Represented(restorer = "bilinearGroup::getG1")
     protected GroupElement group1ElementF1;
@@ -56,9 +34,8 @@ public class SPSXSIGPublicParameters implements PublicParameters {
     protected GroupElement[] group2ElementsU;
 
 
-
     public SPSXSIGPublicParameters(BilinearGroup bilinearGroup, Integer messageLength){
-        super();
+        super(bilinearGroup, messageLength);
         this.bilinearGroup = bilinearGroup;
         this.messageLength = messageLength;
         this.group1ElementG = this.bilinearGroup.getG1().getUniformlyRandomNonNeutral();
@@ -67,6 +44,16 @@ public class SPSXSIGPublicParameters implements PublicParameters {
         generateRandomF();
         generateRandomU();
     }
+
+    public SPSXSIGPublicParameters(AKOT15SharedPublicParameters sharedPP) {
+        super(sharedPP.getBilinearGroup(), sharedPP.getMessageLength());
+        this.group1ElementG = sharedPP.getG1GroupGenerator();
+        this.group2ElementH = sharedPP.getG2GroupGenerator();
+
+        generateRandomF();
+        generateRandomU();
+    }
+
 
     public SPSXSIGPublicParameters(Representation repr) {
         new ReprUtil(this).deserialize(repr);

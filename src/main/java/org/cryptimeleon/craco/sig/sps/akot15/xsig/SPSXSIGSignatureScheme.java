@@ -29,6 +29,7 @@ public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSi
     public SPSXSIGSignatureScheme(Representation repr) { new ReprUtil(this).deserialize(repr); }
 
 
+    public SPSXSIGPublicParameters getPublicParameters() { return pp; }
 
 
     @Override
