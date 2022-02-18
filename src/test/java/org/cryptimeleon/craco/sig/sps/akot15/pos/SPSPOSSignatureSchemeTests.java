@@ -5,6 +5,7 @@ import org.cryptimeleon.craco.sig.SignatureKeyPair;
 import org.cryptimeleon.craco.sig.SignatureSchemeParams;
 import org.cryptimeleon.craco.sig.SignatureSchemeTester;
 import org.cryptimeleon.craco.sig.sps.SPSSchemeTester;
+import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 import org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGPublicParameters;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 import org.cryptimeleon.math.structures.rings.zn.Zp;
@@ -42,8 +43,8 @@ public class SPSPOSSignatureSchemeTests extends SPSSchemeTester {
 
         SPSPOSSignatureScheme scheme = (SPSPOSSignatureScheme) params.getSignatureScheme();
 
-        Zp.ZpElement fixedSecretKey = ((SPSPOSPublicParameters)params.getPublicParameters()).getZp().getUniformlyRandomElement();
-        GroupElement fixedPublicKey = ((SPSPOSPublicParameters)params.getPublicParameters()).getG1GroupGenerator().pow(fixedSecretKey).compute();
+        Zp.ZpElement fixedSecretKey = ((AKOT15SharedPublicParameters)params.getPublicParameters()).getZp().getUniformlyRandomElement();
+        GroupElement fixedPublicKey = ((AKOT15SharedPublicParameters)params.getPublicParameters()).getG1GroupGenerator().pow(fixedSecretKey).compute();
 
         SPSPOSSignature sigma = scheme.sign(params.getMessage1(), params.getKeyPair1().getSigningKey(), fixedSecretKey);
 
@@ -94,8 +95,8 @@ public class SPSPOSSignatureSchemeTests extends SPSSchemeTester {
     @Override
     public void testPublicParameterRepresentation() {
         // public parameter representation test
-        SPSPOSPublicParameters ppTest;
-        ppTest = new SPSPOSPublicParameters(params.getPublicParameters().getRepresentation());
+        AKOT15SharedPublicParameters ppTest;
+        ppTest = new AKOT15SharedPublicParameters(params.getPublicParameters().getRepresentation());
         assertEquals(params.getPublicParameters(), ppTest);
     }
 

@@ -3,13 +3,15 @@ package org.cryptimeleon.craco.sig.sps.akot15.tc;
 import org.cryptimeleon.craco.commitment.CommitmentKey;
 import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
+import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParametersGen;
+import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 import org.cryptimeleon.math.structures.rings.zn.Zp;
 
 public class TCAKOT15CommitmentSchemeTestParameterGenerator {
 
     public static TrapdoorCommitmentTestParameters generateParameters(int securityParameter, int messageLength) {
 
-        TCAKOT15PublicParameters pp = TCAKOT15PublicParametersGen.generateParameters(securityParameter, messageLength, true);
+        AKOT15SharedPublicParameters pp = AKOT15SharedPublicParametersGen.generateParameters(securityParameter, messageLength, true);
 
         TCAKOT15CommitmentScheme scheme = new TCAKOT15CommitmentScheme(pp);
 

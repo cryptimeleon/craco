@@ -5,8 +5,7 @@ import org.cryptimeleon.craco.commitment.CommitmentSchemeTester;
 import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.common.plaintexts.RingElementPlainText;
-import org.cryptimeleon.craco.sig.sps.akot15.tc.TCAKOT15PublicParameters;
-import org.cryptimeleon.craco.sig.sps.akot15.tc.TrapdoorCommitmentTestParameters;
+import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,7 +33,7 @@ public class TCGAKOT15CommitmentSchemeTests {
 
         GroupElementPlainText[] gePlainText = ((MessageBlock)params.getPlainText()).stream().map
                 (
-                        x -> new GroupElementPlainText(((TCGAKOT15PublicParameters)params.getPublicParameters()).getG1GroupGenerator().pow(((RingElementPlainText)x).getRingElement()).compute())
+                        x -> new GroupElementPlainText(((AKOT15SharedPublicParameters)params.getPublicParameters()).getG1GroupGenerator().pow(((RingElementPlainText)x).getRingElement()).compute())
                         ).toArray(GroupElementPlainText[]::new);
 
 

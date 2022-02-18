@@ -4,6 +4,7 @@ import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.sig.*;
+import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.structures.groups.GroupElement;
@@ -16,9 +17,9 @@ import java.util.stream.IntStream;
 
 public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSignatureScheme {
 
-    public SPSPOSPublicParameters pp; //TODO not public
+    public AKOT15SharedPublicParameters pp; //TODO not public
 
-    public SPSPOSSignatureScheme(SPSPOSPublicParameters pp) {
+    public SPSPOSSignatureScheme(AKOT15SharedPublicParameters pp) {
         super();
         this.pp = pp;
     }
@@ -27,9 +28,13 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
     @Override
     public SignatureKeyPair<SPSPOSVerificationKey, SPSPOSSigningKey> generateKeyPair(int numberOfMessages) {
 
-        if(numberOfMessages != pp.numberOfMessages) {
+        if(numberOfMessages != pp.getMessageLength()) {
             throw new IllegalArgumentException(
-                    "The number of messages did not match the expected message length in the public parameters"
+                    String.format(
+                            "The number of messages did not match the expected message length in the public parameters: %d vs. %d",
+                            numberOfMessages,
+                            pp.getMessageLength()
+                            )
             );
         }
 

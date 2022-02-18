@@ -4,15 +4,15 @@ import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.sig.SignatureKeyPair;
 import org.cryptimeleon.craco.sig.SignatureSchemeParams;
-import org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGSigningKey;
-import org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGVerificationKey;
+import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParametersGen;
+import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 
 public class SPSPOSSignatureSchemeTestParamGenerator {
 
     public static SignatureSchemeParams generateParameters(int securityParameter, int numberOfMessages) {
 
         // setup scheme
-        SPSPOSPublicParameters pp = SPSPOSPublicParametersGen.generateParameters(securityParameter, numberOfMessages, true);
+        AKOT15SharedPublicParameters pp = AKOT15SharedPublicParametersGen.generateParameters(securityParameter, numberOfMessages, true);
         SPSPOSSignatureScheme scheme = new SPSPOSSignatureScheme(pp);
 
         SignatureKeyPair<SPSPOSVerificationKey, SPSPOSSigningKey> keyPair = scheme.generateKeyPair(numberOfMessages);

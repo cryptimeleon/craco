@@ -6,6 +6,7 @@ import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.common.plaintexts.RingElementPlainText;
 import org.cryptimeleon.craco.sig.SignatureKeyPair;
+import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 import org.cryptimeleon.craco.sig.sps.akot15.pos.*;
 import org.cryptimeleon.craco.sig.sps.akot15.tcgamma.*;
 import org.cryptimeleon.math.serialization.Representation;
@@ -17,7 +18,7 @@ import org.cryptimeleon.math.structures.rings.zn.Zp.ZpElement;
 public class TCAKOT15CommitmentScheme implements CommitmentScheme {
 
     @Represented
-    TCAKOT15PublicParameters pp;
+    AKOT15SharedPublicParameters pp;
 
     SPSPOSSignatureScheme posInstance;
     TCGAKOT15CommitmentScheme gbcInstance;
@@ -29,20 +30,21 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme {
 
     MessageBlock commitMsg;
 
-    public TCAKOT15CommitmentScheme(TCAKOT15PublicParameters pp) {
+    public TCAKOT15CommitmentScheme(AKOT15SharedPublicParameters pp) {
         super();
         this.pp = pp;
 
-        //set G,H
-        SPSPOSPublicParameters posPP = new SPSPOSPublicParameters(pp.bilinearGroup, 1);
-        posPP.setGH(pp.group1ElementG, pp.group2ElementH);
+        AKOT15SharedPublicParameters pp_pos = pp.clone();
+        pp_pos.setMessageLength(1);
 
-        TCGAKOT15PublicParameters gbcPP = new TCGAKOT15PublicParameters(pp.bilinearGroup, pp.getMessageLength() + 2);
-        gbcPP.setGH(pp.group1ElementG, pp.group2ElementH);
+        //create nested signature scheme instance (using the same public parameters)
+        this.posInstance = new SPSPOSSignatureScheme(pp_pos);
 
-        //create nested signature scheme instance
-        this.posInstance = new SPSPOSSignatureScheme(posPP);
-        this.gbcInstance = new TCGAKOT15CommitmentScheme(gbcPP);
+        // as tc gamma will sign the verification key of posInstance, it's expected messages are 2 elements longer
+        AKOT15SharedPublicParameters pp_gbc = pp.clone();
+        pp_gbc.setMessageLength(pp.getMessageLength() + 2);
+
+        this.gbcInstance = new TCGAKOT15CommitmentScheme(pp_gbc);
 
         this.commitmentKey = generateKey();
     }
@@ -156,17 +158,6 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme {
 
         for (int i = 2; i < msg_com.length; i++) {
             msg_com[i] = new GroupElementPlainText(oneTimePublicKeys[i - 2]);
-        }
-
-        System.out.println(posInstance.pp.getG1GroupGenerator().equals(gbcInstance.pp.getG1GroupGenerator()));
-        System.out.println("-------");
-
-        for (int i = 0; i < msg_com.length; i++) {
-
-            GroupElement msg_test1 = pp.getG1GroupGenerator().pow(((RingElementPlainText)commitMsg.get(i)).getRingElement()).compute();
-            GroupElement msg_text2 = msg_com[i].get().compute();
-
-            System.out.println(msg_test1.equals(msg_text2));
         }
 
         return gbcInstance.verify(com, new TCGAKOT15OpenValue(open.getGroup1ElementGamma()), new MessageBlock(msg_com));

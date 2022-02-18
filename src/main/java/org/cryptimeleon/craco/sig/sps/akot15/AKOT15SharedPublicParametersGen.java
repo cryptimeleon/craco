@@ -1,13 +1,13 @@
-package org.cryptimeleon.craco.sig.sps.akot15.tc;
+package org.cryptimeleon.craco.sig.sps.akot15;
 
 import org.cryptimeleon.math.random.RandomGenerator;
 import org.cryptimeleon.math.structures.groups.debug.DebugBilinearGroup;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearGroup;
 import org.cryptimeleon.math.structures.groups.elliptic.type3.bn.BarretoNaehrigBilinearGroup;
 
-public class TCAKOT15PublicParametersGen {
+public class AKOT15SharedPublicParametersGen {
 
-    public static TCAKOT15PublicParameters generateParameters(int securityParameter, int numberOfMessages, boolean debugMode) {
+    public static AKOT15SharedPublicParameters generateParameters(int securityParameter, int numberOfMessages, boolean debugMode) {
         BilinearGroup group;
         if (debugMode) {
             group = new DebugBilinearGroup(RandomGenerator.getRandomPrime(securityParameter), BilinearGroup.Type.TYPE_3);
@@ -15,7 +15,7 @@ public class TCAKOT15PublicParametersGen {
             group = new BarretoNaehrigBilinearGroup(securityParameter);
         }
 
-        return new TCAKOT15PublicParameters(group, numberOfMessages);
+        return new AKOT15SharedPublicParameters(group, numberOfMessages);
     }
 
 }
