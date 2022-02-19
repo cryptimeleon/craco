@@ -9,6 +9,7 @@ import org.cryptimeleon.craco.sig.SignatureKeyPair;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 import org.cryptimeleon.craco.sig.sps.akot15.pos.*;
 import org.cryptimeleon.craco.sig.sps.akot15.tcgamma.*;
+import org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGPublicParameters;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
@@ -29,6 +30,16 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme {
     GroupElement[] oneTimePublicKeys;
 
     MessageBlock commitMsg;
+
+    //TODO set these up better
+
+    private GroupElement getG1GroupGenerator() {
+        return (pp instanceof SPSXSIGPublicParameters) ? ((SPSXSIGPublicParameters)pp).getGroup1ElementF1() : pp.getG1GroupGenerator();
+    }
+
+    private GroupElement getG2GroupGenerator() {
+        return (pp instanceof SPSXSIGPublicParameters) ? ((SPSXSIGPublicParameters)pp).getGroup2ElementF1() : pp.getG2GroupGenerator();
+    }
 
     public TCAKOT15CommitmentScheme(AKOT15SharedPublicParameters pp) {
         super();
@@ -112,7 +123,7 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme {
 
         for (int i = 0; i < oneTimePublicKeys.length; i++) {
             oneTimeSecretKeys[i] = pp.getZp().getUniformlyRandomNonzeroElement();
-            oneTimePublicKeys[i] = pp.getG1GroupGenerator().pow(oneTimeSecretKeys[i]).compute();
+            oneTimePublicKeys[i] = getG1GroupGenerator().pow(oneTimeSecretKeys[i]).compute();
         }
     }
 
@@ -170,10 +181,10 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme {
 
         GroupElementPlainText[] msgBlock = new GroupElementPlainText[pp.getMessageLength()];
         msgBlock[0] = new GroupElementPlainText(
-                pp.getG2GroupGenerator().pow(pp.getZp().injectiveValueOf(bytes))
+                getG2GroupGenerator().pow(pp.getZp().injectiveValueOf(bytes))
         );
         for (int i = 1; i < pp.getMessageLength(); i++) {
-            msgBlock[i] = new GroupElementPlainText(pp.getG2GroupGenerator());
+            msgBlock[i] = new GroupElementPlainText(getG2GroupGenerator());
         }
 
         return new MessageBlock(msgBlock);
@@ -181,14 +192,14 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme {
 
     @Override
     public Commitment restoreCommitment(Representation repr) {
-        return new TCAKOT15Commitment(pp.getG2GroupGenerator().getStructure(), repr);
+        return new TCAKOT15Commitment(getG2GroupGenerator().getStructure(), repr);
     }
 
     @Override
     public OpenValue restoreOpenValue(Representation repr) {
         return new TCAKOT15OpenValue(
-                pp.getG1GroupGenerator().getStructure(),
-                pp.getG2GroupGenerator().getStructure(),
+                getG1GroupGenerator().getStructure(),
+                getG2GroupGenerator().getStructure(),
                 repr);
     }
 

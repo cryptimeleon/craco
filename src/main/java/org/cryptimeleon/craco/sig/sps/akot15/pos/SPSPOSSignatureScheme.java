@@ -5,6 +5,7 @@ import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.sig.*;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
+import org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGPublicParameters;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.structures.groups.GroupElement;
@@ -17,7 +18,15 @@ import java.util.stream.IntStream;
 
 public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSignatureScheme {
 
-    public AKOT15SharedPublicParameters pp; //TODO not public
+    private AKOT15SharedPublicParameters pp;
+
+    private GroupElement getG1GroupGenerator() {
+        return (pp instanceof SPSXSIGPublicParameters) ? ((SPSXSIGPublicParameters)pp).getGroup1ElementF1() : pp.getG1GroupGenerator();
+    }
+
+    private GroupElement getG2GroupGenerator() {
+        return (pp instanceof SPSXSIGPublicParameters) ? ((SPSXSIGPublicParameters)pp).getGroup2ElementF1() : pp.getG2GroupGenerator();
+    }
 
     public SPSPOSSignatureScheme(AKOT15SharedPublicParameters pp) {
         super();
@@ -43,9 +52,9 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
         ZpElement[] exponentsChi = IntStream.range(0, numberOfMessages).mapToObj(
                 x-> pp.getZp().getUniformlyRandomNonzeroElement()).toArray(ZpElement[]::new);
 
-        GroupElement group1ElementW = pp.getG1GroupGenerator().pow(exponentW).compute();
+        GroupElement group1ElementW = getG1GroupGenerator().pow(exponentW).compute();
         GroupElement[] group1ElementsChi = Arrays.stream(exponentsChi).map(
-                x-> pp.getG1GroupGenerator().pow(x).compute()).toArray(GroupElement[]::new);
+                x-> getG1GroupGenerator().pow(x).compute()).toArray(GroupElement[]::new);
 
         SPSPOSSigningKey sk = new SPSPOSSigningKey(exponentsChi, exponentW);
         SPSPOSVerificationKey vk = new SPSPOSVerificationKey(group1ElementsChi, group1ElementW);
@@ -62,7 +71,7 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
         //pick randomness
         ZpElement exponentA = pp.getZp().getUniformlyRandomElement();
-        GroupElement group1ElementA = pp.getG1GroupGenerator().pow(exponentA).compute();
+        GroupElement group1ElementA = getG1GroupGenerator().pow(exponentA).compute();
 
         //put into keys
 
@@ -101,13 +110,13 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
         ZpElement exponentZeta = pp.getZp().getUniformlyRandomNonzeroElement();
 
-        GroupElement group1ElementSigmaZ = pp.getG2GroupGenerator().pow(exponentZeta).compute();
+        GroupElement group1ElementSigmaZ = getG2GroupGenerator().pow(exponentZeta).compute();
 
         // calculate exponent of the left side of R
         ZpElement lhsExponent = oneTimeKey;
         lhsExponent = lhsExponent.sub(exponentZeta.mul(sk.getExponentW()));
 
-        GroupElement group1ElementSigmaR = pp.getG2GroupGenerator().pow(lhsExponent);
+        GroupElement group1ElementSigmaR = getG2GroupGenerator().pow(lhsExponent);
 
         for (int i = 0; i < messageBlock.length(); i++) {
             GroupElement m_i = ((GroupElementPlainText)messageBlock.get(i)).get();
@@ -159,10 +168,10 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
         //check PPE
 
         //this should throw an exception if the OT key was already used TODO check that
-        GroupElement ppelhs = bMap.apply(oneTimeVerificationKey, pp.getG2GroupGenerator()).compute();
+        GroupElement ppelhs = bMap.apply(oneTimeVerificationKey, getG2GroupGenerator()).compute();
 
         GroupElement pperhs = bMap.apply(vk.getGroup1ElementW(), sigma.getGroup2ElementZ());
-        pperhs = pperhs.op(bMap.apply(pp.getG1GroupGenerator(), sigma.getGroup2ElementR()));
+        pperhs = pperhs.op(bMap.apply(getG1GroupGenerator(), sigma.getGroup2ElementR()));
 
         for (int i = 0; i < messageBlock.length(); i++) {
             GroupElement m_i = ((GroupElementPlainText)messageBlock.get(i)).get();
@@ -175,12 +184,12 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
     @Override
     public PlainText restorePlainText(Representation repr) {
-        return new MessageBlock(repr, r -> new GroupElementPlainText(r, pp.getG2GroupGenerator().getStructure()));
+        return new MessageBlock(repr, r -> new GroupElementPlainText(r, getG2GroupGenerator().getStructure()));
     }
 
     @Override
     public Signature restoreSignature(Representation repr) {
-        return new SPSPOSSignature(repr, pp.getG2GroupGenerator().getStructure());
+        return new SPSPOSSignature(repr, getG2GroupGenerator().getStructure());
     }
 
     @Override
@@ -190,7 +199,7 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
     @Override
     public VerificationKey restoreVerificationKey(Representation repr) {
-        return new SPSPOSVerificationKey(repr, pp.getG1GroupGenerator().getStructure());
+        return new SPSPOSVerificationKey(repr, getG1GroupGenerator().getStructure());
     }
 
     @Override
@@ -218,10 +227,10 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
         GroupElementPlainText[] msgBlock = new GroupElementPlainText[messageBlockLength];
         msgBlock[0] = new GroupElementPlainText(
-                pp.getG2GroupGenerator().pow(pp.getZp().injectiveValueOf(bytes))
+                getG2GroupGenerator().pow(pp.getZp().injectiveValueOf(bytes))
         );
         for (int i = 1; i < messageBlockLength; i++) {
-            msgBlock[i] = new GroupElementPlainText(pp.getG2GroupGenerator());
+            msgBlock[i] = new GroupElementPlainText(getG2GroupGenerator());
         }
 
         return new MessageBlock(msgBlock);
@@ -229,7 +238,7 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
     @Override
     public int getMaxNumberOfBytesForMapToPlaintext() {
-        return (pp.getG2GroupGenerator().getStructure().size().bitLength() - 1) / 8;
+        return (getG2GroupGenerator().getStructure().size().bitLength() - 1) / 8;
     }
 
 

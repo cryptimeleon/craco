@@ -10,6 +10,7 @@ import org.cryptimeleon.craco.sig.sps.akot15.tc.TCAKOT15Commitment;
 import org.cryptimeleon.craco.sig.sps.akot15.tc.TCAKOT15CommitmentScheme;
 import org.cryptimeleon.craco.sig.sps.akot15.tcgamma.TCGAKOT15Commitment;
 import org.cryptimeleon.craco.sig.sps.akot15.tcgamma.TCGAKOT15CommitmentKey;
+import org.cryptimeleon.craco.sig.sps.akot15.tcgamma.TCGAKOT15XSIGCommitment;
 import org.cryptimeleon.craco.sig.sps.akot15.xsig.*;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
@@ -32,10 +33,10 @@ public class SPSFSP2SignatureScheme implements MultiMessageStructurePreservingSi
 
         //instantiate nested building blocks
         SPSXSIGPublicParameters pp_xsig = new SPSXSIGPublicParameters(pp);
+
         xsigInstance = new SPSXSIGSignatureScheme(pp_xsig);
 
-        AKOT15SharedPublicParameters pp_tc = new AKOT15SharedPublicParameters(pp.getBilinearGroup(), pp.getMessageLength(), pp_xsig.getGroup1ElementF1(), pp_xsig.getGroup2ElementF1());
-        tcInstance = new TCAKOT15CommitmentScheme(pp_tc);
+        tcInstance = new TCAKOT15CommitmentScheme(pp_xsig);
     }
 
     @Override
@@ -66,13 +67,15 @@ public class SPSFSP2SignatureScheme implements MultiMessageStructurePreservingSi
         MessageBlock messageBlock = (MessageBlock) plainText;
         SPSXSIGSigningKey sk = (SPSXSIGSigningKey) secretKey;
 
-        CommitmentPair commitmentPair_tc = tcInstance.commit(messageBlock);
+        CommitmentPair tcCommitmentPair = tcInstance.commit(messageBlock);
 
-        TCGAKOT15Commitment com = ((TCGAKOT15Commitment)commitmentPair_tc.getCommitment());
+        // as defined by the public parameters, TCG returns a special variant of the commitment that includes the
+        //      2 additional values needed by XSIG
+        TCGAKOT15XSIGCommitment com = ((TCGAKOT15XSIGCommitment)tcCommitmentPair.getCommitment());
 
-        SPSXSIGSignature sigma = (SPSXSIGSignature) xsigInstance.sign(sk, new GroupElementPlainText(com.getGroup2ElementGu()));
+        SPSXSIGSignature sigma = (SPSXSIGSignature) xsigInstance.sign(sk, com.toMessageBlock());
 
-        return new SPSFSP2Signature(sigma, commitmentPair_tc);
+        return new SPSFSP2Signature(sigma, tcCommitmentPair);
     }
 
     @Override
@@ -100,8 +103,8 @@ public class SPSFSP2SignatureScheme implements MultiMessageStructurePreservingSi
 
         CommitmentPair commitmentPair = sigma.getCommitmentPair_tc();
 
-        return xsigInstance.verify(new GroupElementPlainText(((TCAKOT15Commitment)commitmentPair.getCommitment()).getCommitment()), sigma.getSigma_xsig(), vk.getVk_xsig())
-                && tcInstance.verify(sigma.getCommitmentPair_tc().getCommitment(), sigma.getCommitmentPair_tc().getOpenValue(), messageBlock);
+        return xsigInstance.verify(((TCGAKOT15XSIGCommitment)commitmentPair.getCommitment()).toMessageBlock(), sigma.getSigma_xsig(), vk.getVk_xsig())
+            && tcInstance.verify(sigma.getCommitmentPair_tc().getCommitment(), sigma.getCommitmentPair_tc().getOpenValue(), messageBlock);
     }
 
     @Override

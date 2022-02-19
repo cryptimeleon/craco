@@ -54,6 +54,20 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
         generateRandomU();
     }
 
+    private SPSXSIGPublicParameters(SPSXSIGPublicParameters original) {
+        super(original.getBilinearGroup(), original.getMessageLength());
+        this.group1ElementG = original.getG1GroupGenerator();
+        this.group2ElementH = original.getG2GroupGenerator();
+
+        this.group1ElementF1 = original.group1ElementF1;
+        this.group2ElementF1 = original.group2ElementF1;
+        this.group1ElementF2 = original.group1ElementF2;
+        this.group2ElementF2 = original.group2ElementF2;
+        this.group1ElementsU = original.group1ElementsU;
+        this.group2ElementsU = original.group2ElementsU;
+
+    }
+
 
     public SPSXSIGPublicParameters(Representation repr) {
         new ReprUtil(this).deserialize(repr);
@@ -132,6 +146,11 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
         return Objects.hash(bilinearGroup, group1ElementG, group2ElementH, messageLength);
     }
 
+    @Override
+    public SPSXSIGPublicParameters clone() {
+        return new SPSXSIGPublicParameters(this);
+    }
+
     public BilinearGroup getBilinearGroup() {
         return bilinearGroup;
     }
@@ -164,47 +183,24 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
         return group1ElementF1;
     }
 
-    public void setGroup1ElementF1(GroupElement group1ElementF1) {
-        this.group1ElementF1 = group1ElementF1;
-    }
-
     public GroupElement getGroup1ElementF2() {
         return group1ElementF2;
-    }
-
-    public void setGroup1ElementF2(GroupElement group1ElementF2) {
-        this.group1ElementF2 = group1ElementF2;
     }
 
     public GroupElement getGroup2ElementF1() {
         return group2ElementF1;
     }
 
-    public void setGroup2ElementF1(GroupElement group2ElementF1) {
-        this.group2ElementF1 = group2ElementF1;
-    }
-
     public GroupElement getGroup2ElementF2() {
         return group2ElementF2;
-    }
-
-    public void setGroup2ElementF2(GroupElement group2ElementF2) {
-        this.group2ElementF2 = group2ElementF2;
     }
 
     public GroupElement[] getGroup1ElementsU() {
         return group1ElementsU;
     }
 
-    public void setGroup1ElementsU(GroupElement[] group1ElementsU) {
-        this.group1ElementsU = group1ElementsU;
-    }
-
     public GroupElement[] getGroup2ElementsU() {
         return group2ElementsU;
     }
 
-    public void setGroup2ElementsU(GroupElement[] group2ElementsU) {
-        this.group2ElementsU = group2ElementsU;
-    }
 }
