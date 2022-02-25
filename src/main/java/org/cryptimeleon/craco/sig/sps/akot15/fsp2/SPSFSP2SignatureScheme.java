@@ -16,6 +16,8 @@ import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
 
+import java.util.Objects;
+
 public class SPSFSP2SignatureScheme implements MultiMessageStructurePreservingSignatureScheme {
 
     @Represented
@@ -107,24 +109,35 @@ public class SPSFSP2SignatureScheme implements MultiMessageStructurePreservingSi
             && tcInstance.verify(sigma.getCommitmentPair_tc().getCommitment(), sigma.getCommitmentPair_tc().getOpenValue(), messageBlock);
     }
 
+
     @Override
     public PlainText restorePlainText(Representation repr) {
-        return null;
+        // The message space for this scheme is a simple vector of GroupElements in G2
+        return new MessageBlock(repr, r -> new GroupElementPlainText(r, pp.getG2GroupGenerator().getStructure()));
     }
 
     @Override
     public Signature restoreSignature(Representation repr) {
-        return null;
+        return new SPSFSP2Signature(
+                pp.getG1GroupGenerator().getStructure(),
+                pp.getG2GroupGenerator().getStructure(),
+                repr);
     }
 
     @Override
     public SigningKey restoreSigningKey(Representation repr) {
-        return null;
+        return new SPSXSIGSigningKey(
+                pp.getG1GroupGenerator().getStructure(),
+                pp.getG2GroupGenerator().getStructure(),
+                repr);
     }
 
     @Override
     public VerificationKey restoreVerificationKey(Representation repr) {
-        return null;
+        return new SPSFSP2VerificationKey(
+                pp.getG1GroupGenerator().getStructure(),
+                pp.getG2GroupGenerator().getStructure(),
+                repr);
     }
 
     @Override
@@ -145,6 +158,20 @@ public class SPSFSP2SignatureScheme implements MultiMessageStructurePreservingSi
     @Override
     public Representation getRepresentation() {
         return new ReprUtil(this).serialize();
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SPSFSP2SignatureScheme that = (SPSFSP2SignatureScheme) o;
+        return Objects.equals(pp, that.pp) && Objects.equals(xsigInstance, that.xsigInstance) && Objects.equals(tcInstance, that.tcInstance);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pp, xsigInstance, tcInstance);
     }
 
 }
