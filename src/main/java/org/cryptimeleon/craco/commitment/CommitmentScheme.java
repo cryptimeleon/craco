@@ -50,7 +50,20 @@ public interface CommitmentScheme extends StandaloneRepresentable, Representatio
      * @throws IllegalArgumentException if there is no injective {@code PlainText} element corresponding to the given
      *                                  bytes, for example if the byte array is too long
      */
-    PlainText mapToPlainText(byte[] bytes);
+    PlainText mapToPlaintext(byte[] bytes);
+
+
+    /**
+     * Returns the maximal number of bytes that can be mapped injectively to a {@link PlainText} by
+     * {@link #mapToPlaintext(byte[])}
+     * <p>
+     * As described in {@link #mapToPlaintext(byte[])} there might be no injective {@link PlainText} for some byte arrays, e.g.
+     * if the byte array is too long. Therefore, this method provides the maximal number of bytes that can be mapped
+     * injectively to a {@link PlainText}.
+     *
+     * @return maximal number of bytes that can be given to {@link #mapToPlaintext(byte[])}.
+     */
+    int getMaxNumberOfBytesForMapToPlaintext();
 
     default CommitmentPair restoreCommitmentPair(Representation repr) {
         return new CommitmentPair(
