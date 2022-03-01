@@ -1,7 +1,6 @@
 package org.cryptimeleon.craco.sig.sps.kpw15;
 
 import org.cryptimeleon.craco.common.PublicParameters;
-import org.cryptimeleon.craco.sig.sps.agho11.SPSAGHO11PublicParameters;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;

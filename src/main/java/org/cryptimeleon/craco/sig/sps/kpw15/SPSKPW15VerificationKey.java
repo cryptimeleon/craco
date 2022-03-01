@@ -1,15 +1,12 @@
 package org.cryptimeleon.craco.sig.sps.kpw15;
 
 import org.cryptimeleon.craco.sig.VerificationKey;
-import org.cryptimeleon.craco.sig.sps.agho11.SPSAGHO11VerificationKey;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.cartesian.Vector;
 import org.cryptimeleon.math.structures.groups.Group;
 import org.cryptimeleon.math.structures.groups.GroupElement;
-import org.cryptimeleon.math.structures.groups.cartesian.GroupElementVector;
-import org.cryptimeleon.math.structures.rings.zn.Zp;
 
 import java.util.Arrays;
 import java.util.Objects;

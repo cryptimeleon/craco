@@ -1,6 +1,5 @@
 package org.cryptimeleon.craco.sig.sps.kpw15;
 
-import org.cryptimeleon.craco.sig.sps.agho11.SPSAGHO11PublicParameters;
 import org.cryptimeleon.math.random.RandomGenerator;
 import org.cryptimeleon.math.structures.groups.debug.DebugBilinearGroup;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearGroup;
