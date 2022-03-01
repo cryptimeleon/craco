@@ -72,14 +72,26 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
 
         for (int i = 0; i < messageBlockLengths.length; i++) {
             if(!(messageBlockLengths[i] == pp.getMessageLengths()[i])){
-                throw new IllegalArgumentException("The given messageBlockLengths do not match the public parameters");
+                throw new IllegalArgumentException(
+                        String.format(
+                                "The given message length of the %s vector does not match the public parameters" +
+                                " expected: %d, but was: %d",
+                                (i == 0) ? "first" : "second",
+                                pp.getMessageLengths()[i],
+                                messageBlockLengths[i]
+                        )
+                );
             }
         }
 
-        ZpElement[] exponentsU = IntStream.range(0, messageBlockLengths[1]).mapToObj( //note that u_1 ... u_k_N
+        // edge-case: if the expected messageBlockLengths are too short, add padding to the key
+        int firstMsgVectorLength = Math.max(1, messageBlockLengths[0]); // k_M will be padded to be at least 1
+        int secondMsgVectorLength = Math.max(2, messageBlockLengths[1]); // k_N will be padded to be at least 2
+
+        ZpElement[] exponentsU = IntStream.range(0, secondMsgVectorLength).mapToObj( //note that u_1 ... u_k_N
                 x -> zp.getUniformlyRandomNonzeroElement())
                 .toArray(ZpElement[]::new);
-        ZpElement[] exponentsW = IntStream.range(0, messageBlockLengths[0]).mapToObj( //and that w_1 ... w_k_M
+        ZpElement[] exponentsW = IntStream.range(0, firstMsgVectorLength).mapToObj( //and that w_1 ... w_k_M
                 x -> zp.getUniformlyRandomNonzeroElement())
                 .toArray(ZpElement[]::new);
 
@@ -120,6 +132,8 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
         }
 
         MessageBlock containerBlock = (MessageBlock) plainText;
+        containerBlock = padMessageIfShort(containerBlock); // pad message if necessary
+
         MessageBlock messageGElements = (MessageBlock) containerBlock.get(0);
         MessageBlock messageHElements = (MessageBlock) containerBlock.get(1);
 
@@ -178,6 +192,8 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
         }
 
         MessageBlock containerBlock = (MessageBlock) plainText;
+        containerBlock = padMessageIfShort(containerBlock); // pad message if necessary
+
         MessageBlock messageGElements = (MessageBlock) containerBlock.get(0);
         MessageBlock messageHElements = (MessageBlock) containerBlock.get(1);
 
@@ -305,6 +321,11 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
 
     private MessageBlock mapToPlaintext(byte[] bytes, int messageBlockLength){
         // returns (P^m, P, ..., P) where m = Z_p.injectiveValueOf(bytes).
+
+        // if the scheme uses zero length messages for G1, messages will be padded to at least 1 element
+        if(messageBlockLength == 0) {
+            messageBlockLength = 1;
+        }
 
         GroupElementPlainText[] msgBlock = new GroupElementPlainText[messageBlockLength];
         msgBlock[0] = new GroupElementPlainText(
@@ -445,6 +466,37 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
         }
 
         // if no exception has been thrown at this point, we can assume the message matches the expected structure.
+    }
+
+    /**
+     * Pads a given {@link MessageBlock} in case either of its inner MessageBlocks is too short.
+     * k_M (the first inner Block) must be at least 1 element long
+     * k_N (the second inner Block) must be at least 2 elements long
+     */
+    private MessageBlock padMessageIfShort(MessageBlock messageBlock) {
+
+        // at this point we assume the message is of the correct structure, as per {@code doMessageChecks()}
+
+        MessageBlock firstInnerBlock = (MessageBlock) messageBlock.get(0);
+        MessageBlock secondInnerBlock = (MessageBlock) messageBlock.get(1);
+
+        GroupElement g1Neutral = pp.getG1GroupGenerator().getStructure().getNeutralElement();
+        GroupElement g2Neutral = pp.getG2GroupGenerator().getStructure().getNeutralElement();
+
+        //pad messages only if needed
+        if(pp.getMessageLengths()[0] < 1) {
+            firstInnerBlock = new MessageBlock(
+                    firstInnerBlock.pad(new GroupElementPlainText(g1Neutral), 1)
+            );
+        }
+
+        if(pp.getMessageLengths()[1] < 2) {
+            secondInnerBlock = new MessageBlock(
+                    secondInnerBlock.pad(new GroupElementPlainText(g2Neutral), 2)
+            );
+        }
+
+        return new MessageBlock(firstInnerBlock, secondInnerBlock);
     }
     
 }
