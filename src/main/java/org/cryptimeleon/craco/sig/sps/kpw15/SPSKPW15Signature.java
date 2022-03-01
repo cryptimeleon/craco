@@ -14,6 +14,9 @@ import org.cryptimeleon.math.structures.groups.GroupElement;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * A signature as defined by the KPW15 SPS scheme.
+ */
 public class SPSKPW15Signature implements Signature, UniqueByteRepresentable {
 
     /**
@@ -45,8 +48,6 @@ public class SPSKPW15Signature implements Signature, UniqueByteRepresentable {
     protected GroupElement group2ElementSigma4U;
 
 
-
-
     public SPSKPW15Signature(Representation repr, Group groupG1, Group groupG2) {
         new ReprUtil(this).register(groupG1,"G1").register(groupG2,"G2").deserialize(repr);
     }
@@ -61,8 +62,6 @@ public class SPSKPW15Signature implements Signature, UniqueByteRepresentable {
         this.group1ElementSigma3T = group1ElementSigma3T;
         this.group2ElementSigma4U = group2ElementSigma4U;
     }
-
-
 
 
     public GroupElement[] getGroup1ElementSigma1R() {
@@ -82,11 +81,8 @@ public class SPSKPW15Signature implements Signature, UniqueByteRepresentable {
     }
 
 
-
-
     @Override
     public Representation getRepresentation() { return ReprUtil.serialize(this); }
-
 
     @Override
     public ByteAccumulator updateAccumulator(ByteAccumulator accumulator) { return AnnotatedUbrUtil.autoAccumulate(accumulator, this); }
@@ -112,4 +108,5 @@ public class SPSKPW15Signature implements Signature, UniqueByteRepresentable {
     public int hashCode() {
         return Objects.hash(group1ElementSigma1R, group1ElementSigma2S, group1ElementSigma3T, group2ElementSigma4U);
     }
+
 }

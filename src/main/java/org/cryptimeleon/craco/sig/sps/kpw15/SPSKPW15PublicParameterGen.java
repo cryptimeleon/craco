@@ -11,7 +11,7 @@ public class SPSKPW15PublicParameterGen {
      * @param securityParameter The security parameter.
      * @param debugMode         Enable debug mode (Makes the PPs insecure!).
      * @param messageLength The message length the instance is expected to sign
-     * @return The public parameters for the AGHO11 SPS scheme
+     * @return The public parameters for the KPW15 SPS scheme
      */
     public SPSKPW15PublicParameters generatePublicParameter(int securityParameter, boolean debugMode, int messageLength) {
         BilinearGroup group;
