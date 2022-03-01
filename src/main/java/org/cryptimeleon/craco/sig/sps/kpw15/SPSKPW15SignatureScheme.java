@@ -19,15 +19,17 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 
 /**
- * A simplified implementation of the SPS scheme originally presented in [1] by Kiltz et al.
- * Signs a vector of n G1 group elements.
+ * A simplified implementation of the SPS scheme originally presented in [1] by Kiltz et al. as seen in [2]
+ * Signs a vector of {n} group elements in G_1.
+ *
  * <p>
  * Bilinear map type: 3
  * <p>
+ *
  * [1] Kiltz, E.,Pan, J., Wee, H.:
  * Structure-Preserving Signatures from Standard Assumptions, Revisited
  * https://eprint.iacr.org/2015/604.pdf
- * <p>
+ *
  * [2] Sakai, Y., Attrapadung, N., Hanaoka, G.:
  * Attribute-Based Signatures for Circuits from Bilinear Map
  * https://eprint.iacr.org/2016/242.pdf
@@ -36,10 +38,14 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
 
     /**
      * The public parameters used by the scheme
-     * */
+     */
     @Represented
     SPSKPW15PublicParameters pp;
 
+    /**
+     * k is relevant in regard to the security assumptions under which the scheme is CMA-secure.
+     * See [1] (p. 12) for details.
+     */
     static final int k = 1;
 
 
@@ -51,8 +57,6 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
     }
 
     public SPSKPW15SignatureScheme(Representation repr) { new ReprUtil(this).deserialize(repr); }
-
-
 
 
     @Override
@@ -87,13 +91,13 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
                         x -> zp.getUniformlyRandomElement())
                 .toArray(ZpElement[]::new);
 
-        // calculate C ((n+1) x 1)
+        // calculate C ((n+1) x 1 matrix)
 
         ZpElement[] C = MatrixUtility.matrixMul(
                 K, (numberOfMessages + 1), 2,
                 A, 2, 1); //K.mul(A)
 
-        // calculate C0, C1 (2 x 1)
+        // calculate C0, C1 (2 x 1 matrix)
 
         ZpElement[] C0 = MatrixUtility.matrixMul(
                 K0, 2, 2,
@@ -101,11 +105,11 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
 
         ZpElement[] C1 = MatrixUtility.matrixMul(
                 K1, 2, 2,
-                A, 2, 1);//K1.mul(A)
+                A, 2, 1); //K1.mul(A)
 
         // calculate P0, P1 (1 x 2)
 
-        //Note that we transpose B implicitly, as it only contains 2 elements anyway
+        //Note that we transpose B implicitly here, as it only contains 2 elements anyway
         ZpElement[] P0 = MatrixUtility.matrixMul(
                 B, 1, 2,
                 K0, 2, 2
@@ -138,21 +142,21 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
     @Override
     public Signature sign(PlainText plainText, SigningKey secretKey) {
 
-        if (plainText instanceof GroupElementPlainText) {
-            plainText = new MessageBlock(plainText);
+        if((plainText instanceof GroupElementPlainText)){
+            plainText = new MessageBlock(plainText); //if only a single element was given, wrap it in a MessageBlock
         }
-        if (!(plainText instanceof MessageBlock)) {
-            throw new IllegalArgumentException("Not a valid plain text for this scheme");
-        }
+
+        // check if the plainText matches the structure required by the scheme
+        doMessageChecks(plainText);
+
+        MessageBlock messageBlock = (MessageBlock) plainText;
+        messageBlock.prepend(new GroupElementPlainText(pp.getG1GroupGenerator()));
+
         if (!(secretKey instanceof SPSKPW15SigningKey)) {
             throw new IllegalArgumentException("Not a valid signing key for this scheme");
         }
 
         SPSKPW15SigningKey sk = (SPSKPW15SigningKey) secretKey;
-        MessageBlock messageBlock = (MessageBlock) plainText;
-        messageBlock.prepend(new GroupElementPlainText(pp.getG1GroupGenerator()));
-
-        //TODO check message block length
 
         //pick randomness r0, r1
 
@@ -211,7 +215,11 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
         return new SPSKPW15Signature(sigma1, sigma2, sigma3, sigma4);
     }
 
-    private boolean checkSigma1(GroupElement[] sigma1, GroupElement[] paddedMessage, ZpElement[] K, ZpElement r0, ZpElement r1, GroupElement[] P0, GroupElement[] P1 ) {
+    private boolean checkSigma1(GroupElement[] sigma1,
+                                GroupElement[] paddedMessage,
+                                ZpElement[] K,
+                                ZpElement r0, ZpElement r1,
+                                GroupElement[] P0, GroupElement[] P1 ) {
 
         // n = 1
         // padded message^T (1 x 2) x K (2 x 2) -> 1 x 2
@@ -250,11 +258,12 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
     @Override
     public Boolean verify(PlainText plainText, Signature signature, VerificationKey publicKey) {
 
-        if(!(plainText instanceof MessageBlock)){
-            throw new IllegalArgumentException("Not a valid plain text for this scheme");
+        if((plainText instanceof GroupElementPlainText)){
+            plainText = new MessageBlock(plainText); //if only a single element was given, wrap it in a MessageBlock
         }
 
-        //TODO check message length
+        // check if the plainText matches the structure required by the scheme
+        doMessageChecks(plainText);
 
         if(!(signature instanceof SPSKPW15Signature)){
             throw new IllegalArgumentException("Not a valid signature for this scheme");
@@ -266,14 +275,7 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
 
         MessageBlock messageBlock = (MessageBlock) plainText;
         // we need the vector (1,m) for the PPEs
-        GroupElement[] message = new GroupElement[messageBlock.length()+1];
-
-        message[0] = pp.getG1GroupGenerator();
-
-        for (int i = 1; i <= messageBlock.length(); i++) {
-            message[i] = ((GroupElementPlainText) messageBlock.get(i-1)).get();
-        }
-
+        messageBlock = padMessage(messageBlock);
 
         SPSKPW15Signature sigma = (SPSKPW15Signature) signature;
         SPSKPW15VerificationKey pk = (SPSKPW15VerificationKey) publicKey;
@@ -292,20 +294,28 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
         //sigma4 is only a single group element
 
 
-        return evaluateFirstPPE(sigma1, sigma2, sigma3, message, C, C0, C1, pk.getA())
+        return evaluateFirstPPE(sigma1, sigma2, sigma3, messageBlock, C, C0, C1, pk.getA())
                 && evaluateSecondPPE(sigma2, sigma.getGroup2ElementSigma4U(), sigma3);
     }
 
+
+    /**
+     * Evaluates the first PPE as defined in the paper.
+     */
     private boolean evaluateFirstPPE(GroupElementVector sigma1,
                                      GroupElementVector sigma2,
                                      GroupElementVector sigma3,
-                                     GroupElement[] message,
+                                     MessageBlock paddedMessage,
                                      GroupElementVector C,
                                      GroupElementVector C0,
                                      GroupElementVector C1,
                                      GroupElement A) {
 
         BilinearMap bMap = pp.getBilinearMap();
+
+        GroupElement[] message = paddedMessage.stream().map(
+                x->((GroupElementPlainText)x).get()
+        ).toArray(GroupElement[]::new);
 
         //for matrices, Kiltz et al. define e(A,B) = AxB
         //note how these all result in a 1x1 matrix / a single group element
@@ -335,6 +345,9 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
         return ppe1lhs.equals(ppe1rhs);
     }
 
+    /**
+     * Evaluates the second PPE as defined in the paper.
+     */
     private boolean evaluateSecondPPE(GroupElementVector sigma2, GroupElement sigma4, GroupElementVector sigma3) {
 
         BilinearMap bMap = pp.getBilinearMap();
@@ -343,7 +356,7 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
                 bMap,
                 sigma2, 1, 2,
                 new GroupElementVector(sigma4, sigma4), 2, 1
-                ); //TODO optimize
+                );
 
         GroupElementVector ppe2rhs = MatrixUtility.matrixMul(
                 bMap,
@@ -354,8 +367,70 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
         return ppe2lhs.equals(ppe2rhs);
     }
 
+    /**
+     * Messages given to this scheme must be padded with one instance of the G_1 generator set in the public parameters.
+     * This is required in order for the dimensions of the message and matrices to match.
+     */
+    private MessageBlock padMessage(MessageBlock messageBlock) {
+        return new MessageBlock(
+                messageBlock.prepend(
+                        new GroupElementPlainText(pp.getG1GroupGenerator())
+                )
+        );
+    }
 
-    public SPSKPW15PublicParameters getPp(){ return pp; }
+    /**
+     * Check if the given plainText matches the structure expected by the scheme
+     *      and throws detailed exception if the plainText fails any check.
+     *      The scheme expects messages containing a vector of{@link GroupElementPlainText}s in G_1.
+     *      Size must match the public parameters.
+     * */
+    private void doMessageChecks(PlainText plainText) {
+
+        MessageBlock messageBlock;
+
+        // The scheme expects a MessageBlock...
+        if(plainText instanceof MessageBlock) {
+            messageBlock = (MessageBlock) plainText;
+        }
+        else {
+            throw new IllegalArgumentException("The scheme requires its messages to be GroupElements");
+        }
+
+        // ...with a size matching the public parameters...
+        if(messageBlock.length() != pp.messageLength) {
+            throw new IllegalArgumentException(String.format(
+                    "The scheme expected a message of length %d, but the size was: %d",
+                    pp.messageLength, messageBlock.length()
+            ));
+        }
+
+        // ...containing group elements...
+        for (int i = 0; i < messageBlock.length(); i++) {
+            if(!(messageBlock.get(i) instanceof GroupElementPlainText)) {
+                throw new IllegalArgumentException(
+                        String.format(
+                                "The scheme requires its messages to be GroupElements," +
+                                        " but element %d was of type: %s",
+                                i, messageBlock.get(i).getClass().toString()
+                        )
+                );
+            }
+
+            // ... in G1.
+            GroupElementPlainText groupElementPT = (GroupElementPlainText) messageBlock.get(i);
+            if(!(groupElementPT.get().getStructure().equals(pp.getG1GroupGenerator().getStructure()))) {
+                throw new IllegalArgumentException(
+                        String.format(
+                                "Expected message to be in G_1, but element %d was in: %s",
+                                i, groupElementPT.get().getStructure().toString()
+                        )
+                );
+            }
+        }
+
+        // if no exception has been thrown at this point, we can assume the message matches the expected structure.
+    }
 
 
     @Override
