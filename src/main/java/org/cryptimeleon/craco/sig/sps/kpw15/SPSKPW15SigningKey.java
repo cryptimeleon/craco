@@ -15,10 +15,9 @@ import java.util.Objects;
 /**
  * Class for the secret (signing) key of the KPW15 signature scheme.
  *
+ * Note: the names of the elements have been carried over from the paper as-is.
  */
 public class SPSKPW15SigningKey implements SigningKey {
-
-    // K, P0, P1, B
 
     /**
      * (n+1 x k+1) Matrix K in the paper

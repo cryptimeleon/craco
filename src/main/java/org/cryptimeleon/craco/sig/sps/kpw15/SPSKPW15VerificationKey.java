@@ -11,6 +11,11 @@ import org.cryptimeleon.math.structures.groups.GroupElement;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * Class for the public (verification) key of the KPW15 signature scheme.
+ *
+ * Note: the names of the elements have been carried over from the paper as-is.
+ */
 public class SPSKPW15VerificationKey implements VerificationKey {
 
     // C0, C1, C, A (all in G_2)
