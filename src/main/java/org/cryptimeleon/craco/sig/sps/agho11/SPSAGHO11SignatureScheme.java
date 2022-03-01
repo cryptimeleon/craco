@@ -25,6 +25,9 @@ import java.util.stream.IntStream;
  * CRYPTO 2011: Advances in Cryptology – CRYPTO 2011 pp. 649-666
  * https://www.iacr.org/archive/crypto2011/68410646/68410646.pdf
  *
+ * Note: For short messages (k_M = 0 or k_N \in {0,1}) messages and keys will be padded to length
+ * to ensure the scheme's security as described in [1]
+ *
  * */
 public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreservingSignatureScheme {
 
