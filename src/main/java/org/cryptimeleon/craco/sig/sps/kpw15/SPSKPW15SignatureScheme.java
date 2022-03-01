@@ -175,7 +175,7 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
             message[i] = ((GroupElementPlainText) messageBlock.get(i-1)).get();
         }
 
-        GroupElement[] sigma1lhs = MatrixUtility.calculateSigma1Matrix(message, sk.getK());
+        GroupElement[] sigma1lhs = MatrixUtility.calculateSigma1MatrixMxK(message, sk.getK());
 
         GroupElement[] sigma1rhsInner = Arrays.stream(sk.getP1()).map(
                 x -> x.pow(r1).compute()
@@ -320,23 +320,23 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
         //for matrices, Kiltz et al. define e(A,B) = AxB
         //note how these all result in a 1x1 matrix / a single group element
 
-        GroupElementVector ppe1lhs = MatrixUtility.matrixMul(
+        GroupElementVector ppe1lhs = MatrixUtility.matrixApplyMap(
                 bMap,
                 sigma1, 1, 2,
                 new GroupElementVector(pp.getG2GroupGenerator(), A), 2, 1
                 ).compute();
 
-        GroupElementVector ppe1rhs1 = MatrixUtility.matrixMul(
+        GroupElementVector ppe1rhs1 = MatrixUtility.matrixApplyMap(
                 bMap,
                 new GroupElementVector(message), 1, message.length,
                 C, message.length, 1);
 
-        GroupElementVector ppe1rhs2 = MatrixUtility.matrixMul(
+        GroupElementVector ppe1rhs2 = MatrixUtility.matrixApplyMap(
                 bMap,
                 sigma2, 1, 2,
                 C0, 2, 1);
 
-        GroupElementVector ppe1rhs3 = MatrixUtility.matrixMul(bMap,
+        GroupElementVector ppe1rhs3 = MatrixUtility.matrixApplyMap(bMap,
                 sigma3, 1, 2,
                 C1, 2, 1);
 
@@ -352,13 +352,13 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
 
         BilinearMap bMap = pp.getBilinearMap();
 
-        GroupElementVector ppe2lhs = MatrixUtility.matrixMul(
+        GroupElementVector ppe2lhs = MatrixUtility.matrixApplyMap(
                 bMap,
                 sigma2, 1, 2,
                 new GroupElementVector(sigma4, sigma4), 2, 1
                 );
 
-        GroupElementVector ppe2rhs = MatrixUtility.matrixMul(
+        GroupElementVector ppe2rhs = MatrixUtility.matrixApplyMap(
                 bMap,
                 sigma3, 1, 2,
                 new GroupElementVector(pp.getG2GroupGenerator(), pp.getG2GroupGenerator()), 2, 1
