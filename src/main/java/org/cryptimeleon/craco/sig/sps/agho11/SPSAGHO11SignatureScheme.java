@@ -25,10 +25,19 @@ import java.util.stream.IntStream;
  * CRYPTO 2011: Advances in Cryptology – CRYPTO 2011 pp. 649-666
  * https://www.iacr.org/archive/crypto2011/68410646/68410646.pdf
  *
- * Note: For short messages (k_M = 0 or k_N \in {0,1}) messages and keys will be padded to length
- * to ensure the scheme's security as described in [1]
+ * Note: To ensure the scheme's security as described in [1], messages and keys will be padded to length
+ *      for short messages (k_M = 0 or k_N \in {0,1}), such that at least one G_1 group element and
+ *      at least two G_2 groupElements are signed.
+ *      The messages are assumed to be composed of a tuple of two {@link MessageBlock}s;
+ *      one containing {@link  GroupElementPlainText}s of elements in G_1 and the other {@link  GroupElementPlainText}s
+ *      of elements in G_2.
+ *      The message vectors are padded with the neutral element of they respective groups.
+ *      The key generation function accounts for this edge-case automatically by calculating the extra elements
+ *      that are required as a consequence of the padding.
+ *      From a user perspective, any positive length tuple of two message-vectors (M \in G_1,N \in G_2) may be passed
+ *      without the need for additional precautions.
  *
- * */
+ */
 public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreservingSignatureScheme {
 
     /**
