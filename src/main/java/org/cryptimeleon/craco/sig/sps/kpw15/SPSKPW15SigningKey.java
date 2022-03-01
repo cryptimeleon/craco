@@ -88,16 +88,8 @@ public class SPSKPW15SigningKey implements SigningKey {
         return P0;
     }
 
-    public void setP0(GroupElement[] P0) {
-        this.P0 = P0;
-    }
-
     public GroupElement[] getP1() {
         return P1;
-    }
-
-    public void setP1(GroupElement[] P1) {
-        this.P1 = P1;
     }
 
     public GroupElement getB() {
@@ -108,22 +100,15 @@ public class SPSKPW15SigningKey implements SigningKey {
         this.B = B;
     }
 
-
-
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof SPSKPW15SigningKey)) return false;
         SPSKPW15SigningKey that = (SPSKPW15SigningKey) o;
-
-        return this.hashCode() == that.hashCode(); //TODO something fishy here
-
-        //return Arrays.equals(K, that.K)
-        //        &&  Objects.equals(P0, that.P0)
-        //        &&  Arrays.equals(P1, that.P1)
-        //        &&  Objects.equals(B, that.B);
+        return Arrays.equals(K, that.K)
+                && Arrays.equals(P0, that.P0)
+                && Arrays.equals(P1, that.P1)
+                && Objects.equals(B, that.B);
     }
 
     @Override

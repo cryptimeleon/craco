@@ -40,8 +40,6 @@ public class SPSKPW15VerificationKey implements VerificationKey {
     protected GroupElement A;
 
 
-
-
     public SPSKPW15VerificationKey() { super(); }
 
     public SPSKPW15VerificationKey(Group G_1, Group G_2, Representation repr) {
@@ -69,27 +67,15 @@ public class SPSKPW15VerificationKey implements VerificationKey {
     }
 
 
-
-
     public GroupElement[] getC0() {
         return C0;
-    }
-
-    public void setC0(GroupElement[] c0) {
-        C0 = c0;
     }
 
     public GroupElement[] getC1() {
         return C1;
     }
 
-    public void setC1(GroupElement[] c1) {
-        C1 = c1;
-    }
-
-    public GroupElement[] getC() {
-        return C;
-    }
+    public GroupElement[] getC() { return C; }
 
     public void setC(GroupElement[] c) {
         C = c;
@@ -103,26 +89,19 @@ public class SPSKPW15VerificationKey implements VerificationKey {
         A = a;
     }
 
-
-
-
+    
     @Override
     public Representation getRepresentation() { return ReprUtil.serialize(this); }
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (!(o instanceof SPSKPW15VerificationKey)) return false;
         SPSKPW15VerificationKey that = (SPSKPW15VerificationKey) o;
-
-        return this.hashCode() == that.hashCode(); //TODO why won't the objects validate??
-
-        /*return Arrays.equals(C0, that.C0)
+        return Arrays.equals(C0, that.C0)
                 && Arrays.equals(C1, that.C1)
-                && Objects.equals(C, that.C)
-                && Objects.equals(A, that.A);*/
+                && Arrays.equals(C, that.C)
+                && Objects.equals(A, that.A);
     }
 
     @Override
