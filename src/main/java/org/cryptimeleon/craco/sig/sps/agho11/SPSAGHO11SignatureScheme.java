@@ -8,6 +8,7 @@ import org.cryptimeleon.math.serialization.ListRepresentation;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
+import org.cryptimeleon.math.structures.groups.Group;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearMap;
 import org.cryptimeleon.math.structures.rings.zn.Zp;
@@ -110,17 +111,12 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
     @Override
     public Signature sign(PlainText plainText, SigningKey secretKey) {
 
+        // check if the plainText matches the expected message structure
+        // the scheme signs messages on G^(k_M) x H^(k_N), so we need a MessageBlock containing 2 MessageBlocks
+        doMessageChecks(plainText);
+
         if(!(secretKey instanceof SPSAGHO11SigningKey)){
             throw new IllegalArgumentException("Not a valid signing key for this scheme");
-        }
-
-        if(!(plainText instanceof MessageBlock)){
-            throw new IllegalArgumentException("Not a valid plain text for this scheme");
-        }
-
-        //The scheme signs messages on G^(k_M) x H^(k_N), so we need a MessageBlock containing 2 MessageBlocks
-        if(!(((MessageBlock) plainText).length() == 2)){
-            throw new IllegalArgumentException("Not a valid plain text for this scheme.");
         }
 
         MessageBlock containerBlock = (MessageBlock) plainText;
@@ -169,13 +165,9 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
     @Override
     public Boolean verify(PlainText plainText, Signature signature, VerificationKey publicKey) {
 
-        if(!(plainText instanceof MessageBlock)){
-            throw new IllegalArgumentException("Not a valid plain text for this scheme");
-        }
-
-        if(!(((MessageBlock) plainText).length() == 2)){
-            throw new IllegalArgumentException("Not a valid plain text for this scheme.");
-        }
+        // check if the plainText matches the expected message structure
+        // the scheme signs messages on G^(k_M) x H^(k_N), so we need a MessageBlock containing 2 MessageBlocks
+        doMessageChecks(plainText);
 
         if(!(signature instanceof SPSAGHO11Signature)){
             throw new IllegalArgumentException("Not a valid signature for this scheme");
@@ -359,6 +351,100 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
 
         return Objects.equals(this.pp, other.pp);
 
+    }
+
+    /**
+     * Checks if the given {@link PlainText} matches the structure expected by the scheme and
+     *      throws detailed exception if the plainText fails any check.
+     *      The scheme expects a {@link MessageBlock} with two inner {@link MessageBlock}s, each holding
+     *      {@link GroupElementPlainText}s in G1 and G2 respectively.
+     */
+    private void doMessageChecks(PlainText plainText) throws IllegalArgumentException{
+
+        // check if the plainText is a MessageBlock...
+        if(!(plainText instanceof MessageBlock)) {
+            throw new IllegalArgumentException(
+                    String.format("The plainText provided must be a MessageBlock, but was: %s",
+                    plainText.getClass().toString()
+                    )
+            );
+        }
+
+        MessageBlock msgBlock = (MessageBlock) plainText;
+
+        // ...with two inner elements...
+        if(msgBlock.length() != 2) {
+            throw new IllegalArgumentException(
+                    String.format("The message provided must contain 2 inner MessageBlocks, but had: %d",
+                            msgBlock.length()
+                    )
+            );
+        }
+
+        // ...that are messageBlocks...
+        for (int i = 0; i < 2; i++) {
+            if(!(msgBlock.get(i) instanceof MessageBlock)) {
+                throw new IllegalArgumentException(
+                        String.format(
+                                "The message provided must contain 2 inner MessageBlocks," +
+                                        " but element %d was not an instance of MessageBlock", i));
+            }
+        }
+
+        // test both inner message blocks
+        MessageBlock innerBlock1 = (MessageBlock) msgBlock.get(0);
+        MessageBlock innerBlock2 = (MessageBlock) msgBlock.get(1);
+
+        for (int blockID = 0; blockID < 2; blockID++) {
+            MessageBlock innerBlock = (blockID == 0) ? innerBlock1 : innerBlock2;
+            int expectedLength = pp.messageLengths[blockID];
+            Group expectedGroup =
+                    (blockID == 0) ? pp.getG1GroupGenerator().getStructure() : pp.getG2GroupGenerator().getStructure();
+
+            // ...whose lengths match those defined in the public parameters...
+            if(innerBlock.length() != expectedLength) {
+                throw new IllegalArgumentException(
+                        String.format(
+                                "length of %s message vector does not match public parameters" +
+                                        " expected %d, but was: %d",
+                                (blockID == 0) ? "first" : "second",
+                                innerBlock1.length(), pp.messageLengths[0]
+                        )
+                );
+            }
+
+            // ...and hold GroupElementPlainTexts in G1 and G2 respectively...
+            for (int i = 0; i < innerBlock.length(); i++) {
+                if(!(innerBlock.get(i) instanceof GroupElementPlainText)) {
+                    throw new IllegalArgumentException(
+                            String.format(
+                                    "The inner message blocks may only contain GroupElementPlainTexts," +
+                                            " but element %d of inner block %d was of type: %s",
+                                    i,
+                                    blockID,
+                                    innerBlock.get(i).getClass().toString()
+                                    )
+                    );
+                }
+
+                GroupElement groupElement = ((GroupElementPlainText)innerBlock.get(i)).get();
+
+                if(!(groupElement.getStructure().equals(expectedGroup))) {
+                    throw new IllegalArgumentException(
+                            String.format(
+                                    "Element %d of inner message block %d does not match the expected group. "
+                                    + " expected: %s, but was: %s",
+                                    i,
+                                    blockID,
+                                    groupElement.getStructure().toString(),
+                                    expectedGroup.toString()
+                            )
+                    );
+                }
+            }
+        }
+
+        // if no exception has been thrown at this point, we can assume the message matches the expected structure.
     }
     
 }
