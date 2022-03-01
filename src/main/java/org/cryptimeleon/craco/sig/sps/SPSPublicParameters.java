@@ -16,7 +16,7 @@ import java.util.Objects;
  * i.e. a bilinear group for evauating pairing product equations and the associated
  * group generators
  * */
-public abstract class SPSPublicParameters implements PublicParameters {
+public class SPSPublicParameters implements PublicParameters {
 
     /**
      * The bilinear group containing map e in the paper.
@@ -75,6 +75,11 @@ public abstract class SPSPublicParameters implements PublicParameters {
     @Override
     public int hashCode() {
         return Objects.hash(bilinearGroup, group1ElementG, group2ElementH);
+    }
+
+    @Override
+    public Representation getRepresentation() {
+        return new ReprUtil(this).serialize();
     }
 
 }
