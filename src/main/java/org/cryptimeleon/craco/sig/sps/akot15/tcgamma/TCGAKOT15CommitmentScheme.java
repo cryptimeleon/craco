@@ -211,8 +211,9 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
         return ppe_lhs.equals(ppe_rhs);
     }
 
+
     @Override
-    public PlainText mapToPlainText(byte[] bytes) {
+    public PlainText mapToPlaintext(byte[] bytes) {
         RingElementPlainText zero = new RingElementPlainText(pp.getZp().getZeroElement());
         return new MessageBlock(
                 Vector.of(new RingElementPlainText(pp.getZp().injectiveValueOf(bytes)))
@@ -220,6 +221,10 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
         );
     }
 
+    @Override
+    public int getMaxNumberOfBytesForMapToPlaintext() {
+        return (pp.getG1GroupGenerator().getStructure().size().bitLength() - 1) / 8;
+    }
 
     @Override
     public Commitment restoreCommitment(Representation repr) {

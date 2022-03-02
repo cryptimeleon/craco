@@ -5,28 +5,39 @@ import org.cryptimeleon.craco.sig.sps.akot15.pos.SPSPOSSignature;
 import org.cryptimeleon.craco.sig.sps.akot15.pos.SPSPOSVerificationKey;
 import org.cryptimeleon.math.hash.ByteAccumulator;
 import org.cryptimeleon.math.hash.annotations.AnnotatedUbrUtil;
+import org.cryptimeleon.math.serialization.ListRepresentation;
+import org.cryptimeleon.math.serialization.ObjectRepresentation;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.groups.Group;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.IntStream;
+
 /**
  * An opening to a commitment used by the TCAKOT15 implementation.
  * */
 public class TCAKOT15OpenValue implements OpenValue {
 
-    // Opening as defined in TC Gamma
+    /**
+     * Opening as defined in TC Gamma
+     */
     @Represented(restorer = "G1")
     protected GroupElement group1ElementGamma;
 
     /**
      *
-     * */
+     */
     @Represented
     protected SPSPOSVerificationKey spsPosVerificationKey;
 
-    @Represented(restorer = "G2")
+    /**
+     *
+     */
+    @Represented(restorer = "[G1]")
     protected GroupElement[] spsPosOTVerificationKeys;
 
     /**
@@ -44,7 +55,15 @@ public class TCAKOT15OpenValue implements OpenValue {
     }
 
     public TCAKOT15OpenValue(Group g1, Group g2, Representation repr) {
-        new ReprUtil(this).register(g1, "G1").register(g2, "G2").deserialize(repr);
+        ObjectRepresentation objRepr = (ObjectRepresentation) repr;
+
+        this.group1ElementGamma = g1.restoreElement(objRepr.get("tcgOpen"));
+        this.spsPosVerificationKey = new SPSPOSVerificationKey(objRepr.get("posVk"), g1);
+        this.spsPosOTVerificationKeys = g1.restoreVector(objRepr.get("posOtVk")).stream().toArray(GroupElement[]::new);
+
+        this.spsPosSignatures = objRepr.get("posSigmas").list().stream().map(
+                x -> new SPSPOSSignature(x, g2)
+        ).toArray(SPSPOSSignature[]::new);
     }
 
 
@@ -57,7 +76,20 @@ public class TCAKOT15OpenValue implements OpenValue {
 
     @Override
     public Representation getRepresentation() {
-        return null;
+        ObjectRepresentation objRepr = new ObjectRepresentation();
+
+        objRepr.put("tcgOpen", group1ElementGamma.getRepresentation());
+        objRepr.put("posVk", spsPosVerificationKey.getRepresentation());
+
+        objRepr.put("posOtVk", new ListRepresentation(
+                Arrays.stream(spsPosOTVerificationKeys).sequential().map(x -> x.getRepresentation()).toArray(Representation[]::new)
+        ));
+
+        objRepr.put("posSigmas", new ListRepresentation(
+                Arrays.stream(spsPosSignatures).sequential().map(x -> x.getRepresentation()).toArray(Representation[]::new)
+        ));
+
+        return objRepr;
     }
 
     public SPSPOSVerificationKey getSpsPosVerificationKey() {
@@ -87,4 +119,24 @@ public class TCAKOT15OpenValue implements OpenValue {
     public GroupElement getGroup1ElementGamma() {
         return group1ElementGamma;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TCAKOT15OpenValue)) return false;
+        TCAKOT15OpenValue that = (TCAKOT15OpenValue) o;
+        return Objects.equals(group1ElementGamma, that.group1ElementGamma)
+                && Objects.equals(spsPosVerificationKey, that.spsPosVerificationKey)
+                && Arrays.equals(spsPosOTVerificationKeys, that.spsPosOTVerificationKeys)
+                && Arrays.equals(spsPosSignatures, that.spsPosSignatures);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(group1ElementGamma, spsPosVerificationKey);
+        result = 31 * result + Arrays.hashCode(spsPosOTVerificationKeys);
+        result = 31 * result + Arrays.hashCode(spsPosSignatures);
+        return result;
+    }
+
 }

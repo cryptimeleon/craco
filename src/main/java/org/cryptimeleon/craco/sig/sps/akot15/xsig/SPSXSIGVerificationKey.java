@@ -64,7 +64,14 @@ public class SPSXSIGVerificationKey implements VerificationKey {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SPSXSIGVerificationKey that = (SPSXSIGVerificationKey) o;
-        return Objects.equals(V1, that.V1) && Objects.equals(V2, that.V2) && Objects.equals(V3, that.V3) && Objects.equals(V4, that.V4) && Objects.equals(V5, that.V5) && Objects.equals(V6, that.V6) && Objects.equals(V7, that.V7) && Objects.equals(V8, that.V8);
+        return Objects.equals(V1, that.V1)
+                && Objects.equals(V2, that.V2)
+                && Objects.equals(V3, that.V3)
+                && Objects.equals(V4, that.V4)
+                && Objects.equals(V5, that.V5)
+                && Objects.equals(V6, that.V6)
+                && Objects.equals(V7, that.V7)
+                && Objects.equals(V8, that.V8);
     }
 
     @Override

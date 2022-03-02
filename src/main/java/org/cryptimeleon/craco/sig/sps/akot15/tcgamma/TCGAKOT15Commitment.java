@@ -9,6 +9,8 @@ import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.groups.Group;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 
+import java.util.Objects;
+
 public class TCGAKOT15Commitment implements Commitment {
 
     /**
@@ -42,4 +44,17 @@ public class TCGAKOT15Commitment implements Commitment {
         return new ReprUtil(this).serialize();
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TCGAKOT15Commitment)) return false;
+        TCGAKOT15Commitment that = (TCGAKOT15Commitment) o;
+        return Objects.equals(group2ElementGu, that.group2ElementGu);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(group2ElementGu);
+    }
 }

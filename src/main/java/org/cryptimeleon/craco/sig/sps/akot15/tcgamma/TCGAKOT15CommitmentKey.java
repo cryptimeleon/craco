@@ -9,6 +9,8 @@ import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.groups.Group;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 
+import java.util.Arrays;
+
 public class TCGAKOT15CommitmentKey implements CommitmentKey {
 
     @Represented(restorer = "[G2]")
@@ -37,6 +39,19 @@ public class TCGAKOT15CommitmentKey implements CommitmentKey {
     @Override
     public Representation getRepresentation() {
         return new ReprUtil(this).serialize();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TCGAKOT15CommitmentKey)) return false;
+        TCGAKOT15CommitmentKey that = (TCGAKOT15CommitmentKey) o;
+        return Arrays.equals(group2ElementsXi, that.group2ElementsXi);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(group2ElementsXi);
     }
 
 }

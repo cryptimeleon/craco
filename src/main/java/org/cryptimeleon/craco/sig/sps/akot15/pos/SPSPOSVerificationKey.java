@@ -90,7 +90,8 @@ public class SPSPOSVerificationKey implements VerificationKey {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SPSPOSVerificationKey that = (SPSPOSVerificationKey) o;
-        return Arrays.equals(group1ElementsChi, that.group1ElementsChi) && Objects.equals(group1ElementW, that.group1ElementW);
+        return Arrays.equals(group1ElementsChi, that.group1ElementsChi)
+                && Objects.equals(group1ElementW, that.group1ElementW);
     }
 
     @Override

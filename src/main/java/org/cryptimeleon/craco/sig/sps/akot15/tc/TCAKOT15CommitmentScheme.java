@@ -15,7 +15,13 @@ import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 import org.cryptimeleon.math.structures.rings.zn.Zp.ZpElement;
-
+/**
+ *
+ *
+ * Note: This scheme does not possess its own implementation of an Commitment instance. It instead reuses
+ * {@link TCGAKOT15Commitment}, as the paper states com := com_gbc
+ *
+ */
 public class TCAKOT15CommitmentScheme implements CommitmentScheme {
 
     @Represented
@@ -176,7 +182,7 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme {
 
 
     @Override
-    public MessageBlock mapToPlainText(byte[] bytes) {
+    public MessageBlock mapToPlaintext(byte[] bytes) {
         // returns (P^m, P, ..., P) where m = Z_p.injectiveValueOf(bytes).
 
         GroupElementPlainText[] msgBlock = new GroupElementPlainText[pp.getMessageLength()];
@@ -191,8 +197,13 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme {
     }
 
     @Override
+    public int getMaxNumberOfBytesForMapToPlaintext() {
+        return (pp.getG1GroupGenerator().getStructure().size().bitLength() - 1) / 8;
+    }
+
+    @Override
     public Commitment restoreCommitment(Representation repr) {
-        return new TCAKOT15Commitment(getG2GroupGenerator().getStructure(), repr);
+        return new TCGAKOT15Commitment(getG2GroupGenerator().getStructure(), repr);
     }
 
     @Override

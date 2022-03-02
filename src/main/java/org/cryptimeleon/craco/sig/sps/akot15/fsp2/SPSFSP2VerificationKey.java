@@ -2,7 +2,9 @@ package org.cryptimeleon.craco.sig.sps.akot15.fsp2;
 
 import org.cryptimeleon.craco.sig.VerificationKey;
 import org.cryptimeleon.craco.sig.sps.akot15.tcgamma.TCGAKOT15CommitmentKey;
+import org.cryptimeleon.craco.sig.sps.akot15.tcgamma.TCGAKOT15XSIGCommitmentKey;
 import org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGVerificationKey;
+import org.cryptimeleon.math.serialization.ObjectRepresentation;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
@@ -24,13 +26,23 @@ public class SPSFSP2VerificationKey implements VerificationKey {
     }
 
     public SPSFSP2VerificationKey(Group g1, Group g2, Representation repr) {
-        new ReprUtil(this).register(g1, "G1").register(g2, "G2").deserialize(repr);
+
+        ObjectRepresentation objRepr = (ObjectRepresentation) repr;
+
+        this.vk_xsig = new SPSXSIGVerificationKey(g1,g2, objRepr.get("vkXSIG"));
+        this.ck_tc = new TCGAKOT15XSIGCommitmentKey(g2, objRepr.get("ckTC"));
     }
 
 
     @Override
     public Representation getRepresentation() {
-        return new ReprUtil(this).serialize();
+
+        ObjectRepresentation objRepr = new ObjectRepresentation();
+
+        objRepr.put("vkXSIG", vk_xsig.getRepresentation());
+        objRepr.put("ckTC", ck_tc.getRepresentation());
+
+        return objRepr;
     }
 
     public SPSXSIGVerificationKey getVk_xsig() {
