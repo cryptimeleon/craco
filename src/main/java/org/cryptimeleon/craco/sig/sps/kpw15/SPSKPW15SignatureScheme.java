@@ -22,6 +22,9 @@ import java.util.stream.IntStream;
  * A simplified implementation of the SPS scheme originally presented in [1] by Kiltz et al. as seen in [2]
  * Signs a vector of {n} group elements in G_1.
  *
+ * This simplification is achieved by setting the parameter "k" in the paper to the fixed value of 1.
+ * Consequently, this simplified scheme is secure under the SXDH assumption [1 , p. 3]
+ *
  * <p>
  * Bilinear map type: 3
  * <p>
@@ -41,12 +44,6 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
      */
     @Represented
     SPSKPW15PublicParameters pp;
-
-    /**
-     * k is relevant in regard to the security assumptions under which the scheme is CMA-secure.
-     * See [1] (p. 12) for details.
-     */
-    static final int k = 1;
 
     /**
      * Performs a limited set of matrix operations required by the KPW15 SPS scheme.
