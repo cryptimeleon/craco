@@ -45,22 +45,14 @@ public class TCGAKOT15CommitmentSchemeTests {
         params.getScheme().verify(com.getCommitment(), com.getOpenValue(), groupElementPlainText);
     }
 
-
     @Test
     public void testNegativeWrongCommitAndVerify() {
         CommitmentSchemeTester.testCommitmentSchemeVerifyWithWrongMessages(params.getScheme(), params.getPlainText(), params.getWrongPlainText());
     }
 
-    //TODO uncomment these when a fix for the InjectiveValueOf function is available
-
-    //@Test
-    //public void testMapToPlainTest() {
-    //    CommitmentSchemeTester.testCommitmentSchemeMapToPlaintext(params.getScheme(), params.getPlainText());
-    //}
-
-    //@Test
-    //public void testNegativeMapToPlainTest() {
-    //    CommitmentSchemeTester.testCommitmentSchemeMapToPlainTextWithWrongMessages(params.getScheme(), params.getPlainText(), params.getWrongPlainText());
-    //}
+    @Test
+    public void testMapToPlaintext() {
+        CommitmentSchemeTester.testCommitmentSchemeMapToPlaintext(params.getScheme());
+    }
 
 }

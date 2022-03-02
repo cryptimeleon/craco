@@ -140,17 +140,34 @@ public class SPSFSP2SignatureScheme implements MultiMessageStructurePreservingSi
 
     @Override
     public PlainText mapToPlaintext(byte[] bytes, VerificationKey pk) {
-        return null;
+        //TODO add pp check
+        return mapToPlaintext(bytes, pp.getMessageLength());
     }
 
     @Override
     public PlainText mapToPlaintext(byte[] bytes, SigningKey sk) {
-        return null;
+        //TODO add pp check
+        return mapToPlaintext(bytes, pp.getMessageLength());
+    }
+
+    private MessageBlock mapToPlaintext(byte[] bytes, int messageBlockLength) {
+        // returns (P^m, P, ..., P) where m = Z_p.injectiveValueOf(bytes).
+
+        GroupElementPlainText[] msgBlock = new GroupElementPlainText[messageBlockLength];
+        msgBlock[0] = new GroupElementPlainText(
+                pp.getG1GroupGenerator().pow(pp.getZp().injectiveValueOf(bytes))
+        );
+
+        for (int i = 1; i < msgBlock.length; i++) {
+            msgBlock[i] = new GroupElementPlainText(pp.getG1GroupGenerator());
+        }
+
+        return new MessageBlock(new MessageBlock(msgBlock), new MessageBlock());
     }
 
     @Override
     public int getMaxNumberOfBytesForMapToPlaintext() {
-        return 0;
+        return (pp.getG1GroupGenerator().getStructure().size().bitLength() - 1) / 8;
     }
 
     @Override

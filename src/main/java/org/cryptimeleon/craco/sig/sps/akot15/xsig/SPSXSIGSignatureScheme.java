@@ -375,7 +375,7 @@ public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSi
 
     private MessageBlock mapToPlaintext(byte[] bytes, int messageBlockLength){
         // returns (P^m, P, ..., P) where m = Z_p.injectiveValueOf(bytes).
-        //TODO check this!
+
         GroupElementPlainText[] msgBlock = new GroupElementPlainText[messageBlockLength];
         msgBlock[0] = new GroupElementPlainText(
                 pp.getG1GroupGenerator().pow(pp.getZp().injectiveValueOf(bytes))

@@ -61,4 +61,9 @@ public class TCAKOT15CommitmentSchemeTester {
         assertEquals(comPair.getCommitment(), com);
     }
 
+    @Test
+    public void testMapToPlaintext() {
+        CommitmentSchemeTester.testCommitmentSchemeMapToPlaintext(params.getScheme());
+    }
+
 }
