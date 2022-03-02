@@ -2,7 +2,6 @@ package org.cryptimeleon.craco.sig.sps.akot15.xsig;
 
 import org.cryptimeleon.craco.sig.SignatureSchemeParams;
 import org.cryptimeleon.craco.sig.sps.SPSSchemeTester;
-import org.cryptimeleon.craco.sig.sps.kpw15.SPSKPW15PublicParameters;
 
 import static org.junit.Assert.assertEquals;
 

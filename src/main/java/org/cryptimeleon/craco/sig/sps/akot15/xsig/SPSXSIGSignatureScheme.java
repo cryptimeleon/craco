@@ -4,8 +4,6 @@ import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.sig.*;
-import org.cryptimeleon.craco.sig.sps.agho11.SPSAGHO11SigningKey;
-import org.cryptimeleon.craco.sig.sps.kpw15.SPSKPW15Signature;
 import org.cryptimeleon.math.serialization.ListRepresentation;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
