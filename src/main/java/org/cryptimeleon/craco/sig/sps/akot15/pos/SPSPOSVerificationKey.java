@@ -34,14 +34,11 @@ public class SPSPOSVerificationKey implements VerificationKey {
     @Represented(restorer = "G1")
     protected GroupElement group1ElementA;
 
-    private boolean isOTKeyValid;
-
 
     public SPSPOSVerificationKey(GroupElement[] group1ElementsChi, GroupElement group1ElementW) {
         super();
         this.group1ElementsChi = group1ElementsChi;
         this.group1ElementW = group1ElementW;
-        this.isOTKeyValid = false; // The one-time key has not been set yet, so it's not valid
     }
 
     public SPSPOSVerificationKey(Representation repr, Group G_1) {
@@ -57,28 +54,12 @@ public class SPSPOSVerificationKey implements VerificationKey {
         return group1ElementW;
     }
 
-    public void SetOneTimeKey(GroupElement oneTimeKey) {
-        this.group1ElementA = oneTimeKey;
-        this.isOTKeyValid = true;
-    }
-
-    public GroupElement getAndUseOneTimeKey() {
-
-        if(!isOTKeyValid){
-            throw new IllegalStateException("This one-time key has already been used.");
-        }
-
-        isOTKeyValid = false;
-        return this.group1ElementA;
-    }
-
-    public void setOneTimeKey(GroupElement oneTimeKey) {
-        this.group1ElementA = oneTimeKey;
-    }
+    public void setOneTimeKey(GroupElement oneTimeKey) { this.group1ElementA = oneTimeKey; }
 
     public GroupElement getOneTimeKey() {
         return this.group1ElementA;
     }
+
 
     @Override
     public Representation getRepresentation() {

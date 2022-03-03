@@ -81,6 +81,10 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
         return keyPair;
     }
 
+    /**
+     * Updates the given keyPair with a new set of one-time keys.
+     *
+     */
     public void updateOneTimeKey(SignatureKeyPair<SPSPOSVerificationKey, SPSPOSSigningKey> keyPair) {
 
         //pick randomness
@@ -88,9 +92,8 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
         GroupElement group1ElementA = pp.getG1GroupGenerator().pow(exponentA).compute();
 
         //put into keys
-
         keyPair.getSigningKey().setOneTimeKey(exponentA);
-        keyPair.getVerificationKey().SetOneTimeKey(group1ElementA);
+        keyPair.getVerificationKey().setOneTimeKey(group1ElementA);
     }
 
     @Override
@@ -105,6 +108,12 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
         return sign(plainText, sk, sk.getOneTimeKey());
     }
 
+    /**
+     * While a one-time key is stored in the {@param secretKey}, the scheme allows for a separate one-time key
+     * to be passed to the scheme. This makes it easier to use this scheme as a building block.
+     *
+     * Note: Implementations using this scheme are responsible for ensuring that the one-time keys are not reused.
+     */
     public SPSPOSSignature sign(PlainText plainText, SigningKey secretKey, ZpElement oneTimeKey) {
 
         if((plainText instanceof GroupElementPlainText)){
@@ -120,10 +129,6 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
         MessageBlock messageBlock = (MessageBlock) plainText;
         SPSPOSSigningKey sk = (SPSPOSSigningKey) secretKey;
-
-        if(messageBlock.length() != pp.getMessageLength()) {
-            throw new IllegalArgumentException("The given message does not match the expected message length of the public parameters");
-        }
 
         ZpElement exponentZeta = pp.getZp().getUniformlyRandomNonzeroElement();
 
@@ -142,7 +147,6 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
         group1ElementSigmaR.compute();
 
-
         return new SPSPOSSignature(group1ElementSigmaZ, group1ElementSigmaR);
     }
 
@@ -158,6 +162,12 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
         return verify(plainText, signature, publicKey, vk.getOneTimeKey());
     }
 
+    /**
+     * While a one-time key is stored in the {@param publicKey}, the scheme allows for a separate one-time key
+     * to be passed to the scheme. This makes it easier to use this scheme as a building block.
+     *
+     * Note: Implementations using this scheme are responsible for ensuring that the one-time keys are not reused.
+     */
     public Boolean verify(PlainText plainText,
                           Signature signature,
                           VerificationKey publicKey,
@@ -187,7 +197,6 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
         //check PPE
 
-        //this should throw an exception if the OT key was already used TODO check that
         GroupElement ppelhs = bMap.apply(oneTimeVerificationKey, pp.getG2GroupGenerator()).compute();
 
         GroupElement pperhs = bMap.apply(vk.getGroup1ElementW(), sigma.getGroup2ElementZ());

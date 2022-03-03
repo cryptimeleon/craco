@@ -31,20 +31,16 @@ public class SPSPOSSigningKey implements SigningKey {
 
     /**
      * a in the paper
+     * The one-time key used for signing
      * */
     @Represented(restorer = "Zp")
     protected ZpElement exponentA;
 
-    private boolean isOTKeyValid;
-
-
-    public SPSPOSSigningKey() { super(); }
 
     public SPSPOSSigningKey(ZpElement[] exponentsChi, ZpElement exponentW) {
         super();
         this.exponentsChi = exponentsChi;
         this.exponentW = exponentW;
-        this.isOTKeyValid = false; // The one-time key has not been set yet, so it's not valid
     }
 
     public SPSPOSSigningKey(Representation repr, Zp zp) {
@@ -62,22 +58,8 @@ public class SPSPOSSigningKey implements SigningKey {
         return exponentW;
     }
 
-    public void setOneTimeKey(ZpElement oneTimeKey) {
-        this.exponentA = oneTimeKey;
-        this.isOTKeyValid = true;
-    }
+    public void setOneTimeKey(ZpElement oneTimeKey) { this.exponentA = oneTimeKey; }
 
-    public ZpElement getAndUseOneTimeKey() {
-
-        if(!isOTKeyValid) {
-            throw new IllegalStateException("This one-time key has already been used.");
-        }
-
-        isOTKeyValid = false;
-        return exponentA;
-    }
-
-    //TODO this could use refactoring ()
     public ZpElement getOneTimeKey() {
         return exponentA;
     }
