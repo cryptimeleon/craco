@@ -4,8 +4,8 @@ import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.sig.*;
+import org.cryptimeleon.craco.sig.sps.SPSMessageSpaceVerifier;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
-import org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGPublicParameters;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.structures.groups.GroupElement;
@@ -16,17 +16,32 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
-public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSignatureScheme {
+/**
+ * An implementation of the partially one-time SPS scheme presented in [1]
+ * While the scheme is intended to be a building block of the larger SPS scheme
+ * {@link org.cryptimeleon.craco.sig.sps.akot15.fsp2.SPSFSP2SignatureScheme},
+ * the implementation can be used on its own, where it is one-time CMA secure
+ * under the Double Pairing assumption as defined in [1].
+ *
+ *
+ * Note: The calculation of the commitments differs slightly when the scheme is used in the context of
+ * {@link org.cryptimeleon.craco.sig.sps.akot15.fsp2.SPSFSP2SignatureScheme}:
+ *      As the scheme combines {@link org.cryptimeleon.craco.sig.sps.akot15.tc.TCAKOT15CommitmentScheme} -- which is
+ *      based on this scheme -- with {@link org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGSignatureScheme},
+ *      the scheme must calculate 2 additional elements for its commitments (with are then signed by XSIG).
+ *
+ *
+ * [1] Abe et al.: Fully Structure-Preserving Signatures and Shrinking Commitments.
+ * https://eprint.iacr.org/2015/076.pdf
+ *
+ */
+public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSignatureScheme, SPSMessageSpaceVerifier {
 
+    /**
+     * the public parameters for this scheme
+     */
     private AKOT15SharedPublicParameters pp;
 
-    private GroupElement getG1GroupGenerator() {
-        return (pp instanceof SPSXSIGPublicParameters) ? ((SPSXSIGPublicParameters)pp).getGroup1ElementF1() : pp.getG1GroupGenerator();
-    }
-
-    private GroupElement getG2GroupGenerator() {
-        return (pp instanceof SPSXSIGPublicParameters) ? ((SPSXSIGPublicParameters)pp).getGroup2ElementF1() : pp.getG2GroupGenerator();
-    }
 
     public SPSPOSSignatureScheme(AKOT15SharedPublicParameters pp) {
         super();
@@ -40,10 +55,9 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
         if(numberOfMessages != pp.getMessageLength()) {
             throw new IllegalArgumentException(
                     String.format(
-                            "The number of messages did not match the expected message length in the public parameters: %d vs. %d",
+                            "The expected the message length %d, but was %d",
                             numberOfMessages,
-                            pp.getMessageLength()
-                            )
+                            pp.getMessageLength())
             );
         }
 
@@ -52,9 +66,9 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
         ZpElement[] exponentsChi = IntStream.range(0, numberOfMessages).mapToObj(
                 x-> pp.getZp().getUniformlyRandomNonzeroElement()).toArray(ZpElement[]::new);
 
-        GroupElement group1ElementW = getG1GroupGenerator().pow(exponentW).compute();
+        GroupElement group1ElementW = pp.getG1GroupGenerator().pow(exponentW).compute();
         GroupElement[] group1ElementsChi = Arrays.stream(exponentsChi).map(
-                x-> getG1GroupGenerator().pow(x).compute()).toArray(GroupElement[]::new);
+                x-> pp.getG1GroupGenerator().pow(x).compute()).toArray(GroupElement[]::new);
 
         SPSPOSSigningKey sk = new SPSPOSSigningKey(exponentsChi, exponentW);
         SPSPOSVerificationKey vk = new SPSPOSVerificationKey(group1ElementsChi, group1ElementW);
@@ -71,7 +85,7 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
         //pick randomness
         ZpElement exponentA = pp.getZp().getUniformlyRandomElement();
-        GroupElement group1ElementA = getG1GroupGenerator().pow(exponentA).compute();
+        GroupElement group1ElementA = pp.getG1GroupGenerator().pow(exponentA).compute();
 
         //put into keys
 
@@ -93,9 +107,12 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
     public SPSPOSSignature sign(PlainText plainText, SigningKey secretKey, ZpElement oneTimeKey) {
 
-        if(!(plainText instanceof MessageBlock)){
-            throw new IllegalArgumentException("Not a valid plain text for this scheme");
+        if((plainText instanceof GroupElementPlainText)){
+            plainText = new MessageBlock(plainText);
         }
+
+        // check if the message matches the expected structure (MessageBlock containing G_2 group elements)
+        doMessageChecks(plainText, pp.getMessageLength(), pp.getG2GroupGenerator().getStructure());
 
         if(!(secretKey instanceof SPSPOSSigningKey)){
             throw new IllegalArgumentException("Not a valid signing key for this scheme");
@@ -110,13 +127,13 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
         ZpElement exponentZeta = pp.getZp().getUniformlyRandomNonzeroElement();
 
-        GroupElement group1ElementSigmaZ = getG2GroupGenerator().pow(exponentZeta).compute();
+        GroupElement group1ElementSigmaZ = pp.getG2GroupGenerator().pow(exponentZeta).compute();
 
         // calculate exponent of the left side of R
         ZpElement lhsExponent = oneTimeKey;
         lhsExponent = lhsExponent.sub(exponentZeta.mul(sk.getExponentW()));
 
-        GroupElement group1ElementSigmaR = getG2GroupGenerator().pow(lhsExponent);
+        GroupElement group1ElementSigmaR = pp.getG2GroupGenerator().pow(lhsExponent);
 
         for (int i = 0; i < messageBlock.length(); i++) {
             GroupElement m_i = ((GroupElementPlainText)messageBlock.get(i)).get();
@@ -143,9 +160,13 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
     public Boolean verify(PlainText plainText, Signature signature, VerificationKey publicKey, GroupElement oneTimeVerificationKey) {
 
-        if(!(plainText instanceof MessageBlock)){
-            throw new IllegalArgumentException("Not a valid plain text for this scheme");
+        //if plainText only contains a single element, wrap it in a MessageBlock
+        if((plainText instanceof GroupElementPlainText)){
+            plainText = new MessageBlock(plainText);
         }
+
+        // check if the message matches the expected structure (MessageBlock containing G_2 group elements)
+        doMessageChecks(plainText, pp.getMessageLength(), pp.getG2GroupGenerator().getStructure());
 
         if(!(publicKey instanceof SPSPOSVerificationKey)){
             throw new IllegalArgumentException("Not a valid signing key for this scheme");
@@ -168,10 +189,10 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
         //check PPE
 
         //this should throw an exception if the OT key was already used TODO check that
-        GroupElement ppelhs = bMap.apply(oneTimeVerificationKey, getG2GroupGenerator()).compute();
+        GroupElement ppelhs = bMap.apply(oneTimeVerificationKey, pp.getG2GroupGenerator()).compute();
 
         GroupElement pperhs = bMap.apply(vk.getGroup1ElementW(), sigma.getGroup2ElementZ());
-        pperhs = pperhs.op(bMap.apply(getG1GroupGenerator(), sigma.getGroup2ElementR()));
+        pperhs = pperhs.op(bMap.apply(pp.getG1GroupGenerator(), sigma.getGroup2ElementR()));
 
         for (int i = 0; i < messageBlock.length(); i++) {
             GroupElement m_i = ((GroupElementPlainText)messageBlock.get(i)).get();
@@ -184,12 +205,12 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
     @Override
     public PlainText restorePlainText(Representation repr) {
-        return new MessageBlock(repr, r -> new GroupElementPlainText(r, getG2GroupGenerator().getStructure()));
+        return new MessageBlock(repr, r -> new GroupElementPlainText(r, pp.getG2GroupGenerator().getStructure()));
     }
 
     @Override
     public Signature restoreSignature(Representation repr) {
-        return new SPSPOSSignature(repr, getG2GroupGenerator().getStructure());
+        return new SPSPOSSignature(repr, pp.getG2GroupGenerator().getStructure());
     }
 
     @Override
@@ -199,7 +220,7 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
     @Override
     public VerificationKey restoreVerificationKey(Representation repr) {
-        return new SPSPOSVerificationKey(repr, getG1GroupGenerator().getStructure());
+        return new SPSPOSVerificationKey(repr, pp.getG1GroupGenerator().getStructure());
     }
 
     @Override
@@ -227,10 +248,10 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
         GroupElementPlainText[] msgBlock = new GroupElementPlainText[messageBlockLength];
         msgBlock[0] = new GroupElementPlainText(
-                getG2GroupGenerator().pow(pp.getZp().injectiveValueOf(bytes))
+                pp.getG2GroupGenerator().pow(pp.getZp().injectiveValueOf(bytes))
         );
         for (int i = 1; i < messageBlockLength; i++) {
-            msgBlock[i] = new GroupElementPlainText(getG2GroupGenerator());
+            msgBlock[i] = new GroupElementPlainText(pp.getG2GroupGenerator());
         }
 
         return new MessageBlock(msgBlock);
@@ -238,7 +259,7 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
     @Override
     public int getMaxNumberOfBytesForMapToPlaintext() {
-        return (getG2GroupGenerator().getStructure().size().bitLength() - 1) / 8;
+        return (pp.getG2GroupGenerator().getStructure().size().bitLength() - 1) / 8;
     }
 
 

@@ -12,8 +12,10 @@ import org.cryptimeleon.math.structures.rings.zn.Zp;
 import java.util.Objects;
 
 /**
- * The construction of the AKOT FSPS requires the {@link PublicParameters} to match up across building blocks
- * In order to simplify interactions between the schemes, this class holds these shared public parameters
+ * The construction of the AKOT15 signature scheme
+ * {@link org.cryptimeleon.craco.sig.sps.akot15.fsp2.SPSFSP2SignatureScheme} requires the {@link PublicParameters}
+ * to match up across building blocks. In order to simplify interactions between the schemes,
+ * this class holds these shared public parameters.
  *
  */
 public class AKOT15SharedPublicParameters implements PublicParameters, Cloneable {

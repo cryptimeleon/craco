@@ -52,16 +52,6 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
      */
     private TCGAKOT15CommitmentKey commitmentKey;
 
-    //TODO remove these
-    private GroupElement getG1GroupGenerator() {
-        return (pp instanceof SPSXSIGPublicParameters) ? ((SPSXSIGPublicParameters)pp).getGroup1ElementF1() : pp.getG1GroupGenerator();
-    }
-
-    private GroupElement getG2GroupGenerator() {
-        return (pp instanceof SPSXSIGPublicParameters) ? ((SPSXSIGPublicParameters)pp).getGroup2ElementF1() : pp.getG2GroupGenerator();
-    }
-
-
     public TCGAKOT15CommitmentScheme(AKOT15SharedPublicParameters pp) {
         this.pp = pp;
         commitmentKey = generateKey();
@@ -86,7 +76,7 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
 
                 Zp.ZpElement rho = pp.getZp().getUniformlyRandomElement();
 
-                group2ElementsXi[i] = getG2GroupGenerator().pow(rho).compute();
+                group2ElementsXi[i] = pp.getG2GroupGenerator().pow(rho).compute();
                 group2ElementsXi2[i] = ppXSIG.getGroup2ElementF2().pow(rho).compute();
                 group2ElementsXi3[i] = ppXSIG.getGroup2ElementsU()[0].pow(rho).compute();
             }
@@ -96,7 +86,7 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
         else {
 
             for (int i = 0; i < group2ElementsXi.length; i++) {
-                group2ElementsXi[i] = getG2GroupGenerator().pow(pp.getZp().getUniformlyRandomElement()).compute();
+                group2ElementsXi[i] = pp.getG2GroupGenerator().pow(pp.getZp().getUniformlyRandomElement()).compute();
             }
 
             return new TCGAKOT15CommitmentKey(group2ElementsXi);
@@ -120,14 +110,14 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
         MessageBlock messageBlock = (MessageBlock) plainText;
         Zp.ZpElement zeta = pp.getZp().getUniformlyRandomElement();
 
-        TCGAKOT15OpenValue open = new TCGAKOT15OpenValue(getG1GroupGenerator().pow(zeta).compute());
+        TCGAKOT15OpenValue open = new TCGAKOT15OpenValue(pp.getG1GroupGenerator().pow(zeta).compute());
 
         //if XSIG message space is detected, compute additional values
         if(pp instanceof SPSXSIGPublicParameters) {
             return commitXSIGVariant(messageBlock, zeta, open);
         }
         else {
-            GroupElement group2ElementGu = getG2GroupGenerator().pow(zeta);
+            GroupElement group2ElementGu = pp.getG2GroupGenerator().pow(zeta);
 
             for (int i = 0; i < messageBlock.length(); i++) {
                 GroupElement Xi = commitmentKey.getGroup2ElementsXi()[i];
@@ -154,7 +144,7 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
 
         // compute G_u
 
-        GroupElement group2ElementGu = getG2GroupGenerator().pow(zeta);
+        GroupElement group2ElementGu = pp.getG2GroupGenerator().pow(zeta);
         GroupElement group2ElementGu2 = ppXSIG.getGroup2ElementF2().pow(zeta);
         GroupElement group2ElementGu3 = ppXSIG.getGroup2ElementsU()[0].pow(zeta);
 
@@ -213,16 +203,18 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
         //if RingElements are provided, transform the message to feature group elements
         if(messageBlock.get(0) instanceof RingElementPlainText) {
             messageGroupElements = messageBlock.stream().map(
-                    x -> getG1GroupGenerator().pow(((RingElementPlainText)x).getRingElement()).compute()).toArray(GroupElement[]::new);
+                    x -> pp.getG1GroupGenerator().pow(((RingElementPlainText)x).getRingElement()).compute())
+                    .toArray(GroupElement[]::new);
         }else if(messageBlock.get(0) instanceof GroupElementPlainText) {
-            messageGroupElements = messageBlock.stream().map(x -> ((GroupElementPlainText)x).get()).toArray(GroupElement[]::new);
+            messageGroupElements = messageBlock.stream().map(x -> ((GroupElementPlainText)x).get())
+                    .toArray(GroupElement[]::new);
         }
 
 
         BilinearMap bMap = pp.getBilinearMap();
 
-        GroupElement ppe_lhs = bMap.apply(getG1GroupGenerator(), com.getGroup2ElementGu()).compute();
-        GroupElement ppe_rhs = bMap.apply(open.getGroup1ElementR(), getG2GroupGenerator());
+        GroupElement ppe_lhs = bMap.apply(pp.getG1GroupGenerator(), com.getGroup2ElementGu()).compute();
+        GroupElement ppe_rhs = bMap.apply(open.getGroup1ElementR(), pp.getG2GroupGenerator());
 
         for (int i = 0; i < messageBlock.length(); i++) {
             ppe_rhs = ppe_rhs.op(bMap.apply(
@@ -320,12 +312,12 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
                 // in G_1.
                 GroupElementPlainText group1ElementPT = (GroupElementPlainText) messageBlock.get(i);
 
-                if(!(group1ElementPT.get().getStructure().equals(getG1GroupGenerator().getStructure()))) {
+                if(!(group1ElementPT.get().getStructure().equals(pp.getG1GroupGenerator().getStructure()))) {
                     throw new IllegalArgumentException(
                             String.format(
                                     "The scheme expected GroupElements in %s," +
                                             " but element %d was in: %s",
-                                    getG1GroupGenerator().getStructure().toString(),
+                                    pp.getG1GroupGenerator().getStructure().toString(),
                                     i,
                                     group1ElementPT.get().getStructure().toString()
                             )
@@ -359,12 +351,12 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
 
     @Override
     public Commitment restoreCommitment(Representation repr) {
-        return new TCGAKOT15Commitment(getG2GroupGenerator().getStructure(), repr);
+        return new TCGAKOT15Commitment(pp.getG2GroupGenerator().getStructure(), repr);
     }
 
     @Override
     public OpenValue restoreOpenValue(Representation repr) {
-        return new TCGAKOT15OpenValue(getG1GroupGenerator().getStructure(), repr);
+        return new TCGAKOT15OpenValue(pp.getG1GroupGenerator().getStructure(), repr);
     }
 
     @Override

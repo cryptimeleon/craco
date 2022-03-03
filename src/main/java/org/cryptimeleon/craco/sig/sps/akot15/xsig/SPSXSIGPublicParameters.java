@@ -1,5 +1,6 @@
 package org.cryptimeleon.craco.sig.sps.akot15.xsig;
 
+import org.cryptimeleon.craco.common.PublicParameters;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
@@ -13,6 +14,12 @@ import org.cryptimeleon.math.structures.rings.zn.Zp.ZpElement;
 
 import java.util.Objects;
 
+/**
+ * The construction of the AKOT15 signature scheme FSPS2 requires the {@link PublicParameters} to match up
+ * across building blocks.
+ * This class extends these shared parameters with the elements required in XSIGs calculations.
+ *
+ */
 public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
 
     @Represented(restorer = "bilinearGroup::getG1")
