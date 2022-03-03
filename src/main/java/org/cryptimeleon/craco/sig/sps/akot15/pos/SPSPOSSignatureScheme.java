@@ -8,6 +8,7 @@ import org.cryptimeleon.craco.sig.sps.SPSMessageSpaceVerifier;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
+import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearMap;
 import org.cryptimeleon.math.structures.rings.zn.Zp.ZpElement;
@@ -40,12 +41,17 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
     /**
      * the public parameters for this scheme
      */
+    @Represented
     private AKOT15SharedPublicParameters pp;
 
 
     public SPSPOSSignatureScheme(AKOT15SharedPublicParameters pp) {
         super();
         this.pp = pp;
+    }
+
+    public SPSPOSSignatureScheme(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
     }
 
 
