@@ -158,7 +158,10 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
         return verify(plainText, signature, publicKey, vk.getOneTimeKey());
     }
 
-    public Boolean verify(PlainText plainText, Signature signature, VerificationKey publicKey, GroupElement oneTimeVerificationKey) {
+    public Boolean verify(PlainText plainText,
+                          Signature signature,
+                          VerificationKey publicKey,
+                          GroupElement oneTimeVerificationKey) {
 
         //if plainText only contains a single element, wrap it in a MessageBlock
         if((plainText instanceof GroupElementPlainText)){
@@ -179,10 +182,6 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
         MessageBlock messageBlock = (MessageBlock) plainText;
         SPSPOSVerificationKey vk = (SPSPOSVerificationKey) publicKey;
         SPSPOSSignature sigma = (SPSPOSSignature) signature;
-
-        if(messageBlock.length() != pp.getMessageLength()) {
-            throw new IllegalArgumentException("The given message does not match the expected message length of the public parameters");
-        }
 
         BilinearMap bMap = pp.getBilinearMap();
 
