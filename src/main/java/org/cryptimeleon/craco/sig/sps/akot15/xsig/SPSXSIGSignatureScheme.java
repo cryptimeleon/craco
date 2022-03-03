@@ -4,15 +4,17 @@ import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.sig.*;
+import org.cryptimeleon.craco.sig.sps.SPSMessageSpaceVerifier;
 import org.cryptimeleon.math.serialization.ListRepresentation;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
+import org.cryptimeleon.math.structures.groups.Group;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearMap;
 import org.cryptimeleon.math.structures.rings.zn.Zp.ZpElement;
 
-public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSignatureScheme {
+public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSignatureScheme, SPSMessageSpaceVerifier {
 
     @Represented
     private SPSXSIGPublicParameters pp;
@@ -25,7 +27,6 @@ public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSi
     }
 
     public SPSXSIGSignatureScheme(Representation repr) { new ReprUtil(this).deserialize(repr); }
-
 
     public SPSXSIGPublicParameters getPublicParameters() { return pp; }
 
@@ -90,63 +91,17 @@ public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSi
                 group1ElementK1, group1ElementK2,
                 group1ElementK3, group1ElementK4);
 
-
-        boolean test = verifyKeyIntegrity(vk, sk);
-
         return new SignatureKeyPair<>(vk, sk);
     }
 
 
-    /**
-     * Tests the properties of the key pair
-     * */
-    //TODO remove these
-    private boolean verifyKeyIntegrity(SPSXSIGVerificationKey vk, SPSXSIGSigningKey sk) {
-
-        BilinearMap bMap = pp.getBilinearMap();
-
-        GroupElement ppe1lhs = bMap.apply(sk.getK2(), pp.getGroup2ElementH()).compute();
-        GroupElement ppe1rhs = bMap.apply(pp.getGroup1ElementG(), vk.getV1()).compute();
-
-        boolean ppe1Test = ppe1lhs.equals(ppe1rhs);
-
-        GroupElement ppe2lhs = bMap.apply(pp.getGroup1ElementG(), vk.getV3()).compute();
-        GroupElement ppe2rhs = bMap.apply(sk.getK2(), vk.getV2()).compute();
-
-        boolean ppe2Test = ppe2lhs.equals(ppe2rhs);
-
-        GroupElement ppe3lhs = bMap.apply(sk.K1, vk.getV1()).compute();
-        GroupElement ppe3rhs = bMap.apply(vk.getV7(), vk.getV8()).compute();
-
-        boolean ppe3Test = ppe3lhs.equals(ppe3rhs);
-
-        GroupElement ppe4lhs = bMap.apply(sk.getK2(), vk.getV4()).compute();
-        GroupElement ppe4rhs = bMap.apply(pp.getGroup1ElementG(), vk.getV5()).compute();
-
-        boolean ppe4Test = ppe4lhs.equals(ppe4rhs);
-
-        GroupElement ppe5lhs = bMap.apply(sk.K3, pp.getGroup2ElementH());
-        ppe5lhs = ppe5lhs.op(bMap.apply(sk.K4, vk.getV2())).compute();
-
-        GroupElement ppe5rhs = bMap.apply(pp.getGroup1ElementG(), vk.getV4()).compute();
-
-        boolean ppe5Test = ppe5lhs.equals(ppe5rhs);
-
-        return ppe1Test && ppe2Test && ppe3Test && ppe4Test && ppe5Test;
-    }
-
     @Override
     public Signature sign(PlainText plainText, SigningKey secretKey) {
 
-        if(!(plainText instanceof MessageBlock)){
-            throw new IllegalArgumentException("Not a valid plain text for this scheme");
-        }
+        // check if the message to be signed matches the structure required by the implementation
+        doMessageChecks(plainText);
 
         MessageBlock messageBlock = (MessageBlock) plainText;
-
-        if(!(messageBlock.get(0) instanceof MessageBlock)){
-            throw new IllegalArgumentException("Not a valid plain text for this scheme");
-        }
 
         if(!(secretKey instanceof SPSXSIGSigningKey)){
             throw new IllegalArgumentException("Not a valid signing key for this scheme");
@@ -165,7 +120,7 @@ public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSi
 
         // compute signature
 
-        GroupElement group2ElementS0 = sk.getV6();
+        GroupElement group2ElementS0 = sk.getGroup2ElementV6();
 
         for (int i = 0; i < messageBlock.length(); i++) {
             GroupElementPlainText m_i3 = ((GroupElementPlainText)((MessageBlock)messageBlock.get(i)).get(2));
@@ -174,15 +129,15 @@ public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSi
 
         group2ElementS0 = group2ElementS0.pow(r0).compute();
 
-        GroupElement group1ElementS1 = sk.getK1().op(sk.getK3().pow(r)).compute();
+        GroupElement group1ElementS1 = sk.getGroup1ElementK1().op(sk.getGroup1ElementK3().pow(r)).compute();
 
-        GroupElement group1ElementS2 = sk.getK4().pow(r);
+        GroupElement group1ElementS2 = sk.getGroup1ElementK4().pow(r);
         GroupElement group1ElementS2rhs = pp.getGroup1ElementG().pow(z.neg()).compute();
         group1ElementS2 = group1ElementS2.op(group1ElementS2rhs).compute();
 
-        GroupElement group1ElementS3 = sk.getK2().pow(z).compute();
+        GroupElement group1ElementS3 = sk.getGroup1ElementK2().pow(z).compute();
 
-        GroupElement group1ElementS4 = sk.getK2().pow(r1).compute();
+        GroupElement group1ElementS4 = sk.getGroup1ElementK2().pow(r1).compute();
 
         GroupElement group1ElementS5 = pp.getGroup1ElementG().pow(r0).compute();
 
@@ -198,11 +153,8 @@ public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSi
     @Override
     public Boolean verify(PlainText plainText, Signature signature, VerificationKey publicKey) {
 
-        // parse message
-
-        if(!(plainText instanceof MessageBlock)){
-            throw new IllegalArgumentException("Not a valid plain text for this scheme");
-        }
+        // check if the message to be signed matches the structure required by the implementation
+        doMessageChecks(plainText);
 
         if(!(publicKey instanceof SPSXSIGVerificationKey)){
             throw new IllegalArgumentException("Not a valid signing key for this scheme");
@@ -228,7 +180,7 @@ public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSi
     private boolean verifyFirstPPE(BilinearMap bMap, SPSXSIGSignature sigma,
                                    SPSXSIGVerificationKey vk, MessageBlock messageBlock) {
 
-        GroupElement ppe1lhs2 = vk.getV6();
+        GroupElement ppe1lhs2 = vk.getGroup2ElementV6();
 
         for (int i = 0; i < messageBlock.length(); i++) {
             GroupElementPlainText m_i3 = ((GroupElementPlainText)((MessageBlock)messageBlock.get(i)).get(2));
@@ -249,18 +201,18 @@ public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSi
 
         //left-hand side
 
-        GroupElement ppe2lhs = bMap.apply(sigma.getGroup1ElementsSigma()[0], vk.getV1());
+        GroupElement ppe2lhs = bMap.apply(sigma.getGroup1ElementsSigma()[0], vk.getGroup2ElementV1());
 
-        ppe2lhs = ppe2lhs.op(bMap.apply(sigma.getGroup1ElementsSigma()[1], vk.getV3()));
-        ppe2lhs = ppe2lhs.op(bMap.apply(sigma.getGroup1ElementsSigma()[2], vk.getV2()));
+        ppe2lhs = ppe2lhs.op(bMap.apply(sigma.getGroup1ElementsSigma()[1], vk.getGroup2ElementV3()));
+        ppe2lhs = ppe2lhs.op(bMap.apply(sigma.getGroup1ElementsSigma()[2], vk.getGroup2ElementV2()));
 
         ppe2lhs.compute();
 
         //right-hand side
 
-        GroupElement ppe2rhs = bMap.apply(sigma.getGroup1ElementsSigma()[3], vk.getV4());
-        ppe2rhs = ppe2rhs.op(bMap.apply(sigma.getGroup1ElementsSigma()[4], vk.getV5()));
-        ppe2rhs = ppe2rhs.op(bMap.apply(vk.getV7(), vk.getV8()));
+        GroupElement ppe2rhs = bMap.apply(sigma.getGroup1ElementsSigma()[3], vk.getGroup2ElementV4());
+        ppe2rhs = ppe2rhs.op(bMap.apply(sigma.getGroup1ElementsSigma()[4], vk.getGroup2ElementV5()));
+        ppe2rhs = ppe2rhs.op(bMap.apply(vk.getGroup1ElementV7(), vk.getGroup2ElementV8()));
         ppe2rhs.compute();
 
         return ppe2lhs.equals(ppe2rhs);
@@ -311,6 +263,95 @@ public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSi
 
         return true;
     }
+
+    @Override
+    public void doMessageChecks(PlainText plainText, int expectedMessageLength, Group expectedGroup) {
+        // use implementation specific to this scheme
+        doMessageChecks(plainText);
+    }
+
+    /**
+     * Check if the given plainText matches the structure expected by the scheme
+     *      and throws detailed exception if the plainText fails any check.
+     *      Messages for this scheme require a unique structure. The message space is defined as
+     *      M = {(M_11, M_12, M_13),...,(M_l1, M_l2, M_l3)} such that for all i there exists a m_i in Zp such that
+     *      (M_i1, M_i2, M_i3) = (F1^mi, F2^mi, Ui^mi). (Note that all these group elements are \in G_2.)
+     *
+     *      This results in the scheme expecting a {@link MessageBlock}, containing inner {@link MessageBlock}s,
+     *      each of which holds 3 GroupElements in G_2.
+     */
+    private void doMessageChecks(PlainText plainText) {
+        MessageBlock messageBlock;
+
+        // The scheme expects a MessageBlock...
+        if(plainText instanceof MessageBlock) {
+            messageBlock = (MessageBlock) plainText;
+        }
+        else {
+            throw new IllegalArgumentException("The scheme requires its messages to a MessageBlock");
+        }
+
+        // ...with a size matching the public parameters...
+        if(messageBlock.length() != pp.getMessageLength()) {
+            throw new IllegalArgumentException(String.format(
+                    "The scheme expected a message of length %d, but the size was: %d",
+                    pp.getMessageLength(), messageBlock.length()
+            ));
+        }
+
+        // ... containing more MessageBlocks...
+        for (int i = 0; i < messageBlock.length(); i++) {
+            if(!(messageBlock.get(i) instanceof MessageBlock)) {
+                throw new IllegalArgumentException(String.format(
+                        "The scheme requires its messages to only contain inner MessageBlocks, " +
+                                "but element %d was %s",
+                        i, messageBlock.get(i).getClass()
+                ));
+            }
+            else {
+                // ...each containing three elements...
+                MessageBlock innerBlock = (MessageBlock) messageBlock.get(i);
+                if(innerBlock.length() != 3) {
+                    throw new IllegalArgumentException(String.format(
+                            "The scheme requires its inner MessageBlocks to contain three elements," +
+                                    " but element %d contained: %d elements",
+                            i, innerBlock.length()
+                    ));
+                }
+                else {
+                    // ... each of which is a GroupElementPlaintext
+                    for (int j = 0; j < innerBlock.length(); j++) {
+                        if(!(innerBlock.get(j) instanceof GroupElementPlainText)) {
+                            throw new IllegalArgumentException(
+                                    String.format(
+                                            "The scheme requires its inner MessageBlocks to contain GroupElements," +
+                                                    " but element %d was of type: %s",
+                                            i, messageBlock.get(i).getClass().toString()
+                                    )
+                            );
+                        }
+                        else {
+                            // ... in G2.
+                            GroupElementPlainText groupElementPT = (GroupElementPlainText) innerBlock.get(j);
+                            if(!(groupElementPT.get().getStructure().equals(pp.getG2GroupGenerator().getStructure()))) {
+                                throw new IllegalArgumentException(
+                                        String.format(
+                                                "Expected message elements to be in G_2," +
+                                                        " but element %d in inner MessageBlock %d was in: %s",
+                                                j, i, groupElementPT.get().getStructure().toString()
+                                        )
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // if no exception has been thrown at this point, we can assume the message matches the expected structure.
+    }
+
+
 
     @Override
     public PlainText restorePlainText(Representation repr) {
@@ -365,11 +406,21 @@ public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSi
 
     @Override
     public PlainText mapToPlaintext(byte[] bytes, VerificationKey pk) {
+        if(pp == null)
+        {
+            throw new NullPointerException("Number of messages is stored in public parameters but they are not set");
+        }
+
         return mapToPlaintext(bytes, pp.getMessageLength());
     }
 
     @Override
     public PlainText mapToPlaintext(byte[] bytes, SigningKey sk) {
+        if(pp == null)
+        {
+            throw new NullPointerException("Number of messages is stored in public parameters but they are not set");
+        }
+
         return mapToPlaintext(bytes, pp.getMessageLength());
     }
 
