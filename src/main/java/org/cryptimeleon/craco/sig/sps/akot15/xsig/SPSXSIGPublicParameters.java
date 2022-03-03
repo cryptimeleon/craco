@@ -80,9 +80,7 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
         generateRandomU();
     }
 
-    public SPSXSIGPublicParameters(Representation repr) {
-        super(repr);
-    }
+    public SPSXSIGPublicParameters(Representation repr) { super(repr); }
 
 
     /**

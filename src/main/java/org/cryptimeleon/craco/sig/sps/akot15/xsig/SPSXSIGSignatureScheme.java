@@ -14,12 +14,13 @@ import org.cryptimeleon.math.structures.groups.GroupElement;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearMap;
 import org.cryptimeleon.math.structures.rings.zn.Zp.ZpElement;
 
+import java.util.Objects;
+
 public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSignatureScheme, SPSMessageSpaceVerifier {
 
     @Represented
     private SPSXSIGPublicParameters pp;
 
-    protected SPSXSIGSignatureScheme() { super(); }
 
     public SPSXSIGSignatureScheme(SPSXSIGPublicParameters pp) {
         super();
@@ -27,6 +28,7 @@ public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSi
     }
 
     public SPSXSIGSignatureScheme(Representation repr) { new ReprUtil(this).deserialize(repr); }
+
 
     public SPSXSIGPublicParameters getPublicParameters() { return pp; }
 
@@ -450,6 +452,17 @@ public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSi
     @Override
     public Representation getRepresentation() { return ReprUtil.serialize(this); }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SPSXSIGSignatureScheme)) return false;
+        SPSXSIGSignatureScheme that = (SPSXSIGSignatureScheme) o;
+        return Objects.equals(pp, that.pp);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(pp);
+    }
 
 }
