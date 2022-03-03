@@ -43,6 +43,7 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
 
     private TCGAKOT15CommitmentKey commitmentKey;
 
+    //TODO remove these
     private GroupElement getG1GroupGenerator() {
         return (pp instanceof SPSXSIGPublicParameters) ? ((SPSXSIGPublicParameters)pp).getGroup1ElementF1() : pp.getG1GroupGenerator();
     }
@@ -59,7 +60,7 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
     }
 
     /**
-     * Generate a commitment key to be used by the scheme
+     * Generate a commitment key to be used by the scheme.
      * */
     private TCGAKOT15CommitmentKey generateKey() {
 
@@ -92,10 +93,6 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
 
             return new TCGAKOT15CommitmentKey(group2ElementsXi);
         }
-    }
-
-    public TCGAKOT15CommitmentKey getCommitmentKey() {
-        return commitmentKey;
     }
 
 
@@ -136,6 +133,13 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
         }
     }
 
+    /**
+     * if the scheme is used in the context of
+     * {@link org.cryptimeleon.craco.sig.sps.akot15.fsp2.SPSFSP2SignatureScheme}, the scheme is required to calculate
+     * two additional elements, so they can later be passed to
+     * {@link org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGSignatureScheme}.
+     *
+     */
     private CommitmentPair commitXSIGVariant(MessageBlock messageBlock, Zp.ZpElement zeta, TCGAKOT15OpenValue open) {
 
         TCGAKOT15XSIGCommitmentKey ck = (TCGAKOT15XSIGCommitmentKey) commitmentKey;
@@ -152,7 +156,7 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
             RingElement mi = ((RingElementPlainText)messageBlock.get(i)).getRingElement();
 
             GroupElement Xi = ck.getGroup2ElementsXi()[i];
-            GroupElement Xi2 = ck.getGroup2ElementsXi2()[i]; //TODO this might be a typo
+            GroupElement Xi2 = ck.getGroup2ElementsXi2()[i];
             GroupElement Xi3 = ck.getGroup2ElementsXi3()[i];
 
             group2ElementGu = group2ElementGu.op(Xi.pow(mi));
@@ -164,7 +168,9 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
         group2ElementGu2.compute();
         group2ElementGu3.compute();
 
-        return new CommitmentPair(new TCGAKOT15XSIGCommitment(group2ElementGu, group2ElementGu2, group2ElementGu3), open);
+        return new CommitmentPair(
+                new TCGAKOT15XSIGCommitment(group2ElementGu, group2ElementGu2, group2ElementGu3),
+                open);
     }
 
 
@@ -224,6 +230,10 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
         return ppe_lhs.equals(ppe_rhs);
     }
 
+
+    public TCGAKOT15CommitmentKey getCommitmentKey() {
+        return commitmentKey;
+    }
 
     @Override
     public PlainText mapToPlaintext(byte[] bytes) {
