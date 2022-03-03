@@ -12,6 +12,7 @@ import org.cryptimeleon.math.structures.groups.elliptic.BilinearMap;
 import org.cryptimeleon.math.structures.rings.zn.Zp;
 import org.cryptimeleon.math.structures.rings.zn.Zp.ZpElement;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -75,9 +76,8 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
 
     }
 
-
     public SPSXSIGPublicParameters(Representation repr) {
-        new ReprUtil(this).deserialize(repr);
+        super(repr);
     }
 
 
@@ -112,46 +112,8 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
 
     }
 
-
-    /**
-     * Returns the group Zp (where p is the group order of G1, G2, and GT)
-     */
-    public Zp getZp(){ return new Zp(bilinearGroup.getG1().size()); }
-
-    public GroupElement getG1GroupGenerator(){
-        return group1ElementG;
-    }
-
-    public GroupElement getG2GroupGenerator(){
-        return group2ElementH;
-    }
-
-    public BilinearMap getBilinearMap(){ return bilinearGroup.getBilinearMap(); }
-
-    public Group getGT() {return bilinearGroup.getGT(); }
-
     public Integer getMessageLength(){ return messageLength; }
 
-
-    @Override
-    public Representation getRepresentation() { return ReprUtil.serialize(this); }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SPSXSIGPublicParameters that = (SPSXSIGPublicParameters) o;
-        return Objects.equals(bilinearGroup, that.bilinearGroup)
-                && Objects.equals(group1ElementG, that.group1ElementG)
-                && Objects.equals(group2ElementH, that.group2ElementH)
-                && Objects.equals(messageLength, that.messageLength);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(bilinearGroup, group1ElementG, group2ElementH, messageLength);
-    }
 
     @Override
     public SPSXSIGPublicParameters clone() {
@@ -166,24 +128,13 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
         this.bilinearGroup = bilinearGroup;
     }
 
+
     public GroupElement getGroup1ElementG() {
         return group1ElementG;
     }
 
-    public void setGroup1ElementG(GroupElement group1ElementG) {
-        this.group1ElementG = group1ElementG;
-    }
-
     public GroupElement getGroup2ElementH() {
         return group2ElementH;
-    }
-
-    public void setGroup2ElementH(GroupElement group2ElementH) {
-        this.group2ElementH = group2ElementH;
-    }
-
-    public void setMessageLength(Integer messageLength) {
-        this.messageLength = messageLength;
     }
 
     public GroupElement getGroup1ElementF1() {
@@ -210,4 +161,25 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
         return group2ElementsU;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SPSXSIGPublicParameters)) return false;
+        if (!super.equals(o)) return false;
+        SPSXSIGPublicParameters that = (SPSXSIGPublicParameters) o;
+        return Objects.equals(group1ElementF1, that.group1ElementF1)
+                && Objects.equals(group1ElementF2, that.group1ElementF2)
+                && Objects.equals(group2ElementF1, that.group2ElementF1)
+                && Objects.equals(group2ElementF2, that.group2ElementF2)
+                && Arrays.equals(group1ElementsU, that.group1ElementsU)
+                && Arrays.equals(group2ElementsU, that.group2ElementsU);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(super.hashCode(), group1ElementF1, group1ElementF2, group2ElementF1, group2ElementF2);
+        result = 31 * result + Arrays.hashCode(group1ElementsU);
+        result = 31 * result + Arrays.hashCode(group2ElementsU);
+        return result;
+    }
 }
