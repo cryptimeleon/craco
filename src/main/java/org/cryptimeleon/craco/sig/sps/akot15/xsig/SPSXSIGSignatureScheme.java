@@ -35,7 +35,9 @@ public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSi
     public SignatureKeyPair<SPSXSIGVerificationKey, SPSXSIGSigningKey> generateKeyPair(int numberOfMessages) {
 
         if(pp.getMessageLength() != numberOfMessages){
-            throw new IllegalArgumentException("The given message length does not match the public parameters");
+            throw new IllegalArgumentException(String.format(
+                    "The scheme expected messageLength %d, but was: %d",
+                    pp.getMessageLength(), numberOfMessages));
         }
 
         //pick randomness

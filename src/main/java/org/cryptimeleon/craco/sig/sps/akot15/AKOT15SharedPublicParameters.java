@@ -75,7 +75,7 @@ public class AKOT15SharedPublicParameters extends SPSPublicParameters implements
     public AKOT15SharedPublicParameters clone() {
 
         AKOT15SharedPublicParameters clone = new AKOT15SharedPublicParameters(
-                this.bilinearGroup, this.messageLength, this.group1ElementG, group2ElementH
+                this.bilinearGroup, this.messageLength.intValue(), this.group1ElementG, group2ElementH
         );
 
         return clone;

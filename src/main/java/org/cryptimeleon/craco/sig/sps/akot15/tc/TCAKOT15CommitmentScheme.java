@@ -10,7 +10,6 @@ import org.cryptimeleon.craco.sig.sps.SPSMessageSpaceVerifier;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 import org.cryptimeleon.craco.sig.sps.akot15.pos.*;
 import org.cryptimeleon.craco.sig.sps.akot15.tcgamma.*;
-import org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGPublicParameters;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
@@ -87,11 +86,45 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme, SPSMessageSpa
         //create nested signature scheme instance (using the same public parameters)
         this.posInstance = new SPSPOSSignatureScheme(pp_pos);
 
-        // as tc gamma will sign the verification key of posInstance, it's expected messages are 2 elements longer
+        // as tc gamma will sign the verification key of posInstance, its expected messages are 2 elements longer
         AKOT15SharedPublicParameters pp_gbc = pp.clone();
         pp_gbc.setMessageLength(pp.getMessageLength() + 2);
 
         this.gbcInstance = new TCGAKOT15CommitmentScheme(pp_gbc);
+
+        this.commitmentKey = generateKey();
+    }
+
+    /**
+     * Set up the scheme using a set of shared parameters, as well as special parameters for TC gamma, enabling
+     *      inter-compatibility with {@link org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGSignatureScheme}
+     *
+     * Note: The original paper contains a typo in the section: "Procedure: Matching C_gbc to M_xsig -- Setup" [1, p.17]
+     *       The whole of TC must be initialized with F_1, F^{tilde}_1 as the default generators, not just TC_gamma.
+     */
+    public TCAKOT15CommitmentScheme(AKOT15SharedPublicParameters sharedPublicParametersParameters,
+                                    TCGAKOT15XSIGPublicParameters tcGammaPublicParameters) {
+        super();
+
+        // set up general PublicParameters for this scheme
+        this.pp = new AKOT15SharedPublicParameters(
+                sharedPublicParametersParameters.getBilinearGroup(),
+                sharedPublicParametersParameters.getMessageLength(),
+                tcGammaPublicParameters.getG1GroupGenerator(),
+                tcGammaPublicParameters.getG2GroupGenerator());
+
+        // set up POS specific public parameters
+        AKOT15SharedPublicParameters pp_pos = new AKOT15SharedPublicParameters(
+                sharedPublicParametersParameters.getBilinearGroup(),
+                1,
+                tcGammaPublicParameters.getG1GroupGenerator(),
+                tcGammaPublicParameters.getG2GroupGenerator());
+
+        //create nested signature scheme instance (using the same public parameters)
+        this.posInstance = new SPSPOSSignatureScheme(pp_pos);
+
+        // use a special set of public parameters for tc_gamma if given (these are to be provided by FSP2)
+        this.gbcInstance = new TCGAKOT15CommitmentScheme(tcGammaPublicParameters);
 
         this.commitmentKey = generateKey();
     }

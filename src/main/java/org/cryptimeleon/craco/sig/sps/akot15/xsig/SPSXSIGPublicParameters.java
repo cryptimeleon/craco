@@ -60,7 +60,7 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
     protected GroupElement[] group2ElementsU;
 
 
-    public SPSXSIGPublicParameters(BilinearGroup bilinearGroup, Integer messageLength){
+    public SPSXSIGPublicParameters(BilinearGroup bilinearGroup, int messageLength){
         super(bilinearGroup, messageLength);
         this.bilinearGroup = bilinearGroup;
         this.messageLength = messageLength;
@@ -71,27 +71,13 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
         generateRandomU();
     }
 
-    public SPSXSIGPublicParameters(AKOT15SharedPublicParameters sharedPP) {
-        super(sharedPP.getBilinearGroup(), sharedPP.getMessageLength());
+    public SPSXSIGPublicParameters(AKOT15SharedPublicParameters sharedPP, int messageLength) {
+        super(sharedPP.getBilinearGroup(), messageLength);
         this.group1ElementG = sharedPP.getG1GroupGenerator();
         this.group2ElementH = sharedPP.getG2GroupGenerator();
 
         generateRandomF();
         generateRandomU();
-    }
-
-    private SPSXSIGPublicParameters(SPSXSIGPublicParameters original) {
-        super(original.getBilinearGroup(), original.getMessageLength());
-        this.group1ElementG = original.getG1GroupGenerator();
-        this.group2ElementH = original.getG2GroupGenerator();
-
-        this.group1ElementF1 = original.group1ElementF1;
-        this.group2ElementF1 = original.group2ElementF1;
-        this.group1ElementF2 = original.group1ElementF2;
-        this.group2ElementF2 = original.group2ElementF2;
-        this.group1ElementsU = original.group1ElementsU;
-        this.group2ElementsU = original.group2ElementsU;
-
     }
 
     public SPSXSIGPublicParameters(Representation repr) {
@@ -133,11 +119,6 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
 
     }
 
-
-    @Override
-    public SPSXSIGPublicParameters clone() {
-        return new SPSXSIGPublicParameters(this);
-    }
 
     public BilinearGroup getBilinearGroup() {
         return bilinearGroup;

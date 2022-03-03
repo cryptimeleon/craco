@@ -4,6 +4,7 @@ import org.cryptimeleon.craco.commitment.CommitmentPair;
 import org.cryptimeleon.craco.sig.Signature;
 import org.cryptimeleon.craco.sig.sps.akot15.tc.TCAKOT15OpenValue;
 import org.cryptimeleon.craco.sig.sps.akot15.tcgamma.TCGAKOT15Commitment;
+import org.cryptimeleon.craco.sig.sps.akot15.tcgamma.TCGAKOT15XSIGCommitment;
 import org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGSignature;
 import org.cryptimeleon.math.serialization.ObjectRepresentation;
 import org.cryptimeleon.math.serialization.Representation;
@@ -40,7 +41,15 @@ public class SPSFSP2Signature implements Signature {
 
         this.sigmaXSIG = new SPSXSIGSignature(objRepr.get("sigma"), g1, g2);
 
-        TCGAKOT15Commitment com = new TCGAKOT15Commitment(g2, objRepr.get("com"));
+        TCGAKOT15Commitment com;
+
+        // if the representation contains an instance of TCGAKOT15XSIGCommitment, use that
+        if(objRepr.get("comXSIG") != null) {
+            com = new TCGAKOT15XSIGCommitment(g2, objRepr.get("comXSIG"));
+        }
+        else {
+            com = new TCGAKOT15Commitment(g2, objRepr.get("com"));
+        }
         TCAKOT15OpenValue open = new TCAKOT15OpenValue(g1, g2, objRepr.get("open"));
 
         this.commitmentPairTC = new CommitmentPair(com, open);
@@ -52,7 +61,14 @@ public class SPSFSP2Signature implements Signature {
         ObjectRepresentation objRepr = new ObjectRepresentation();
 
         objRepr.put("sigma", sigmaXSIG.getRepresentation());
-        objRepr.put("com", commitmentPairTC.getCommitment().getRepresentation());
+
+        //if special XSIG variant is used, put that instead
+        if(commitmentPairTC.getCommitment() instanceof TCGAKOT15XSIGCommitment) {
+            objRepr.put("comXSIG", commitmentPairTC.getCommitment().getRepresentation());
+        }
+        else {
+            objRepr.put("com", commitmentPairTC.getCommitment().getRepresentation());
+        }
         objRepr.put("open", commitmentPairTC.getOpenValue().getRepresentation());
 
         return objRepr;
@@ -71,6 +87,7 @@ public class SPSFSP2Signature implements Signature {
         if (this == o) return true;
         if (!(o instanceof SPSFSP2Signature)) return false;
         SPSFSP2Signature that = (SPSFSP2Signature) o;
+
         return Objects.equals(sigmaXSIG, that.sigmaXSIG)
                 && Objects.equals(commitmentPairTC.getCommitment(), that.commitmentPairTC.getCommitment())
                 && Objects.equals(commitmentPairTC.getOpenValue(), that.commitmentPairTC.getOpenValue());

@@ -9,7 +9,6 @@ import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.common.plaintexts.RingElementPlainText;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
-import org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGPublicParameters;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.structures.cartesian.Vector;
@@ -64,10 +63,10 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
 
         GroupElement[] group2ElementsXi = new GroupElement[pp.getMessageLength()];
 
-        //if XSIG parameters are passed, additional values are calculated
-        if(pp instanceof SPSXSIGPublicParameters) {
+        //if XSIG specific parameters are passed, additional values are calculated
+        if(pp instanceof TCGAKOT15XSIGPublicParameters) {
 
-            SPSXSIGPublicParameters ppXSIG = (SPSXSIGPublicParameters) pp;
+            TCGAKOT15XSIGPublicParameters ppXSIG = (TCGAKOT15XSIGPublicParameters) pp;
 
             GroupElement[] group2ElementsXi2 = new GroupElement[pp.getMessageLength()];
             GroupElement[] group2ElementsXi3 = new GroupElement[pp.getMessageLength()];
@@ -78,7 +77,7 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
 
                 group2ElementsXi[i] = pp.getG2GroupGenerator().pow(rho).compute();
                 group2ElementsXi2[i] = ppXSIG.getGroup2ElementF2().pow(rho).compute();
-                group2ElementsXi3[i] = ppXSIG.getGroup2ElementsU()[0].pow(rho).compute();
+                group2ElementsXi3[i] = ppXSIG.getGroup2ElementU1().pow(rho).compute();
             }
 
             return new TCGAKOT15XSIGCommitmentKey(group2ElementsXi, group2ElementsXi2, group2ElementsXi3);
@@ -113,7 +112,7 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
         TCGAKOT15OpenValue open = new TCGAKOT15OpenValue(pp.getG1GroupGenerator().pow(zeta).compute());
 
         //if XSIG message space is detected, compute additional values
-        if(pp instanceof SPSXSIGPublicParameters) {
+        if(pp instanceof TCGAKOT15XSIGPublicParameters) {
             return commitXSIGVariant(messageBlock, zeta, open);
         }
         else {
@@ -140,13 +139,13 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
     private CommitmentPair commitXSIGVariant(MessageBlock messageBlock, Zp.ZpElement zeta, TCGAKOT15OpenValue open) {
 
         TCGAKOT15XSIGCommitmentKey ck = (TCGAKOT15XSIGCommitmentKey) commitmentKey;
-        SPSXSIGPublicParameters ppXSIG = (SPSXSIGPublicParameters) pp;
+        TCGAKOT15XSIGPublicParameters ppXSIG = (TCGAKOT15XSIGPublicParameters) pp;
 
         // compute G_u
 
         GroupElement group2ElementGu = pp.getG2GroupGenerator().pow(zeta);
         GroupElement group2ElementGu2 = ppXSIG.getGroup2ElementF2().pow(zeta);
-        GroupElement group2ElementGu3 = ppXSIG.getGroup2ElementsU()[0].pow(zeta);
+        GroupElement group2ElementGu3 = ppXSIG.getGroup2ElementU1().pow(zeta);
 
         for (int i = 0; i < messageBlock.length(); i++) {
 

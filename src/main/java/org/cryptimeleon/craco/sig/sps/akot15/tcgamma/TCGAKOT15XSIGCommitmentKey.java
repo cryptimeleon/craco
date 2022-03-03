@@ -7,6 +7,8 @@ import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.groups.Group;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 
+import java.util.Arrays;
+
 /**
  * A variant of {@link TCGAKOT15CommitmentKey} that is compatible with the message space
  * of {@link org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGSignatureScheme}
@@ -48,6 +50,23 @@ public class TCGAKOT15XSIGCommitmentKey extends TCGAKOT15CommitmentKey{
 
     public GroupElement[] getGroup2ElementsXi3() {
         return group2ElementsXi3;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TCGAKOT15XSIGCommitmentKey)) return false;
+        if (!super.equals(o)) return false;
+        TCGAKOT15XSIGCommitmentKey that = (TCGAKOT15XSIGCommitmentKey) o;
+        return Arrays.equals(group2ElementsXi2, that.group2ElementsXi2) && Arrays.equals(group2ElementsXi3, that.group2ElementsXi3);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + Arrays.hashCode(group2ElementsXi2);
+        result = 31 * result + Arrays.hashCode(group2ElementsXi3);
+        return result;
     }
 
 }

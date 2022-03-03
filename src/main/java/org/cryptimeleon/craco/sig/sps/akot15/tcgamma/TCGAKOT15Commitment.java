@@ -3,6 +3,7 @@ package org.cryptimeleon.craco.sig.sps.akot15.tcgamma;
 import org.cryptimeleon.craco.commitment.Commitment;
 import org.cryptimeleon.math.hash.ByteAccumulator;
 import org.cryptimeleon.math.hash.annotations.AnnotatedUbrUtil;
+import org.cryptimeleon.math.serialization.ObjectRepresentation;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
@@ -23,13 +24,12 @@ public class TCGAKOT15Commitment implements Commitment {
     @Represented(restorer = "G2")
     private GroupElement group2ElementGu;
 
-
     public TCGAKOT15Commitment(GroupElement group2ElementGu) {
         this.group2ElementGu = group2ElementGu;
     }
 
     public TCGAKOT15Commitment(Group group2, Representation repr) {
-        new ReprUtil(this).register(group2, "G2").deserialize(repr);
+        new ReprUtil(this).register(group2,"G2").deserialize(repr);
     }
 
 

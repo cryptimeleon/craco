@@ -2,7 +2,9 @@ package org.cryptimeleon.craco.sig.sps.akot15.tcgamma;
 
 import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
+import org.cryptimeleon.math.serialization.ObjectRepresentation;
 import org.cryptimeleon.math.serialization.Representation;
+import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.groups.Group;
 import org.cryptimeleon.math.structures.groups.GroupElement;
@@ -31,13 +33,16 @@ public class TCGAKOT15XSIGCommitment extends TCGAKOT15Commitment{
     private GroupElement group2ElementGu3;
 
 
-    public TCGAKOT15XSIGCommitment(GroupElement group2ElementGu, GroupElement group2ElementGu2, GroupElement group2ElementGu3) {
+    public TCGAKOT15XSIGCommitment(GroupElement group2ElementGu,
+                                   GroupElement group2ElementGu2,
+                                   GroupElement group2ElementGu3) {
         super(group2ElementGu);
         this.group2ElementGu2 = group2ElementGu2;
         this.group2ElementGu3 = group2ElementGu3;
     }
 
-    public TCGAKOT15XSIGCommitment(Group group2, Representation repr) {
+    public TCGAKOT15XSIGCommitment(Group group2, Representation repr)
+    {
         super(group2, repr);
     }
 
@@ -66,13 +71,17 @@ public class TCGAKOT15XSIGCommitment extends TCGAKOT15Commitment{
     }
 
     @Override
+    public Representation getRepresentation() {
+        return new ReprUtil(this).serialize();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof TCGAKOT15XSIGCommitment)) return false;
         if (!super.equals(o)) return false;
         TCGAKOT15XSIGCommitment that = (TCGAKOT15XSIGCommitment) o;
-        return Objects.equals(group2ElementGu2, that.group2ElementGu2)
-                && Objects.equals(group2ElementGu3, that.group2ElementGu3);
+        return Objects.equals(group2ElementGu2, that.group2ElementGu2) && Objects.equals(group2ElementGu3, that.group2ElementGu3);
     }
 
     @Override
