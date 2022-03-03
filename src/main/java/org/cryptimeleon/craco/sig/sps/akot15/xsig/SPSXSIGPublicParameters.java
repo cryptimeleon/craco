@@ -23,21 +23,39 @@ import java.util.Objects;
  */
 public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
 
+    /**
+     * F_1 \in G_1 in the paper
+     */
     @Represented(restorer = "bilinearGroup::getG1")
     protected GroupElement group1ElementF1;
 
+    /**
+     * F_2 \in G_1 in the paper
+     */
     @Represented(restorer = "bilinearGroup::getG1")
     protected GroupElement group1ElementF2;
 
+    /**
+     * F^{tilde}_1 \in G_2 in the paper
+     */
     @Represented(restorer = "bilinearGroup::getG2")
     protected GroupElement group2ElementF1;
 
+    /**
+     * F^{tilde}_2 \in G_2 in the paper
+     */
     @Represented(restorer = "bilinearGroup::getG2")
     protected GroupElement group2ElementF2;
 
+    /**
+     * U_i \in G_1 in the paper
+     */
     @Represented(restorer = "[bilinearGroup::getG1]")
     protected GroupElement[] group1ElementsU;
 
+    /**
+     * U_i \in G_2 in the paper
+     */
     @Represented(restorer = "[bilinearGroup::getG2]")
     protected GroupElement[] group2ElementsU;
 
@@ -82,8 +100,8 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
 
 
     /**
-     * Generate the group elements F1, F2 for both groups
-     * */
+     * Generate the group elements F_1, F_2 for both groups
+     */
     private void generateRandomF() {
 
         ZpElement delta = getZp().getUniformlyRandomNonzeroElement();
@@ -97,6 +115,9 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
 
     }
 
+    /**
+     * Generate the group elements U_i, U^{tilde}_i for both groups
+     */
     private void generateRandomU() {
 
         this.group1ElementsU = new GroupElement[messageLength];
@@ -111,8 +132,6 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
         }
 
     }
-
-    public Integer getMessageLength(){ return messageLength; }
 
 
     @Override
