@@ -70,6 +70,10 @@ public class SPSFSP2SignatureScheme implements MultiMessageStructurePreservingSi
         tcInstance = new TCAKOT15CommitmentScheme(pp, ppTC);
     }
 
+    public SPSFSP2SignatureScheme(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
+    }
+
     @Override
     public SignatureKeyPair<SPSFSP2VerificationKey, SPSXSIGSigningKey> generateKeyPair(int numberOfMessages) {
 

@@ -34,6 +34,16 @@ public class CommitmentStandaloneReprTests extends StandaloneReprSubTest {
         test(scheme);
     }
 
+    public void testTCAKOT15() {
+        AKOT15SharedPublicParameters pp = AKOT15SharedPublicParametersGen.generateParameters(
+                128, 20, true);
+
+        TCAKOT15CommitmentScheme scheme = new TCAKOT15CommitmentScheme(pp);
+
+        test(pp);
+        test(scheme);
+    }
+
     public void testHashThenCommit() {
         test(new HashThenCommitCommitmentScheme(pedersen, new SHA256HashFunction()));
     }

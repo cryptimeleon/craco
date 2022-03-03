@@ -10,11 +10,17 @@ import org.cryptimeleon.craco.sig.sps.SPSMessageSpaceVerifier;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 import org.cryptimeleon.craco.sig.sps.akot15.pos.*;
 import org.cryptimeleon.craco.sig.sps.akot15.tcgamma.*;
+import org.cryptimeleon.math.serialization.ObjectRepresentation;
+import org.cryptimeleon.math.serialization.RepresentableRepresentation;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 import org.cryptimeleon.math.structures.rings.zn.Zp.ZpElement;
+
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * An implementation of the structure preserving commitment scheme TC presented in [1]
  * While the scheme is intended to be a building block of the larger SPS scheme
@@ -127,6 +133,14 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme, SPSMessageSpa
         this.gbcInstance = new TCGAKOT15CommitmentScheme(tcGammaPublicParameters);
 
         this.commitmentKey = generateKey();
+    }
+
+    public TCAKOT15CommitmentScheme(Representation repr) {
+
+        ObjectRepresentation objRepr = (ObjectRepresentation) repr;
+        AKOT15SharedPublicParameters ppTemp = new AKOT15SharedPublicParameters(((RepresentableRepresentation)objRepr.get("pp")).getRepresentation());
+
+        new ReprUtil(this).register(ppTemp.getZp(), "Zp").deserialize(repr);
     }
 
 
@@ -298,4 +312,21 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme, SPSMessageSpa
     public Representation getRepresentation() {
         return new ReprUtil(this).serialize();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TCAKOT15CommitmentScheme)) return false;
+        TCAKOT15CommitmentScheme that = (TCAKOT15CommitmentScheme) o;
+        return Objects.equals(pp, that.pp) && Objects.equals(posInstance, that.posInstance) && Objects.equals(gbcInstance, that.gbcInstance) && Objects.equals(commitmentKey, that.commitmentKey) && Arrays.equals(oneTimeSecretKeys, that.oneTimeSecretKeys) && Arrays.equals(oneTimePublicKeys, that.oneTimePublicKeys);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(pp, posInstance, gbcInstance, commitmentKey);
+        result = 31 * result + Arrays.hashCode(oneTimeSecretKeys);
+        result = 31 * result + Arrays.hashCode(oneTimePublicKeys);
+        return result;
+    }
+
 }
