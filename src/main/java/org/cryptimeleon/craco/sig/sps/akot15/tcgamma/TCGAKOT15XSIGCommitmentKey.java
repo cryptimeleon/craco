@@ -16,14 +16,14 @@ public class TCGAKOT15XSIGCommitmentKey extends TCGAKOT15CommitmentKey{
 
     /**
      * X_i2 \in G2 in the paper
-     * Defined as F^{tilde}_2^{pi}
+     * Defined as F^{tilde}_2^{rho_i}
      */
     @Represented(restorer = "[G2]")
     private GroupElement[] group2ElementsXi2;
 
     /**
      * X_i2 \in G2 in the paper
-     * Defined as U^{tilde}_1^{pi}
+     * Defined as U^{tilde}_1^{rho_i}
      */
     @Represented(restorer = "[G2]")
     private GroupElement[] group2ElementsXi3;
@@ -50,22 +50,4 @@ public class TCGAKOT15XSIGCommitmentKey extends TCGAKOT15CommitmentKey{
         return group2ElementsXi3;
     }
 
-
-    public MessageBlock toMessageBlock() {
-
-        MessageBlock[] triples = new MessageBlock[getGroup2ElementsXi().length];
-
-        for (int i = 0; i < getGroup2ElementsXi().length; i++) {
-
-            MessageBlock triple = new MessageBlock(
-                    new GroupElementPlainText(getGroup2ElementsXi()[i]),
-                    new GroupElementPlainText(group2ElementsXi2[i]),
-                    new GroupElementPlainText(group2ElementsXi3[i])
-                    );
-
-            triples[i] = triple;
-        }
-
-        return new MessageBlock(triples);
-    }
 }
