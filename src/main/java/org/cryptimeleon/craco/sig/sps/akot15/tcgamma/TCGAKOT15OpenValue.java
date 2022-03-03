@@ -17,7 +17,7 @@ public class TCGAKOT15OpenValue implements OpenValue {
 
     /**
      * R in G1 in the paper
-     * */
+     */
     @Represented(restorer = "G1")
     private GroupElement group1ElementR;
 
