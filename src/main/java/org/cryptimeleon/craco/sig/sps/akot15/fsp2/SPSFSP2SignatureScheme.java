@@ -33,10 +33,12 @@ public class SPSFSP2SignatureScheme implements MultiMessageStructurePreservingSi
 
         //instantiate nested building blocks
         SPSXSIGPublicParameters pp_xsig = new SPSXSIGPublicParameters(pp);
+        SPSXSIGPublicParameters pp_tc = new SPSXSIGPublicParameters(pp);
+        //pp_xsig.setMessageLength(1);
 
         xsigInstance = new SPSXSIGSignatureScheme(pp_xsig);
 
-        tcInstance = new TCAKOT15CommitmentScheme(pp_xsig);
+        tcInstance = new TCAKOT15CommitmentScheme(pp_tc);
     }
 
     @Override
@@ -101,10 +103,10 @@ public class SPSFSP2SignatureScheme implements MultiMessageStructurePreservingSi
         SPSFSP2VerificationKey vk = (SPSFSP2VerificationKey) publicKey;
         SPSFSP2Signature sigma = (SPSFSP2Signature) signature;
 
-        CommitmentPair commitmentPair = sigma.getCommitmentPair_tc();
+        CommitmentPair commitmentPair = sigma.getCommitmentPairTC();
 
-        return xsigInstance.verify(((TCGAKOT15XSIGCommitment)commitmentPair.getCommitment()).toMessageBlock(), sigma.getSigma_xsig(), vk.getVk_xsig())
-            && tcInstance.verify(sigma.getCommitmentPair_tc().getCommitment(), sigma.getCommitmentPair_tc().getOpenValue(), messageBlock);
+        return xsigInstance.verify(((TCGAKOT15XSIGCommitment)commitmentPair.getCommitment()).toMessageBlock(), sigma.getSigmaXSIG(), vk.getVkXSIG())
+            && tcInstance.verify(sigma.getCommitmentPairTC().getCommitment(), sigma.getCommitmentPairTC().getOpenValue(), messageBlock);
     }
 
 
@@ -140,13 +142,21 @@ public class SPSFSP2SignatureScheme implements MultiMessageStructurePreservingSi
 
     @Override
     public PlainText mapToPlaintext(byte[] bytes, VerificationKey pk) {
-        //TODO add pp check
+        if(pp == null)
+        {
+            throw new NullPointerException("Number of messages is stored in public parameters but they are not set");
+        }
+
         return mapToPlaintext(bytes, pp.getMessageLength());
     }
 
     @Override
     public PlainText mapToPlaintext(byte[] bytes, SigningKey sk) {
-        //TODO add pp check
+        if(pp == null)
+        {
+            throw new NullPointerException("Number of messages is stored in public parameters but they are not set");
+        }
+
         return mapToPlaintext(bytes, pp.getMessageLength());
     }
 
