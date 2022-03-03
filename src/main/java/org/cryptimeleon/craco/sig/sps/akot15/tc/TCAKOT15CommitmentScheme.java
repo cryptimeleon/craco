@@ -16,10 +16,22 @@ import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 import org.cryptimeleon.math.structures.rings.zn.Zp.ZpElement;
 /**
+ * An implementation of the structure preserving commitment scheme TC presented in [1]
+ * While the scheme is intended to be a building block of the larger SPS scheme
+ * {@link org.cryptimeleon.craco.sig.sps.akot15.fsp2.SPSFSP2SignatureScheme},
+ * the implementation can be used on its own, where it is chosen message target collision resistant
+ * under the assumptions that its building blocks {@link SPSPOSSignatureScheme}
+ * and {@link TCGAKOT15CommitmentScheme} make.
  *
+ * Note: While the scheme is a trapdoor commitment scheme in the paper, its trapdoor functionality (SimCom, Equiv in
+ * the paper) has been omitted for this implementation, as it is not required for FSPS2 to work as intended.
  *
- * Note: This scheme does not possess its own implementation of an Commitment instance. It instead reuses
+ * Note: This scheme does not possess its own implementation of an {@link Commitment} instance. It instead reuses
  * {@link TCGAKOT15Commitment}, as the paper states com := com_gbc
+ *
+ *
+ * [1] Abe et al.: Fully Structure-Preserving Signatures and Shrinking Commitments.
+ * https://eprint.iacr.org/2015/076.pdf
  *
  */
 public class TCAKOT15CommitmentScheme implements CommitmentScheme {
@@ -27,12 +39,19 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme {
     @Represented
     AKOT15SharedPublicParameters pp;
 
+    @Represented
     SPSPOSSignatureScheme posInstance;
+
+    @Represented
     TCGAKOT15CommitmentScheme gbcInstance;
 
+    @Represented
     TCGAKOT15CommitmentKey commitmentKey;
 
+    @Represented(restorer = "")
     ZpElement[] oneTimeSecretKeys;
+
+    @Represented(restorer = "")
     GroupElement[] oneTimePublicKeys;
 
     MessageBlock commitMsg;

@@ -32,6 +32,8 @@ import org.cryptimeleon.math.structures.rings.zn.Zp;
  *      based on this scheme -- with {@link org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGSignatureScheme},
  *      the scheme must calculate 2 additional elements for its commitments (with are then signed by XSIG).
  *
+ * Note: While the message space of the verification function is M := {M_i \in G_1}, this implementation will
+ *      also accept messages containing elements \in Z_p and will calculate the appropriate G_1 elements automatically.
  *
  * [1] Abe et al.: Fully Structure-Preserving Signatures and Shrinking Commitments.
  * https://eprint.iacr.org/2015/076.pdf
@@ -39,8 +41,15 @@ import org.cryptimeleon.math.structures.rings.zn.Zp;
  */
 public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
 
+    /**
+     * The public parameters for this scheme
+     */
     private AKOT15SharedPublicParameters pp;
 
+    /**
+     * In order to match the {@link CommitmentScheme} interface, the scheme stores its own keys
+     * instead of the key passed as a parameter of commit() / verify().
+     */
     private TCGAKOT15CommitmentKey commitmentKey;
 
     //TODO remove these
@@ -51,7 +60,6 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
     private GroupElement getG2GroupGenerator() {
         return (pp instanceof SPSXSIGPublicParameters) ? ((SPSXSIGPublicParameters)pp).getGroup2ElementF1() : pp.getG2GroupGenerator();
     }
-
 
 
     public TCGAKOT15CommitmentScheme(AKOT15SharedPublicParameters pp) {
@@ -106,9 +114,8 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
     @Override
     public CommitmentPair commit(PlainText plainText) {
 
-        if(!(plainText instanceof MessageBlock)) {
-            throw new IllegalArgumentException("this is not a valid message for this scheme");
-        }
+        // check if the message matches the expected structure. commit() requires its messages to contain RingElements.
+        doMessageChecks(plainText, true);
 
         MessageBlock messageBlock = (MessageBlock) plainText;
         Zp.ZpElement zeta = pp.getZp().getUniformlyRandomElement();
@@ -177,9 +184,7 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
     @Override
     public boolean verify(Commitment commitment, OpenValue openValue, PlainText plainText) {
 
-        if(!(plainText instanceof MessageBlock)) {
-            throw new IllegalArgumentException("this is not a valid message for this scheme");
-        }
+        doMessageChecks(plainText, false);
 
         if(!(commitment instanceof TCGAKOT15Commitment)) {
             throw new IllegalArgumentException("this is not a valid commitment for this scheme");
@@ -228,6 +233,109 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
         ppe_rhs.compute();
 
         return ppe_lhs.equals(ppe_rhs);
+    }
+
+    /**
+     * Check if the given plainText matches the structure expected by the scheme
+     *      and throws detailed exception if the plainText fails any check.
+     *
+     *      Note that this scheme -- unlike every other scheme in the {@link org.cryptimeleon.craco.sig.sps.akot15}
+     *      package -- operates on {@link org.cryptimeleon.math.structures.rings.zn.Zp.ZpElement}s for its
+     *      commit function.
+     *      For this implementation, the verification function permits either RingElements or GroupElements
+     *
+     * @param requireZpElements defines if the function checking the message require the message
+     *                          to contain only ZpElements
+     */
+    private void doMessageChecks(PlainText plainText, boolean requireZpElements) {
+
+        MessageBlock messageBlock;
+
+        // The scheme expects a MessageBlock...
+        if(plainText instanceof MessageBlock) {
+            messageBlock = (MessageBlock) plainText;
+        }
+        else {
+            throw new IllegalArgumentException("The scheme requires its messages to a MessageBlock");
+        }
+
+        // ... with a size that matches its public parameters.
+        if(messageBlock.length() != pp.getMessageLength()) {
+            throw new IllegalArgumentException(String.format(
+                    "The scheme expected a message of length %d, but the size was: %d",
+                    pp.getMessageLength(), messageBlock.length()
+            ));
+        }
+
+        // if the function permits either RingElements or GroupElements, set the message space according to the first
+        // element of the message
+        if(!requireZpElements) {
+            if(messageBlock.get(0) instanceof RingElementPlainText)
+                requireZpElements = true;
+        }
+
+        // if we expect RingElements, make sure all message elements are RingElements...
+        if(requireZpElements) {
+            for (int i = 0; i < messageBlock.length(); i++) {
+                if(!(messageBlock.get(i) instanceof RingElementPlainText)) {
+                    throw new IllegalArgumentException(
+                            String.format(
+                                    "The scheme expected its Messages to contain RingElements," +
+                                            " but element %d was of type: %s",
+                                    i, messageBlock.get(i).getClass().toString()
+                            )
+                    );
+                }
+
+                // ... \in Zp as defined by the public parameters
+                RingElementPlainText ringElementPT = (RingElementPlainText) messageBlock.get(i);
+
+                if(!(ringElementPT.getRingElement().getStructure().equals(pp.getZp()))) {
+                    throw new IllegalArgumentException(
+                            String.format(
+                                    "The scheme expected RingElements in %s," +
+                                            " but element %d was in: %s",
+                                    pp.getZp().toString(),
+                                    i,
+                                    ringElementPT.getRingElement().getStructure().toString()
+                            )
+                    );
+                }
+
+            }
+        }
+        // if we expect GroupElements, make sure all message elements are GroupElements...
+        else {
+            for (int i = 0; i < messageBlock.length(); i++) {
+                if(!(messageBlock.get(i) instanceof GroupElementPlainText)) {
+                    throw new IllegalArgumentException(
+                            String.format(
+                                    "The scheme expected its Messages to contain GroupElements," +
+                                            " but element %d was of type: %s",
+                                    i, messageBlock.get(i).getClass().toString()
+                            )
+                    );
+                }
+
+                // in G_1.
+                GroupElementPlainText group1ElementPT = (GroupElementPlainText) messageBlock.get(i);
+
+                if(!(group1ElementPT.get().getStructure().equals(getG1GroupGenerator().getStructure()))) {
+                    throw new IllegalArgumentException(
+                            String.format(
+                                    "The scheme expected GroupElements in %s," +
+                                            " but element %d was in: %s",
+                                    getG1GroupGenerator().getStructure().toString(),
+                                    i,
+                                    group1ElementPT.get().getStructure().toString()
+                            )
+                    );
+                }
+
+            }
+        }
+
+        // if no exception has been thrown at this point, we can assume the message matches the expected structure.
     }
 
 
