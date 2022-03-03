@@ -9,6 +9,7 @@ import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.common.plaintexts.RingElementPlainText;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
+import org.cryptimeleon.math.serialization.ObjectRepresentation;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
@@ -17,6 +18,8 @@ import org.cryptimeleon.math.structures.groups.GroupElement;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearMap;
 import org.cryptimeleon.math.structures.rings.RingElement;
 import org.cryptimeleon.math.structures.rings.zn.Zp;
+
+import java.util.Objects;
 
 /**
  * An implementation of the gamma binding commitment scheme presented in [1]
@@ -59,7 +62,29 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
     }
 
     public TCGAKOT15CommitmentScheme(Representation repr) {
-        new ReprUtil(this).deserialize(repr);
+        super();
+
+        ObjectRepresentation objRepr = (ObjectRepresentation) repr;
+
+        // restore special xsig parameters if given
+        if(objRepr.get("ppXSIG") != null) {
+            this.pp = new TCGAKOT15XSIGPublicParameters(objRepr.get("ppXSIG"));
+        }
+        else {
+            this.pp = new AKOT15SharedPublicParameters(objRepr.get("pp"));
+        }
+
+        if(objRepr.get("ckXSIG") != null) {
+            this.commitmentKey = new TCGAKOT15XSIGCommitmentKey(
+                    pp.getG2GroupGenerator().getStructure(),
+                    objRepr.get("ckXSIG"));
+        }
+        else {
+            this.commitmentKey = new TCGAKOT15CommitmentKey(
+                    pp.getG2GroupGenerator().getStructure(),
+                    objRepr.get("ck"));
+        }
+
     }
 
     /**
@@ -366,7 +391,39 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
 
     @Override
     public Representation getRepresentation() {
-        return new ReprUtil(this).serialize();
+
+        ObjectRepresentation objRepr = new ObjectRepresentation();
+
+        // if scheme uses xsig specific commitment key, generate representation accordingly
+        if(commitmentKey instanceof TCGAKOT15XSIGCommitmentKey) {
+            objRepr.put("ckXSIG", commitmentKey.getRepresentation());
+        }
+        else {
+            objRepr.put("ck", commitmentKey.getRepresentation());
+        }
+
+        // if scheme uses xsig specific public parameters, generate representation accordingly
+        if(pp instanceof TCGAKOT15XSIGPublicParameters) {
+            objRepr.put("ppXSIG", pp.getRepresentation());
+        }
+        else {
+            objRepr.put("pp", pp.getRepresentation());
+        }
+
+        return objRepr;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TCGAKOT15CommitmentScheme)) return false;
+        TCGAKOT15CommitmentScheme that = (TCGAKOT15CommitmentScheme) o;
+        return Objects.equals(pp, that.pp) && Objects.equals(commitmentKey, that.commitmentKey);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pp, commitmentKey);
     }
 
 }

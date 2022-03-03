@@ -3,6 +3,8 @@ package org.cryptimeleon.craco.sig.sps.akot15.tcgamma;
 import org.cryptimeleon.craco.common.PublicParameters;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 import org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGPublicParameters;
+import org.cryptimeleon.math.serialization.Representation;
+import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 
@@ -48,6 +50,10 @@ public class TCGAKOT15XSIGPublicParameters extends AKOT15SharedPublicParameters 
         this.group2ElementF2 = xsigPublicParameters.getGroup2ElementF2();
         this.group2ElementU1 = xsigPublicParameters.getGroup2ElementsU()[0];
 
+    }
+
+    public TCGAKOT15XSIGPublicParameters(Representation repr) {
+        super(repr);
     }
 
 
