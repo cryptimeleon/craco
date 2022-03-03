@@ -1,5 +1,12 @@
 package org.cryptimeleon.craco.ser.standalone.params;
 
+import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
+import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParametersGen;
+import org.cryptimeleon.craco.sig.sps.akot15.fsp2.SPSFSP2SignatureScheme;
+import org.cryptimeleon.craco.sig.sps.akot15.pos.SPSPOSSignatureScheme;
+import org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGPublicParameters;
+import org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGPublicParametersGen;
+import org.cryptimeleon.craco.sig.sps.akot15.xsig.SPSXSIGSignatureScheme;
 import org.cryptimeleon.craco.sig.sps.groth15.SPSGroth15PublicParameters;
 import org.cryptimeleon.craco.sig.sps.groth15.SPSGroth15PublicParametersGen;
 import org.cryptimeleon.craco.sig.sps.groth15.SPSGroth15SignatureScheme;
@@ -60,4 +67,32 @@ public class SignatureStandaloneReprTests extends StandaloneReprSubTest {
         test(pp);
         test(new BBSBSignatureScheme(pp));
     }
+
+    public void testPOS() {
+        AKOT15SharedPublicParameters pp = AKOT15SharedPublicParametersGen.generateParameters(
+                128, 20,true);
+        SPSPOSSignatureScheme scheme = new SPSPOSSignatureScheme(pp);
+
+        test(scheme);
+        test(pp);
+    }
+
+    public void testXSIG() {
+        SPSXSIGPublicParameters pp = SPSXSIGPublicParametersGen.generatePublicParameters(
+                128, 20,true);
+        SPSXSIGSignatureScheme scheme = new SPSXSIGSignatureScheme(pp);
+
+        test(scheme);
+        test(pp);
+    }
+
+    public void testFSP2() {
+        AKOT15SharedPublicParameters pp = AKOT15SharedPublicParametersGen.generateParameters(
+                128, 20,true);
+        SPSFSP2SignatureScheme scheme = new SPSFSP2SignatureScheme(pp);
+
+        test(scheme);
+        test(pp);
+    }
+
 }

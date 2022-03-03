@@ -2,13 +2,14 @@ package org.cryptimeleon.craco.sig.sps.akot15.tcgamma;
 
 import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.common.plaintexts.RingElementPlainText;
+import org.cryptimeleon.craco.sig.sps.CommitmentSchemeParams;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParametersGen;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 import org.cryptimeleon.math.structures.rings.zn.Zp;
 
 public class TCGAKOT15CommitmentSchemeTestParameterGenerator {
 
-    public static TCGAKOT15TestParameters generateParameters(int securityParameter, int messageLength) {
+    public static CommitmentSchemeParams generateParameters(int securityParameter, int messageLength) {
 
         AKOT15SharedPublicParameters pp = AKOT15SharedPublicParametersGen.generateParameters(securityParameter, messageLength, true);
 
@@ -36,7 +37,7 @@ public class TCGAKOT15CommitmentSchemeTestParameterGenerator {
         }
 
 
-        return new TCGAKOT15TestParameters(pp, new MessageBlock(messages), new MessageBlock(wrongMessages), scheme);
+        return new CommitmentSchemeParams(pp, new MessageBlock(messages), new MessageBlock(wrongMessages), scheme, scheme.getCommitmentKey());
     }
 
 }

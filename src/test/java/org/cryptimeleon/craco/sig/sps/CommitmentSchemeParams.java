@@ -1,14 +1,15 @@
-package org.cryptimeleon.craco.sig.sps.akot15.tc;
+package org.cryptimeleon.craco.sig.sps;
 
-import org.cryptimeleon.craco.commitment.CommitmentScheme;
 import org.cryptimeleon.craco.commitment.CommitmentKey;
+import org.cryptimeleon.craco.commitment.CommitmentScheme;
 import org.cryptimeleon.craco.common.PublicParameters;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 
 /**
- * Parameter for a commitment scheme test.
+ * A set of parameters used for testing CommitmentSchemes
+ *
  */
-public class TrapdoorCommitmentTestParameters {
+public class CommitmentSchemeParams {
 
     private PublicParameters publicParameters;
     private PlainText plainText;
@@ -16,7 +17,7 @@ public class TrapdoorCommitmentTestParameters {
     private CommitmentScheme scheme;
     private CommitmentKey commitmentKey;
 
-    public TrapdoorCommitmentTestParameters(PublicParameters publicParameters, PlainText plainText, PlainText wrongPlainText, CommitmentScheme scheme, CommitmentKey commitmentKey) {
+    public CommitmentSchemeParams(PublicParameters publicParameters, PlainText plainText, PlainText wrongPlainText, CommitmentScheme scheme, CommitmentKey commitmentKey) {
         this.publicParameters = publicParameters;
         this.plainText = plainText;
         this.wrongPlainText = wrongPlainText;

@@ -1,14 +1,10 @@
 package org.cryptimeleon.craco.sig.sps.akot15.tc;
 
-import org.cryptimeleon.craco.commitment.Commitment;
 import org.cryptimeleon.craco.commitment.CommitmentPair;
 import org.cryptimeleon.craco.commitment.CommitmentSchemeTester;
-import org.cryptimeleon.craco.common.plaintexts.PlainText;
-import org.cryptimeleon.craco.sig.Signature;
-import org.cryptimeleon.craco.sig.SigningKey;
-import org.cryptimeleon.craco.sig.VerificationKey;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 import org.cryptimeleon.craco.sig.sps.akot15.tcgamma.TCGAKOT15Commitment;
+import org.cryptimeleon.craco.sig.sps.CommitmentSchemeParams;
 import org.cryptimeleon.math.serialization.ObjectRepresentation;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.structures.groups.Group;
@@ -23,7 +19,7 @@ public class TCAKOT15CommitmentSchemeTester {
     private final int MESSAGE_LENGTH = 32;
 
 
-    TrapdoorCommitmentTestParameters params;
+    CommitmentSchemeParams params;
 
 
     @Before

@@ -5,6 +5,7 @@ import org.cryptimeleon.craco.commitment.CommitmentSchemeTester;
 import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.common.plaintexts.RingElementPlainText;
+import org.cryptimeleon.craco.sig.sps.CommitmentSchemeParams;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +16,7 @@ public class TCGAKOT15CommitmentSchemeTests {
     private final int MESSAGE_LENGTH = 1;
 
 
-    TCGAKOT15TestParameters params;
+    CommitmentSchemeParams params;
 
 
     @Before

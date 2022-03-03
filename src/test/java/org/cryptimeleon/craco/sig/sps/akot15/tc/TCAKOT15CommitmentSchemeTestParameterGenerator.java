@@ -5,17 +5,18 @@ import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParametersGen;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
+import org.cryptimeleon.craco.sig.sps.CommitmentSchemeParams;
 import org.cryptimeleon.math.structures.rings.zn.Zp;
 
 public class TCAKOT15CommitmentSchemeTestParameterGenerator {
 
-    public static TrapdoorCommitmentTestParameters generateParameters(int securityParameter, int messageLength) {
+    public static CommitmentSchemeParams generateParameters(int securityParameter, int messageLength) {
 
         AKOT15SharedPublicParameters pp = AKOT15SharedPublicParametersGen.generateParameters(securityParameter, messageLength, true);
 
         TCAKOT15CommitmentScheme scheme = new TCAKOT15CommitmentScheme(pp);
 
-        CommitmentKey CommitmentKey = scheme.generateKey();
+        CommitmentKey commitmentKey = scheme.generateKey();
 
         //generate messages
 
@@ -39,7 +40,7 @@ public class TCAKOT15CommitmentSchemeTestParameterGenerator {
         }
 
 
-        return new TrapdoorCommitmentTestParameters(pp, new MessageBlock(messages), new MessageBlock(wrongMessages), scheme, CommitmentKey);
+        return new CommitmentSchemeParams(pp, new MessageBlock(messages), new MessageBlock(wrongMessages), scheme, commitmentKey);
     }
 
 }

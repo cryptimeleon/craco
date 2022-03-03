@@ -11,6 +11,7 @@ import org.cryptimeleon.craco.common.plaintexts.RingElementPlainText;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
+import org.cryptimeleon.math.serialization.annotations.Represented;
 import org.cryptimeleon.math.structures.cartesian.Vector;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearMap;
@@ -43,6 +44,7 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
     /**
      * The public parameters for this scheme
      */
+    @Represented
     private AKOT15SharedPublicParameters pp;
 
     /**
@@ -54,6 +56,10 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
     public TCGAKOT15CommitmentScheme(AKOT15SharedPublicParameters pp) {
         this.pp = pp;
         commitmentKey = generateKey();
+    }
+
+    public TCGAKOT15CommitmentScheme(Representation repr) {
+        new ReprUtil(this).deserialize(repr);
     }
 
     /**
