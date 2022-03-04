@@ -71,14 +71,14 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme, SPSMessageSpa
      * Instead of running several instances of {@link SPSPOSSignatureScheme}, the scheme calculates its own one-time
      *      keys and passes each of them to a single {@code posInstance} in sequence.
      */
-    @Represented(restorer = "[Zp]")
+    //@Represented(restorer = "[Zp]")
     ZpElement[] oneTimeSecretKeys;
 
     /**
      * Instead of running several instances of {@link SPSPOSSignatureScheme}, the scheme calculates its own one-time
      *      keys and passes each of them to a single {@code posInstance} in sequence.
      */
-    @Represented(restorer = "[Zp]")
+    //@Represented(restorer = "[G1]")
     GroupElement[] oneTimePublicKeys;
 
 
@@ -137,10 +137,27 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme, SPSMessageSpa
 
     public TCAKOT15CommitmentScheme(Representation repr) {
 
-        ObjectRepresentation objRepr = (ObjectRepresentation) repr;
-        AKOT15SharedPublicParameters ppTemp = new AKOT15SharedPublicParameters(((RepresentableRepresentation)objRepr.get("pp")).getRepresentation());
+        super();
 
-        new ReprUtil(this).register(ppTemp.getZp(), "Zp").deserialize(repr);
+        // manually deserialize the scheme
+
+        ObjectRepresentation objRepr = (ObjectRepresentation) repr;
+
+        this.pp = new AKOT15SharedPublicParameters(((RepresentableRepresentation)objRepr.get("pp")).getRepresentation());
+        this.posInstance = new SPSPOSSignatureScheme(((RepresentableRepresentation)objRepr.get("posInstance")).getRepresentation());
+        this.gbcInstance = new TCGAKOT15CommitmentScheme(((RepresentableRepresentation)objRepr.get("gbcInstance")).getRepresentation());
+
+        if(((RepresentableRepresentation)objRepr.get("commitmentKey")).getRepresentedTypeName()
+                .equals(TCGAKOT15XSIGCommitmentKey.class.toString())) {
+            this.commitmentKey = new TCGAKOT15XSIGCommitmentKey(pp.getG2GroupGenerator().getStructure(),
+                    ((RepresentableRepresentation)objRepr.get("commitmentKey")).getRepresentation());
+        }
+        else {
+            this.commitmentKey = new TCGAKOT15CommitmentKey(pp.getG2GroupGenerator().getStructure(),
+                    ((RepresentableRepresentation)objRepr.get("commitmentKey")).getRepresentation());
+        }
+
+        // the one-time keys need not be represented, as they are only generated upon committing;
     }
 
 
@@ -310,7 +327,14 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme, SPSMessageSpa
 
     @Override
     public Representation getRepresentation() {
-        return new ReprUtil(this).serialize();
+        ObjectRepresentation objRepr = (ObjectRepresentation) new ReprUtil(this).serialize();
+
+        // store specific class of commitment key
+        objRepr.put("commitmentKey", new RepresentableRepresentation(
+                commitmentKey.getClass().toString(),
+                commitmentKey.getRepresentation()));
+
+        return objRepr;
     }
 
     @Override
@@ -318,15 +342,18 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme, SPSMessageSpa
         if (this == o) return true;
         if (!(o instanceof TCAKOT15CommitmentScheme)) return false;
         TCAKOT15CommitmentScheme that = (TCAKOT15CommitmentScheme) o;
-        return Objects.equals(pp, that.pp) && Objects.equals(posInstance, that.posInstance) && Objects.equals(gbcInstance, that.gbcInstance) && Objects.equals(commitmentKey, that.commitmentKey) && Arrays.equals(oneTimeSecretKeys, that.oneTimeSecretKeys) && Arrays.equals(oneTimePublicKeys, that.oneTimePublicKeys);
+
+        //problem is with pps
+
+        return Objects.equals(pp, that.pp)
+                && Objects.equals(posInstance, that.posInstance)
+                && Objects.equals(gbcInstance.pp, that.gbcInstance.pp)
+                && Objects.equals(commitmentKey, that.commitmentKey);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(pp, posInstance, gbcInstance, commitmentKey);
-        result = 31 * result + Arrays.hashCode(oneTimeSecretKeys);
-        result = 31 * result + Arrays.hashCode(oneTimePublicKeys);
-        return result;
+        return Objects.hash(gbcInstance.pp);
     }
 
 }

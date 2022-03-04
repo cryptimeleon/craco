@@ -225,7 +225,9 @@ public class SPSFSP2SignatureScheme implements MultiMessageStructurePreservingSi
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SPSFSP2SignatureScheme that = (SPSFSP2SignatureScheme) o;
-        return Objects.equals(pp, that.pp) && Objects.equals(xsigInstance, that.xsigInstance) && Objects.equals(tcInstance, that.tcInstance);
+        return Objects.equals(pp, that.pp)
+                && Objects.equals(xsigInstance, that.xsigInstance)
+                && Objects.equals(tcInstance, that.tcInstance);
     }
 
     @Override

@@ -28,7 +28,7 @@ public class TCGAKOT15XSIGPublicParameters extends AKOT15SharedPublicParameters 
     /**
      * F^{tilde}_2 \in G_2 in the paper
      */
-    @Represented(restorer = "bilinearGroup::getG1")
+    @Represented(restorer = "bilinearGroup::getG2")
     protected GroupElement group2ElementF2;
 
     /**
@@ -71,7 +71,8 @@ public class TCGAKOT15XSIGPublicParameters extends AKOT15SharedPublicParameters 
         if (!(o instanceof TCGAKOT15XSIGPublicParameters)) return false;
         if (!super.equals(o)) return false;
         TCGAKOT15XSIGPublicParameters that = (TCGAKOT15XSIGPublicParameters) o;
-        return Objects.equals(group2ElementF2, that.group2ElementF2) && Objects.equals(group2ElementU1, that.group2ElementU1);
+        return Objects.equals(group2ElementF2, that.group2ElementF2)
+                && Objects.equals(group2ElementU1, that.group2ElementU1);
     }
 
     @Override

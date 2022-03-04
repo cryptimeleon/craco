@@ -49,7 +49,7 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
      * The public parameters for this scheme
      */
     @Represented
-    private AKOT15SharedPublicParameters pp;
+    public AKOT15SharedPublicParameters pp;
 
     /**
      * In order to match the {@link CommitmentScheme} interface, the scheme stores its own keys
