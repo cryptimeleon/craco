@@ -1,5 +1,7 @@
 package org.cryptimeleon.craco.ser.standalone.params;
 
+import org.cryptimeleon.craco.sig.sps.SPSPublicParameters;
+import org.cryptimeleon.craco.sig.sps.SPSPublicParametersGen;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParametersGen;
 import org.cryptimeleon.craco.sig.sps.akot15.fsp2.SPSFSP2SignatureScheme;
@@ -66,6 +68,12 @@ public class SignatureStandaloneReprTests extends StandaloneReprSubTest {
         BBSBPublicParameter pp = setup.doKeyGen(80, true);
         test(pp);
         test(new BBSBSignatureScheme(pp));
+    }
+
+    public void testSPSPublicParameters() {
+        SPSPublicParameters pp = SPSPublicParametersGen.generateParameters(128, true);
+
+        test(pp);
     }
 
     public void testPOS() {
