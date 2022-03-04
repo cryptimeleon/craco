@@ -5,7 +5,6 @@ import org.cryptimeleon.math.structures.groups.debug.DebugBilinearGroup;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearGroup;
 import org.cryptimeleon.math.structures.groups.elliptic.type3.bn.BarretoNaehrigBilinearGroup;
 
-
 /**
  * generates a set of public parameters to be used by the {@link SPSXSIGSignatureScheme}.
  *

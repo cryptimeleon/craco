@@ -28,7 +28,6 @@ public class SPSPOSSignature implements Signature, UniqueByteRepresentable {
     /**
      * R^{tilde} \in G_2 in the paper
      */
-
     @Represented(restorer = "G2")
     protected GroupElement group2ElementR;
 
@@ -51,7 +50,7 @@ public class SPSPOSSignature implements Signature, UniqueByteRepresentable {
         return group2ElementR;
     }
 
-  
+
     @Override
     public Representation getRepresentation() {
         return ReprUtil.serialize(this);

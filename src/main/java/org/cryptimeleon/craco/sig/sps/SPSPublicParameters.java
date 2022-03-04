@@ -81,5 +81,5 @@ public class SPSPublicParameters implements PublicParameters {
     public Representation getRepresentation() {
         return new ReprUtil(this).serialize();
     }
-    
+
 }

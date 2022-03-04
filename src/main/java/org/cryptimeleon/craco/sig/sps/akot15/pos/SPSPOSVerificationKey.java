@@ -54,7 +54,6 @@ public class SPSPOSVerificationKey implements VerificationKey {
         return group1ElementW;
     }
 
-
     public void setOneTimeKey(GroupElement oneTimeKey) { this.group1ElementA = oneTimeKey; }
 
     public GroupElement getOneTimeKey() {
