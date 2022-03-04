@@ -69,7 +69,7 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
 
         // restore special xsig parameters if given
         if(((RepresentableRepresentation)objRepr.get("pp")).getRepresentedTypeName()
-                .equals(TCGAKOT15XSIGPublicParameters.class.toString())) {
+                .equals(TCGAKOT15XSIGPublicParameters.class.getName())) {
             this.pp = new TCGAKOT15XSIGPublicParameters(((RepresentableRepresentation) objRepr.get("pp"))
                     .getRepresentation());
         }
@@ -79,7 +79,7 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
         }
 
         if(((RepresentableRepresentation)objRepr.get("ck")).getRepresentedTypeName().
-                equals(TCGAKOT15XSIGCommitmentKey.class.toString())) {
+                equals(TCGAKOT15XSIGCommitmentKey.class.getName())) {
             this.commitmentKey = new TCGAKOT15XSIGCommitmentKey(
                     pp.getG2GroupGenerator().getStructure(),
                     ((RepresentableRepresentation) objRepr.get("ck")).getRepresentation());
@@ -399,12 +399,9 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
 
         ObjectRepresentation objRepr = new ObjectRepresentation();
 
-        objRepr.put("ck", new RepresentableRepresentation(
-                commitmentKey.getClass().toString(),
-                commitmentKey.getRepresentation())
-        );
+        objRepr.put("ck", new RepresentableRepresentation(commitmentKey));
 
-        objRepr.put("pp", new RepresentableRepresentation(pp.getClass().toString(), pp.getRepresentation()));
+        objRepr.put("pp", new RepresentableRepresentation(pp));
 
         return objRepr;
     }

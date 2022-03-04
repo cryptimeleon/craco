@@ -148,7 +148,7 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme, SPSMessageSpa
         this.gbcInstance = new TCGAKOT15CommitmentScheme(((RepresentableRepresentation)objRepr.get("gbcInstance")).getRepresentation());
 
         if(((RepresentableRepresentation)objRepr.get("commitmentKey")).getRepresentedTypeName()
-                .equals(TCGAKOT15XSIGCommitmentKey.class.toString())) {
+                .equals(TCGAKOT15XSIGCommitmentKey.class.getName())) {
             this.commitmentKey = new TCGAKOT15XSIGCommitmentKey(pp.getG2GroupGenerator().getStructure(),
                     ((RepresentableRepresentation)objRepr.get("commitmentKey")).getRepresentation());
         }
@@ -330,9 +330,7 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme, SPSMessageSpa
         ObjectRepresentation objRepr = (ObjectRepresentation) new ReprUtil(this).serialize();
 
         // store specific class of commitment key
-        objRepr.put("commitmentKey", new RepresentableRepresentation(
-                commitmentKey.getClass().toString(),
-                commitmentKey.getRepresentation()));
+        objRepr.put("commitmentKey", new RepresentableRepresentation(commitmentKey));
 
         return objRepr;
     }
