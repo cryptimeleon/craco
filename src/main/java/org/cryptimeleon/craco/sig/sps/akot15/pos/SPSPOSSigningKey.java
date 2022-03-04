@@ -58,6 +58,7 @@ public class SPSPOSSigningKey implements SigningKey {
         return exponentW;
     }
 
+  
     public void setOneTimeKey(ZpElement oneTimeKey) { this.exponentA = oneTimeKey; }
 
     public ZpElement getOneTimeKey() {

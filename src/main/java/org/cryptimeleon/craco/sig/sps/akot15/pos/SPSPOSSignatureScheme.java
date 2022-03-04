@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
+
 /**
  * An implementation of the partially one-time SPS scheme presented in [1]
  * While the scheme is intended to be a building block of the larger SPS scheme
@@ -50,6 +51,7 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
         this.pp = pp;
     }
 
+
     public SPSPOSSignatureScheme(Representation repr) {
         new ReprUtil(this).deserialize(repr);
     }
@@ -57,7 +59,6 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
     @Override
     public SignatureKeyPair<SPSPOSVerificationKey, SPSPOSSigningKey> generateKeyPair(int numberOfMessages) {
-
         if(numberOfMessages != pp.getMessageLength()) {
             throw new IllegalArgumentException(
                     String.format(
@@ -87,6 +88,7 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
         return keyPair;
     }
 
+  
     /**
      * Updates the given keyPair with a new set of one-time keys.
      *
@@ -158,7 +160,6 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
 
     @Override
     public Boolean verify(PlainText plainText, Signature signature, VerificationKey publicKey) {
-
         if(!(publicKey instanceof SPSPOSVerificationKey)){
             throw new IllegalArgumentException("Not a valid signing key for this scheme");
         }

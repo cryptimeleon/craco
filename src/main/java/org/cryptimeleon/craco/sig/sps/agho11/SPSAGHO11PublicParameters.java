@@ -1,9 +1,10 @@
-package org.cryptimeleon.craco.sig.sps;
+package org.cryptimeleon.craco.sig.sps.agho11;
 
 import org.cryptimeleon.craco.common.PublicParameters;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
+import org.cryptimeleon.math.structures.groups.Group;
 import org.cryptimeleon.math.structures.groups.GroupElement;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearGroup;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearMap;
@@ -12,17 +13,19 @@ import org.cryptimeleon.math.structures.rings.zn.Zp;
 import java.util.Objects;
 
 /**
- * An interface containing generic components shared by many SPS schemes
- * i.e. a bilinear group for evauating pairing product equations and the associated
- * group generators
- * */
-public class SPSPublicParameters implements PublicParameters {
+ * Class for the public parameters of the AGHO11 structure preserving signature scheme.
+ * Bilinear group type 3
+ *
+ *
+ */
+
+public class SPSAGHO11PublicParameters implements PublicParameters {
 
     /**
      * The bilinear group containing map e in the paper.
      */
     @Represented
-    protected BilinearGroup bilinearGroup; // G1 x G2 -> GT
+    private BilinearGroup bilinearGroup; // G1 x G2 -> GT
 
     /**
      * G \in G_1 in paper.
@@ -36,16 +39,25 @@ public class SPSPublicParameters implements PublicParameters {
     @Represented(restorer = "bilinearGroup::getG2")
     protected GroupElement group2ElementH;
 
-    public SPSPublicParameters(BilinearGroup bilinearGroup) {
+    /**
+     * The number of expected G1/G2 elements per message respectively
+     * */
+    @Represented(restorer = "[messageLengths]")
+    protected Integer[] messageLengths;
+
+
+    public SPSAGHO11PublicParameters(BilinearGroup bilinearGroup, Integer[] messageBlockLengths){
         super();
         this.bilinearGroup = bilinearGroup;
+        this.messageLengths = messageBlockLengths;
         this.group1ElementG = this.bilinearGroup.getG1().getUniformlyRandomNonNeutral();
         this.group2ElementH = this.bilinearGroup.getG2().getUniformlyRandomNonNeutral();
     }
 
-    public SPSPublicParameters(Representation repr) {
+    public SPSAGHO11PublicParameters(Representation repr) {
         new ReprUtil(this).deserialize(repr);
     }
+
 
     /**
      * Returns the group Zp (where p is the group order of G1, G2, and GT)
@@ -54,32 +66,44 @@ public class SPSPublicParameters implements PublicParameters {
         return new Zp(bilinearGroup.getG1().size());
     }
 
+    /**
+     * Get the generator of group G_1
+     */
     public GroupElement getG1GroupGenerator(){
         return group1ElementG;
     }
 
+    /**
+     * Get the generator of group G_2
+     */
     public GroupElement getG2GroupGenerator(){
         return group2ElementH;
     }
 
     public BilinearMap getBilinearMap(){ return bilinearGroup.getBilinearMap(); }
 
+    public Group getGT() {return bilinearGroup.getGT(); }
+
+    public Integer[] getMessageLengths(){ return messageLengths; }
+
+
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SPSPublicParameters)) return false;
-        SPSPublicParameters that = (SPSPublicParameters) o;
-        return Objects.equals(bilinearGroup, that.bilinearGroup) && Objects.equals(group1ElementG, that.group1ElementG) && Objects.equals(group2ElementH, that.group2ElementH);
-    }
+    public Representation getRepresentation() { return ReprUtil.serialize(this); }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bilinearGroup, group1ElementG, group2ElementH);
+        return Objects.hash(bilinearGroup, group1ElementG, group2ElementH, messageLengths);
     }
 
     @Override
-    public Representation getRepresentation() {
-        return new ReprUtil(this).serialize();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SPSAGHO11PublicParameters that = (SPSAGHO11PublicParameters) o;
+        return Objects.equals(bilinearGroup, that.bilinearGroup)
+                &&  Objects.equals(group1ElementG, that.group1ElementG)
+                &&  Objects.equals(group2ElementH, that.group2ElementH);
     }
-    
+
 }

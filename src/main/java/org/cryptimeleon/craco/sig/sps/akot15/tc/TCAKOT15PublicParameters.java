@@ -1,6 +1,7 @@
-package org.cryptimeleon.craco.sig.sps;
+package org.cryptimeleon.craco.sig.sps.akot15.tc;
 
 import org.cryptimeleon.craco.common.PublicParameters;
+import org.cryptimeleon.craco.sig.sps.SPSPublicParameters;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
@@ -11,12 +12,7 @@ import org.cryptimeleon.math.structures.rings.zn.Zp;
 
 import java.util.Objects;
 
-/**
- * An interface containing generic components shared by many SPS schemes
- * i.e. a bilinear group for evauating pairing product equations and the associated
- * group generators
- * */
-public class SPSPublicParameters implements PublicParameters {
+public class TCAKOT15PublicParameters implements PublicParameters {
 
     /**
      * The bilinear group containing map e in the paper.
@@ -36,14 +32,18 @@ public class SPSPublicParameters implements PublicParameters {
     @Represented(restorer = "bilinearGroup::getG2")
     protected GroupElement group2ElementH;
 
-    public SPSPublicParameters(BilinearGroup bilinearGroup) {
+    @Represented
+    protected Integer messageLength;
+
+    public TCAKOT15PublicParameters(BilinearGroup bilinearGroup, Integer messageLength) {
         super();
         this.bilinearGroup = bilinearGroup;
+        this.messageLength = messageLength;
         this.group1ElementG = this.bilinearGroup.getG1().getUniformlyRandomNonNeutral();
         this.group2ElementH = this.bilinearGroup.getG2().getUniformlyRandomNonNeutral();
     }
 
-    public SPSPublicParameters(Representation repr) {
+    public TCAKOT15PublicParameters(Representation repr) {
         new ReprUtil(this).deserialize(repr);
     }
 
@@ -64,11 +64,14 @@ public class SPSPublicParameters implements PublicParameters {
 
     public BilinearMap getBilinearMap(){ return bilinearGroup.getBilinearMap(); }
 
+    public int getMessageLength() { return messageLength; }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SPSPublicParameters)) return false;
-        SPSPublicParameters that = (SPSPublicParameters) o;
+        if (!(o instanceof TCAKOT15PublicParameters)) return false;
+        TCAKOT15PublicParameters that = (TCAKOT15PublicParameters) o;
         return Objects.equals(bilinearGroup, that.bilinearGroup) && Objects.equals(group1ElementG, that.group1ElementG) && Objects.equals(group2ElementH, that.group2ElementH);
     }
 
@@ -81,5 +84,4 @@ public class SPSPublicParameters implements PublicParameters {
     public Representation getRepresentation() {
         return new ReprUtil(this).serialize();
     }
-    
 }

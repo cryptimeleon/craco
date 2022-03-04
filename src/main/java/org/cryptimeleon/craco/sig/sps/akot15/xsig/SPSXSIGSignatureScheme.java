@@ -20,7 +20,7 @@ public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSi
 
     @Represented
     private SPSXSIGPublicParameters pp;
-
+  
 
     public SPSXSIGSignatureScheme(SPSXSIGPublicParameters pp) {
         super();
@@ -225,7 +225,6 @@ public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSi
     private boolean verifyThirdPPE(BilinearMap bMap, MessageBlock messageBlock) {
 
         for (int i = 0; i < messageBlock.length(); i++) {
-
             MessageBlock innerBlock = (MessageBlock) messageBlock.get(i);
             GroupElement m_i1 = ((GroupElementPlainText) innerBlock.get(0)).get();
             GroupElement m_i3 = ((GroupElementPlainText) innerBlock.get(2)).get();
@@ -354,7 +353,6 @@ public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSi
 
         // if no exception has been thrown at this point, we can assume the message matches the expected structure.
     }
-
 
 
     @Override

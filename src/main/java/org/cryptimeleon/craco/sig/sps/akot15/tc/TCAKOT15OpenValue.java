@@ -67,8 +67,6 @@ public class TCAKOT15OpenValue implements OpenValue {
     }
 
 
-
-
     @Override
     public ByteAccumulator updateAccumulator(ByteAccumulator accumulator) {
         return AnnotatedUbrUtil.autoAccumulate(accumulator, this);

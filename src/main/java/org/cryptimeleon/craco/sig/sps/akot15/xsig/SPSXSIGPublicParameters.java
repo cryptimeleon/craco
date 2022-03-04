@@ -56,6 +56,7 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
     /**
      * U_i \in G_2 in the paper
      */
+
     @Represented(restorer = "[bilinearGroup::getG2]")
     protected GroupElement[] group2ElementsU;
 
@@ -126,7 +127,7 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
         this.bilinearGroup = bilinearGroup;
     }
 
-
+  
     public GroupElement getGroup1ElementG() {
         return group1ElementG;
     }
