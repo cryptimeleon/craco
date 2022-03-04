@@ -10,6 +10,7 @@ import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.craco.common.plaintexts.RingElementPlainText;
 import org.cryptimeleon.craco.sig.sps.akot15.AKOT15SharedPublicParameters;
 import org.cryptimeleon.math.serialization.ObjectRepresentation;
+import org.cryptimeleon.math.serialization.RepresentableRepresentation;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.annotations.ReprUtil;
 import org.cryptimeleon.math.serialization.annotations.Represented;
@@ -67,22 +68,26 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
         ObjectRepresentation objRepr = (ObjectRepresentation) repr;
 
         // restore special xsig parameters if given
-        if(objRepr.get("ppXSIG") != null) {
-            this.pp = new TCGAKOT15XSIGPublicParameters(objRepr.get("ppXSIG"));
+        if(((RepresentableRepresentation)objRepr.get("pp")).getRepresentedTypeName()
+                .equals(TCGAKOT15XSIGPublicParameters.class.toString())) {
+            this.pp = new TCGAKOT15XSIGPublicParameters(((RepresentableRepresentation) objRepr.get("pp"))
+                    .getRepresentation());
         }
         else {
-            this.pp = new AKOT15SharedPublicParameters(objRepr.get("pp"));
+            this.pp = new AKOT15SharedPublicParameters(((RepresentableRepresentation) objRepr.get("pp"))
+                    .getRepresentation());
         }
 
-        if(objRepr.get("ckXSIG") != null) {
+        if(((RepresentableRepresentation)objRepr.get("ck")).getRepresentedTypeName().
+                equals(TCGAKOT15XSIGCommitmentKey.class.toString())) {
             this.commitmentKey = new TCGAKOT15XSIGCommitmentKey(
                     pp.getG2GroupGenerator().getStructure(),
-                    objRepr.get("ckXSIG"));
+                    ((RepresentableRepresentation) objRepr.get("ck")).getRepresentation());
         }
         else {
             this.commitmentKey = new TCGAKOT15CommitmentKey(
                     pp.getG2GroupGenerator().getStructure(),
-                    objRepr.get("ck"));
+                    ((RepresentableRepresentation) objRepr.get("ck")).getRepresentation());
         }
 
     }
@@ -394,21 +399,12 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
 
         ObjectRepresentation objRepr = new ObjectRepresentation();
 
-        // if scheme uses xsig specific commitment key, generate representation accordingly
-        if(commitmentKey instanceof TCGAKOT15XSIGCommitmentKey) {
-            objRepr.put("ckXSIG", commitmentKey.getRepresentation());
-        }
-        else {
-            objRepr.put("ck", commitmentKey.getRepresentation());
-        }
+        objRepr.put("ck", new RepresentableRepresentation(
+                commitmentKey.getClass().toString(),
+                commitmentKey.getRepresentation())
+        );
 
-        // if scheme uses xsig specific public parameters, generate representation accordingly
-        if(pp instanceof TCGAKOT15XSIGPublicParameters) {
-            objRepr.put("ppXSIG", pp.getRepresentation());
-        }
-        else {
-            objRepr.put("pp", pp.getRepresentation());
-        }
+        objRepr.put("pp", new RepresentableRepresentation(pp.getClass().toString(), pp.getRepresentation()));
 
         return objRepr;
     }
