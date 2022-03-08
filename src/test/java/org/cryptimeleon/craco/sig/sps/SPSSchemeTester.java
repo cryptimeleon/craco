@@ -2,8 +2,6 @@ package org.cryptimeleon.craco.sig.sps;
 
 import org.cryptimeleon.craco.common.PublicParameters;
 import org.cryptimeleon.craco.sig.*;
-import org.cryptimeleon.craco.sig.sps.kpw15.SPSKPW15PublicParameters;
-import org.cryptimeleon.craco.sig.sps.kpw15.SPSKPW15SignatureSchemeTestParamGenerator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,7 +12,7 @@ import static org.junit.Assert.assertEquals;
  * */
 public abstract class SPSSchemeTester {
 
-    protected static int testIterations = 1;
+    protected static int testIterations = 5;
     protected static int NUM_MESSAGES = 32;
     protected static int SECURITY_PARAMETER = 128;
 

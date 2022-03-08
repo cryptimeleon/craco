@@ -18,7 +18,8 @@ import java.util.Objects;
 
 public class SPSAGHO11VerificationKey implements VerificationKey {
 
-    // TODO: Note that the generation key GK is included in the verification key in the paper. It has been moved to the public parameters here to avoid redundancy
+    /* Note that the generation key GK is included in the verification key in the paper.
+            it has been moved to the public parameters here to avoid redundancy */
 
     /**
      * U_1, ..., U_k_N \in G_1 in the paper.
