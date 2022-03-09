@@ -338,7 +338,7 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
 
         GroupElement sigma4 = pp.getG2GroupGenerator().pow(r1).compute();
 
-        System.out.println("check sigma1: " + checkSigma1(sigma1, message, sk.getK(), r0, r1, sk.getP0(), sk.getP1()));
+        //System.out.println("check sigma1: " + checkSigma1(sigma1, message, sk.getK(), r0, r1, sk.getP0(), sk.getP1()));
 
         return new SPSKPW15Signature(sigma1, sigma2, sigma3, sigma4);
     }
