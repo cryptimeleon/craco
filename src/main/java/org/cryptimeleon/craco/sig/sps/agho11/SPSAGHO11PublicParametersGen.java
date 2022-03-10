@@ -1,9 +1,12 @@
 package org.cryptimeleon.craco.sig.sps.agho11;
 
+import org.cryptimeleon.craco.sig.sps.SPSPublicParameters;
 import org.cryptimeleon.math.random.RandomGenerator;
 import org.cryptimeleon.math.structures.groups.debug.DebugBilinearGroup;
 import org.cryptimeleon.math.structures.groups.elliptic.BilinearGroup;
 import org.cryptimeleon.math.structures.groups.elliptic.type3.bn.BarretoNaehrigBilinearGroup;
+
+import java.util.function.BiFunction;
 
 
 public class SPSAGHO11PublicParametersGen {
@@ -23,4 +26,12 @@ public class SPSAGHO11PublicParametersGen {
 
         return new SPSAGHO11PublicParameters(group, messageBlockLengths);
     }
+
+    /**
+     * generates a set of {@code SPSAGHO11PublicParameters} based on a pre-made {@link BilinearGroup}.
+     */
+    public static SPSAGHO11PublicParameters generateParameters(BilinearGroup bGroup, Integer[] messageBlockLengths) {
+        return new SPSAGHO11PublicParameters(bGroup, messageBlockLengths);
+    }
+
 }
