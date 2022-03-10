@@ -236,6 +236,7 @@ public class SPSGroth15SignatureScheme implements MultiMessageStructurePreservin
 
     private MessageBlock mapToPlaintext(byte[] bytes, int messageBlockLength) {
         // returns (P^m, P, ..., P) where m = Z_p.injectiveValueOf(bytes).
+        // this makes sure different messages produce different equivalence classes
 
         GroupElementPlainText[] msgBlock = new GroupElementPlainText[messageBlockLength];
         msgBlock[0] = new GroupElementPlainText(

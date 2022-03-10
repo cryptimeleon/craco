@@ -1,6 +1,5 @@
 package org.cryptimeleon.craco.sig.sps;
 
-import org.cryptimeleon.craco.common.PublicParameters;
 import org.cryptimeleon.craco.sig.*;
 import org.junit.Before;
 import org.junit.Test;
