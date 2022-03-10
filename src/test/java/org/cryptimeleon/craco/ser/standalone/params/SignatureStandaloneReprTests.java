@@ -1,5 +1,8 @@
 package org.cryptimeleon.craco.ser.standalone.params;
 
+import org.cryptimeleon.craco.sig.sps.agho11.SPSAGHO11PublicParameters;
+import org.cryptimeleon.craco.sig.sps.agho11.SPSAGHO11PublicParametersGen;
+import org.cryptimeleon.craco.sig.sps.agho11.SPSAGHO11SignatureScheme;
 import org.cryptimeleon.craco.sig.sps.groth15.SPSGroth15PublicParameters;
 import org.cryptimeleon.craco.sig.sps.groth15.SPSGroth15PublicParametersGen;
 import org.cryptimeleon.craco.sig.sps.groth15.SPSGroth15SignatureScheme;
@@ -44,6 +47,14 @@ public class SignatureStandaloneReprTests extends StandaloneReprSubTest {
         signatureScheme = new SPSGroth15SignatureScheme(pp);
 
         test(signatureScheme);
+        test(pp);
+    }
+
+    public void testSPSAGHO11() {
+        SPSAGHO11PublicParameters pp = SPSAGHO11PublicParametersGen.generatePublicParameters(128, true, new Integer[] {20,20});
+        SPSAGHO11SignatureScheme scheme = new SPSAGHO11SignatureScheme(pp);
+
+        test(scheme);
         test(pp);
     }
 
