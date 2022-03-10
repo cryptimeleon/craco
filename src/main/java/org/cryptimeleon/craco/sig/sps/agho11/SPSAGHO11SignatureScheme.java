@@ -62,7 +62,7 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
     @Override
     public SignatureKeyPair<SPSAGHO11VerificationKey, SPSAGHO11SigningKey> generateKeyPair(int numberOfMessages)
     {
-        return generateKeyPair(numberOfMessages, 2);
+        return generateKeyPair(numberOfMessages, 0);
     }
 
     /**
