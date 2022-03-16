@@ -31,6 +31,7 @@ public class SPSAGHO11PublicParameters extends SPSPublicParameters {
 
 
     public SPSAGHO11PublicParameters(BilinearGroup bilinearGroup, Integer[] messageBlockLengths){
+        // as SPSPublicParameters precompute G and H itself, we do not need to precompute here
         super(bilinearGroup);
         this.messageLengths = messageBlockLengths;
     }

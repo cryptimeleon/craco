@@ -24,6 +24,8 @@ public class SPSKPW15PublicParameters extends SPSPublicParameters {
     public SPSKPW15PublicParameters(BilinearGroup bilinearGroup, int messageLength){
         super(bilinearGroup);
         this.messageLength = messageLength;
+
+        // as SPSPublicParameters precompute G and H itself, we do not need to precompute here
     }
 
     public SPSKPW15PublicParameters(Representation repr) {
@@ -32,7 +34,6 @@ public class SPSKPW15PublicParameters extends SPSPublicParameters {
 
 
     public int getMessageLength() { return messageLength; }
-
 
     @Override
     public Representation getRepresentation() { return ReprUtil.serialize(this); }

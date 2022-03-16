@@ -50,6 +50,7 @@ public class TCGAKOT15XSIGPublicParameters extends AKOT15SharedPublicParameters 
         this.group2ElementF2 = xsigPublicParameters.getGroup2ElementF2();
         this.group2ElementU1 = xsigPublicParameters.getGroup2ElementsU()[0];
 
+        precompute();
     }
 
     public TCGAKOT15XSIGPublicParameters(Representation repr) {
@@ -64,6 +65,16 @@ public class TCGAKOT15XSIGPublicParameters extends AKOT15SharedPublicParameters 
     public GroupElement getGroup2ElementU1() {
         return group2ElementU1;
     }
+
+
+    /**
+     * precomputes the group elements of the public parameters.
+     */
+    private void precompute() {
+        this.group2ElementF2.precomputePow();
+        this.group2ElementU1.precomputePow();
+    }
+
 
     @Override
     public boolean equals(Object o) {

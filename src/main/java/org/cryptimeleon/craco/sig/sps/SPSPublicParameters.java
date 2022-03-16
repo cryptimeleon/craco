@@ -47,6 +47,8 @@ public class SPSPublicParameters implements PublicParameters {
         this.bilinearGroup = bilinearGroup;
         this.group1ElementG = this.bilinearGroup.getG1().getUniformlyRandomNonNeutral();
         this.group2ElementH = this.bilinearGroup.getG2().getUniformlyRandomNonNeutral();
+
+        precompute();
     }
 
     public SPSPublicParameters(Representation repr) {
@@ -72,6 +74,14 @@ public class SPSPublicParameters implements PublicParameters {
     public BilinearMap getBilinearMap(){ return bilinearGroup.getBilinearMap(); }
 
     public Group getGT() {return bilinearGroup.getGT(); }
+
+    /**
+     * precomputes the group elements of the public parameters.
+     */
+    private void precompute() {
+        this.group1ElementG.precomputePow();
+        this.group2ElementH.precomputePow();
+    }
 
     @Override
     public boolean equals(Object o) {

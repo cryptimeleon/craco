@@ -69,6 +69,8 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
 
         generateRandomF();
         generateRandomU();
+
+        precompute();
     }
 
     public SPSXSIGPublicParameters(AKOT15SharedPublicParameters sharedPP, int messageLength) {
@@ -78,6 +80,8 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
 
         generateRandomF();
         generateRandomU();
+
+        precompute();
     }
 
     public SPSXSIGPublicParameters(Representation repr) { super(repr); }
@@ -115,6 +119,20 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
             group2ElementsU[i] = group2ElementH.pow(ui).compute();
         }
 
+    }
+
+    /**
+     * precomputes the group elements of the public parameters.
+     */
+    private void precompute() {
+        this.group1ElementF1.precomputePow();
+        this.group2ElementF1.precomputePow();
+
+        this.group1ElementF2.precomputePow();
+        this.group2ElementF2.precomputePow();
+
+        Arrays.stream(this.group1ElementsU).forEach(x -> x.precomputePow());
+        Arrays.stream(this.group2ElementsU).forEach(x -> x.precomputePow());
     }
 
 

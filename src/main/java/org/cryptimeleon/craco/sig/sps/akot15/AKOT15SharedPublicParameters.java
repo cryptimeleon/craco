@@ -26,6 +26,7 @@ public class AKOT15SharedPublicParameters extends SPSPublicParameters implements
 
 
     public AKOT15SharedPublicParameters(BilinearGroup bilinearGroup, int messageLength) {
+        // as SPSPublicParameters precompute G and H itself, we do not need to precompute here
         super(bilinearGroup);
         this.bilinearGroup = bilinearGroup;
         this.messageLength = messageLength;
@@ -38,6 +39,7 @@ public class AKOT15SharedPublicParameters extends SPSPublicParameters implements
                                          int messageLength,
                                          GroupElement group1ElementG,
                                          GroupElement group2ElementH) {
+        // as SPSPublicParameters precompute G and H itself, we do not need to precompute here
         super(bilinearGroup);
         this.bilinearGroup = bilinearGroup;
         this.messageLength = messageLength;
