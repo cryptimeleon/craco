@@ -101,12 +101,10 @@ public class SPSKPW15VerificationKey implements VerificationKey {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SPSKPW15VerificationKey)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         SPSKPW15VerificationKey that = (SPSKPW15VerificationKey) o;
-        return Arrays.equals(C0, that.C0)
-                && Arrays.equals(C1, that.C1)
-                && Arrays.equals(C, that.C)
-                && Objects.equals(A, that.A);
+        return Arrays.equals(C0, that.C0) && Arrays.equals(C1, that.C1)
+                && Arrays.equals(C, that.C) && Objects.equals(A, that.A);
     }
 
     @Override

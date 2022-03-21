@@ -75,15 +75,13 @@ public class TCGAKOT15XSIGPublicParameters extends AKOT15SharedPublicParameters 
         this.group2ElementU1.precomputePow();
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TCGAKOT15XSIGPublicParameters)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         TCGAKOT15XSIGPublicParameters that = (TCGAKOT15XSIGPublicParameters) o;
-        return Objects.equals(group2ElementF2, that.group2ElementF2)
-                && Objects.equals(group2ElementU1, that.group2ElementU1);
+        return Objects.equals(group2ElementF2, that.group2ElementF2) && Objects.equals(group2ElementU1, that.group2ElementU1);
     }
 
     @Override

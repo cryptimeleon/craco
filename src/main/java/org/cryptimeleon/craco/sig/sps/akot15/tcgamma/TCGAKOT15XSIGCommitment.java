@@ -78,10 +78,11 @@ public class TCGAKOT15XSIGCommitment extends TCGAKOT15Commitment{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TCGAKOT15XSIGCommitment)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         TCGAKOT15XSIGCommitment that = (TCGAKOT15XSIGCommitment) o;
-        return Objects.equals(group2ElementGu2, that.group2ElementGu2) && Objects.equals(group2ElementGu3, that.group2ElementGu3);
+        return Objects.equals(group2ElementGu2, that.group2ElementGu2)
+                && Objects.equals(group2ElementGu3, that.group2ElementGu3);
     }
 
     @Override

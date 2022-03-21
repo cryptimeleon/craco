@@ -102,12 +102,10 @@ public class SPSKPW15SigningKey implements SigningKey {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SPSKPW15SigningKey)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         SPSKPW15SigningKey that = (SPSKPW15SigningKey) o;
-        return Arrays.equals(K, that.K)
-                && Arrays.equals(P0, that.P0)
-                && Arrays.equals(P1, that.P1)
-                && Objects.equals(B, that.B);
+        return Arrays.equals(K, that.K) && Arrays.equals(P0, that.P0)
+                && Arrays.equals(P1, that.P1) && Objects.equals(B, that.B);
     }
 
     @Override

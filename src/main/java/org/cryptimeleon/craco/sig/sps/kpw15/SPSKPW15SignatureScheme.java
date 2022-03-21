@@ -638,12 +638,10 @@ public class SPSKPW15SignatureScheme implements MultiMessageStructurePreservingS
 
     @Override
     public boolean equals(Object o) {
-        if(!(o instanceof SPSKPW15SignatureScheme))
-            return false;
-
-        SPSKPW15SignatureScheme other = (SPSKPW15SignatureScheme) o;
-
-        return Objects.equals(this.pp, other.pp);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SPSKPW15SignatureScheme that = (SPSKPW15SignatureScheme) o;
+        return Objects.equals(pp, that.pp);
     }
 
 }

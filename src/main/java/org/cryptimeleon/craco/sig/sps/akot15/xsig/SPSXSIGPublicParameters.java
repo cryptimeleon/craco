@@ -180,7 +180,7 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SPSXSIGPublicParameters)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         SPSXSIGPublicParameters that = (SPSXSIGPublicParameters) o;
         return Objects.equals(group1ElementF1, that.group1ElementF1)
@@ -193,7 +193,8 @@ public class SPSXSIGPublicParameters extends AKOT15SharedPublicParameters {
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(super.hashCode(), group1ElementF1, group1ElementF2, group2ElementF1, group2ElementF2);
+        int result = Objects.hash(super.hashCode(), group1ElementF1, group1ElementF2,
+                group2ElementF1, group2ElementF2);
         result = 31 * result + Arrays.hashCode(group1ElementsU);
         result = 31 * result + Arrays.hashCode(group2ElementsU);
         return result;

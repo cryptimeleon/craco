@@ -85,12 +85,11 @@ public class SPSFSP2Signature implements Signature {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SPSFSP2Signature)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         SPSFSP2Signature that = (SPSFSP2Signature) o;
-
         return Objects.equals(sigmaXSIG, that.sigmaXSIG)
-                && Objects.equals(commitmentPairTC.getCommitment(), that.commitmentPairTC.getCommitment())
-                && Objects.equals(commitmentPairTC.getOpenValue(), that.commitmentPairTC.getOpenValue());
+                && Objects.equals(commitmentPairTC.getOpenValue(), that.commitmentPairTC.getOpenValue())
+                && Objects.equals(commitmentPairTC.getCommitment(), that.commitmentPairTC.getCommitment());
     }
 
     @Override

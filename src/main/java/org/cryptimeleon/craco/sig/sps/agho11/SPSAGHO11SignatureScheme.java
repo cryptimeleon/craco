@@ -139,7 +139,7 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
         // the scheme signs messages on G^(k_M) x H^(k_N), so we need a MessageBlock containing 2 MessageBlocks
         doMessageChecks(plainText);
 
-        if(!(secretKey instanceof SPSAGHO11SigningKey)){
+        if(!(secretKey.getClass() == SPSAGHO11SigningKey.class)){
             throw new IllegalArgumentException("Not a valid signing key for this scheme");
         }
 
@@ -195,11 +195,11 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
         // the scheme signs messages on G^(k_M) x H^(k_N), so we need a MessageBlock containing 2 MessageBlocks
         doMessageChecks(plainText);
 
-        if(!(signature instanceof SPSAGHO11Signature)){
+        if(!(signature.getClass() == SPSAGHO11Signature.class)){
             throw new IllegalArgumentException("Not a valid signature for this scheme");
         }
 
-        if(!(publicKey instanceof SPSAGHO11VerificationKey)){
+        if(!(publicKey.getClass() == SPSAGHO11VerificationKey.class)){
             throw new IllegalArgumentException("Not a valid verification key for this scheme");
         }
 
@@ -366,24 +366,17 @@ public class SPSAGHO11SignatureScheme implements MultiMessageStructurePreserving
         return ReprUtil.serialize(this);
     }
 
-
     @Override
-    public int hashCode() {
-        final int prime = 41;
-        int result = 1;
-        result = prime * result + ((pp == null) ? 0 : pp.hashCode());
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SPSAGHO11SignatureScheme that = (SPSAGHO11SignatureScheme) o;
+        return Objects.equals(pp, that.pp);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if(!(o instanceof SPSAGHO11SignatureScheme))
-            return false;
-
-        SPSAGHO11SignatureScheme other = (SPSAGHO11SignatureScheme) o;
-
-        return Objects.equals(this.pp, other.pp);
-
+    public int hashCode() {
+        return Objects.hash(pp);
     }
 
     /**

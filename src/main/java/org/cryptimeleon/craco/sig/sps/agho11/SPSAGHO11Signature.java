@@ -74,15 +74,17 @@ public class SPSAGHO11Signature implements Signature, UniqueByteRepresentable {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SPSAGHO11Signature that = (SPSAGHO11Signature) o;
+        return Objects.equals(group1ElementSigma1R, that.group1ElementSigma1R)
+                && Objects.equals(group1ElementSigma2S, that.group1ElementSigma2S)
+                && Objects.equals(group2ElementSigma3T, that.group2ElementSigma3T);
+    }
 
-        if(!(o instanceof SPSAGHO11Signature))
-            return false;
-
-        SPSAGHO11Signature other = (SPSAGHO11Signature) o;
-
-        return Objects.equals(this.group1ElementSigma1R, other.group1ElementSigma1R)
-                && Objects.equals(this.group1ElementSigma2S, other.group1ElementSigma2S)
-                && Objects.equals(this.group2ElementSigma3T, other.group2ElementSigma3T);
+    @Override
+    public int hashCode() {
+        return Objects.hash(group1ElementSigma1R, group1ElementSigma2S, group2ElementSigma3T);
     }
 
 }

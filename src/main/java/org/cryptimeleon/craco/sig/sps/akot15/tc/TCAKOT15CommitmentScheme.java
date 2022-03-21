@@ -338,20 +338,22 @@ public class TCAKOT15CommitmentScheme implements CommitmentScheme, SPSMessageSpa
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TCAKOT15CommitmentScheme)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         TCAKOT15CommitmentScheme that = (TCAKOT15CommitmentScheme) o;
-
-        //problem is with pps
-
         return Objects.equals(pp, that.pp)
                 && Objects.equals(posInstance, that.posInstance)
-                && Objects.equals(gbcInstance.pp, that.gbcInstance.pp)
-                && Objects.equals(commitmentKey, that.commitmentKey);
+                && Objects.equals(gbcInstance, that.gbcInstance)
+                && Objects.equals(commitmentKey, that.commitmentKey)
+                && Arrays.equals(oneTimeSecretKeys, that.oneTimeSecretKeys)
+                && Arrays.equals(oneTimePublicKeys, that.oneTimePublicKeys);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(gbcInstance.pp);
+        int result = Objects.hash(pp, posInstance, gbcInstance, commitmentKey);
+        result = 31 * result + Arrays.hashCode(oneTimeSecretKeys);
+        result = 31 * result + Arrays.hashCode(oneTimePublicKeys);
+        return result;
     }
 
 }

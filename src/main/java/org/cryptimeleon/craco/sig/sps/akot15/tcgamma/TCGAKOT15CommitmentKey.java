@@ -51,7 +51,7 @@ public class TCGAKOT15CommitmentKey implements CommitmentKey {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TCGAKOT15CommitmentKey)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         TCGAKOT15CommitmentKey that = (TCGAKOT15CommitmentKey) o;
         return Arrays.equals(group2ElementsXi, that.group2ElementsXi);
     }

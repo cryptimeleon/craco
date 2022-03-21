@@ -48,12 +48,12 @@ public class SPSAGHO11PublicParameters extends SPSPublicParameters {
     @Override
     public Representation getRepresentation() { return ReprUtil.serialize(this); }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SPSAGHO11PublicParameters)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-
         SPSAGHO11PublicParameters that = (SPSAGHO11PublicParameters) o;
         return Arrays.equals(messageLengths, that.messageLengths);
     }

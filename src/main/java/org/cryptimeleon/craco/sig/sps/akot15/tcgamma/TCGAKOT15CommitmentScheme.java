@@ -409,7 +409,7 @@ public class TCGAKOT15CommitmentScheme implements CommitmentScheme {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TCGAKOT15CommitmentScheme)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         TCGAKOT15CommitmentScheme that = (TCGAKOT15CommitmentScheme) o;
         return Objects.equals(pp, that.pp) && Objects.equals(commitmentKey, that.commitmentKey);
     }

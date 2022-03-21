@@ -123,7 +123,7 @@ public class TCAKOT15OpenValue implements OpenValue {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TCAKOT15OpenValue)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         TCAKOT15OpenValue that = (TCAKOT15OpenValue) o;
         return Objects.equals(group1ElementGamma, that.group1ElementGamma)
                 && Objects.equals(spsPosVerificationKey, that.spsPosVerificationKey)
@@ -138,5 +138,4 @@ public class TCAKOT15OpenValue implements OpenValue {
         result = 31 * result + Arrays.hashCode(spsPosSignatures);
         return result;
     }
-
 }

@@ -86,7 +86,7 @@ public class AKOT15SharedPublicParameters extends SPSPublicParameters implements
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AKOT15SharedPublicParameters)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         AKOT15SharedPublicParameters that = (AKOT15SharedPublicParameters) o;
         return Objects.equals(messageLength, that.messageLength);

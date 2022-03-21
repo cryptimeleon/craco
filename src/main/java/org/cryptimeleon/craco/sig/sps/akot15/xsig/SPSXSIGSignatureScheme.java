@@ -455,7 +455,7 @@ public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSi
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SPSXSIGSignatureScheme)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         SPSXSIGSignatureScheme that = (SPSXSIGSignatureScheme) o;
         return Objects.equals(pp, that.pp);
     }

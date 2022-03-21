@@ -55,10 +55,11 @@ public class TCGAKOT15XSIGCommitmentKey extends TCGAKOT15CommitmentKey{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TCGAKOT15XSIGCommitmentKey)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         TCGAKOT15XSIGCommitmentKey that = (TCGAKOT15XSIGCommitmentKey) o;
-        return Arrays.equals(group2ElementsXi2, that.group2ElementsXi2) && Arrays.equals(group2ElementsXi3, that.group2ElementsXi3);
+        return Arrays.equals(group2ElementsXi2, that.group2ElementsXi2)
+                && Arrays.equals(group2ElementsXi3, that.group2ElementsXi3);
     }
 
     @Override
@@ -68,5 +69,4 @@ public class TCGAKOT15XSIGCommitmentKey extends TCGAKOT15CommitmentKey{
         result = 31 * result + Arrays.hashCode(group2ElementsXi3);
         return result;
     }
-
 }

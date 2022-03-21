@@ -48,11 +48,10 @@ public class TCGAKOT15Commitment implements Commitment {
         return new ReprUtil(this).serialize();
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TCGAKOT15Commitment)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         TCGAKOT15Commitment that = (TCGAKOT15Commitment) o;
         return Objects.equals(group2ElementGu, that.group2ElementGu);
     }
@@ -61,4 +60,5 @@ public class TCGAKOT15Commitment implements Commitment {
     public int hashCode() {
         return Objects.hash(group2ElementGu);
     }
+
 }

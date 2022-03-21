@@ -51,7 +51,7 @@ public class TCGAKOT15OpenValue implements OpenValue {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TCGAKOT15OpenValue)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         TCGAKOT15OpenValue that = (TCGAKOT15OpenValue) o;
         return Objects.equals(group1ElementR, that.group1ElementR);
     }
