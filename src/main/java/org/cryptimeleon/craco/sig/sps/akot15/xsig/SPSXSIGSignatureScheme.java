@@ -16,6 +16,17 @@ import org.cryptimeleon.math.structures.rings.zn.Zp.ZpElement;
 
 import java.util.Objects;
 
+/**
+ * An implementation of the xrma secure SPS scheme presented in [1]
+ * While the scheme is intended to be a building block of the larger SPS scheme
+ * {@link org.cryptimeleon.craco.sig.sps.akot15.fsp2.SPSFSP2SignatureScheme},
+ * the implementation can be used on its own, where it is secure under extended random message attacks [1].
+ *
+ *
+ * [1] Abe et al.: Fully Structure-Preserving Signatures and Shrinking Commitments.
+ * https://eprint.iacr.org/2015/076.pdf
+ *
+ */
 public class SPSXSIGSignatureScheme implements MultiMessageStructurePreservingSignatureScheme, SPSMessageSpaceVerifier {
 
     @Represented
