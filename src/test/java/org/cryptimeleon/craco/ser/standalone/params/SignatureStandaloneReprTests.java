@@ -1,5 +1,12 @@
 package org.cryptimeleon.craco.ser.standalone.params;
 
+import org.cryptimeleon.craco.common.ByteArrayImplementation;
+import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
+import org.cryptimeleon.craco.sig.SignatureKeyPair;
+import org.cryptimeleon.craco.sig.ecdsa.ECDSASignature;
+import org.cryptimeleon.craco.sig.ecdsa.ECDSASignatureScheme;
+import org.cryptimeleon.craco.sig.ecdsa.ECDSASigningKey;
+import org.cryptimeleon.craco.sig.ecdsa.ECDSAVerificationKey;
 import org.cryptimeleon.craco.sig.sps.SPSPublicParameters;
 import org.cryptimeleon.craco.sig.sps.SPSPublicParametersGen;
 import org.cryptimeleon.craco.sig.sps.agho11.SPSAGHO11PublicParameters;
@@ -36,6 +43,16 @@ import org.cryptimeleon.math.hash.impl.VariableOutputLengthHashFunction;
 
 public class SignatureStandaloneReprTests extends StandaloneReprSubTest {
     private final PSPublicParameters pp = new PSPublicParametersGen().generatePublicParameter(128, true);
+
+    public void testECDSA() {
+        ECDSASignatureScheme ecdsaSignatureScheme = new ECDSASignatureScheme();
+        SignatureKeyPair<ECDSAVerificationKey, ECDSASigningKey> keyPair = ecdsaSignatureScheme.generateKeyPair();
+        ECDSASignature signature = (ECDSASignature) ecdsaSignatureScheme.sign(new MessageBlock(new ByteArrayImplementation("TestMessage".getBytes())), keyPair.getSigningKey());
+
+        test(keyPair.getSigningKey());
+        test(keyPair.getVerificationKey());
+        test(signature);
+    }
 
     public void testSPSEQ() {
         SPSEQPublicParameters pp = new SPSEQPublicParametersGen().generatePublicParameter(128, true);
