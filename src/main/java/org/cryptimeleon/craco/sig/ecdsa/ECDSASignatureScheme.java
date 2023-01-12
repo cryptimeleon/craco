@@ -33,7 +33,7 @@ public class ECDSASignatureScheme implements SignatureScheme {
         }
     }
 
-    public SignatureKeyPair<ECDSAVerificationKey, ECDSASigningKey> keyGen() {
+    public SignatureKeyPair<ECDSAVerificationKey, ECDSASigningKey> generateKeyPair() {
         try {
             ECGenParameterSpec ecSpec = new ECGenParameterSpec(CURVE);
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance(ALGORITHM);

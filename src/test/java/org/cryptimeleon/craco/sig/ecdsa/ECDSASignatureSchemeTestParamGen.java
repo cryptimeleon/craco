@@ -16,10 +16,10 @@ public class ECDSASignatureSchemeTestParamGen {
     public static SignatureSchemeParams generateParams() {
         ECDSASignatureScheme ecdsaSignatureScheme = new ECDSASignatureScheme();
 
-        SignatureKeyPair<ECDSAVerificationKey, ECDSASigningKey> keyPair = ecdsaSignatureScheme.keyGen();
+        SignatureKeyPair<ECDSAVerificationKey, ECDSASigningKey> keyPair = ecdsaSignatureScheme.generateKeyPair();
         SignatureKeyPair<ECDSAVerificationKey, ECDSASigningKey> wrongKeyPair;
         do {
-            wrongKeyPair = ecdsaSignatureScheme.keyGen();
+            wrongKeyPair = ecdsaSignatureScheme.generateKeyPair();
         } while (wrongKeyPair.getVerificationKey().equals(keyPair.getVerificationKey())
                 || wrongKeyPair.getSigningKey().equals(keyPair.getSigningKey()));
 
