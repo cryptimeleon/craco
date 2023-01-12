@@ -7,6 +7,9 @@ import org.cryptimeleon.math.serialization.StandaloneRepresentable;
 
 import java.util.Arrays;
 
+/**
+ * Class for a signature of the {@link ECDSASignatureScheme}.
+ */
 public class ECDSASignature implements Signature, StandaloneRepresentable {
 
     final byte[] bytes;
