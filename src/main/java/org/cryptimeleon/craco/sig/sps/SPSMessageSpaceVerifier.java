@@ -1,9 +1,9 @@
 package org.cryptimeleon.craco.sig.sps;
 
+import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
 import org.cryptimeleon.math.structures.groups.Group;
-import org.cryptimeleon.craco.common.plaintexts.GroupElementPlainText;
 
 /**
  * Interface to define a message check for SPSSchemes.
@@ -15,15 +15,14 @@ public interface SPSMessageSpaceVerifier {
 
     /**
      * Checks if the given plainText matches the structure expected by the scheme
-     *      and throws detailed exception if the plainText fails any check.
-     *
-     * For this default implementation, the following properties of the parameter {@param plainText} are checked:
-     *      * {@param plainText} is of type {@link org.cryptimeleon.craco.common.plaintexts.MessageBlock}.
-     *      * The amount of PlainTexts matches {@param expectedMessageLength}.
-     *      * The elements stored in {@param plainText} are of type {@link GroupElementPlainText}.
-     *      * The elements stored in said {@link GroupElementPlainText}s are \in {@param expectedGroup}
-     *
-     * */
+     * and throws detailed exception if the plainText fails any check.
+     * <p>
+     * For this default implementation, the following properties of the parameter {@code plainText} are checked:
+     * * {@code plainText} is of type {@link org.cryptimeleon.craco.common.plaintexts.MessageBlock}.
+     * * The amount of PlainTexts matches {@code expectedMessageLength}.
+     * * The elements stored in {@code plainText} are of type {@link GroupElementPlainText}.
+     * * The elements stored in said {@link GroupElementPlainText}s are \in {@code expectedGroup}
+     */
     default void doMessageChecks(PlainText plainText, int expectedMessageLength, Group expectedGroup)
             throws IllegalArgumentException{
 
