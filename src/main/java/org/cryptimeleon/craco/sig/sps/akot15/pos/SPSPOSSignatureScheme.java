@@ -115,7 +115,7 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
     }
 
     /**
-     * While a one-time key is stored in the {@param secretKey}, the scheme allows for a separate one-time key
+     * While a one-time key is stored in the {@code secretKey}, the scheme allows for a separate one-time key
      * to be passed to the scheme. This makes it easier to use this scheme as a building block.
      *
      * Note: Implementations using this scheme are responsible for ensuring that the one-time keys are not reused.
@@ -169,7 +169,7 @@ public class SPSPOSSignatureScheme implements MultiMessageStructurePreservingSig
     }
 
     /**
-     * While a one-time key is stored in the {@param publicKey}, the scheme allows for a separate one-time key
+     * While a one-time key is stored in the {@code publicKey}, the scheme allows for a separate one-time key
      * to be passed to the scheme. This makes it easier to use this scheme as a building block.
      *
      * Note: Implementations using this scheme are responsible for ensuring that the one-time keys are not reused.
