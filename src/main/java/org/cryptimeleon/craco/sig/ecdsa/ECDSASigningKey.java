@@ -17,7 +17,7 @@ import static org.cryptimeleon.craco.sig.ecdsa.ECDSASignatureScheme.ALGORITHM;
 
 /**
  * Signing key of the {@link ECDSASignatureScheme}.
- * </br>
+ * <p>
  * Essentially a wrapper around Java's {@link PrivateKey} to fit into the Cryptimeleon API and support simple serialization.
  */
 public class ECDSASigningKey implements SigningKey, StandaloneRepresentable {
