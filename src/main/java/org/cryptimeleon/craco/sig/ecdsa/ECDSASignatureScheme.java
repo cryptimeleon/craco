@@ -14,6 +14,10 @@ import java.security.*;
 import java.security.spec.ECGenParameterSpec;
 
 
+/**
+ * Cryptimeleon wrapper for the ECDSA signature scheme.
+ * Uses the curve and algorithms specified in the constants below.
+ */
 public class ECDSASignatureScheme implements SignatureScheme {
 
     static final String ALGORITHM = "EC";
@@ -37,6 +41,7 @@ public class ECDSASignatureScheme implements SignatureScheme {
             KeyPair keyPair = keyGen.generateKeyPair();
             return new SignatureKeyPair<>(new ECDSAVerificationKey(keyPair.getPublic()), new ECDSASigningKey(keyPair.getPrivate()));
         } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
 
@@ -51,7 +56,10 @@ public class ECDSASignatureScheme implements SignatureScheme {
             signer.initSign(ecdsaSigningKey.getKey());
             signer.update(plainText.getUniqueByteRepresentation());
             return new ECDSASignature(signer.sign());
-        } catch (InvalidKeyException | SignatureException e) {
+        } catch (InvalidKeyException e ) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("Input secretKey must a valid " + ALGORITHM + " secret key");
+        } catch (SignatureException e) {
             throw new RuntimeException(e);
         }
     }
@@ -65,7 +73,10 @@ public class ECDSASignatureScheme implements SignatureScheme {
             signer.initVerify(ecdsaVerificationKey.getKey());
             signer.update(plainText.getUniqueByteRepresentation());
             return signer.verify(ecdsaSignature.bytes);
-        } catch (InvalidKeyException | SignatureException e) {
+        } catch (InvalidKeyException e ) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("Input publicKey must a valid " + ALGORITHM + " public key");
+        } catch (SignatureException e) {
             throw new RuntimeException(e);
         }
     }

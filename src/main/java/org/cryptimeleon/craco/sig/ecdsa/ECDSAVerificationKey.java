@@ -14,6 +14,11 @@ import java.util.Objects;
 
 import static org.cryptimeleon.craco.sig.ecdsa.ECDSASignatureScheme.ALGORITHM;
 
+/**
+ * Verification key of the {@link ECDSASignatureScheme}.
+ * </br>
+ * Essentially a wrapper around Java's {@link PublicKey} to fit into the Cryptimeleon API and support simple serialization.
+ */
 public class ECDSAVerificationKey implements VerificationKey {
 
     private final PublicKey key;
