@@ -31,6 +31,9 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
      * @param hashFunction       {@link HashFunction} used for hashing of the original message
      */
     public HashThenCommitCommitmentScheme(CommitmentScheme encapsulatedScheme, HashFunction hashFunction) {
+        if (hashFunction.getOutputLength() > encapsulatedScheme.getMaxNumberOfBytesForMapToPlaintext()) {
+            throw new IllegalArgumentException("The given hash function is incompatible with the given commitment scheme! The output length is too large.");
+        }
         this.encapsulatedScheme = encapsulatedScheme;
         this.hashFunction = hashFunction;
     }
@@ -54,13 +57,13 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
     public CommitmentPair commit(PlainText plainText) {
         ByteArrayImplementation pt;
         if (!(plainText instanceof ByteArrayImplementation)) {
-            pt = (ByteArrayImplementation) mapToPlainText(plainText.getUniqueByteRepresentation());
+            pt = new ByteArrayImplementation(plainText.getUniqueByteRepresentation());
         } else {
             pt = (ByteArrayImplementation) plainText;
         }
         // hash
         byte[] hashedBytes = hashFunction.hash(pt.getData());
-        PlainText hashedPlainText = encapsulatedScheme.mapToPlainText(hashedBytes);
+        PlainText hashedPlainText = encapsulatedScheme.mapToPlaintext(hashedBytes);
 
         return encapsulatedScheme.commit(hashedPlainText);
     }
@@ -78,19 +81,24 @@ public class HashThenCommitCommitmentScheme implements CommitmentScheme {
     public boolean verify(Commitment commitment, OpenValue openValue, PlainText plainText) {
         ByteArrayImplementation pt;
         if (!(plainText instanceof ByteArrayImplementation)) {
-            pt = (ByteArrayImplementation) mapToPlainText(plainText.getUniqueByteRepresentation());
+            pt = (ByteArrayImplementation) mapToPlaintext(plainText.getUniqueByteRepresentation());
         } else {
             pt = (ByteArrayImplementation) plainText;
         }
         // hash
         byte[] hashedBytes = hashFunction.hash(pt.getData());
-        PlainText hashedPlainText = encapsulatedScheme.mapToPlainText(hashedBytes);
+        PlainText hashedPlainText = encapsulatedScheme.mapToPlaintext(hashedBytes);
         return encapsulatedScheme.verify(commitment, openValue, hashedPlainText);
     }
 
     @Override
-    public PlainText mapToPlainText(byte[] bytes) throws IllegalArgumentException {
+    public PlainText mapToPlaintext(byte[] bytes) throws IllegalArgumentException {
         return new ByteArrayImplementation(bytes);
+    }
+
+    @Override
+    public int getMaxNumberOfBytesForMapToPlaintext() {
+        return Integer.MAX_VALUE;
     }
 
     @Override

@@ -83,12 +83,15 @@ public class PedersenCommitmentScheme implements CommitmentScheme {
     }
 
     @Override
-    public MessageBlock mapToPlainText(byte[] bytes) throws IllegalArgumentException {
-        RingElementPlainText zero = new RingElementPlainText(group.getZn().getZeroElement());
-        return new MessageBlock(
-                Vector.of(new RingElementPlainText(group.getZn().injectiveValueOf(bytes)))
-                        .pad(zero, h.length())
-        );
+    public MessageBlock mapToPlaintext(byte[] bytes) throws IllegalArgumentException {
+        //Result will be a vector (zp.injectiveValueOf(bytes), 0, ..., 0)
+        return new RingElementVector(group.getZn().injectiveValueOf(bytes)).pad(group.getZn().getZeroElement(), h.length())
+                .map(RingElementPlainText::new, MessageBlock::new);
+    }
+
+    @Override
+    public int getMaxNumberOfBytesForMapToPlaintext() {
+        return (group.size().bitLength() - 1) / 8;
     }
 
     @Override
