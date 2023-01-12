@@ -2,6 +2,7 @@ package org.cryptimeleon.craco.sig.ecdsa;
 
 import org.cryptimeleon.craco.sig.VerificationKey;
 import org.cryptimeleon.math.serialization.Representation;
+import org.cryptimeleon.math.serialization.StandaloneRepresentable;
 import org.cryptimeleon.math.serialization.StringRepresentation;
 
 import java.security.KeyFactory;
@@ -19,7 +20,7 @@ import static org.cryptimeleon.craco.sig.ecdsa.ECDSASignatureScheme.ALGORITHM;
  * <p>
  * Essentially a wrapper around Java's {@link PublicKey} to fit into the Cryptimeleon API and support simple serialization.
  */
-public class ECDSAVerificationKey implements VerificationKey {
+public class ECDSAVerificationKey implements VerificationKey, StandaloneRepresentable {
 
     private final PublicKey key;
 

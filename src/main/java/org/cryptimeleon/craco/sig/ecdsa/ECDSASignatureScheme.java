@@ -12,6 +12,7 @@ import org.cryptimeleon.math.serialization.StringRepresentation;
 
 import java.security.*;
 import java.security.spec.ECGenParameterSpec;
+import java.util.Objects;
 
 
 /**
@@ -119,5 +120,24 @@ public class ECDSASignatureScheme implements SignatureScheme {
     @Override
     public Representation getRepresentation() {
         return new StringRepresentation("");
+    }
+
+    /*
+     * We need equals, hashcode and the Representation constructor to satisfy the SignatureScheme bounds for automated tests
+     * All instances of ECDSASignatureSchemer are 'equal'.
+     */
+
+    public ECDSASignatureScheme(Representation repr) {
+        this();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o != null && getClass() == o.getClass();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(19817349853L);
     }
 }
