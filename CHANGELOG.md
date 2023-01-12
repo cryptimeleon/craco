@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Latest]
 
+## [3.1.0]
+
+### Added
+- ECDSA signatures from `java.security` (see [#102](https://github.com/cryptimeleon/craco/pull/102))
+- AGHO11, KPW15 and AKOT15 structure-preserving signature schemes (see [#99](https://github.com/cryptimeleon/craco/pull/99)))
+
 ## [3.0.1]
 
 ### Changed
