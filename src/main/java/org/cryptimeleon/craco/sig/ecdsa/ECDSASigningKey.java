@@ -7,6 +7,7 @@ import org.cryptimeleon.math.serialization.StringRepresentation;
 
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -14,6 +15,7 @@ import java.util.Base64;
 import java.util.Objects;
 
 import static org.cryptimeleon.craco.sig.ecdsa.ECDSASignatureScheme.ALGORITHM;
+import static org.cryptimeleon.craco.sig.ecdsa.ECDSASignatureScheme.PROVIDER;
 
 /**
  * Signing key of the {@link ECDSASignatureScheme}.
@@ -33,9 +35,9 @@ public class ECDSASigningKey implements SigningKey, StandaloneRepresentable {
         PKCS8EncodedKeySpec privKeySpec = new PKCS8EncodedKeySpec(encodedKey);
 
         try {
-            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
+            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM, PROVIDER);
             this.key = keyFactory.generatePrivate(privKeySpec);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException | NoSuchProviderException e) {
             throw new RuntimeException(e);
         }
     }

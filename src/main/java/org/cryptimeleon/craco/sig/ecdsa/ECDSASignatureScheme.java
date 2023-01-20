@@ -1,5 +1,6 @@
 package org.cryptimeleon.craco.sig.ecdsa;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.cryptimeleon.craco.common.ByteArrayImplementation;
 import org.cryptimeleon.craco.common.plaintexts.MessageBlock;
 import org.cryptimeleon.craco.common.plaintexts.PlainText;
@@ -22,30 +23,32 @@ import java.util.Objects;
 public class ECDSASignatureScheme implements SignatureScheme {
 
     static final String ALGORITHM = "EC";
+    static final String PROVIDER = "BC";
     static final String CURVE = "secp256k1";
     private static final String SIGNING_ALGORITHM = "SHA256withECDSA";
     private final Signature signer;
 
     public ECDSASignatureScheme() {
         try {
-            signer = Signature.getInstance(SIGNING_ALGORITHM);
-        } catch (NoSuchAlgorithmException e) {
+            Security.addProvider(new BouncyCastleProvider());
+            signer = Signature.getInstance(SIGNING_ALGORITHM, PROVIDER);
+        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
             throw new RuntimeException(e);
         }
     }
 
     public SignatureKeyPair<ECDSAVerificationKey, ECDSASigningKey> generateKeyPair() {
         try {
+            Security.addProvider(new BouncyCastleProvider());
             ECGenParameterSpec ecSpec = new ECGenParameterSpec(CURVE);
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(ALGORITHM);
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(ALGORITHM, PROVIDER);
             keyGen.initialize(ecSpec);
             KeyPair keyPair = keyGen.generateKeyPair();
             return new SignatureKeyPair<>(new ECDSAVerificationKey(keyPair.getPublic()), new ECDSASigningKey(keyPair.getPrivate()));
-        } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
+        } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException | NoSuchProviderException  e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-
     }
 
 

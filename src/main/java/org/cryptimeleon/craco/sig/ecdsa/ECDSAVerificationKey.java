@@ -1,19 +1,19 @@
 package org.cryptimeleon.craco.sig.ecdsa;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.cryptimeleon.craco.sig.VerificationKey;
 import org.cryptimeleon.math.serialization.Representation;
 import org.cryptimeleon.math.serialization.StandaloneRepresentable;
 import org.cryptimeleon.math.serialization.StringRepresentation;
 
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
+import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Objects;
 
 import static org.cryptimeleon.craco.sig.ecdsa.ECDSASignatureScheme.ALGORITHM;
+import static org.cryptimeleon.craco.sig.ecdsa.ECDSASignatureScheme.PROVIDER;
 
 /**
  * Verification key of the {@link ECDSASignatureScheme}.
@@ -33,9 +33,10 @@ public class ECDSAVerificationKey implements VerificationKey, StandaloneRepresen
         X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(encodedKey);
 
         try {
-            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
+            Security.addProvider(new BouncyCastleProvider());
+            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM, PROVIDER);
             this.key = keyFactory.generatePublic(pubKeySpec);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException | NoSuchProviderException e) {
             throw new RuntimeException(e);
         }
     }
