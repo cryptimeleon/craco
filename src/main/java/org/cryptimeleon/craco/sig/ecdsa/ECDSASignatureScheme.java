@@ -22,7 +22,7 @@ import java.util.Objects;
 public class ECDSASignatureScheme implements SignatureScheme {
 
     static final String ALGORITHM = "EC";
-    static final String CURVE = "secp256k1";
+    static final String CURVE = "secp256r1";
     private static final String SIGNING_ALGORITHM = "SHA256withECDSA";
     private final Signature signer;
 
