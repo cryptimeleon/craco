@@ -1,0 +1,23 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Cryptimeleon Craco
+message: >-
+  When writing research papers, please cite our paper https://eprint.iacr.org/2021/961.
+type: software
+authors:
+  - given-names: Jan
+    family-names: Bobolz
+  - given-names: Denis
+    family-names: Diemert
+  - given-names: Fabian
+    family-names: Eidens
+  - given-names: Raphael
+    family-names: Heitjohann
+  - given-names: Paul
+    family-names: Kramer
+  - name: "Open-Source Contributors"
+repository-code: 'https://github.com/cryptimeleon/craco'
+url: 'https://cryptimeleon.org'
+license: Apache-2.0
