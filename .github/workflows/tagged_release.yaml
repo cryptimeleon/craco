@@ -1,4 +1,4 @@
-name: Tagget release
+name: Tagged release
 
 on:
   push:
